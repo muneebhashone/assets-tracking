@@ -1,4 +1,9 @@
 export enum shipmentType {
   ZIMLINE = "ZIMLINE",
+  SEARATE = "SEARATE",
 }
-9
+
+
+export enum DBErrors {
+  UNIQUE_KEY_ERROR = "P2002"
+}

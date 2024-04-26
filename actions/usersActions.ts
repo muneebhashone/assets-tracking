@@ -255,3 +255,12 @@ export const editProfile = async (name: string, email: string) => {
     return error;
   }
 };
+export const userData = async (id: string) => {
+  Number(id)
+  try {
+    const user = await db.user.findFirst({ where: { id: Number(id) } })
+    return user
+  } catch (error) {
+    return error;
+  }
+}

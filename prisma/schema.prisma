@@ -25,15 +25,26 @@ model User {
   shipments Shipment[]
 }
 
+model Vessel {
+  id          Int      @id @default(autoincrement())
+  fid         Int
+  name        String
+  flag        String
+  shipment_id Int
+  shipment    Shipment @relation(fields: [shipment_id], references: [id])
+}
+
 model Shipment {
-  id         Int    @id @default(autoincrement())
-  user       User   @relation(fields: [userId], references: [id])
-  userId     Int
-  status     String
-  carrier    String
-  reference  String
-  shipment   String
-  arivalTime String
+  id              Int      @id @default(autoincrement())
+  userId          Int
+  status          String
+  carrier         String
+  arrivalTime     String
+  name            String
+  tracking_number String   @unique
+  type            String
+  user            User     @relation(fields: [userId], references: [id])
+  vessels         Vessel[]
 }
 
 enum Status {

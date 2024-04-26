@@ -3,22 +3,28 @@ import React from "react";
 import { Button } from "../ui/button";
 import { ShipmentTable } from "../tables/shipmentTable/shipmentTable";
 import Link from "next/link";
+import { ShippingCardsView } from "../ui/ShippingCardView";
+import { getShipmentByUserId } from "@/actions/shipmentActions";
+import { auth } from "@/lib/auth-options";
+import { Session } from "next-auth";
+import { Shipment } from "@prisma/client";
 
 type Props = {};
 
-const UserDashboard = (props: Props) => {
-  
-  type Payment = {
-    id: string;
-    shipment: string;
-    do: number;
-    status: "pending" | "processing" | "success" | "failed";
-    da: string;
-  };
-  const data: Payment[] = [
-    
-  ];
+const UserDashboard = async (props: Props) => {
 
+  // type Payment = {
+  //   id: string;
+  //   shipment: string;
+  //   do: number;
+  //   status: "pending" | "processing" | "success" | "failed";
+  //   da: string;
+  // };
+  // const data: Payment[] = [
+
+  // ];
+  const session = await auth() as Session
+  const shipmentData = await getShipmentByUserId(parseInt(session.user.id)) as Shipment[]
   return (
     <>
 
@@ -29,15 +35,15 @@ const UserDashboard = (props: Props) => {
           below.
         </p>
         <div className="flex my-5 justify-between">
-        <Link 
-        className="border rounded-md px-4 py-2 bg-blue-500 text-white hover:bg-blue-600"
-        href="/dashboard/shipment"
-        >Create</Link>
+          <Link
+            className="border rounded-md px-4 py-2 bg-blue-500 text-white hover:bg-blue-600"
+            href="/dashboard/shipment"
+          >Create</Link>
           <Button variant="default">Export as pdf</Button>
         </div>
         {
-          data ?
-          <ShipmentTable data={data} />:<h1>no record found</h1>
+          shipmentData?.length ?
+            <ShippingCardsView shipData={shipmentData} /> : <h1>no record found</h1>
         }
       </div>
     </>

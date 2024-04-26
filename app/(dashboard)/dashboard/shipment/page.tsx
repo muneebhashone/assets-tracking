@@ -1,6 +1,6 @@
 "use client";
 
-import { insertShipmentRecord, shipmentData } from "@/actions/addShipment";
+import { insertShipmentRecord } from "@/actions/shipmentActions";
 import { Button } from "@/components/ui/button";
 import { Heading } from "@/components/ui/heading";
 import { Input } from "@/components/ui/input";
@@ -13,58 +13,54 @@ import {
 } from "@/components/ui/select";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import { IShipmentData } from "@/types";
+import { ICreateShipment, IResponse, IShipmentData } from "@/types";
 import { shipmentType } from "@/types/enums";
 import { coins_err, internal_server_error } from "@/types/messgaes";
 import { useToast } from "@/components/ui/use-toast";
-import { useSession } from "next-auth/react";
-import { removeCoins } from "@/actions/insertCoins";
+
 
 type Props = {};
 
 const schema = z.object({
-  containerID: z
+  tracking_number: z
     .string({
-      required_error: "Container id is required",
+      required_error: "Tracking Number is required",
     })
     .min(1, { message: "invalid id" }),
-  containerType: z.string({
-    required_error: "Container Type is required",
+  carrier: z.string({
+    required_error: "Please Select Carrier Type",
   }),
 });
 const page = (props: Props) => {
   const { toast } = useToast();
-  const { update, data: session } = useSession();
+  const [loading, setLoading] = useState<boolean>(false)
+
+  // const { update, data: session } = useSession();
   const {
     formState: { errors },
     register,
-    resetField,
-    setValue,
     handleSubmit,
-  } = useForm<IShipmentData>({
+    reset
+  } = useForm<ICreateShipment>({
     resolver: zodResolver(schema),
   });
 
-  const onSubmit = async (payload: IShipmentData) => {
-    const data = await shipmentData(payload);
-    const id = Number(session?.user.id);
-    console.log(id)
-    if (data === coins_err || data === internal_server_error) {
-      return toast({
-        title: "Error",
-        description: data,
-        variant: "destructive",
-      });
-    }
-
-    const insert = await insertShipmentRecord(id, data);
-    // await removeCoins(id);
-    return toast({
+  const onSubmit = async (payload: ICreateShipment) => {
+    setLoading(true)
+    const insert = await insertShipmentRecord(payload) as IResponse;
+    setLoading(false)
+    insert.status === "success" ? toast({
       title: "Success",
-      description: insert as string,
+      description: insert?.message as string,
+
+    }) : toast({
+      title: "Error",
+      description: insert?.message as string,
+      variant: "destructive",
     });
+    reset()
   };
   return (
     <div className=" p-5 ">
@@ -78,25 +74,27 @@ const page = (props: Props) => {
             <p>Carrier</p>
             <select
               className="border p-2 border-r-3"
-              {...register("containerType")}
+              {...register("carrier")}
             >
-              <option value={shipmentType.ZIMLINE}>Zimline</option>
+              {/* <option value={shipmentType.ZIMLINE}>Zimline</option> */}
+              <option value={shipmentType.SEARATE}>Sea Rates</option>
               <option value="others">Others</option>
             </select>
           </div>
 
-          <label htmlFor="trackingID">Enter your Tracking ID</label>
+          <label htmlFor="tracking_number">Enter your Tracking ID</label>
           <Input
             placeholder="xxxxxxxxxxxxx"
             type="text"
-            {...register("containerID")}
+            {...register("tracking_number")}
           />
         </div>
         <Button
-          className="mt-5 flex justify-end absolute right-5"
+          className={`mt-5 flex justify-end absolute right-5 ${loading ? "opacity-35" : ""}`}
           type="submit"
+          disabled={loading}
         >
-          Submit
+          {loading ? "Submitting..." : "Submit"}
         </Button>
       </form>
     </div>

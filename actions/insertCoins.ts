@@ -18,16 +18,14 @@ export const insertCoins = async (id: number, credits: number) => {
     if (!exist) {
       return "user not exist ";
     }
-    const { credits: userCredits } = exist;
 
-    if (userCredits === null) {
-      return null;
-    }
-    const total = credits + userCredits;
+
+
+
     await db.user.update({
       where: { id },
       data: {
-        credits: total,
+        credits: credits,
       },
     });
     return "updated sucessfull";
