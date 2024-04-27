@@ -66,7 +66,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
             disabled={loading}
             onClick={() => onAccept(data.email)}
           >
-            <Edit className="mr-2 h-4 w-4" /> Accpet
+            <Edit className="mr-2 h-4 w-4" /> Accept
           </DropdownMenuItem>
           <DropdownMenuItem disabled={loading} onClick={() => setOpen(true)}>
             <Trash className="mr-2 h-4 w-4" /> Delete
