@@ -15,7 +15,7 @@ export async function POST(request: Request) {
     const { password: hashPassword } = exist as IUserMessage;
     const validate = await argon2.verify(hashPassword, password);
     if (!validate) {
-      return NextResponse.json({ message: "wron password" }, { status: 404 });
+      return NextResponse.json({ message: "wrong password" }, { status: 404 });
     }
     const { password: userPass, ...rest } = exist as IUserMessage;
     return NextResponse.json({ message: rest }, { status: 200 });

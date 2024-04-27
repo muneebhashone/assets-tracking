@@ -1,5 +1,5 @@
 import { Icons } from "@/components/icons";
-import { Shipment, Vessel } from "@prisma/client";
+import { Shipment, User, Vessel } from "@prisma/client";
 
 export interface NavItem {
   title: string;
@@ -220,6 +220,7 @@ export interface ShipmentProps {
 
 export interface ShipmentData extends Shipment {
   vessels: Vessel[]
+  user: User
 }
 export type MainNavItem = NavItemWithOptionalChildren;
 

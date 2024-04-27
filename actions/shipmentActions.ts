@@ -1,7 +1,7 @@
 "use server";
 import { auth } from "@/lib/auth-options";
 import { removeCoins } from "./insertCoins";
-import { ApiResponse, ICreateShipment, IResponse, IShipmentData, ShipmentData } from "@/types";
+import { ApiResponse, ICreateShipment, IResponse, IShipmentData, ROLE, ShipmentData } from "@/types";
 import { DBErrors, shipmentType } from "@/types/enums";
 import { checkUserCredits } from "@/utils";
 import { db } from "@/lib/db";
@@ -51,17 +51,35 @@ export const getShipmentByUserId = async (userId: number) => {
     }
 }
 
+export const getAllShipments = async () => {
+    const admin = await auth()
+
+
+    try {
+        if (admin?.user.role !== ROLE.ADMIN) {
+            return new Error('UnAuthorized')
+        }
+        const shippingData = await db.shipment.findMany()
+        if (shippingData.length) {
+            return shippingData
+        }
+        return null
+    } catch (error) {
+        return error
+    }
+}
+
 export const getShipmentByTrackingNumber = async (trackingNumber: string) => {
 
     try {
-        const shippingData = await db.shipment.findFirst({ where: { tracking_number: trackingNumber } })
+        const shippingData = await db.shipment.findFirst({ where: { tracking_number: trackingNumber }, include: { user: true, vessels: true } })
 
         if (shippingData) {
             const vesselData = await db.vessel.findMany({ where: { shipment_id: shippingData?.id } })
-            if (vesselData.length) {
-                const data = { ...shippingData, vessels: vesselData }
-                return data as ShipmentData
-            }
+            // if (vesselData.length) {
+            //     // const data = { ...shippingData, vessels: vesselData }
+            //     return data as ShipmentData
+            // }
             return shippingData as Shipment
         }
         return null
