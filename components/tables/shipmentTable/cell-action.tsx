@@ -26,8 +26,10 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
   const router = useRouter();
   const onConfirm = async (email: string) => {
     setLoading(true);
+    console.log(email)
     await softDeleteUser(email);
     router.refresh();
+    setOpen(false)
     setLoading(false);
   };
 

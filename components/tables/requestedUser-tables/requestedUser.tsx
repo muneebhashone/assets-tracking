@@ -58,7 +58,7 @@ export function EmployeeTable<TData, TValue>({
   pageCount,
   pageSizeOptions = [10, 20, 30, 40, 50],
 }: DataTableProps<TData, TValue>) {
-  // console.log({data})
+
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -71,8 +71,7 @@ export function EmployeeTable<TData, TValue>({
   const perPageAsNumber = Number(per_page);
   const fallbackPerPage = isNaN(perPageAsNumber) ? 10 : perPageAsNumber;
 
-  /* this can be used to get the selectedrows 
-  console.log("value", table.getFilteredSelectedRowModel()); */
+  const tableData = data.map((entry) => { return ({ ...entry, status: entry.status === 'true' ? 'Active' : 'InActive' }) })
 
   // Create query string
   const createQueryString = React.useCallback(
@@ -114,7 +113,7 @@ export function EmployeeTable<TData, TValue>({
   }, [pageIndex, pageSize]);
 
   const table = useReactTable({
-    data,
+    data: tableData,
     columns,
     pageCount: pageCount ?? -1,
     getCoreRowModel: getCoreRowModel(),
@@ -208,9 +207,9 @@ export function EmployeeTable<TData, TValue>({
                       {header.isPlaceholder
                         ? null
                         : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext(),
-                          )}
+                          header.column.columnDef.header,
+                          header.getContext(),
+                        )}
                     </TableHead>
                   );
                 })}
