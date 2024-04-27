@@ -32,10 +32,10 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
     setLoading(false);
     return reject;
   };
-  const onAccpet = async (email: string) => {
+  const onAccept = async (email: string) => {
     setLoading(true);
     const { data: updateResponce } = await axios.post(
-      "http://localhost:3000/api/admin/userStatus",
+      `${process.env.NEXT_PUBLIC_SITE_URL as string}/api/admin/userStatus`,
       {
         email: email,
       },
@@ -64,7 +64,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
 
           <DropdownMenuItem
             disabled={loading}
-            onClick={() => onAccpet(data.email)}
+            onClick={() => onAccept(data.email)}
           >
             <Edit className="mr-2 h-4 w-4" /> Accpet
           </DropdownMenuItem>
