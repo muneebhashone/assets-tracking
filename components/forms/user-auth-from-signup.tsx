@@ -135,7 +135,7 @@ export default function UserAuthFormSignUp() {
             )}
           />
 
-          <Button disabled={isPending} className="ml-auto w-full" type="submit">
+          <Button disabled={isPending} className="ml-auto w-full bg-[#D3991F]" type="submit">
             submit
           </Button>
         </form>

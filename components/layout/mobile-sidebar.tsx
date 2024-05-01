@@ -14,9 +14,9 @@ interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {
   // playlists: Playlist[];
 }
 
-export  function MobileSidebar({ className }: SidebarProps) {
+export function MobileSidebar({ className }: SidebarProps) {
   const [open, setOpen] = useState(false);
-  const {data:session} = useSession();
+  const { data: session } = useSession();
 
   const { role } = session?.user;
   return (
@@ -25,16 +25,16 @@ export  function MobileSidebar({ className }: SidebarProps) {
         <SheetTrigger asChild>
           <MenuIcon />
         </SheetTrigger>
-        <SheetContent side="left" className="!px-0">
+        <SheetContent side="left" className="!px-0 bg-[#3491fe]">
           <div className="space-y-4 py-4">
             <div className="px-3 py-2">
-              <h2 className="mb-2 px-4 text-lg font-semibold tracking-tight">
+              <h2 className="mb-2 px-4 text-lg font-semibold tracking-tight text-white">
                 Overview
               </h2>
               <div className="space-y-1">
-              <DashboardNav
-              items={role === ROLE.ADMIN ? adminNavItems : userNavItems}
-            />
+                <DashboardNav
+                  items={role === ROLE.ADMIN ? adminNavItems : userNavItems}
+                />
               </div>
             </div>
           </div>

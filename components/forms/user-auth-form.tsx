@@ -19,6 +19,7 @@ import GoogleSignInButton from "../github-auth-button";
 import { useRouter } from "next/navigation";
 import { useToast } from "../ui/use-toast";
 import { Status } from "@prisma/client";
+import { ICreateShipment } from "@/types";
 
 const formSchema = z.object({
   email: z.string().email({ message: "Enter a valid email address" }),
@@ -27,7 +28,7 @@ const formSchema = z.object({
 
 type UserFormValue = z.infer<typeof formSchema>;
 
-export default function UserAuthForm() {
+export default function UserAuthForm({ shipmentData }: { shipmentData: ICreateShipment }) {
   const router = useRouter();
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
@@ -59,7 +60,11 @@ export default function UserAuthForm() {
         return;
       }
       if (signInUser?.ok) {
-        router.push("/dashboard");
+        if (shipmentData) {
+          router.push(`/dashboard/shipment/?carrier=${shipmentData.carrier}&tracking_number=${shipmentData.tracking_number}`);
+        } else {
+          router.push("/dashboard");
+        }
         setLoading(false);
       }
     } catch (error) {
@@ -111,7 +116,7 @@ export default function UserAuthForm() {
             )}
           />
 
-          <Button disabled={loading} className="ml-auto w-full" type="submit">
+          <Button disabled={loading} className="ml-auto w-full bg-[#D3991F]" type="submit">
             Continue With Email
           </Button>
         </form>

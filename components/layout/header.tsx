@@ -3,6 +3,7 @@ import { cn } from "@/lib/utils";
 import { MobileSidebar } from "./mobile-sidebar";
 import { UserNav } from "./user-nav";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function Header() {
   return (
@@ -13,18 +14,9 @@ export default function Header() {
             href={"/"}
 
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="mr-2 h-6 w-6"
-            >
-              <path d="M15 6v12a3 3 0 1 0 3-3H6a3 3 0 1 0 3 3V6a3 3 0 1 0-3 3h12a3 3 0 1 0-3-3" />
-            </svg>
+            <Link href={'/'}>
+              <Image src={'/images/logo.png'} alt="logo" width={60} height={60} />
+            </Link>
           </Link>
         </div>
         <div className={cn("block lg:!hidden")}>

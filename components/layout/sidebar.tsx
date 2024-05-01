@@ -9,12 +9,12 @@ export default async function Sidebar() {
   const { role } = session?.user;
   return (
     <nav
-      className={cn(`relative hidden h-screen border-r pt-16 lg:block w-72`)}
+      className={cn(`relative hidden h-screen border-r pt-16 lg:block w-72 bg-[#3491fe]`)}
     >
       <div className="space-y-4 py-4">
         <div className="px-3 py-2">
           <div className="space-y-1">
-            <h2 className="mb-2 px-4 text-xl font-semibold tracking-tight">
+            <h2 className="mb-2 px-4 text-xl font-semibold tracking-tight text-white ">
               Overview
             </h2>
             <DashboardNav

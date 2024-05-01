@@ -41,10 +41,11 @@ model Shipment {
   carrier         String
   arrivalTime     String
   name            String
-  tracking_number String   @unique
+  tracking_number String   
   type            String
   user            User     @relation(fields: [userId], references: [id])
   vessels         Vessel[]
+  @@unique([userId, tracking_number], name: "Unique_User_TrackingNumber")
 }
 
 enum Status {
