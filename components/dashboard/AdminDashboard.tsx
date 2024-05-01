@@ -12,7 +12,7 @@ const AdminDashboard = async (props: Props) => {
     <>
 
       <div className="flex flex-col ">
-        <h1 className="text-lg font-bold tracking-tight mb-4">All shipment</h1>
+        <h1 className="text-lg font-bold tracking-tight mb-4 ">All shipment</h1>
         {/* <p className="text-sm tracking-tight">
           
         </p> */}

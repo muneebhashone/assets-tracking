@@ -36,10 +36,10 @@ const UserDashboard = async (props: Props) => {
         </p>
         <div className="flex my-5 justify-between">
           <Link
-            className="border rounded-md px-4 py-2 bg-blue-500 text-white hover:bg-blue-600"
+            className="border rounded-md px-4 py-2 bg-[#D3991F] text-white hover:bg-blue-600"
             href="/dashboard/shipment"
           >Create</Link>
-          <Button variant="default">Export as pdf</Button>
+          {/* <Button variant="default">Export as pdf</Button> */}
         </div>
         {
           shipmentData?.length ?

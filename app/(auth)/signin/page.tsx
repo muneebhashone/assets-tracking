@@ -3,13 +3,19 @@ import Link from "next/link";
 import UserAuthForm from "@/components/forms/user-auth-form";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { ReadonlyURLSearchParams } from "next/navigation";
+import { ICreateShipment } from "@/types";
+import Image from "next/image";
 
 export const metadata: Metadata = {
   title: "Authentication",
   description: "Authentication forms built using the components.",
 };
 
-export default function AuthenticationPage() {
+export default function AuthenticationPage({ searchParams }: { searchParams: { [key: string]: string | string[] | undefined } }) {
+
+  const shipData = (searchParams['carrier'] && searchParams['tracking_number']) ? { carrier: searchParams['carrier'] as string, tracking_number: searchParams['tracking_number'] as string } : null
+
   return (
     <div className="relative h-screen flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
       <Link
@@ -22,21 +28,11 @@ export default function AuthenticationPage() {
         Login
       </Link>
       <div className="relative hidden h-full flex-col bg-muted p-10 text-white dark:border-r lg:flex">
-        <div className="absolute inset-0 bg-zinc-900" />
+        <div className="absolute inset-0 bg-[#3491fe]" />
         <div className="relative z-20 flex items-center text-lg font-medium">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="mr-2 h-6 w-6"
-          >
-            <path d="M15 6v12a3 3 0 1 0 3-3H6a3 3 0 1 0 3 3V6a3 3 0 1 0-3 3h12a3 3 0 1 0-3-3" />
-          </svg>
-          Logo
+          <Link href={'/'}>
+         <Image src={'/images/logo.png'} alt="logo" width={60} height={60} />
+          </Link>
         </div>
         <div className="relative z-20 mt-auto">
           <blockquote className="space-y-2">
@@ -59,9 +55,9 @@ export default function AuthenticationPage() {
               Enter your email below to login your account
             </p>
           </div>
-          <UserAuthForm />
-          <Link href="/signup">create an account?</Link >
-       
+          <UserAuthForm shipmentData={shipData as ICreateShipment} />
+          <Link href="/signup" className="text-[#3491FE]" >create an account?</Link >
+
         </div>
       </div>
     </div>

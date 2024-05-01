@@ -33,15 +33,7 @@ export default async function Component(props: PageProps) {
                     </Button>
                 </Link>
                 <h1 className="text-lg font-semibold md:text-2xl">Shipment Details</h1>
-                <div className="ml-auto flex items-center gap-2 md:gap-4">
-                    <Button className="hidden md:flex" variant="outline">
-                        Print
-                    </Button>
-                    <Button className="w-8 h-8" size="icon" variant="outline">
-                        <DownloadIcon className="w-4 h-4" />
-                        <span className="sr-only">Download</span>
-                    </Button>
-                </div>
+
             </div>
             <main className="flex-1 overflow-y-auto p-4 md:p-6">
                 <div className="grid gap-6 md:grid-cols-1 lg:grid-cols-2">

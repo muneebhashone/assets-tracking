@@ -46,11 +46,13 @@
     "argon2": "^0.40.1",
     "autoprefixer": "10.4.15",
     "axios": "^1.6.7",
+    "bullmq": "^5.7.6",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
     "date-fns": "^2.30.0",
     "eslint": "8.48.0",
     "eslint-config-next": "^14.0.1",
+    "ioredis": "^5.4.1",
     "jsonwebtoken": "^9.0.2",
     "lucide-react": "^0.291.0",
     "next": "^14.0.1",
@@ -77,6 +79,6 @@
     "@types/uuid": "^9.0.7",
     "@typescript-eslint/eslint-plugin": "^6.11.0",
     "prettier": "3.0.3",
-    "prisma": "^5.11.0"
+    "prisma": "^5.13.0"
   }
 }

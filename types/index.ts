@@ -174,7 +174,7 @@ interface Metadata {
   };
 }
 
-interface ShippingData {
+interface SeaRatesData {
   metadata: Metadata;
   locations: Location[];
   facilities: Facility[];
@@ -209,15 +209,18 @@ interface ShippingData {
 export interface ApiResponse {
   status: "error" | "success";
   message: string;
-  data: ShippingData;
+  data: SeaRatesData;
 }
 
 
 export interface ShipmentProps {
-  shipData: Shipment[]
+  shipData: ShipmenAdminData[]
 }
 
+export interface ShipmenAdminData extends Shipment {
 
+  user?: User
+}
 export interface ShipmentData extends Shipment {
   vessels: Vessel[]
   user: User
