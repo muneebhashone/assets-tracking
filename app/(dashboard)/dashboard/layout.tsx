@@ -14,7 +14,7 @@ export default async function DashboardLayout({ children }: props) {
       <Header />
       <div className="flex h-screen overflow-hidden">
         <Sidebar />
-        <main className="w-full pt-16 ">{children}</main>
+        <main className="w-full pt-16 overflow-y-auto">{children}</main>
       </div>
     </>
   );

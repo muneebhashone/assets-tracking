@@ -27,14 +27,14 @@ interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   searchKey: string;
-  userInfo?:PaginatedUsers
+  userInfo?: PaginatedUsers;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
   searchKey,
-  userInfo
+  userInfo,
 }: DataTableProps<TData, TValue>) {
   const [pagination, setPagination] = useState({
     pageIndex: 0, //initial page index
@@ -47,16 +47,13 @@ export function DataTable<TData, TValue>({
     getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     onPaginationChange: setPagination,
-    pageCount:userInfo?.totalPages,
+    pageCount: userInfo?.totalPages,
     initialState: {
       pagination: {
         ...pagination,
       },
     },
   });
-
-  /* this can be used to get the selectedrows 
-  console.log("value", table.getFilteredSelectedRowModel()); */
 
   return (
     <>

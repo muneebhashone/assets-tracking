@@ -58,12 +58,10 @@ export function RejectedTable<TData, TValue>({
   pageCount,
   pageSizeOptions = [10, 20, 30, 40, 50],
 }: DataTableProps<TData, TValue>) {
-  // console.log({data})
 
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  // Search params
   const page = searchParams?.get("page") ?? "1";
   const pageAsNumber = Number(page);
   const fallbackPage =
@@ -73,10 +71,6 @@ export function RejectedTable<TData, TValue>({
   const fallbackPerPage = isNaN(perPageAsNumber) ? 10 : perPageAsNumber;
   const tableData = data.map((entry) => { return ({ ...entry, status: entry.status === 'true' ? 'Active' : 'InActive' }) })
 
-  /* this can be used to get the selectedrows 
-  console.log("value", table.getFilteredSelectedRowModel()); */
-
-  // Create query string
   const createQueryString = React.useCallback(
     (params: Record<string, string | number | null>) => {
       const newSearchParams = new URLSearchParams(searchParams?.toString());
@@ -94,7 +88,7 @@ export function RejectedTable<TData, TValue>({
     [searchParams],
   );
 
-  // Handle server-side pagination
+
   const [{ pageIndex, pageSize }, setPagination] =
     React.useState<PaginationState>({
       pageIndex: fallbackPage - 1,
@@ -131,32 +125,6 @@ export function RejectedTable<TData, TValue>({
   });
 
   const searchValue = table.getColumn(searchKey)?.getFilterValue() as string;
-  // React.useEffect(() => {
-  //   if (debounceValue.length > 0) {
-  //     router.push(
-  //       `${pathname}?${createQueryString({
-  //         [selectedOption.value]: `${debounceValue}${
-  //           debounceValue.length > 0 ? `.${filterVariety}` : ""
-  //         }`,
-  //       })}`,
-  //       {
-  //         scroll: false,
-  //       }
-  //     )
-  //   }
-
-  //   if (debounceValue.length === 0) {
-  //     router.push(
-  //       `${pathname}?${createQueryString({
-  //         [selectedOption.value]: null,
-  //       })}`,
-  //       {
-  //         scroll: false,
-  //       }
-  //     )
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [debounceValue, filterVariety, selectedOption.value])
 
   React.useEffect(() => {
     if (searchValue?.length > 0) {
@@ -191,14 +159,7 @@ export function RejectedTable<TData, TValue>({
 
   return (
     <>
-      {/* <Input
-        placeholder={`Search ${searchKey}...`}
-        value={(table.getColumn(searchKey)?.getFilterValue() as string) ?? ""}
-        onChange={(event) =>
-          table.getColumn(searchKey)?.setFilterValue(event.target.value)
-        }
-        className="w-full md:max-w-sm"
-      /> */}
+
       <ScrollArea className="rounded-md border h-[calc(80vh-220px)]">
         <Table className="relative">
           <TableHeader>

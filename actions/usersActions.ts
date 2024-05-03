@@ -3,8 +3,10 @@
 import { auth } from "@/lib/auth-options";
 import { db } from "@/lib/db";
 import { ROLE, Status } from "@/types";
+import { userState } from "@/types/enums";
 import { checkUserExist2 } from "@/utils";
 import { Prisma } from "@prisma/client";
+import { DefaultArgs } from "@prisma/client/runtime/library";
 
 export const getRegisteredUsers = async ({
   pageParam,
@@ -86,10 +88,7 @@ export const getRejectedUsers = async ({
 
     const userExist = await db.user.findMany({
       where: {
-        AND: [
-          { role: { equals: ROLE.USER } },
-          { deleted: { equals: true } },
-        ],
+        AND: [{ role: { equals: ROLE.USER } }, { deleted: { equals: true } }],
       } as Prisma.UserWhereInput,
       distinct: "id",
       skip: offset,
@@ -98,10 +97,7 @@ export const getRejectedUsers = async ({
 
     const users = await db.user.count({
       where: {
-        AND: [
-          { role: { equals: ROLE.USER } },
-          { deleted: { equals: true } },
-        ],
+        AND: [{ role: { equals: ROLE.USER } }, { deleted: { equals: true } }],
       } as Prisma.UserWhereInput,
     });
     const totalPages = Math.ceil(users / Number(pageSize));
@@ -245,7 +241,7 @@ export const editProfile = async (name: string, email: string) => {
   try {
     const exist = await checkUserExist2(email);
     if (!exist) {
-      return null
+      return null;
     }
     await db.user.update({
       data: { name },
@@ -256,11 +252,43 @@ export const editProfile = async (name: string, email: string) => {
   }
 };
 export const userData = async (id: string) => {
-  Number(id)
+  Number(id);
   try {
-    const user = await db.user.findFirst({ where: { id: Number(id) } })
-    return user
+    const user = await db.user.findFirst({ where: { id: Number(id) } });
+    return user;
   } catch (error) {
     return error;
   }
-}
+};
+
+export const getUserCount = async (status?: userState) => {
+  let filter: Prisma.UserCountArgs = {
+    where: {
+      AND: [{ role: { not: ROLE.ADMIN } }],
+    },
+  };
+  if (status) {
+    switch (status) {
+      case userState.ACCEPTED:
+        filter["where"]["AND"] = {
+          status: { equals: "true" },
+        } as Prisma.UserWhereInput | Prisma.UserWhereInput[];
+        break;
+      case userState.REJECTED:
+        filter["where"]["AND"] = {
+          deleted: { equals: true },
+        } as Prisma.UserWhereInput | Prisma.UserWhereInput[];
+
+        break;
+      case userState.PENDING:
+        filter["where"]["AND"] = { status: { equals: "false" } } as
+          | Prisma.UserWhereInput
+          | Prisma.UserWhereInput[];
+
+        break;
+    }
+  }
+
+  const usersCount = await db.user.count(filter);
+  return { usersCount };
+};

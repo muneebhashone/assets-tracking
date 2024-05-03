@@ -7,7 +7,7 @@ import MainFooter from "@/components/MainFooter";
 import NotificationCard from "@/components/NotificationCard";
 import SectionHeading from "@/components/SectionHeading";
 import TestimonialCardSection from "@/components/TestimonialCardSection";
-import NotificationIcon from "@/components/icons/NotificationIcon";
+import { NotificationIcon } from "@/components/Icons/index";
 import {
   cardlist,
   cardlisting,
