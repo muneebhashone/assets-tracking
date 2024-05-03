@@ -77,8 +77,8 @@ export interface IShipmentData {
   containerType: string;
 }
 export interface IResponse {
-  message: string
-  status: string
+  message: string;
+  status: string;
 }
 export interface ICreateShipment {
   // carrier: string;
@@ -86,8 +86,8 @@ export interface ICreateShipment {
   // shipment: string;
   // status: string;
   // arivalTime: string;
-  tracking_number: string
-  carrier: string
+  tracking_number: string;
+  carrier: string;
 }
 interface Location {
   id: number;
@@ -160,7 +160,7 @@ interface Metadata {
   number: string;
   sealine: string;
   sealine_name: string;
-  status: string;
+  status: "PLANNED" | "IN_TRANSIT" | "DELIVERED" | "UNKNOWN" | string;
   updated_at: string;
   api_calls: {
     total: number | null;
@@ -212,21 +212,29 @@ export interface ApiResponse {
   data: SeaRatesData;
 }
 
-
 export interface ShipmentProps {
-  shipData: ShipmenAdminData[]
+  shipData: ShipmenAdminData[];
 }
 
 export interface ShipmenAdminData extends Shipment {
-
-  user?: User
+  user?: User;
 }
 export interface ShipmentData extends Shipment {
-  vessels: Vessel[]
-  user: User
+  vessels: Vessel[];
+  user: User;
+}
+export interface shipmentDataWithPagination {
+  data: ShipmentData[] | null;
+  paginatorInfo: {
+    skip: number;
+    limit: number;
+    currentPage: number;
+    pages: number;
+    hasNextPage: boolean;
+    totalRecords: number;
+    pageSize: number;
+  };
 }
 export type MainNavItem = NavItemWithOptionalChildren;
 
 export type SidebarNavItem = NavItemWithChildren;
-
-

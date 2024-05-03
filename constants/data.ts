@@ -109,6 +109,12 @@ export const adminNavItems: NavItem[] = [
     label: "Dashboard",
   },
   {
+    title: "Shipment List",
+    href: "/dashboard/shipment-list",
+    icon: "laptop",
+    label: "Shipment",
+  },
+  {
     title: "Acitve User",
     href: "/dashboard/activeUsers",
     icon: "user",
@@ -133,6 +139,12 @@ export const userNavItems: NavItem[] = [
     href: "/dashboard",
     icon: "dashboard",
     label: "Dashboard",
+  },
+  {
+    title: "Shipment List",
+    href: "/dashboard/shipment-list",
+    icon: "laptop",
+    label: "Shipment",
   },
   {
     title: "Track New Shipment",

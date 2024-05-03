@@ -1,11 +1,13 @@
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
-import LinkedinIcon from "./icons/LinkedinIcon";
-import YoutubeIcon from "./icons/YoutubeIcon";
-import Xicon from "./icons/Xicon";
-import InstagramIcon from "./icons/InstagramIcon";
-import FacebookIcon from "./icons/FacebookIcon";
+import {
+  FacebookIcon,
+  InstagramIcon,
+  LinkedinIcon,
+  Xicon,
+  YoutubeIcon,
+} from "./Icons/index";
 
 interface CompanyType {
   id: number;

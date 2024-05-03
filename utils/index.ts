@@ -58,10 +58,50 @@ const checkPassword = async (
   return validate;
 };
 
+const getPaginator = (
+  limitParam: number,
+  pageParam: number,
+  totalRecords: number,
+): {
+  skip: number;
+  limit: number;
+  currentPage: number;
+  pages: number;
+  hasNextPage: boolean;
+  totalRecords: number;
+  pageSize: number;
+} => {
+  let skip = pageParam;
+  let limit = limitParam;
+
+  if (pageParam <= 1) {
+    skip = 0;
+  } else {
+    skip = limit * (pageParam - 1);
+  }
+
+  const currentPage = Math.max(1, pageParam as number);
+
+  const pages = Math.ceil(totalRecords / Number(limit));
+
+  const hasNextPage = pages > currentPage;
+
+  return {
+    skip,
+    limit,
+    currentPage,
+    pages,
+    hasNextPage,
+    totalRecords,
+    pageSize: limit,
+  };
+};
+
 export {
   checkUserExist,
   checkPassword,
   checkUserExist2,
   checkUserById,
   checkUserCredits,
+  getPaginator,
 };
