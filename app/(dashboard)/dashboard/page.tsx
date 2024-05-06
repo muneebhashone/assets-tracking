@@ -3,40 +3,65 @@
 import {
   getAllStatusData,
   getShipmentDataByYear,
-  shipmentNumber,
+  getShipmentDatabyRole,
 } from "@/actions/shipmentActions";
-import { getUserCount, userData } from "@/actions/usersActions";
+import { userData } from "@/actions/usersActions";
 import DashboardView from "@/components/dashboard/DashboardView";
 import UserDashboardView from "@/components/dashboard/UserView";
-
 import { auth } from "@/lib/auth-options";
 import { ROLE } from "@/types";
-import { ShipmentState, userState } from "@/types/enums";
 import { BarDatum } from "@nivo/bar";
 import { User } from "@prisma/client";
 import { Session } from "next-auth";
 
+export interface IKpiData {
+  userKpi: [
+    {
+      shipmentCount: number;
+    },
+    {
+      shipmentCount: number;
+    },
+    {
+      shipmentCount: number;
+    },
+    {
+      shipmentCount: number;
+    },
+    {
+      shipmentCount: number;
+    },
+  ];
+  adminKpi: [
+    {
+      shipmentCount: number;
+    },
+    {
+      usersCount: number;
+    },
+    {
+      usersCount: number;
+    },
+    {
+      usersCount: number;
+    },
+    {
+      usersCount: number;
+    },
+  ];
+}
 export default async function page() {
   const session = (await auth()) as Session;
   const user = (await userData(session.user.id as string)) as User;
   const adminChart = (await getAllStatusData()) as readonly BarDatum[];
-  const chartData = (await getShipmentDataByYear(2024)) as BarDatum[];
-  const kpiData = await Promise.all([
-    shipmentNumber(),
-    getUserCount(),
-    getUserCount(userState.ACCEPTED),
-    getUserCount(userState.REJECTED),
-    getUserCount(userState.PENDING),
-  ]);
-  const userId =
-    session.user.role === ROLE.USER ? Number(session.user.id) : undefined;
-  const userKpiData = await Promise.all([
-    shipmentNumber(undefined, userId),
-    shipmentNumber(ShipmentState.PLANNED, userId),
-    shipmentNumber(ShipmentState.UNKNOWN, userId),
-    shipmentNumber(ShipmentState.DELIVERED, userId),
-    shipmentNumber(ShipmentState.IN_TRANSIT, userId),
-  ]);
+  const chartData = (await getShipmentDataByYear(
+    2024,
+    session.user.role === ROLE.USER ? user.id : undefined,
+  )) as BarDatum[];
+  const kpiData = await getShipmentDatabyRole(
+    session.user.role,
+    Number(session.user.id),
+  );
 
   return (
     <div className="flex-1 space-y-4 p-4 md:p-8 pt-6 ">
@@ -49,19 +74,19 @@ export default async function page() {
             <h2 className="text-2xl font-bold tracking-tight ">
               Credits: {user?.credits}
             </h2>
-            {/* <h2 className="text-3xl font-bold tracking-tight ">
-                
-              </h2> */}
           </div>
         )}
       </div>
 
       {session?.user.role !== ROLE.ADMIN ? (
-        <UserDashboardView chartData={chartData} kpiData={userKpiData} />
+        <UserDashboardView
+          chartData={chartData}
+          kpiData={kpiData as IKpiData["userKpi"]}
+        />
       ) : (
         <DashboardView
           adminData={adminChart}
-          kpiData={kpiData}
+          kpiData={kpiData as IKpiData["adminKpi"]}
           chartData={chartData}
         />
       )}

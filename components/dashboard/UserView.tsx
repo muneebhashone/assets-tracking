@@ -15,6 +15,7 @@ import { Session } from "next-auth";
 import { ROLE } from "@prisma/client";
 import { Skeleton } from "../ui/skeleton";
 import { BarChart } from "../BarChart";
+import { IKpiData } from "@/app/(dashboard)/dashboard/page";
 export interface AdminData {
   name: string;
   count: number;
@@ -22,23 +23,7 @@ export interface AdminData {
 
 interface DashboardProps {
   chartData: readonly BarDatum[];
-  kpiData: [
-    {
-      shipmentCount: number;
-    },
-    {
-      shipmentCount: number;
-    },
-    {
-      shipmentCount: number;
-    },
-    {
-      shipmentCount: number;
-    },
-    {
-      shipmentCount: number;
-    },
-  ];
+  kpiData: IKpiData["userKpi"];
 }
 export default function UserDashboardView({
   chartData,
@@ -133,7 +118,11 @@ export default function UserDashboardView({
               <CardTitle>Shipment Volumes</CardTitle>
             </CardHeader>
             <CardContent>
-              <BarChart className={"aspect-[9/4]"} data={chartData} />
+              {chartData ? (
+                <BarChart className={"aspect-[9/4]"} data={chartData} />
+              ) : (
+                <p className="text-lg">No Data to Show</p>
+              )}
             </CardContent>
           </Card>
         </div>
