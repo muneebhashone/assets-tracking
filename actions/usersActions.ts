@@ -270,21 +270,22 @@ export const getUserCount = async (status?: userState) => {
   if (status) {
     switch (status) {
       case userState.ACCEPTED:
-        filter["where"]["AND"] = {
-          status: { equals: "true" },
-        } as Prisma.UserWhereInput | Prisma.UserWhereInput[];
+        (filter?.["where"]?.["AND"] as Prisma.UserWhereInput[])?.push({
+          status: Status.true,
+        });
+        (filter?.["where"]?.["AND"] as Prisma.UserWhereInput[])?.push({
+          deleted: false,
+        });
         break;
       case userState.REJECTED:
-        filter["where"]["AND"] = {
-          deleted: { equals: true },
-        } as Prisma.UserWhereInput | Prisma.UserWhereInput[];
-
+        (filter?.["where"]?.["AND"] as Prisma.UserWhereInput[])?.push({
+          deleted: true,
+        });
         break;
       case userState.PENDING:
-        filter["where"]["AND"] = { status: { equals: "false" } } as
-          | Prisma.UserWhereInput
-          | Prisma.UserWhereInput[];
-
+        (filter?.["where"]?.["AND"] as Prisma.UserWhereInput[])?.push({
+          status: Status.false,
+        });
         break;
     }
   }

@@ -15,6 +15,7 @@ import { Session } from "next-auth";
 import { ROLE } from "@prisma/client";
 import { Skeleton } from "../ui/skeleton";
 import { BarChart } from "../BarChart";
+import { IKpiData } from "@/app/(dashboard)/dashboard/page";
 export interface AdminData {
   name: string;
   count: number;
@@ -23,23 +24,7 @@ export interface AdminData {
 interface DashboardProps {
   adminData: readonly BarDatum[];
   chartData: readonly BarDatum[];
-  kpiData: [
-    {
-      shipmentCount: number;
-    },
-    {
-      usersCount: number;
-    },
-    {
-      usersCount: number;
-    },
-    {
-      usersCount: number;
-    },
-    {
-      usersCount: number;
-    },
-  ];
+  kpiData: IKpiData["adminKpi"];
 }
 export default function DashboardView({
   adminData,
@@ -50,8 +35,8 @@ export default function DashboardView({
   const [
     { shipmentCount },
     { usersCount },
-    { usersCount: userCountAccepted },
     { usersCount: userCountRejected },
+    { usersCount: userCountAccepted },
     { usersCount: userCountPending },
   ] = kpiData;
   if (!session.data?.user.role) {
@@ -81,9 +66,6 @@ export default function DashboardView({
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{shipmentCount}</div>
-              {/* <p className="text-xs text-gray-500 dark:text-gray-400">
-                +5.2% from last month
-              </p> */}
             </CardContent>
           </Card>
           <Card>
@@ -93,9 +75,6 @@ export default function DashboardView({
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{usersCount}</div>
-              {/* <p className="text-xs text-gray-500 dark:text-gray-400">
-                +2.1% from last month
-              </p> */}
             </CardContent>
           </Card>
           <Card>
@@ -107,9 +86,6 @@ export default function DashboardView({
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{userCountRejected}</div>
-              {/* <p className="text-xs text-gray-500 dark:text-gray-400">
-                -3.2% from last month
-              </p> */}
             </CardContent>
           </Card>
           <Card>
@@ -121,9 +97,6 @@ export default function DashboardView({
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{userCountAccepted}</div>
-              {/* <p className="text-xs text-gray-500 dark:text-gray-400">
-                -0.2 days from last month
-              </p> */}
             </CardContent>
           </Card>
           <Card>
@@ -135,9 +108,6 @@ export default function DashboardView({
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{userCountPending}</div>
-              {/* <p className="text-xs text-gray-500 dark:text-gray-400">
-                -0.2 days from last month
-              </p> */}
             </CardContent>
           </Card>
         </div>
@@ -147,7 +117,11 @@ export default function DashboardView({
               <CardTitle>Shipment Volumes</CardTitle>
             </CardHeader>
             <CardContent>
-              <BarChart className={"aspect-[9/4]"} data={chartData} />
+              {chartData ? (
+                <BarChart className={"aspect-[9/4]"} data={chartData} />
+              ) : (
+                <p className="text-lg">No Data to Show</p>
+              )}
             </CardContent>
           </Card>
 
@@ -156,7 +130,11 @@ export default function DashboardView({
               <CardTitle>Number of Shipments per Status</CardTitle>
             </CardHeader>
             <CardContent>
-              <BarChart className="aspect-[9/4]" data={adminData} />
+              {adminData ? (
+                <BarChart className={"aspect-[9/4]"} data={adminData} />
+              ) : (
+                <p className="text-lg">No Data to Show</p>
+              )}
             </CardContent>
           </Card>
         </div>

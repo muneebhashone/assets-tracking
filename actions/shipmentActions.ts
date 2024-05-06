@@ -8,7 +8,7 @@ import {
   ShipmentData,
   shipmentDataWithPagination,
 } from "@/types";
-import { DBErrors, ShipmentState } from "@/types/enums";
+import { DBErrors, ShipmentState, userState } from "@/types/enums";
 import { checkUserCredits, getPaginator } from "@/utils";
 import { removeCoins } from "./insertCoins";
 
@@ -21,6 +21,7 @@ import {
   DefaultArgs,
   PrismaClientKnownRequestError,
 } from "@prisma/client/runtime/library";
+import { getUserCount } from "./usersActions";
 
 export const getShipmentByUserId = async (params: {
   searchString: string | null;
@@ -200,23 +201,62 @@ export const getAllStatusData = async () => {
   return formattedResponse;
 };
 
-export const getShipmentDataByYear = async (year: number) => {
-  const monthCounts = await db.$queryRaw`
-SELECT
-    TO_CHAR(created_at, 'Mon') AS name,
+export const getShipmentDataByYear = async (year: number, userId?: number) => {
+  let query = Prisma.sql`
+  SELECT
+      TO_CHAR(created_at, 'Mon') AS name,
+      CAST(COUNT(*) AS INTEGER) AS count
+  FROM "Shipment"
+  WHERE
+      EXTRACT(YEAR FROM created_at) = ${year}
+  GROUP BY
+      TO_CHAR(created_at, 'Mon'), EXTRACT(MONTH FROM created_at)
+  ORDER BY
+      EXTRACT(MONTH FROM created_at)
+  `;
+  if (userId) {
+    query = Prisma.sql`SELECT
+    TO_CHAR(s.created_at, 'Mon') AS name,
     CAST(COUNT(*) AS INTEGER) AS count
-FROM "Shipment"
+FROM 
+    "Shipment" s
+JOIN 
+    "User" u ON s."userId" = u.id
 WHERE
-    EXTRACT(YEAR FROM created_at) = ${year}
+    EXTRACT(YEAR FROM s.created_at) = ${year}
+    AND u.id = ${userId} 
 GROUP BY
-    TO_CHAR(created_at, 'Mon'), EXTRACT(MONTH FROM created_at)
+    TO_CHAR(s.created_at, 'Mon'), EXTRACT(MONTH FROM s.created_at)
 ORDER BY
-    EXTRACT(MONTH FROM created_at)
-`;
+    EXTRACT(MONTH FROM s.created_at)`;
+  }
+  const monthCounts = await db.$queryRaw(query);
   if ((monthCounts as Array<Record<string, number>>)?.length) {
     return monthCounts;
   }
   return null;
+};
+
+export const getShipmentDatabyRole = async (role: ROLE, userId: number) => {
+  switch (role) {
+    case ROLE.ADMIN:
+      return await Promise.all([
+        shipmentNumber(),
+        getUserCount(),
+        getUserCount(userState.REJECTED),
+        getUserCount(userState.ACCEPTED),
+        getUserCount(userState.PENDING),
+      ]);
+
+    case ROLE.USER:
+      return await Promise.all([
+        shipmentNumber(undefined, userId),
+        shipmentNumber(ShipmentState.PLANNED, userId),
+        shipmentNumber(ShipmentState.UNKNOWN, userId),
+        shipmentNumber(ShipmentState.DELIVERED, userId),
+        shipmentNumber(ShipmentState.IN_TRANSIT, userId),
+      ]);
+  }
 };
 
 export const shipmentNumber = async (
@@ -229,29 +269,33 @@ export const shipmentNumber = async (
     },
   };
   if (userId) {
-    filter?.where?.AND?.push({ user: { id: userId } });
+    (filter?.where?.AND as Prisma.ShipmentWhereInput[])?.push({
+      user: { id: userId },
+    });
   }
   if (status) {
     switch (status) {
       case ShipmentState.DELIVERED:
-        filter?.where?.AND?.push({
+        (filter?.where?.AND as Prisma.ShipmentWhereInput[])?.push({
           status: { equals: ShipmentState.DELIVERED },
         });
         break;
       case ShipmentState.PLANNED:
-        filter?.where?.AND?.push({
+        (filter?.where?.AND as Prisma.ShipmentWhereInput[])?.push({
           status: { equals: ShipmentState.PLANNED },
         });
 
         break;
       case ShipmentState.IN_TRANSIT:
-        filter?.where?.AND?.push({
+        (filter?.where?.AND as Prisma.ShipmentWhereInput[])?.push({
           status: { equals: ShipmentState.IN_TRANSIT },
         });
 
         break;
       case ShipmentState.UNKNOWN:
-        filter?.where?.AND?.push({ status: { equals: ShipmentState.UNKNOWN } });
+        (filter?.where?.AND as Prisma.ShipmentWhereInput[])?.push({
+          status: { equals: ShipmentState.UNKNOWN },
+        });
 
         break;
     }
