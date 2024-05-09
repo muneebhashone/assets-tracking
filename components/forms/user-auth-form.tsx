@@ -28,7 +28,11 @@ const formSchema = z.object({
 
 type UserFormValue = z.infer<typeof formSchema>;
 
-export default function UserAuthForm({ shipmentData }: { shipmentData: ICreateShipment }) {
+export default function UserAuthForm({
+  shipmentData,
+}: {
+  shipmentData: ICreateShipment;
+}) {
   const router = useRouter();
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
@@ -59,9 +63,12 @@ export default function UserAuthForm({ shipmentData }: { shipmentData: ICreateSh
         setLoading(false);
         return;
       }
+
       if (signInUser?.ok) {
         if (shipmentData) {
-          router.push(`/dashboard/shipment/?carrier=${shipmentData.carrier}&tracking_number=${shipmentData.tracking_number}`);
+          router.push(
+            `/dashboard/shipment/?carrier=${shipmentData.carrier}&tracking_number=${shipmentData.tracking_number}`,
+          );
         } else {
           router.push("/dashboard");
         }
@@ -116,7 +123,11 @@ export default function UserAuthForm({ shipmentData }: { shipmentData: ICreateSh
             )}
           />
 
-          <Button disabled={loading} className="ml-auto w-full bg-[#D3991F]" type="submit">
+          <Button
+            disabled={loading}
+            className="ml-auto w-full bg-[#D3991F]"
+            type="submit"
+          >
             Continue With Email
           </Button>
         </form>

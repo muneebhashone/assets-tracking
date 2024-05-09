@@ -11,8 +11,10 @@ import {
   SearchIcon,
   TrackingIcon,
 } from "@/components/Icons/index";
+import { getAllSeaRatesContainer } from "@/services/searates";
 
 const HeroSection = async () => {
+  const data = await getAllSeaRatesContainer();
   const session = await auth();
   const submitHandler = async (formData: FormData) => {
     "use server";
@@ -68,7 +70,10 @@ const HeroSection = async () => {
                   className="md:w-[600px] h-[60px] px-16 text-[#A8A8A8] border border-[#A8A8A8]"
                 >
                   {/* <option value={shipmentType.ZIMLINE}>Zimline</option> */}
-                  <option value={shipmentType.SEARATE}>Sea Rates</option>
+                  {data &&
+                    data?.map((info) => {
+                      return <option value={info.code}>{info.name}</option>;
+                    })}
                   <option value="others">Others</option>
                 </select>
                 {/* <Input

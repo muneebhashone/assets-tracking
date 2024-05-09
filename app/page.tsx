@@ -2,12 +2,11 @@ import FaqAccordian from "@/components/FaqAccordian";
 import FaqSectionBox from "@/components/FaqSectionBox";
 import Header from "@/components/Header";
 import HeroSection from "@/components/HeroSection";
+import { NotificationIcon } from "@/components/Icons/index";
 import MainFooter from "@/components/MainFooter";
-
 import NotificationCard from "@/components/NotificationCard";
 import SectionHeading from "@/components/SectionHeading";
 import TestimonialCardSection from "@/components/TestimonialCardSection";
-import { NotificationIcon } from "@/components/Icons/index";
 import {
   cardlist,
   cardlisting,
@@ -20,11 +19,10 @@ import {
 } from "@/constants/data";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
 
 type Props = {};
 
-const LandingPage = (props: Props) => {
+const LandingPage = async (props: Props) => {
   return (
     <div>
       <Header />

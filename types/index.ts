@@ -1,5 +1,6 @@
 import { Icons } from "@/components/icons";
 import { Shipment, User, Vessel } from "@prisma/client";
+import { SEARATES_CODES } from "./messgaes";
 
 export interface NavItem {
   title: string;
@@ -205,10 +206,11 @@ interface SeaRatesData {
   containers: Container[];
   route_data: RouteData;
 }
+export type APIMessage = keyof typeof SEARATES_CODES;
 
-export interface ApiResponse {
+export interface SeaRatesApiResponse {
   status: "error" | "success";
-  message: string;
+  message: APIMessage;
   data: SeaRatesData;
 }
 
@@ -235,6 +237,26 @@ export interface shipmentDataWithPagination {
     pageSize: number;
   };
 }
+
+export interface SearatesSealineApiResponse {
+  status: "success" | "error";
+  message: "OK" | "UNEXPECTED_ERROR";
+  data: ShippingLine[];
+}
+
+interface ShippingLine {
+  name: string;
+  active: boolean;
+  active_types: {
+    ct: boolean;
+    bl: boolean;
+    bk: boolean;
+  };
+  maintenance: boolean;
+  scac_codes: string[];
+  prefixes: string[] | null;
+}
+
 export type MainNavItem = NavItemWithOptionalChildren;
 
 export type SidebarNavItem = NavItemWithChildren;
