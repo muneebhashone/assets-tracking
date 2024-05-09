@@ -44,6 +44,7 @@ export const getShipmentByUserId = async (params: {
           },
         },
         { carrier: { contains: params.searchString, mode: "insensitive" } },
+        { sealine: { contains: params.searchString, mode: "insensitive" } },
         { type: { contains: params.searchString, mode: "insensitive" } },
         { status: { contains: params.searchString, mode: "insensitive" } },
         {
@@ -98,6 +99,7 @@ export const getAllShipments = async (params: {
           },
         },
         { carrier: { contains: params.searchString, mode: "insensitive" } },
+        { sealine: { contains: params.searchString, mode: "insensitive" } },
         { type: { contains: params.searchString, mode: "insensitive" } },
         { status: { contains: params.searchString, mode: "insensitive" } },
         { arrivalTime: { contains: params.searchString, mode: "insensitive" } },
@@ -157,22 +159,24 @@ export const insertShipmentRecord: (
     if (!check) {
       return { status: "error", message: coins_err };
     }
-    const res = await adapterHandler(carrier, {
+    const res = await adapterHandler("SEARATE", {
       carrier,
       tracking_number,
       userId,
     });
-    if (res) {
+    if (res?.data) {
+      const ship = res?.data;
       const statusCheckData = {
-        trackingNumber: res.tracking_number,
-        arrivalTime: res.arrivalTime,
-        userId: res.userId,
+        trackingNumber: ship.tracking_number,
+        arrivalTime: ship.arrivalTime,
+        userId: ship.userId,
+        carrier: carrier,
       };
       await removeCoins(userId);
       await createTrackingQueueEntry(statusCheckData);
-      return { status: "success", message: "shipment added" };
+      // return { status: res.status, message: res.message };
     }
-    return { status: "error", message: shipment_creation_error };
+    return { status: res?.status, message: res?.message };
   } catch (error: unknown | PrismaClientKnownRequestError) {
     if (
       (error as PrismaClientKnownRequestError)?.code ===

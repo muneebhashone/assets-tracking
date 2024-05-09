@@ -47,7 +47,7 @@ export default function UserAuthFormSignUp() {
       toast({
         title: data.message,
         duration: 3000,
-        variant: "destructive",
+        variant: "default",
       });
       router.push("/signin");
     },
@@ -135,7 +135,11 @@ export default function UserAuthFormSignUp() {
             )}
           />
 
-          <Button disabled={isPending} className="ml-auto w-full bg-[#D3991F]" type="submit">
+          <Button
+            disabled={isPending}
+            className="ml-auto w-full bg-[#D3991F]"
+            type="submit"
+          >
             submit
           </Button>
         </form>

@@ -19,7 +19,6 @@ export default async function Component(props: PageProps) {
     return null;
   }
 
-
   return (
     <div className="h-[100%] overflow-y-scroll">
       <div className="flex items-center h-14 border-b px-4 md:h-16 bg-gray-100/40 dark:bg-gray-800/40">
@@ -70,7 +69,9 @@ export default async function Component(props: PageProps) {
               <CardTitle>Carrier</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-semibold">{shipData.carrier}</div>
+              <div className="text-2xl font-semibold">
+                {shipData.sealine} ({shipData.carrier})
+              </div>
             </CardContent>
           </Card>
         </div>

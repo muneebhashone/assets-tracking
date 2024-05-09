@@ -36,7 +36,7 @@ export const ShippingCardsView = (props: ShipmentProps) => {
                         Tracking Number: {ship.tracking_number}
                       </Label>
                       <Label htmlFor="sealine_name">
-                        Sealine Name: {ship.name}
+                        Carrier: {ship.sealine}
                       </Label>
                       <Label htmlFor="status">Status: {ship.status}</Label>
                       <Label htmlFor="status">

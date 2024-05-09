@@ -32,12 +32,13 @@ model Shipment {
   id              Int      @id @default(autoincrement())
   userId          Int
   status          String
-  carrier         String
-  arrivalTime     String
-  name            String
   tracking_number String
+  aggregator      String
+  carrier         String
+  sealine         String
+  arrivalTime     String
   type            String
-  created_at       DateTime @default(now())
+  created_at      DateTime @default(now())
   user            User     @relation(fields: [userId], references: [id])
   vessels         Vessel[]
 
