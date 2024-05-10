@@ -118,6 +118,9 @@ export const getAllShipments = async (params: {
     // const filter =
     const shippingData = await db.shipment.findMany({
       ...filter,
+      include: {
+        user: { select: { name: true } },
+      },
       distinct: "id",
       skip: paginatorInfo.skip,
       take: paginatorInfo.pageSize,
@@ -182,7 +185,7 @@ export const insertShipmentRecord: (
       (error as PrismaClientKnownRequestError)?.code ===
       DBErrors.UNIQUE_KEY_ERROR
     )
-      return { status: "error", message: "Shipment Already Made" };
+      return { status: "warning", message: "Shipment Already Made" };
     return { status: "error", message: (error as Error).message };
   }
 };

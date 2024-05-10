@@ -6,6 +6,8 @@ import { ShipmentData, shipmentDataWithPagination } from "@/types";
 import CardViewPagination from "../pagination/CardViewPagination";
 import { ReadonlyURLSearchParams } from "next/navigation";
 import SearchBar from "../SearchBar";
+import { ShipmentTable } from "../tables/shipment-table/shipment-table";
+import { columns } from "../tables/shipment-table/columns";
 
 type Props = {
   searchParams: {
@@ -24,6 +26,7 @@ const AdminDashboard = async (props: Props) => {
   const shipmentResponse = (await getAllShipments(
     params,
   )) as shipmentDataWithPagination;
+
   return (
     <>
       <div className="flex flex-col ">
@@ -34,8 +37,12 @@ const AdminDashboard = async (props: Props) => {
 
         {shipmentResponse?.data?.length ? (
           <>
-            <ShippingCardsView shipData={shipmentResponse?.data} />
-            <CardViewPagination paginator={shipmentResponse.paginatorInfo} />
+            <ShipmentTable
+              data={shipmentResponse.data}
+              columns={columns}
+              pageCount={shipmentResponse.paginatorInfo.totalRecords}
+              searchParams={searchParams}
+            />
           </>
         ) : (
           <h1>no record found</h1>

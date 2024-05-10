@@ -67,6 +67,12 @@ const ShipmentComponent = (props: Props) => {
           title: "Success",
           description: insert?.message as string,
         })
+      : insert.status === "warning"
+      ? toast({
+          title: "Warning",
+          description: insert?.message as string,
+          variant: "warning",
+        })
       : toast({
           title: "Error",
           description: insert?.message as string,
