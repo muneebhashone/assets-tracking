@@ -22,7 +22,10 @@ import {
   PrismaClientKnownRequestError,
 } from "@prisma/client/runtime/library";
 import { getUserCount } from "./usersActions";
-
+interface MonthData {
+  name: string;
+  count: number;
+}
 export const getShipmentByUserId = async (params: {
   searchString: string | null;
   limitParam: number;
@@ -151,44 +154,42 @@ export const getShipmentByTrackingNumber = async (trackingNumber: string) => {
   }
 };
 
-export const insertShipmentRecord: (
-  payload: ICreateShipment,
-) => Promise<IResponse> | unknown = async (payload: ICreateShipment) => {
-  try {
-    const session = await auth();
-    const userId = Number(session?.user.id);
-    const { tracking_number, carrier } = payload;
-    const check = await checkUserCredits(userId);
-    if (!check) {
-      return { status: "error", message: coins_err };
-    }
-    const res = await adapterHandler("SEARATE", {
-      carrier,
-      tracking_number,
-      userId,
-    });
-    if (res?.data) {
-      const ship = res?.data;
-      const statusCheckData = {
-        trackingNumber: ship.tracking_number,
-        arrivalTime: ship.arrivalTime,
-        userId: ship.userId,
-        carrier: carrier,
-      };
-      await removeCoins(userId);
-      await createTrackingQueueEntry(statusCheckData);
-      // return { status: res.status, message: res.message };
-    }
-    return { status: res?.status, message: res?.message };
-  } catch (error: unknown | PrismaClientKnownRequestError) {
-    if (
-      (error as PrismaClientKnownRequestError)?.code ===
-      DBErrors.UNIQUE_KEY_ERROR
-    )
-      return { status: "warning", message: "Shipment Already Made" };
-    return { status: "error", message: (error as Error).message };
-  }
-};
+// export const insertShipmentRecord: (
+//   payload: ICreateShipment,
+// ) => Promise<IResponse> | unknown = async (payload: ICreateShipment) => {
+//   try {
+//     const { tracking_number, carrier, userId } = payload;
+//     const check = await checkUserCredits(userId);
+
+//     if (!check) {
+//       return { status: "error", message: coins_err };
+//     }
+//     const res = await adapterHandler("SEARATE", {
+//       carrier,
+//       tracking_number,
+//       userId,
+//     });
+//     if (res?.data) {
+//       const ship = res?.data;
+//       const statusCheckData = {
+//         trackingNumber: ship.tracking_number,
+//         arrivalTime: ship.arrivalTime,
+//         userId: ship.userId,
+//         carrier: carrier,
+//       };
+//       await removeCoins(userId);
+//       await createTrackingQueueEntry(statusCheckData);
+//     }
+//     return { status: res?.status, message: res?.message };
+//   } catch (error: unknown | PrismaClientKnownRequestError) {
+//     if (
+//       (error as PrismaClientKnownRequestError)?.code ===
+//       DBErrors.UNIQUE_KEY_ERROR
+//     )
+//       return { status: "warning", message: "Shipment Already Made" };
+//     return { status: "error", message: (error as Error).message };
+//   }
+// };
 
 export const getAllStatusData = async () => {
   const admin = await auth();
@@ -237,9 +238,32 @@ GROUP BY
 ORDER BY
     EXTRACT(MONTH FROM s.created_at)`;
   }
-  const monthCounts = await db.$queryRaw(query);
-  if ((monthCounts as Array<Record<string, number>>)?.length) {
-    return monthCounts;
+  const monthCounts: MonthData[] = await db.$queryRaw(query);
+  const allMonths = [
+    { name: "Jan", count: 0 },
+    { name: "Feb", count: 0 },
+    { name: "Mar", count: 0 },
+    { name: "Apr", count: 0 },
+    { name: "May", count: 0 },
+    { name: "Jun", count: 0 },
+    { name: "Jul", count: 0 },
+    { name: "Aug", count: 0 },
+    { name: "Feb", count: 0 },
+    { name: "Sep", count: 0 },
+    { name: "Oct", count: 0 },
+    { name: "Nov", count: 0 },
+    { name: "Dec", count: 0 },
+  ];
+
+  if (monthCounts?.length) {
+    monthCounts.forEach((element) => {
+      const monthIndex = allMonths.findIndex((x) => x.name === element.name);
+      if (monthIndex !== -1) {
+        allMonths[monthIndex].count = element.count;
+      }
+    });
+
+    return allMonths;
   }
   return null;
 };

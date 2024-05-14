@@ -6,9 +6,7 @@ import { Poppins } from "next/font/google";
 import "./globals.css";
 import { getServerSession } from "next-auth";
 import { ReactQueryClientProvider } from "@/components/ReactQueryClientProvider";
-import AuthWrapper from "@/wrapper/AuthWrapper";
-import { useRouter } from "next/router";
-import UnAuthWrapper from "@/wrapper/UnAuthWrapper";
+import { InitializeSocket } from "@/stores/useSocketStore";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -34,6 +32,7 @@ export default async function RootLayout({
         <Providers session={session}>
           <ReactQueryClientProvider>
             <Toaster />
+            <InitializeSocket />
             {children}
           </ReactQueryClientProvider>
         </Providers>

@@ -6,7 +6,9 @@ import { Heading } from "@/components/ui/heading";
 import { Separator } from "@/components/ui/separator";
 import { IUser } from "@/types";
 
-const breadcrumbItems = [{ title: "Employee", link: "/dashboard/rejectedUsers" }];
+const breadcrumbItems = [
+  { title: "Employee", link: "/dashboard/rejectedUsers" },
+];
 
 type paramsProps = {
   searchParams: {
@@ -45,7 +47,7 @@ export default async function Page({ searchParams }: paramsProps) {
           columns={columns}
           totalUsers={resData?.totalUsers}
           data={resData?.users as IUser[]}
-          pageCount={resData.totalUsers}
+          pageCount={resData.totalPages}
         />
       </div>
     </>

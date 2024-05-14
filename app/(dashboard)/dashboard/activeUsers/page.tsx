@@ -24,11 +24,11 @@ export default async function Page({ searchParams }: paramsProps) {
     pageSizeParam: pageLimit,
   });
 
-  const resData = response;
+  // const resData = response;
 
   return (
     <>
-      {resData === "unauthorized" ? (
+      {response === "unauthorized" ? (
         <h1>you dont have access to this route</h1>
       ) : (
         <div className="flex-1 space-y-4  p-4 md:p-8 pt-6">
@@ -36,7 +36,7 @@ export default async function Page({ searchParams }: paramsProps) {
 
           <div className="flex items-start justify-between">
             <Heading
-              title={`ActiveUsers (${resData?.totalUsers})`}
+              title={`Active Users (${response?.totalUsers})`}
               description="Manage active users "
             />
           </div>
@@ -46,9 +46,9 @@ export default async function Page({ searchParams }: paramsProps) {
             // searchKey="country"
             pageNo={page}
             columns={columns}
-            totalUsers={resData?.totalUsers}
-            data={resData?.users as IUser[]}
-            pageCount={resData.totalUsers}
+            totalUsers={response?.totalUsers}
+            data={response?.users as IUser[]}
+            pageCount={response.totalPages}
           />
         </div>
       )}

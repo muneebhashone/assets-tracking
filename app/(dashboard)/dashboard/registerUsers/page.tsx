@@ -45,7 +45,7 @@ export default async function Page({ searchParams }: paramsProps) {
           columns={columns}
           totalUsers={resData?.totalUsers}
           data={resData?.users as IUser[]}
-          pageCount={resData.totalUsers}
+          pageCount={resData.totalPages}
         />
       </div>
     </>

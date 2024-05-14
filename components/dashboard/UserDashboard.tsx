@@ -68,7 +68,7 @@ const UserDashboard = async (props: Props) => {
             <ShipmentTable
               data={shipmentData.data}
               columns={columns}
-              pageCount={shipmentData.paginatorInfo.totalRecords}
+              pageCount={shipmentData.paginatorInfo.pages}
               searchParams={searchParams}
             />
             {/* <ShippingCardsView shipData={shipmentData.data} /> */}

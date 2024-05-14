@@ -1,21 +1,10 @@
 "use client";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { ResponsiveLine } from "@nivo/line";
-import { DetailedHTMLProps, HTMLAttributes } from "react";
-import { ClockIcon, PackageIcon, TruckIcon } from "../Icons/index";
-import { BarDatum, ResponsiveBar } from "@nivo/bar";
-import { useSession } from "next-auth/react";
-import { Session } from "next-auth";
-import { ROLE } from "@prisma/client";
-import { Skeleton } from "../ui/skeleton";
-import { BarChart } from "../BarChart";
 import { IKpiData } from "@/app/(dashboard)/dashboard/page";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { BarDatum } from "@nivo/bar";
+import { useSession } from "next-auth/react";
+import { BarChart } from "../BarChart";
+import { ClockIcon, PackageIcon, TruckIcon } from "../Icons/index";
 export interface AdminData {
   name: string;
   count: number;
