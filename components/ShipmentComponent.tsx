@@ -1,11 +1,13 @@
 "use client";
-import { insertShipmentRecord } from "@/actions/shipmentActions";
+
 import { Button } from "@/components/ui/button";
 import { Heading } from "@/components/ui/heading";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
-import { ICreateShipment, IResponse } from "@/types";
+import { createShipmentEntry } from "@/services/shipment";
+import { ICreateShipment } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useSession } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -15,6 +17,7 @@ export interface ShippingData {
   name: string;
   code: string;
 }
+
 type Props = {
   data: ShippingData[] | undefined;
 };
@@ -32,17 +35,13 @@ const schema = z.object({
 const ShipmentComponent = (props: Props) => {
   const { data } = props;
 
-  const { toast } = useToast();
   const router = useRouter();
   const [loading, setLoading] = useState<boolean>(false);
   const searchParams = useSearchParams();
-  const {
-    formState: { errors },
-    register,
-    handleSubmit,
-    setValue,
-    reset,
-  } = useForm<ICreateShipment>({
+  const { toast } = useToast();
+  const session = useSession();
+
+  const { register, handleSubmit, setValue, reset } = useForm<ICreateShipment>({
     resolver: zodResolver(schema),
   });
 
@@ -60,28 +59,14 @@ const ShipmentComponent = (props: Props) => {
   const onSubmit = async (payload: ICreateShipment) => {
     setLoading(true);
 
-    const insert = (await insertShipmentRecord(payload)) as IResponse;
+    const response = await createShipmentEntry({
+      carrier: payload.carrier,
+      trackingNumber: payload.tracking_number,
+      userId: Number(session.data?.user.id),
+    });
     setLoading(false);
-    insert.status === "success"
-      ? toast({
-          title: "Success",
-          description: insert?.message as string,
-        })
-      : insert.status === "warning"
-      ? toast({
-          title: "Warning",
-          description: insert?.message as string,
-          variant: "warning",
-        })
-      : toast({
-          title: "Error",
-          description: insert?.message as string,
-          variant: "destructive",
-        });
-    if (insert.status === "success") {
-      router.refresh();
-      router.back();
-    }
+    toast({ title: response.status, description: response.message });
+    router.back();
     reset();
   };
 
@@ -91,6 +76,7 @@ const ShipmentComponent = (props: Props) => {
         title="Single Shipment"
         description="You can track shipment by Container Number or MBL / Booking Number."
       />
+
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className=" mt-5">
           <div className="my-5">
@@ -102,8 +88,12 @@ const ShipmentComponent = (props: Props) => {
               >
                 {/* <option value={shipmentType.SEARATE}>SEARATE</option> */}
                 {data &&
-                  data?.map((info) => {
-                    return <option value={info.code}>{info.name}</option>;
+                  data?.map((info, index) => {
+                    return (
+                      <option key={index} value={info.code}>
+                        {info.name}
+                      </option>
+                    );
                   })}
               </select>
             </Suspense>

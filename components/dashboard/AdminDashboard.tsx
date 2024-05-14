@@ -40,7 +40,7 @@ const AdminDashboard = async (props: Props) => {
             <ShipmentTable
               data={shipmentResponse.data}
               columns={columns}
-              pageCount={shipmentResponse.paginatorInfo.totalRecords}
+              pageCount={shipmentResponse.paginatorInfo.pages}
               searchParams={searchParams}
             />
           </>

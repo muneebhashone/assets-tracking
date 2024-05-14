@@ -15,7 +15,14 @@ export const searatesAdapter = async (payload: {
     tracking_number,
     carrier,
   );
-  if (res.data.status === "success") {
+
+  if (
+    res.data.status === "success" &&
+    res.data.message !== "SEALINE_HASNT_PROVIDE_INFO" &&
+    res.data.message !== "SEALINE_CANCELED_SHIPMENT" &&
+    res.data.message !== "NO_CONTAINERS" &&
+    res.data.message !== "NO_EVENTS"
+  ) {
     const metadata = res.data.data.metadata;
     const vesselData = res.data.data.vessels.map((ves) => {
       return { name: ves.name, flag: ves.flag, fid: ves.id };
@@ -41,6 +48,7 @@ export const searatesAdapter = async (payload: {
       };
     }
     const ship = await db.shipment.create({ data: { ...data } });
+
     return {
       status: res.data.status,
       data: ship,

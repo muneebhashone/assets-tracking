@@ -89,6 +89,7 @@ export interface ICreateShipment {
   // arivalTime: string;
   tracking_number: string;
   carrier: string;
+  userId: number;
 }
 interface Location {
   id: number;
