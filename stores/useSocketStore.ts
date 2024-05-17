@@ -5,6 +5,7 @@ import { Socket, io } from "socket.io-client";
 import { useEffect } from "react";
 import { useToast } from "@/components/ui/use-toast";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 interface IUseSocketStore {
   io: Socket;
@@ -13,7 +14,7 @@ interface IUseSocketStore {
 }
 
 const initSocket = io(`${process.env.NEXT_PUBLIC_QUEUE_SERVER_URL}`, {
-  transports: ["websocket", "polling"],
+  transports: ["websocket"],
 });
 
 export const useSocketStore = create<IUseSocketStore>((set) => ({
@@ -27,6 +28,7 @@ export const InitializeSocket = () => {
 
   const { toast } = useToast();
   const session = useSession();
+  const router = useRouter();
   useEffect(() => {
     io.on("connect", () => setConnected(true));
 
@@ -44,6 +46,7 @@ export const InitializeSocket = () => {
         ? toast({
             title: "Success",
             description: message,
+            variant: "default",
           })
         : status === "warning"
         ? toast({
@@ -61,6 +64,10 @@ export const InitializeSocket = () => {
     if (io && session?.data?.user.id) {
       const userIdMessageEvent = `${session.data.user.id}:message`;
       io.on(userIdMessageEvent, ({ status, message }) => {
+        if (status === "success") {
+          router.refresh();
+        }
+
         throwToast(status, message);
       });
 

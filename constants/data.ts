@@ -94,7 +94,6 @@ export const users: User[] = [
 
 export type Employee = {
   id: number;
-
   email: string;
   name: string;
   status: boolean;
@@ -132,6 +131,12 @@ export const adminNavItems: NavItem[] = [
     icon: "employee",
     label: "employee",
   },
+  // {
+  //   title: "Company",
+  //   href: "/dashboard/company",
+  //   icon: "laptop",
+  //   label: "company",
+  // },
 ];
 export const userNavItems: NavItem[] = [
   {

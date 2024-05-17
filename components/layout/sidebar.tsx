@@ -6,10 +6,12 @@ import { ROLE } from "@/types";
 
 export default async function Sidebar() {
   const session = await auth();
-  const { role } = session?.user;
+  const role = session?.user?.role;
   return (
     <nav
-      className={cn(`relative hidden h-screen border-r pt-16 lg:block w-72 bg-[#3491fe]`)}
+      className={cn(
+        `relative hidden h-screen border-r pt-16 lg:block w-72 bg-[#3491fe]`,
+      )}
     >
       <div className="space-y-4 py-4">
         <div className="px-3 py-2">
