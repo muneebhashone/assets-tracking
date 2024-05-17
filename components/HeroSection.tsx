@@ -71,8 +71,12 @@ const HeroSection = async () => {
                 >
                   {/* <option value={shipmentType.ZIMLINE}>Zimline</option> */}
                   {data &&
-                    data?.map((info) => {
-                      return <option value={info.code}>{info.name}</option>;
+                    data?.map((info, index) => {
+                      return (
+                        <option key={index} value={info.code}>
+                          {info.name}
+                        </option>
+                      );
                     })}
                   <option value="others">Others</option>
                 </select>
