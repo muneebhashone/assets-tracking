@@ -8,16 +8,17 @@ datasource db {
 }
 
 model User {
-  id        Int        @id @default(autoincrement())
-  email     String     @unique
-  name      String?
-  role      ROLE       @default(USER)
-  status    Status     @default(false)
-  password  String     @map("password")
-  credits   Int?       @default(0)
-  deleted   Boolean    @default(false)
-  Company   Company?
-  shipments Shipment[]
+  id          Int        @id @default(autoincrement())
+  email       String     @unique
+  name        String?
+  permissions String[]   @default([])
+  role        ROLE       @default(USER)
+  status      Status     @default(false)
+  password    String     @map("password")
+  credits     Int?       @default(0)
+  deleted     Boolean    @default(false)
+  Company     Company?
+  shipments   Shipment[]
 }
 
 model Vessel {
@@ -47,13 +48,16 @@ model Shipment {
 }
 
 model Company {
-  id          Int      @id @default(autoincrement())
-  name        String
-  permissions String[] @default([])
-  ownerId     Int      @unique
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime
-  User        User     @relation(fields: [ownerId], references: [id])
+  id        Int      @id @default(autoincrement())
+  name      String
+  address   String
+  country   String
+  city      String
+  industry  String
+  ownerId   Int      @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime
+  User      User     @relation(fields: [ownerId], references: [id])
 }
 
 enum Status {
