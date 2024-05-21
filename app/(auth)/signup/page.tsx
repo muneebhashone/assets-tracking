@@ -7,6 +7,7 @@ import UserAuthFormSignUp from "@/components/forms/user-auth-from-signup";
 import Image from "next/image";
 
 import { TabsList, Tabs, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import CompanyAuthFormSignUp from "@/components/forms/user-company-form";
 
 export const metadata: Metadata = {
   title: "Authentication",
@@ -62,7 +63,7 @@ export default function AuthenticationPage() {
               <UserAuthFormSignUp />
             </TabsContent>
             <TabsContent value="company">
-              <UserAuthFormSignUp />
+              <CompanyAuthFormSignUp />
             </TabsContent>
           </Tabs>
 

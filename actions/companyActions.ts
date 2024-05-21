@@ -21,7 +21,11 @@ export const getAllCompany = async (params: {
       data: company.length ? company : null,
       paginatorInfo,
     };
-  } catch (error) {
-    return error as Error;
+  } catch (error: any) {
+    // any will be replaced later
+    return {
+      data: [],
+      message: error?.message,
+    };
   }
 };

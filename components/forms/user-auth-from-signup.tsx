@@ -18,25 +18,24 @@ import * as z from "zod";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import { useToast } from "../ui/use-toast";
-const formSchema = z.object({
-  email: z
-    .string({ required_error: "email is required" })
-    .email({ message: "Enter a valid email address" }),
-  password: z
-    .string({ required_error: "password is required" })
-    .min(8, { message: "atleast 8 digit long" })
-    .max(12, { message: "atmost is 12 digit" }),
-  name: z.string({ required_error: "name is required" }),
-});
-
-type UserFormValue = z.infer<typeof formSchema>;
+import { createUserFormSchema } from "@/lib/form-schema";
+import { CreateUserSchemaType } from "@/types";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
+import { useGetAllCompanies } from "@/hooks/useQuery";
 
 export default function UserAuthFormSignUp() {
   const { toast } = useToast();
   const searchParams = useSearchParams();
   const router = useRouter();
+  const { data: companiesResponse, isFetching } = useGetAllCompanies();
   const { mutate, isPending, isSuccess } = useMutation({
-    mutationFn: async (data: UserFormValue) => {
+    mutationFn: async (data: CreateUserSchemaType) => {
       const { data: responseData } = await axios.post(
         "/api/user/create_user",
         data,
@@ -65,12 +64,12 @@ export default function UserAuthFormSignUp() {
     password: "",
     name: "",
   };
-  const form = useForm<UserFormValue>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<CreateUserSchemaType>({
+    resolver: zodResolver(createUserFormSchema),
     defaultValues,
   });
 
-  const onSubmit = async (data: UserFormValue) => {
+  const onSubmit = async (data: CreateUserSchemaType) => {
     mutate(data);
   };
   return (
@@ -129,6 +128,33 @@ export default function UserAuthFormSignUp() {
                     disabled={isPending}
                     {...field}
                   />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="name"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Company</FormLabel>
+                <FormControl>
+                  <Select disabled={isPending || isFetching} {...field}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select your company" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {companiesResponse?.data?.map((company) => (
+                        <SelectItem
+                          key={company?.id}
+                          value={String(company?.id)}
+                        >
+                          {company?.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </FormControl>
                 <FormMessage />
               </FormItem>

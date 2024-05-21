@@ -2,11 +2,36 @@
 
 import { auth } from "@/lib/auth-options";
 import { db } from "@/lib/db";
-import { ROLE, Status } from "@/types";
+import { CreateUserSchemaType, ROLE, Status } from "@/types";
 import { userState } from "@/types/enums";
 import { checkUserExist2 } from "@/utils";
 import { Prisma } from "@prisma/client";
-import { DefaultArgs } from "@prisma/client/runtime/library";
+import argon2 from "argon2";
+
+export const createUser = async (payload: CreateUserSchemaType) => {
+  const { email, password, name, company: company_id } = payload;
+  const exist = await checkUserExist2(email);
+  if (exist) {
+    return {
+      message: "user already  exist",
+      status: 404,
+    };
+  }
+  const hash = await argon2.hash(password);
+  const user = await db.user.create({
+    data: {
+      email,
+      name,
+      password: hash,
+      Company: {
+        connect: {
+          id: Number(company_id),
+        },
+      },
+    },
+  });
+  return { message: "user created", status: 200, user };
+};
 
 export const getRegisteredUsers = async ({
   pageParam,

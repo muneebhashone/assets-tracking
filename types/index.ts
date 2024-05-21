@@ -1,6 +1,8 @@
 import { Icons } from "@/components/icons";
 import { Shipment, User, Vessel } from "@prisma/client";
 import { SEARATES_CODES } from "./messgaes";
+import { createCompanySchema, createUserFormSchema } from "@/lib/form-schema";
+import { infer as zInfer } from "zod";
 
 export interface NavItem {
   title: string;
@@ -63,12 +65,6 @@ export interface PaginatedUsers {
   currentPage: number;
   perPage: number;
   users: IUser[];
-}
-
-export interface IRegisterUser {
-  email: string;
-  name: string;
-  password: string;
 }
 
 export interface IInsertCoins {
@@ -262,3 +258,7 @@ interface ShippingLine {
 export type MainNavItem = NavItemWithOptionalChildren;
 
 export type SidebarNavItem = NavItemWithChildren;
+
+export type CreateUserSchemaType = zInfer<typeof createUserFormSchema>;
+
+export type CreateCompanySchemaType = zInfer<typeof createCompanySchema>;

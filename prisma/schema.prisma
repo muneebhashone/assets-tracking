@@ -49,15 +49,15 @@ model Shipment {
 
 model Company {
   id        Int      @id @default(autoincrement())
-  name      String
+  name      String   @unique
   address   String
   country   String
   city      String
   industry  String
-  ownerId   Int      @unique
+  ownerId   Int?     @unique
   createdAt DateTime @default(now())
   updatedAt DateTime
-  User      User     @relation(fields: [ownerId], references: [id])
+  User      User?    @relation(fields: [ownerId], references: [id])
 }
 
 enum Status {

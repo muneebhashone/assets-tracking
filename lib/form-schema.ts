@@ -37,3 +37,29 @@ export const profileSchema = z.object({
 });
 
 export type ProfileFormValues = z.infer<typeof profileSchema>;
+
+export const createUserFormSchema = z.object({
+  email: z
+    .string({ required_error: "email is required" })
+    .email({ message: "Enter a valid email address" }),
+  password: z
+    .string({ required_error: "password is required" })
+    .min(8, { message: "atleast 8 digit long" })
+    .max(12, { message: "atmost is 12 digit" }),
+  name: z.string({ required_error: "name is required" }),
+  company: z.string({ required_error: "Company is required" }),
+});
+
+export const createCompanySchema = z.object({
+  company: z.string({ required_error: "Company name is required" }),
+  country: z.string().optional(),
+  city: z.string().optional(),
+  email: z
+    .string({ required_error: "email is required" })
+    .email({ message: "Enter a valid email address" }),
+  password: z
+    .string({ required_error: "password is required" })
+    .min(8, { message: "atleast 8 digit long" })
+    .max(12, { message: "atmost is 12 digit" }),
+  name: z.string({ required_error: "name is required" }),
+});

@@ -18,29 +18,16 @@ import * as z from "zod";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import { useToast } from "../ui/use-toast";
-const formSchema = z.object({
-  email: z
-    .string({ required_error: "email is required" })
-    .email({ message: "Enter a valid email address" }),
-  password: z
-    .string({ required_error: "password is required" })
-    .min(8, { message: "atleast 8 digit long" })
-    .max(12, { message: "atmost is 12 digit" }),
-  name: z.string({ required_error: "name is required" }),
-});
+import { CreateCompanySchemaType } from "@/types";
+import { createCompanySchema } from "@/lib/form-schema";
 
-type UserFormValue = z.infer<typeof formSchema>;
-
-export default function UserAuthFormSignUp() {
+export default function CompanyAuthFormSignUp() {
   const { toast } = useToast();
   const searchParams = useSearchParams();
   const router = useRouter();
   const { mutate, isPending, isSuccess } = useMutation({
-    mutationFn: async (data: UserFormValue) => {
-      const { data: responseData } = await axios.post(
-        "/api/user/create_user",
-        data,
-      );
+    mutationFn: async (data: CreateCompanySchemaType) => {
+      const { data: responseData } = await axios.post("/api/company", data);
       return responseData;
     },
     onSuccess(data, variables, context) {
@@ -61,16 +48,19 @@ export default function UserAuthFormSignUp() {
     },
   });
   const defaultValues = {
+    company: "",
+    country: "",
+    city: "",
     email: "",
     password: "",
     name: "",
   };
-  const form = useForm<UserFormValue>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<CreateCompanySchemaType>({
+    resolver: zodResolver(createCompanySchema),
     defaultValues,
   });
 
-  const onSubmit = async (data: UserFormValue) => {
+  const onSubmit = async (data: CreateCompanySchemaType) => {
     mutate(data);
   };
   return (
@@ -80,10 +70,78 @@ export default function UserAuthFormSignUp() {
           onSubmit={form.handleSubmit(onSubmit)}
           className="space-y-2 w-full"
         >
-            <FormField
-                control={form.control}
-                name={}
-            />
+          <FormField
+            control={form.control}
+            name="company"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Company Name</FormLabel>
+                <FormControl>
+                  <Input
+                    type="text"
+                    placeholder="Enter company name..."
+                    disabled={isPending}
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="country"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Country</FormLabel>
+                <FormControl>
+                  <Input
+                    type="text"
+                    placeholder="Enter company country..."
+                    disabled={isPending}
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="city"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>City</FormLabel>
+                <FormControl>
+                  <Input
+                    type="text"
+                    placeholder="Enter company city..."
+                    disabled={isPending}
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="name"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Admin Name</FormLabel>
+                <FormControl>
+                  <Input
+                    type="text"
+                    placeholder="Enter your name..."
+                    disabled={isPending}
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
           <FormField
             control={form.control}
             name="email"
@@ -120,25 +178,6 @@ export default function UserAuthFormSignUp() {
               </FormItem>
             )}
           />
-          <FormField
-            control={form.control}
-            name="name"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Name</FormLabel>
-                <FormControl>
-                  <Input
-                    type="text"
-                    placeholder="Enter your name..."
-                    disabled={isPending}
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
           <Button
             disabled={isPending}
             className="ml-auto w-full bg-[#D3991F]"
