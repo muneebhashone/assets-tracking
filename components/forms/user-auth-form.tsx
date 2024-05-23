@@ -9,17 +9,14 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { ICreateShipment } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { getSession, signIn, signOut } from "next-auth/react";
-import { useSearchParams } from "next/navigation";
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
-import GoogleSignInButton from "../github-auth-button";
-import { useRouter } from "next/navigation";
 import { useToast } from "../ui/use-toast";
-import { Status } from "@prisma/client";
-import { ICreateShipment } from "@/types";
 
 const formSchema = z.object({
   email: z.string().email({ message: "Enter a valid email address" }),

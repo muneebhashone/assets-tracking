@@ -5,11 +5,21 @@ import { db } from "@/lib/db";
 import { CreateUserSchemaType, ROLE, Status } from "@/types";
 import { userState } from "@/types/enums";
 import { checkUserExist2 } from "@/utils";
-import { Prisma } from "@prisma/client";
+import { PERMISSIONS, Prisma } from "@prisma/client";
+import { DefaultArgs } from "@prisma/client/runtime/library";
 import argon2 from "argon2";
 
-export const createUser = async (payload: CreateUserSchemaType) => {
-  const { email, password, name, company: company_id } = payload;
+export const createUser = async (
+  payload: CreateUserSchemaType & { permissions?: PERMISSIONS[] },
+) => {
+  const {
+    email,
+    password,
+    name,
+    company: company_id,
+    role,
+    permissions,
+  } = payload;
   const exist = await checkUserExist2(email);
   if (exist) {
     return {
@@ -18,17 +28,21 @@ export const createUser = async (payload: CreateUserSchemaType) => {
     };
   }
   const hash = await argon2.hash(password);
+  const data: Prisma.UserCreateArgs<DefaultArgs>["data"] = {
+    email,
+    name,
+    password: hash,
+    companyId: Number(company_id),
+    permissions: ["VIEW_DASHBOARD"],
+  };
+  if (role) {
+    data.role = role as ROLE;
+  }
+  if (permissions) {
+    data.permissions = [...permissions, "VIEW_DASHBOARD"];
+  }
   const user = await db.user.create({
-    data: {
-      email,
-      name,
-      password: hash,
-      Company: {
-        connect: {
-          id: Number(company_id),
-        },
-      },
-    },
+    data,
   });
   return { message: "user created", status: 200, user };
 };
@@ -43,11 +57,13 @@ export const getRegisteredUsers = async ({
   try {
     const session = await auth();
     //@ts-ignore
-    const { role, status } = session?.user;
+    const { role, status, companyId } = session?.user;
 
     const page = pageParam || 1;
     const pageSize = pageSizeParam || 3;
     const offset = (Number(page) - 1) * Number(pageSize);
+    const userRolesToFind =
+      role === ROLE.SUPER_ADMIN ? [ROLE.USER, ROLE.ADMIN] : [ROLE.USER];
 
     if (role === ROLE.USER) {
       throw new Error("Unauthorized");
@@ -56,9 +72,10 @@ export const getRegisteredUsers = async ({
     const userExist = await db.user.findMany({
       where: {
         AND: [
-          { role: { equals: ROLE.USER } },
+          { role: { in: userRolesToFind } },
           { status: { equals: Status.false } },
           { deleted: { equals: false } },
+          ...(role === ROLE.ADMIN ? [{ companyId: companyId }] : []),
         ],
       } as Prisma.UserWhereInput,
       distinct: "id",
@@ -72,6 +89,7 @@ export const getRegisteredUsers = async ({
           { role: { equals: ROLE.USER } },
           { status: { equals: Status.false } },
           { deleted: { equals: false } },
+          ...(role === ROLE.ADMIN ? [{ companyId: companyId }] : []),
         ],
       } as Prisma.UserWhereInput,
     });
@@ -101,11 +119,13 @@ export const getRejectedUsers = async ({
   try {
     const session = await auth();
     //@ts-ignore
-    const { role, status } = session?.user;
+    const { role, status, companyId } = session?.user;
 
     const page = pageParam || 1;
     const pageSize = pageSizeParam || 3;
     const offset = (Number(page) - 1) * Number(pageSize);
+    const userRolesToFind =
+      role === ROLE.SUPER_ADMIN ? [ROLE.USER, ROLE.ADMIN] : [ROLE.USER];
 
     if (role === ROLE.USER) {
       throw new Error("Unauthorized");
@@ -113,7 +133,11 @@ export const getRejectedUsers = async ({
 
     const userExist = await db.user.findMany({
       where: {
-        AND: [{ role: { equals: ROLE.USER } }, { deleted: { equals: true } }],
+        AND: [
+          { role: { in: userRolesToFind } },
+          ...(role === ROLE.ADMIN ? [{ companyId: companyId }] : []),
+          { deleted: { equals: true } },
+        ],
       } as Prisma.UserWhereInput,
       distinct: "id",
       skip: offset,
@@ -122,7 +146,11 @@ export const getRejectedUsers = async ({
 
     const users = await db.user.count({
       where: {
-        AND: [{ role: { equals: ROLE.USER } }, { deleted: { equals: true } }],
+        AND: [
+          { role: { equals: ROLE.USER } },
+          { deleted: { equals: true } },
+          ...(role === ROLE.ADMIN ? [{ companyId: companyId }] : []),
+        ],
       } as Prisma.UserWhereInput,
     });
     const totalPages = Math.ceil(users / Number(pageSize));
@@ -152,11 +180,13 @@ export const getActiveUser = async ({
   try {
     const session = await auth();
     //@ts-ignore
-    const { role } = session?.user;
+    const { role, companyId } = session?.user;
 
     const page = pageParam || 1;
     const pageSize = pageSizeParam || 3;
     const offset = (Number(page) - 1) * Number(pageSize);
+    const userRolesToFind =
+      role === ROLE.SUPER_ADMIN ? [ROLE.USER, ROLE.ADMIN] : [ROLE.USER];
 
     if (role === ROLE.USER) {
       return "unauthorized";
@@ -165,7 +195,8 @@ export const getActiveUser = async ({
     const userExist = await db.user.findMany({
       where: {
         AND: [
-          { role: { equals: ROLE.USER } },
+          { role: { in: userRolesToFind } },
+          ...(role === ROLE.ADMIN ? [{ companyId: companyId }] : []),
           { status: { equals: Status.true } },
           { deleted: { equals: false } },
         ],
@@ -179,6 +210,7 @@ export const getActiveUser = async ({
         AND: [
           { role: { equals: ROLE.USER } },
           { status: { equals: Status.true } },
+          ...(role === ROLE.ADMIN ? [{ companyId: companyId }] : []),
           { deleted: { equals: false } },
         ],
       },
@@ -277,7 +309,6 @@ export const editProfile = async (name: string, email: string) => {
   }
 };
 export const userData = async (id: string) => {
-  Number(id);
   try {
     const user = await db.user.findFirst({ where: { id: Number(id) } });
     return user;
@@ -289,7 +320,7 @@ export const userData = async (id: string) => {
 export const getUserCount = async (status?: userState) => {
   let filter: Prisma.UserCountArgs = {
     where: {
-      AND: [{ role: { not: ROLE.ADMIN } }],
+      AND: [{ role: { not: ROLE.SUPER_ADMIN } }],
     },
   };
   if (status) {

@@ -1,26 +1,12 @@
 "use server";
 import { auth } from "@/lib/auth-options";
 import { db } from "@/lib/db";
-import {
-  ICreateShipment,
-  IResponse,
-  ROLE,
-  ShipmentData,
-  shipmentDataWithPagination,
-} from "@/types";
-import { DBErrors, ShipmentState, userState } from "@/types/enums";
-import { checkUserCredits, getPaginator } from "@/utils";
-import { removeCoins } from "./insertCoins";
+import { ROLE, ShipmentData, shipmentDataWithPagination } from "@/types";
+import { ShipmentState, userState } from "@/types/enums";
+import { getPaginator } from "@/utils";
 
-import { coins_err, shipment_creation_error } from "@/types/messgaes";
-
-import { adapterHandler } from "@/adapters";
-import { Prisma, PrismaClient, Shipment } from "@prisma/client";
-import { createTrackingQueueEntry } from "@/services/tracking";
-import {
-  DefaultArgs,
-  PrismaClientKnownRequestError,
-} from "@prisma/client/runtime/library";
+import { Prisma, Shipment } from "@prisma/client";
+import { DefaultArgs } from "@prisma/client/runtime/library";
 import { getUserCount } from "./usersActions";
 interface MonthData {
   name: string;
@@ -30,11 +16,14 @@ export const getShipmentByUserId = async (params: {
   searchString: string | null;
   limitParam: number;
   pageParam: number;
-  userId: number;
+  creatorId: number;
+  companyId: number;
 }): Promise<shipmentDataWithPagination | Error> => {
-  const { limitParam, pageParam, userId } = params;
+  const { limitParam, pageParam, companyId } = params;
   let filter: Prisma.ShipmentFindManyArgs = {
-    where: { userId: userId },
+    where: {
+      companyId,
+    },
   };
   if (params.searchString) {
     filter["where"] = {
@@ -56,11 +45,11 @@ export const getShipmentByUserId = async (params: {
       ],
     };
   }
-  const totalRecords = await db.shipment.count(
-    filter as Prisma.ShipmentCountArgs<DefaultArgs>,
-  );
-  const paginatorInfo = getPaginator(limitParam, pageParam, totalRecords);
   try {
+    const totalRecords = await db.shipment.count(
+      filter as Prisma.ShipmentCountArgs<DefaultArgs>,
+    );
+    const paginatorInfo = getPaginator(limitParam, pageParam, totalRecords);
     const shippingData = await db.shipment.findMany({
       ...filter,
       distinct: "id",
@@ -115,7 +104,7 @@ export const getAllShipments = async (params: {
   const paginatorInfo = getPaginator(limitParam, pageParam, totalRecords);
 
   try {
-    if (admin?.user.role !== ROLE.ADMIN) {
+    if (admin?.user.role !== ROLE.SUPER_ADMIN) {
       return new Error("UnAuthorized");
     }
     // const filter =
@@ -193,7 +182,7 @@ export const getShipmentByTrackingNumber = async (trackingNumber: string) => {
 
 export const getAllStatusData = async () => {
   const admin = await auth();
-  if (admin?.user.role !== ROLE.ADMIN) {
+  if (admin?.user.role !== ROLE.SUPER_ADMIN) {
     return new Error("UnAuthorized");
   }
   const statusCounts = await db.shipment.groupBy({
@@ -270,7 +259,7 @@ ORDER BY
 
 export const getShipmentDatabyRole = async (role: ROLE, userId: number) => {
   switch (role) {
-    case ROLE.ADMIN:
+    case ROLE.SUPER_ADMIN:
       return await Promise.all([
         shipmentNumber(),
         getUserCount(),
@@ -296,7 +285,7 @@ export const shipmentNumber = async (
 ) => {
   let filter: Prisma.ShipmentCountArgs = {
     where: {
-      AND: [{ user: { role: { not: ROLE.ADMIN } } }],
+      AND: [{ user: { role: { not: ROLE.SUPER_ADMIN } } }],
     },
   };
   if (userId) {

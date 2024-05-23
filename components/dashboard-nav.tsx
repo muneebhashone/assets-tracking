@@ -7,13 +7,16 @@ import { Icons } from "@/components/icons";
 import { cn } from "@/lib/utils";
 import { NavItem } from "@/types";
 import { Dispatch, SetStateAction } from "react";
+import { PERMISSIONS, ROLE, User } from "@prisma/client";
+import { checkPermissions } from "@/utils/checkPermissions";
 
 interface DashboardNavProps {
   items: NavItem[];
+  user: User;
   setOpen?: Dispatch<SetStateAction<boolean>>;
 }
 
-export function DashboardNav({ items, setOpen }: DashboardNavProps) {
+export function DashboardNav({ items, setOpen, user }: DashboardNavProps) {
   const path = usePathname();
 
   if (!items?.length) {
@@ -23,6 +26,15 @@ export function DashboardNav({ items, setOpen }: DashboardNavProps) {
   return (
     <nav className="grid items-start gap-2">
       {items.map((item, index) => {
+        if (
+          user?.role !== ROLE.SUPER_ADMIN &&
+          !checkPermissions(
+            user?.permissions,
+            item.permissions as PERMISSIONS[],
+          )
+        )
+          return;
+
         const Icon = Icons[item.icon || "arrowRight"];
         return (
           item.href && (
@@ -36,7 +48,9 @@ export function DashboardNav({ items, setOpen }: DashboardNavProps) {
               <span
                 className={cn(
                   "group flex items-center rounded-md px-3 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground",
-                  path === item.href ? "bg-accent text-black" : "transparent text-white",
+                  path === item.href
+                    ? "bg-accent text-black"
+                    : "transparent text-white",
                   item.disabled && "cursor-not-allowed opacity-80",
                 )}
               >

@@ -42,6 +42,17 @@ const checkIfCompanyExists = async (name: string) => {
   return exist;
 };
 
+const checkCompanyById = async (id: number) => {
+  let exist = await db.company.findFirst({
+    where: {
+      id,
+    },
+  });
+  if (!exist) return null;
+
+  return exist;
+};
+
 const checkUserById = async (id: number) => {
   let exist = await db.user.findFirst({
     where: {
@@ -52,8 +63,8 @@ const checkUserById = async (id: number) => {
 
   return exist;
 };
-const checkUserCredits = async (id: number) => {
-  let exist = await db.user.findFirst({
+const checkCompanyCredits = async (id: number) => {
+  let exist = await db.company.findFirst({
     where: {
       id,
     },
@@ -114,7 +125,8 @@ export {
   checkPassword,
   checkUserExist2,
   checkUserById,
-  checkUserCredits,
+  checkCompanyCredits,
   getPaginator,
   checkIfCompanyExists,
+  checkCompanyById,
 };

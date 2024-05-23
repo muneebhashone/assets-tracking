@@ -16,7 +16,7 @@ export async function POST(request: Request) {
 
     await db.user.update({
       where: { id: id },
-      data: { status: Status.true, role: ROLE.ADMIN },
+      data: { status: Status.true, role: ROLE.ADMIN }, // Review: Check if this is for ADMIN or SUPER_ADMIN. Role unclear
     });
     return NextResponse.json({ message: "status updated" }, { status: 200 });
   } catch (error) {

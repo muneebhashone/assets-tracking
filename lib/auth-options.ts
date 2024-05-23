@@ -1,9 +1,9 @@
+import { Status } from "@/types";
+import { checkPassword, checkUserExist2 } from "@/utils";
+import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { NextAuthOptions, getServerSession } from "next-auth";
 import CredentialProvider from "next-auth/providers/credentials";
-import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { db } from "./db";
-import { checkPassword, checkUserExist, checkUserExist2 } from "@/utils";
-import { IUserMessage, ROLE, Status } from "@/types";
 
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(db),
@@ -22,7 +22,9 @@ export const authOptions: NextAuthOptions = {
         name: token?.name,
         role: token.role,
         status: token.status,
-        credits: token.credits,
+        companyId: token.companyId,
+        permissions: token.permissions,
+        // credits: token.credits,
       };
       return session;
     },

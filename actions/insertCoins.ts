@@ -3,7 +3,7 @@
 import { auth } from "@/lib/auth-options";
 import { db } from "@/lib/db";
 import { ROLE } from "@/types";
-import { checkUserById, checkUserExist2 } from "@/utils";
+import { checkCompanyById } from "@/utils";
 
 export const insertCoins = async (id: number, credits: number) => {
   try {
@@ -11,18 +11,16 @@ export const insertCoins = async (id: number, credits: number) => {
     //@ts-ignore
     const { role, status } = session?.user;
 
-    if (role === ROLE.USER) {
+    if (role !== ROLE.SUPER_ADMIN) {
       throw new Error("Unauthorized");
     }
-    const exist = await checkUserById(id);
+
+    const exist = await checkCompanyById(id);
     if (!exist) {
-      return "user not exist ";
+      return "company does not exist ";
     }
 
-
-
-
-    await db.user.update({
+    await db.company.update({
       where: { id },
       data: {
         credits: credits,
@@ -36,17 +34,17 @@ export const insertCoins = async (id: number, credits: number) => {
 };
 export const removeCoins = async (id: number) => {
   try {
-    const exist = await checkUserById(id);
+    const exist = await checkCompanyById(id);
     if (!exist) {
-      return "user not exist ";
+      return "company not exist ";
     }
-    const { credits: userCredits } = exist;
+    const { credits: companyCredits } = exist;
 
-    if (userCredits === null) {
+    if (companyCredits === null) {
       return null;
     }
-    const total = userCredits - 1;
-    const updatedCoins = await db.user.update({
+    const total = companyCredits - 1;
+    const updatedCoins = await db.company.update({
       where: { id },
       data: {
         credits: total,

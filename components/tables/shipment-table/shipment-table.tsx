@@ -113,7 +113,7 @@ export function ShipmentTable<TData, TValue>({
   const table = useReactTable({
     data: tableData,
     columns:
-      session.data?.user.role === ROLE.ADMIN
+      session.data?.user.role === ROLE.SUPER_ADMIN
         ? [
             ...columns.slice(0, 2),
             {

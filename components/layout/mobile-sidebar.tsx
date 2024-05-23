@@ -20,26 +20,24 @@ export function MobileSidebar({ className }: SidebarProps) {
 
   const { role } = session?.user;
   return (
-    <>
-      <Sheet open={open} onOpenChange={setOpen}>
-        <SheetTrigger asChild>
-          <MenuIcon />
-        </SheetTrigger>
-        <SheetContent side="left" className="!px-0 bg-[#3491fe]">
-          <div className="space-y-4 py-4">
-            <div className="px-3 py-2">
-              <h2 className="mb-2 px-4 text-lg font-semibold tracking-tight text-white">
-                Overview
-              </h2>
-              <div className="space-y-1">
-                <DashboardNav
-                  items={role === ROLE.ADMIN ? adminNavItems : userNavItems}
-                />
-              </div>
+    <Sheet open={open} onOpenChange={setOpen}>
+      <SheetTrigger asChild>
+        <MenuIcon />
+      </SheetTrigger>
+      <SheetContent side="left" className="!px-0 bg-[#3491fe]">
+        <div className="space-y-4 py-4">
+          <div className="px-3 py-2">
+            <h2 className="mb-2 px-4 text-lg font-semibold tracking-tight text-white">
+              Overview
+            </h2>
+            <div className="space-y-1">
+              <DashboardNav
+                items={role === ROLE.SUPER_ADMIN ? adminNavItems : userNavItems}
+              />
             </div>
           </div>
-        </SheetContent>
-      </Sheet>
-    </>
+        </div>
+      </SheetContent>
+    </Sheet>
   );
 }

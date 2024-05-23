@@ -63,6 +63,7 @@ export default function UserAuthFormSignUp() {
     email: "",
     password: "",
     name: "",
+    company: "",
   };
   const form = useForm<CreateUserSchemaType>({
     resolver: zodResolver(createUserFormSchema),
@@ -70,6 +71,7 @@ export default function UserAuthFormSignUp() {
   });
 
   const onSubmit = async (data: CreateUserSchemaType) => {
+    // console.log({ data });
     mutate(data);
   };
   return (
@@ -135,12 +137,16 @@ export default function UserAuthFormSignUp() {
           />
           <FormField
             control={form.control}
-            name="name"
+            name="company"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Company</FormLabel>
                 <FormControl>
-                  <Select disabled={isPending || isFetching} {...field}>
+                  <Select
+                    onValueChange={field.onChange}
+                    disabled={isPending || isFetching}
+                    {...field}
+                  >
                     <SelectTrigger>
                       <SelectValue placeholder="Select your company" />
                     </SelectTrigger>

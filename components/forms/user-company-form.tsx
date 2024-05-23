@@ -9,17 +9,14 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { createCompanySchema } from "@/lib/form-schema";
+import { CreateCompanySchemaType } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { signIn } from "next-auth/react";
-import { useRouter, useSearchParams } from "next/navigation";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import * as z from "zod";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useForm } from "react-hook-form";
 import { useToast } from "../ui/use-toast";
-import { CreateCompanySchemaType } from "@/types";
-import { createCompanySchema } from "@/lib/form-schema";
 
 export default function CompanyAuthFormSignUp() {
   const { toast } = useToast();
@@ -47,14 +44,7 @@ export default function CompanyAuthFormSignUp() {
       });
     },
   });
-  const defaultValues = {
-    company: "",
-    country: "",
-    city: "",
-    email: "",
-    password: "",
-    name: "",
-  };
+  const defaultValues = {};
   const form = useForm<CreateCompanySchemaType>({
     resolver: zodResolver(createCompanySchema),
     defaultValues,
@@ -72,7 +62,7 @@ export default function CompanyAuthFormSignUp() {
         >
           <FormField
             control={form.control}
-            name="company"
+            name="company_name"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Company Name</FormLabel>

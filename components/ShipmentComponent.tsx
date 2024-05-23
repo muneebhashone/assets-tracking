@@ -62,11 +62,11 @@ const ShipmentComponent = (props: Props) => {
     const response = await createShipmentEntry({
       carrier: payload.carrier,
       trackingNumber: payload.tracking_number,
-      userId: Number(session.data?.user.id),
+      companyId: Number(session.data?.user.companyId),
+      creatorId: Number(session.data?.user?.id),
     });
     setLoading(false);
     toast({ title: response.status, description: response.message });
-    router.back();
     reset();
   };
 

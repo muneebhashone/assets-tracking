@@ -8,17 +8,19 @@ datasource db {
 }
 
 model User {
-  id          Int        @id @default(autoincrement())
-  email       String     @unique
+  id          Int           @id @default(autoincrement())
+  email       String        @unique
   name        String?
-  permissions String[]   @default([])
-  role        ROLE       @default(USER)
-  status      Status     @default(false)
-  password    String     @map("password")
-  credits     Int?       @default(0)
-  deleted     Boolean    @default(false)
-  Company     Company?
+  permissions PERMISSIONS[] @default([])
+  role        ROLE          @default(USER)
+  status      Status        @default(false)
+  password    String        @map("password")
+  deleted     Boolean       @default(false)
   shipments   Shipment[]
+  companyId   Int
+  company     Company       @relation(fields: [companyId], references: [id])
+
+  @@index([companyId])
 }
 
 model Vessel {
@@ -32,7 +34,8 @@ model Vessel {
 
 model Shipment {
   id              Int      @id @default(autoincrement())
-  userId          Int
+  creatorId       Int
+  companyId       Int
   status          String
   carrier         String
   arrivalTime     String
@@ -41,23 +44,25 @@ model Shipment {
   created_at      DateTime @default(now())
   aggregator      String
   sealine         String
-  user            User     @relation(fields: [userId], references: [id])
+  user            User     @relation(fields: [creatorId], references: [id])
+  company         Company  @relation(fields: [companyId], references: [id])
   vessels         Vessel[]
 
-  @@unique([userId, tracking_number], name: "Unique_User_TrackingNumber")
+  @@unique([companyId, tracking_number, creatorId], name: "Unique_Company_User_TrackingNumber")
 }
 
 model Company {
-  id        Int      @id @default(autoincrement())
-  name      String   @unique
-  address   String
+  id        Int        @id @default(autoincrement())
+  name      String     @unique
+  address   String?
   country   String
   city      String
-  industry  String
-  ownerId   Int?     @unique
-  createdAt DateTime @default(now())
-  updatedAt DateTime
-  User      User?    @relation(fields: [ownerId], references: [id])
+  industry  String?
+  credits   Int        @default(0)
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  users     User[]
+  Shipment  Shipment[]
 }
 
 enum Status {
@@ -69,4 +74,16 @@ enum ROLE {
   ADMIN
   USER
   SUPER_ADMIN
+}
+
+enum PERMISSIONS {
+  VIEW_DASHBOARD
+  VIEW_SHIPMENT
+  CREATE_SHIPMENT
+  EDIT_SHIPMENT
+  DELETE_SHIPMENT
+  VIEW_USER
+  CREATE_USER
+  EDIT_USER
+  DELETE_USER
 }

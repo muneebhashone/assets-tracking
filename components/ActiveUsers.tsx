@@ -66,7 +66,7 @@ export default function ActiveUsers({ params, user }: paramsProps) {
         });
       }
       toast({
-        title: "Coupen added",
+        title: "Coupon added",
         description: update,
       });
       reset();

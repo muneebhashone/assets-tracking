@@ -29,27 +29,25 @@ export default async function Page({ searchParams }: paramsProps) {
   const resData = response;
 
   return (
-    <>
-      <div className="flex-1 space-y-4  p-4 md:p-8 pt-6">
-        <BreadCrumb items={breadcrumbItems} />
+    <div className="flex-1 space-y-4  p-4 md:p-8 pt-6">
+      <BreadCrumb items={breadcrumbItems} />
 
-        <div className="flex items-start justify-between">
-          <Heading
-            title={`Rejected Users (${resData?.totalUsers})`}
-            description="Manage rejected users"
-          />
-        </div>
-        <Separator />
-
-        <RejectedTable
-          searchKey="country"
-          pageNo={page}
-          columns={columns}
-          totalUsers={resData?.totalUsers}
-          data={resData?.users as IUser[]}
-          pageCount={resData.totalPages}
+      <div className="flex items-start justify-between">
+        <Heading
+          title={`Rejected Users (${resData?.totalUsers})`}
+          description="Manage rejected users"
         />
       </div>
-    </>
+      <Separator />
+
+      <RejectedTable
+        searchKey="country"
+        pageNo={page}
+        columns={columns}
+        totalUsers={resData?.totalUsers}
+        data={resData?.users as IUser[]}
+        pageCount={resData.totalPages}
+      />
+    </div>
   );
 }

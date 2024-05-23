@@ -28,27 +28,23 @@ const AdminDashboard = async (props: Props) => {
   )) as shipmentDataWithPagination;
 
   return (
-    <>
-      <div className="flex flex-col ">
-        <div className="  flex justify-between">
-          <p className="text-lg font-bold tracking-tight mb-4 ">All shipment</p>
-          <SearchBar />
-        </div>
-
-        {shipmentResponse?.data?.length ? (
-          <>
-            <ShipmentTable
-              data={shipmentResponse.data}
-              columns={columns}
-              pageCount={shipmentResponse.paginatorInfo.pages}
-              searchParams={searchParams}
-            />
-          </>
-        ) : (
-          <h1>no record found</h1>
-        )}
+    <div className="flex flex-col ">
+      <div className="  flex justify-between">
+        <p className="text-lg font-bold tracking-tight mb-4 ">All shipment</p>
+        <SearchBar />
       </div>
-    </>
+
+      {shipmentResponse?.data?.length ? (
+        <ShipmentTable
+          data={shipmentResponse.data}
+          columns={columns}
+          pageCount={shipmentResponse.paginatorInfo.pages}
+          searchParams={searchParams}
+        />
+      ) : (
+        <h1>no record found</h1>
+      )}
+    </div>
   );
 };
 

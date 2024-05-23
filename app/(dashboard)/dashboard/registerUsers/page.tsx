@@ -26,28 +26,28 @@ export default async function Page({ searchParams }: paramsProps) {
 
   const resData = response;
 
+  console.log({ resData });
+
   return (
-    <>
-      <div className="flex-1 space-y-4  p-4 md:p-8 pt-6">
-        <BreadCrumb items={breadcrumbItems} />
+    <div className="flex-1 space-y-4  p-4 md:p-8 pt-6">
+      <BreadCrumb items={breadcrumbItems} />
 
-        <div className="flex items-start justify-between">
-          <Heading
-            title={`Registered Users (${resData?.totalUsers})`}
-            description="Manage registered users  "
-          />
-        </div>
-        <Separator />
-
-        <EmployeeTable
-          // searchKey=""
-          pageNo={page}
-          columns={columns}
-          totalUsers={resData?.totalUsers}
-          data={resData?.users as IUser[]}
-          pageCount={resData.totalPages}
+      <div className="flex items-start justify-between">
+        <Heading
+          title={`Registered Users (${resData?.totalUsers})`}
+          description="Manage registered users  "
         />
       </div>
-    </>
+      <Separator />
+
+      <EmployeeTable
+        // searchKey=""
+        pageNo={page}
+        columns={columns}
+        totalUsers={resData?.totalUsers}
+        data={resData?.users as IUser[]}
+        pageCount={resData.totalPages}
+      />
+    </div>
   );
 }

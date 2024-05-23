@@ -9,15 +9,14 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { IUser } from "@/types";
+import { User } from "@prisma/client";
 // import { User } from "@/constants/data";
-import axios from "axios";
 import { Edit, MoreHorizontal, Trash } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 interface CellActionProps {
-  data: IUser;
+  data: User;
 }
 
 export const CellAction: React.FC<CellActionProps> = ({ data }) => {
@@ -27,7 +26,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
   const onConfirm = async (email: string) => {
     setLoading(true);
     await softDeleteUser(email);
-    setOpen(false)
+    setOpen(false);
     router.refresh();
     setLoading(false);
   };

@@ -1,5 +1,5 @@
 import { Icons } from "@/components/icons";
-import { Shipment, User, Vessel } from "@prisma/client";
+import { PERMISSIONS, Shipment, User, Vessel } from "@prisma/client";
 import { SEARATES_CODES } from "./messgaes";
 import { createCompanySchema, createUserFormSchema } from "@/lib/form-schema";
 import { infer as zInfer } from "zod";
@@ -12,6 +12,7 @@ export interface NavItem {
   icon?: keyof typeof Icons;
   label?: string;
   description?: string;
+  permissions?: PERMISSIONS[];
 }
 
 export interface NavItemWithChildren extends NavItem {
