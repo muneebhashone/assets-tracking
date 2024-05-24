@@ -75,7 +75,7 @@ export default async function Component(props: PageProps) {
             </CardContent>
           </Card>
         </div>
-        {session?.user.role === ROLE.ADMIN && (
+        {session?.user.role === ROLE.SUPER_ADMIN && (
           <>
             <div className="flex items-center h-14 border-b px-4 md:h-16 bg-gray-100/40 dark:bg-gray-800/40 mt-2 mb-2">
               <h1 className="text-lg font-semibold md:text-2xl">
@@ -113,7 +113,7 @@ export default async function Component(props: PageProps) {
           </>
         )}
 
-        {shipData.vessels.length && (
+        {shipData.vessels.length > 0 && (
           <>
             <div className="flex items-center h-14 border-b px-4 md:h-16 bg-gray-100/40 dark:bg-gray-800/40 mt-2 mb-2">
               <h1 className="text-lg font-semibold md:text-2xl">

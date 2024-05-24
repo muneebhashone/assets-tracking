@@ -1,7 +1,7 @@
 "use client";
 import { ColumnDef } from "@tanstack/react-table";
 import { CellAction } from "./cell-action";
-import { User } from "@/constants/data";
+import type { User } from "@prisma/client";
 import { Checkbox } from "@/components/ui/checkbox";
 
 export const columns: ColumnDef<User>[] = [
@@ -41,11 +41,11 @@ export const columns: ColumnDef<User>[] = [
     header: "Status",
   },
   {
-    accessorKey: "credits",
-    header: "Credits",
+    accessorKey: "company.name",
+    header: "Company Name",
   },
   {
     id: "actions",
-    cell: ({ row }) => <CellAction data={row.original} />,
+    cell: ({ row }) => <CellAction data={row.original as User} />,
   },
 ];

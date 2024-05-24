@@ -1,10 +1,8 @@
 import ThemeToggle from "@/components/layout/ThemeToggle/theme-toggle";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
-import { useDebounce } from "@uidotdev/usehooks";
 import Link from "next/link";
-import { useState } from "react";
-import SearchBar from "../SearchBar";
+
 import { MobileSidebar } from "./mobile-sidebar";
 import { UserNav } from "./user-nav";
 

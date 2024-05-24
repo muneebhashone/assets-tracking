@@ -13,9 +13,10 @@ export const seaRatesApi = async (
 
 export const getAllSeaRatesContainer = async () => {
   try {
-    const res: AxiosResponse<SearatesSealineApiResponse> = await axios.get(
-      `${process.env.SEARATES_URL}/info/sealines` as string,
-    );
+    const res: AxiosResponse<SearatesSealineApiResponse> =
+      (await axios.get(
+        `${process.env.SEARATES_URL}/info/sealines` as string,
+      )) || [];
     const { data } = res.data;
     const nameScacPairs = data.flatMap((company) => {
       return company.scac_codes.map((scacCode) => {

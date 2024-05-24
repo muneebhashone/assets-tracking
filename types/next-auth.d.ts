@@ -1,4 +1,5 @@
 // auth.ts
+import { PERMISSIONS } from "@prisma/client";
 import { IUserMessage, ROLE, Status } from "../types";
 import NextAuth, { DefaultSession } from "next-auth";
 
@@ -12,7 +13,8 @@ declare module "next-auth" {
       role: ROLE;
       status: Status;
       id: string;
-      credits: number;
+      companyId: number;
+      permissions: PERMISSIONS[];
     } & DefaultSession["user"];
   }
 }
@@ -23,6 +25,7 @@ declare module "next-auth/jwt" {
     role: ROLE;
     status: Status;
     id: string;
-    credits: number;
+    companyId: number;
+    permissions: PERMISSIONS[];
   }
 }

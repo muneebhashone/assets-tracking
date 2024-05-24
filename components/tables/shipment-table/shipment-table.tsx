@@ -11,7 +11,7 @@ import {
 import React from "react";
 
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+
 import {
   Select,
   SelectContent,
@@ -34,7 +34,7 @@ import {
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
-import { IUser, ROLE, ShipmenAdminData } from "@/types";
+import {  ROLE, ShipmenAdminData } from "@/types";
 import { Shipment } from "@prisma/client";
 import { useSession } from "next-auth/react";
 
@@ -113,7 +113,7 @@ export function ShipmentTable<TData, TValue>({
   const table = useReactTable({
     data: tableData,
     columns:
-      session.data?.user.role === ROLE.ADMIN
+      session.data?.user.role === ROLE.SUPER_ADMIN
         ? [
             ...columns.slice(0, 2),
             {

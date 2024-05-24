@@ -9,34 +9,30 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useGetAllCompanies } from "@/hooks/useQuery";
+import { createUserFormSchema } from "@/lib/form-schema";
+import { CreateUserSchemaType } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { signIn } from "next-auth/react";
-import { useRouter, useSearchParams } from "next/navigation";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import * as z from "zod";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
+import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
 import { useToast } from "../ui/use-toast";
-const formSchema = z.object({
-  email: z
-    .string({ required_error: "email is required" })
-    .email({ message: "Enter a valid email address" }),
-  password: z
-    .string({ required_error: "password is required" })
-    .min(8, { message: "atleast 8 digit long" })
-    .max(12, { message: "atmost is 12 digit" }),
-  name: z.string({ required_error: "name is required" }),
-});
-
-type UserFormValue = z.infer<typeof formSchema>;
 
 export default function UserAuthFormSignUp() {
   const { toast } = useToast();
-  const searchParams = useSearchParams();
+  // const searchParams = useSearchParams();
   const router = useRouter();
-  const { mutate, isPending, isSuccess } = useMutation({
-    mutationFn: async (data: UserFormValue) => {
+  const { data: companiesResponse, isFetching } = useGetAllCompanies();
+  const { mutate, isPending } = useMutation({
+    mutationFn: async (data: CreateUserSchemaType) => {
       const { data: responseData } = await axios.post(
         "/api/user/create_user",
         data,
@@ -64,13 +60,15 @@ export default function UserAuthFormSignUp() {
     email: "",
     password: "",
     name: "",
+    company: "",
   };
-  const form = useForm<UserFormValue>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<CreateUserSchemaType>({
+    resolver: zodResolver(createUserFormSchema),
     defaultValues,
   });
 
-  const onSubmit = async (data: UserFormValue) => {
+  const onSubmit = async (data: CreateUserSchemaType) => {
+    // console.log({ data });
     mutate(data);
   };
   return (
@@ -129,6 +127,37 @@ export default function UserAuthFormSignUp() {
                     disabled={isPending}
                     {...field}
                   />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="company"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Company</FormLabel>
+                <FormControl>
+                  <Select
+                    onValueChange={field.onChange}
+                    disabled={isPending || isFetching}
+                    {...field}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select your company" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {companiesResponse?.data?.map((company) => (
+                        <SelectItem
+                          key={company?.id}
+                          value={String(company?.id)}
+                        >
+                          {company?.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </FormControl>
                 <FormMessage />
               </FormItem>

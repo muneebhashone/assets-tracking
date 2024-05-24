@@ -100,43 +100,56 @@ export type Employee = {
   role: string;
 };
 
-export const adminNavItems: NavItem[] = [
+export const navItems: NavItem[] = [
   {
     title: "Dashboard",
     href: "/dashboard",
     icon: "dashboard",
     label: "Dashboard",
+    permissions: ["VIEW_DASHBOARD"],
   },
   {
     title: "Shipment List",
     href: "/dashboard/shipment-list",
     icon: "laptop",
     label: "Shipment",
+    permissions: ["VIEW_SHIPMENT"],
+  },
+  {
+    title: "Track New Shipment",
+    href: "/dashboard/shipment",
+    icon: "moon",
+    label: "Shipment",
+    permissions: ["CREATE_SHIPMENT"],
   },
   {
     title: "Acitve User",
     href: "/dashboard/activeUsers",
     icon: "user",
     label: "user",
+    permissions: ["VIEW_USER"],
   },
   {
     title: "Requested User",
     href: "/dashboard/registerUsers",
     icon: "employee",
     label: "employee",
+    permissions: ["VIEW_USER"],
   },
   {
     title: "Rejected User",
     href: "/dashboard/rejectedUsers",
     icon: "employee",
     label: "employee",
+    permissions: ["VIEW_USER"],
   },
-  // {
-  //   title: "Company",
-  //   href: "/dashboard/company",
-  //   icon: "laptop",
-  //   label: "company",
-  // },
+  {
+    title: "Company",
+    href: "/dashboard/company",
+    icon: "laptop",
+    label: "company",
+    permissions: ["VIEW_COMPANY"],
+  },
 ];
 export const userNavItems: NavItem[] = [
   {

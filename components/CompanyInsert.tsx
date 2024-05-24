@@ -10,9 +10,8 @@ import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/components/ui/use-toast";
 import { IInsertCoins } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { User } from "@prisma/client";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 
@@ -22,12 +21,12 @@ const inserCoinSchema = z.object({
 
 export type paramsProps = {
   params: {
-    userId: string;
+    id: string;
   };
-  user: User;
 };
-export default function ActiveUsers({ params, user }: paramsProps) {
+export default function CompanyCredit({ params }: paramsProps) {
   const { toast } = useToast();
+  const router = useRouter();
   const [loading, setLoading] = useState<boolean>(false);
   const {
     handleSubmit,
@@ -38,7 +37,7 @@ export default function ActiveUsers({ params, user }: paramsProps) {
     resolver: zodResolver(inserCoinSchema),
   });
   const breadcrumbItems = [
-    { title: "User", link: "/dashboard/activeUsers" },
+    { title: "Company", link: "/dashboard/company" },
     { title: "Coupens", link: "/dashboard/user/create" },
   ];
 
@@ -56,7 +55,7 @@ export default function ActiveUsers({ params, user }: paramsProps) {
     }
     const credits = Number(data.credits);
     try {
-      const id = Number(params.userId);
+      const id = Number(params.id);
       const update = await insertCoins(id, credits);
       if (!update) {
         toast({
@@ -65,8 +64,10 @@ export default function ActiveUsers({ params, user }: paramsProps) {
           variant: "destructive",
         });
       }
+      router.refresh();
+      router.back();
       toast({
-        title: "Coupen added",
+        title: "Coupon added",
         description: update,
       });
       reset();
@@ -91,7 +92,7 @@ export default function ActiveUsers({ params, user }: paramsProps) {
           />
         </div>
         <Separator />
-        <h1 className="text-3xl font-bold tracking-tight">{user?.name}</h1>
+        <h1 className="text-3xl font-bold tracking-tight">{""}</h1>
         <form className="w-full h-full" onSubmit={handleSubmit(onSubmit)}>
           <div className="flex w-[30%] my-5">
             <Input

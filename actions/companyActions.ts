@@ -4,7 +4,7 @@ import { db } from "@/lib/db";
 import { getPaginator } from "@/utils";
 
 export const getAllCompany = async (params: {
-  searchString: string | null;
+  searchString?: string ;
   limitParam: number;
   pageParam: number;
 }) => {
@@ -21,7 +21,11 @@ export const getAllCompany = async (params: {
       data: company.length ? company : null,
       paginatorInfo,
     };
-  } catch (error) {
-    return error as Error;
+  } catch (error: any) {
+    // any will be replaced later
+    return {
+      data: [],
+      message: error?.message,
+    };
   }
 };

@@ -1,20 +1,20 @@
 import { auth } from "@/lib/auth-options";
 import { db } from "@/lib/db";
-import { verifyJwt } from "@/lib/jwt";
+
 import { ROLE, Status } from "@prisma/client";
 import { NextResponse } from "next/server";
 
-interface VerifyUser {
-  email: string;
-  role: string;
-  iat: number;
-  exp: number;
-}
+// interface VerifyUser {
+//   email: string;
+//   role: string;
+//   iat: number;
+//   exp: number;
+// }
 export async function GET(request: Request) {
   try {
     const session = await auth();
     //@ts-expect-error
-    const { role, status } = session?.user;
+    const { role } = session?.user;
     const url = new URL(request.url);
     const searchParams = new URLSearchParams(url.search);
     const page = searchParams.get("page") || 1;
@@ -50,6 +50,9 @@ export async function GET(request: Request) {
     return NextResponse.json(response, { status: 200 });
   } catch (error) {
     console.log(error);
-    return NextResponse.json({ message: error.message }, { status: 500 });
+    return NextResponse.json(
+      { message: (error as Error).message },
+      { status: 500 },
+    );
   }
 }

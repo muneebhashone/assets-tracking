@@ -1,10 +1,12 @@
-import { Metadata } from "next";
-import Link from "next/link";
-import UserAuthForm from "@/components/forms/user-auth-form";
-import { Button, buttonVariants } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
 import UserAuthFormSignUp from "@/components/forms/user-auth-from-signup";
+import { buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import { Metadata } from "next";
 import Image from "next/image";
+import Link from "next/link";
+
+import CompanyAuthFormSignUp from "@/components/forms/user-company-form";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export const metadata: Metadata = {
   title: "Authentication",
@@ -26,8 +28,8 @@ export default function AuthenticationPage() {
       <div className="relative hidden h-full flex-col bg-muted p-10 text-white dark:border-r lg:flex">
         <div className="absolute inset-0 bg-[#3491fe]" />
         <div className="relative z-20 flex items-center text-lg font-medium">
-          <Link href={'/'}>
-            <Image src={'/images/logo.png'} alt="logo" width={60} height={60} />
+          <Link href={"/"}>
+            <Image src={"/images/logo.png"} alt="logo" width={60} height={60} />
           </Link>
         </div>
         <div className="relative z-20 mt-auto ">
@@ -48,11 +50,25 @@ export default function AuthenticationPage() {
               Register an account
             </h1>
             <p className="text-sm text-muted-foreground">
-              Enter your email below to register your account
+              Enter your details below to register
             </p>
           </div>
-          <UserAuthFormSignUp />
-          <Link href="/signin" className="text-[#3491FE]">already have an account?</Link >
+          <Tabs defaultValue="user" className="w-[400px]">
+            <TabsList className="grid w-full grid-cols-2">
+              <TabsTrigger value="company">Company</TabsTrigger>
+              <TabsTrigger value="user">User</TabsTrigger>
+            </TabsList>
+            <TabsContent value="user">
+              <UserAuthFormSignUp />
+            </TabsContent>
+            <TabsContent value="company">
+              <CompanyAuthFormSignUp />
+            </TabsContent>
+          </Tabs>
+
+          <Link href="/signin" className="text-[#3491FE]">
+            already have an account?
+          </Link>
           {/* <p className="px-8 text-center text-sm text-muted-foreground">
             By clicking continue, you agree to our{" "}
             <Link

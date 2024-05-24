@@ -1,10 +1,10 @@
 "use client";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Employee } from "@/constants/data";
+import { Company } from "@prisma/client";
 import { ColumnDef } from "@tanstack/react-table";
 import { CellAction } from "./cell-action";
 
-export const columns: ColumnDef<Employee>[] = [
+export const columns: ColumnDef<Company>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -25,23 +25,39 @@ export const columns: ColumnDef<Employee>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "email",
-    header: "EMAIL",
+    accessorKey: "id",
+    header: "ID ",
   },
   {
     accessorKey: "name",
-    header: "NAME",
+    header: "Name ",
   },
-  
+  {
+    accessorKey: "credits",
+    header: "Credits",
+  },
+  {
+    accessorKey: "address",
+    header: "Address",
+  },
+  {
+    accessorKey: "country",
+    header: "Country",
+  },
+  {
+    accessorKey: "city",
+    header: "City",
+  },
+  {
+    accessorKey: "industry",
+    header: "Industry",
+  },
 
   {
-    accessorKey: "status",
-    header: "STATUS",
+    accessorKey: "createdAt",
+    header: "Creation Date",
   },
-  {
-    accessorKey: "role",
-    header: "ROLE",
-  },
+
   {
     id: "actions",
     cell: ({ row }) => <CellAction data={row.original} />,

@@ -1,20 +1,28 @@
-import { Metadata } from "next";
-import Link from "next/link";
 import UserAuthForm from "@/components/forms/user-auth-form";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { ReadonlyURLSearchParams } from "next/navigation";
 import { ICreateShipment } from "@/types";
+import { Metadata } from "next";
 import Image from "next/image";
+import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Authentication",
   description: "Authentication forms built using the components.",
 };
 
-export default function AuthenticationPage({ searchParams }: { searchParams: { [key: string]: string | string[] | undefined } }) {
-
-  const shipData = (searchParams['carrier'] && searchParams['tracking_number']) ? { carrier: searchParams['carrier'] as string, tracking_number: searchParams['tracking_number'] as string } : null
+export default function AuthenticationPage({
+  searchParams,
+}: {
+  searchParams: { [key: string]: string | string[] | undefined };
+}) {
+  const shipData =
+    searchParams["carrier"] && searchParams["tracking_number"]
+      ? {
+          carrier: searchParams["carrier"] as string,
+          tracking_number: searchParams["tracking_number"] as string,
+        }
+      : null;
 
   return (
     <div className="relative h-screen flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
@@ -30,8 +38,8 @@ export default function AuthenticationPage({ searchParams }: { searchParams: { [
       <div className="relative hidden h-full flex-col bg-muted p-10 text-white dark:border-r lg:flex">
         <div className="absolute inset-0 bg-[#3491fe]" />
         <div className="relative z-20 flex items-center text-lg font-medium">
-          <Link href={'/'}>
-         <Image src={'/images/logo.png'} alt="logo" width={60} height={60} />
+          <Link href={"/"}>
+            <Image src={"/images/logo.png"} alt="logo" width={60} height={60} />
           </Link>
         </div>
         <div className="relative z-20 mt-auto">
@@ -56,8 +64,9 @@ export default function AuthenticationPage({ searchParams }: { searchParams: { [
             </p>
           </div>
           <UserAuthForm shipmentData={shipData as ICreateShipment} />
-          <Link href="/signup" className="text-[#3491FE]" >create an account?</Link >
-
+          <Link href="/signup" className="text-[#3491FE]">
+            create an account?
+          </Link>
         </div>
       </div>
     </div>

@@ -1,15 +1,16 @@
 "use server";
 
 import { coins_err } from "@/types/messgaes";
-import { checkUserCredits } from "@/utils";
+import { checkCompanyCredits } from "@/utils";
 import axios from "axios";
 
 export const createShipmentEntry = async (body: {
   trackingNumber: string;
-  userId: number;
+  companyId: number;
   carrier: string;
+  creatorId: number;
 }) => {
-  const check = await checkUserCredits(Number(body.userId));
+  const check = await checkCompanyCredits(Number(body.companyId));
   if (!check) {
     return { status: "error", message: coins_err };
   }
