@@ -11,7 +11,7 @@ import {
 import React from "react";
 
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+
 import {
   Select,
   SelectContent,
@@ -40,8 +40,8 @@ interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: IUser[];
   // searchKey: string;
-  pageNo: number;
-  totalUsers: number;
+  // pageNo: number;
+  // totalUsers: number;
   pageSizeOptions?: number[];
   pageCount: number;
   searchParams?: {
@@ -52,9 +52,9 @@ interface DataTableProps<TData, TValue> {
 export function EmployeeTable<TData, TValue>({
   columns,
   data,
-  pageNo,
+  // pageNo,
   // searchKey,
-  totalUsers,
+  // totalUsers,
   pageCount,
   pageSizeOptions = [10, 20, 30, 40, 50],
 }: DataTableProps<TData, TValue>) {

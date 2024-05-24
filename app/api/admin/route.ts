@@ -1,4 +1,3 @@
-import { auth } from "@/lib/auth-options";
 import { db } from "@/lib/db";
 import { checkUserExist2 } from "@/utils";
 import { ROLE, Status } from "@prisma/client";
@@ -12,7 +11,7 @@ export async function POST(request: Request) {
     if (!exist) {
       return NextResponse.json({ message: "user not exist" }, { status: 404 });
     }
-    const { status, id } = exist;
+    const { id } = exist;
 
     await db.user.update({
       where: { id: id },

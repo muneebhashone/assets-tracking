@@ -14,7 +14,7 @@ declare module "next-auth" {
       status: Status;
       id: string;
       companyId: number;
-      permissions: PERMISSIONS;
+      permissions: PERMISSIONS[];
     } & DefaultSession["user"];
   }
 }
@@ -26,6 +26,6 @@ declare module "next-auth/jwt" {
     status: Status;
     id: string;
     companyId: number;
-    permissions: PERMISSIONS;
+    permissions: PERMISSIONS[];
   }
 }

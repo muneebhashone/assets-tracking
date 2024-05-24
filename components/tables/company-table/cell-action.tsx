@@ -1,6 +1,4 @@
 "use client";
-import { rejectUser, softDeleteUser, undoDeleteUser } from "@/actions/usersActions";
-import { AlertModal } from "@/components/modal/alert-modal";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -9,38 +7,22 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Employee } from "@/constants/data";
-import axios from "axios";
-import { Edit, MoreHorizontal, Trash } from "lucide-react";
-import { useParams, useRouter } from "next/navigation";
-import { useState } from "react";
+import { Company } from "@prisma/client";
+
+import { MoreHorizontal, Trash } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 interface CellActionProps {
-  data: Employee;
+  data: Company;
 }
 
 export const CellAction: React.FC<CellActionProps> = ({ data }) => {
-  const [loading, setLoading] = useState(false);
-  const [open, setOpen] = useState(false);
+  // const [loading, setLoading] = useState(false);
+  // const [open, setOpen] = useState(false);
   const router = useRouter();
-
-  const onConfirm = async (email: string) => {
-    setLoading(true);
-    const reject = await undoDeleteUser(email);
-    setOpen(false);
-    router.refresh();
-    setLoading(false);
-    return reject;
-  };
 
   return (
     <>
-      <AlertModal
-        isOpen={open}
-        onClose={() => setOpen(false)}
-        onConfirm={() => onConfirm(data.email)}
-        loading={loading}
-      />
       <DropdownMenu modal={false}>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" className="h-8 w-8 p-0">
@@ -50,11 +32,18 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
-          <DropdownMenuItem disabled={loading} onClick={() => setOpen(true)}>
-            <Trash className="mr-2 h-4 w-4" /> Undo
+          <DropdownMenuItem
+            onClick={() => router.push(`/dashboard/company/${data.id}`)}
+          >
+            <Trash className="mr-2 h-4 w-4" /> Edit
           </DropdownMenuItem>
+          {/* <DropdownMenuItem >
+            <Trash className="mr-2 h-4 w-4" /> Details
+          </DropdownMenuItem> */}
         </DropdownMenuContent>
       </DropdownMenu>
     </>
   );
 };
+// onClick={() => setOpen(true)}
+// /dashboard/activeUsers/${data.id}

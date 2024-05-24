@@ -11,13 +11,13 @@ model User {
   id          Int           @id @default(autoincrement())
   email       String        @unique
   name        String?
-  permissions PERMISSIONS[] @default([])
   role        ROLE          @default(USER)
   status      Status        @default(false)
   password    String        @map("password")
   deleted     Boolean       @default(false)
-  shipments   Shipment[]
   companyId   Int
+  permissions PERMISSIONS[] @default([])
+  shipments   Shipment[]
   company     Company       @relation(fields: [companyId], references: [id])
 
   @@index([companyId])
@@ -34,18 +34,18 @@ model Vessel {
 
 model Shipment {
   id              Int      @id @default(autoincrement())
-  creatorId       Int
-  companyId       Int
   status          String
   carrier         String
+  aggregator      String
   arrivalTime     String
+  created_at      DateTime @default(now())
+  sealine         String
   tracking_number String
   type            String
-  created_at      DateTime @default(now())
-  aggregator      String
-  sealine         String
-  user            User     @relation(fields: [creatorId], references: [id])
+  companyId       Int
+  creatorId       Int
   company         Company  @relation(fields: [companyId], references: [id])
+  user            User     @relation(fields: [creatorId], references: [id])
   vessels         Vessel[]
 
   @@unique([companyId, tracking_number, creatorId], name: "Unique_Company_User_TrackingNumber")
@@ -58,11 +58,11 @@ model Company {
   country   String
   city      String
   industry  String?
-  credits   Int        @default(0)
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
-  users     User[]
+  credits   Int        @default(0)
   Shipment  Shipment[]
+  users     User[]
 }
 
 enum Status {
@@ -77,7 +77,6 @@ enum ROLE {
 }
 
 enum PERMISSIONS {
-  VIEW_DASHBOARD
   VIEW_SHIPMENT
   CREATE_SHIPMENT
   EDIT_SHIPMENT
@@ -86,4 +85,6 @@ enum PERMISSIONS {
   CREATE_USER
   EDIT_USER
   DELETE_USER
+  VIEW_DASHBOARD
+  VIEW_COMPANY
 }

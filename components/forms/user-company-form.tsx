@@ -14,15 +14,15 @@ import { CreateCompanySchemaType } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { useToast } from "../ui/use-toast";
 
 export default function CompanyAuthFormSignUp() {
   const { toast } = useToast();
-  const searchParams = useSearchParams();
+  // const searchParams = useSearchParams();
   const router = useRouter();
-  const { mutate, isPending, isSuccess } = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationFn: async (data: CreateCompanySchemaType) => {
       const { data: responseData } = await axios.post("/api/company", data);
       return responseData;

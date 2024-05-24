@@ -1,8 +1,7 @@
 import { IUserMessage } from "@/types";
 import { checkUserExist } from "@/utils";
-import { Jwt } from "jsonwebtoken";
-import { NextResponse } from "next/server";
 import argon2 from "argon2";
+import { NextResponse } from "next/server";
 export async function POST(request: Request) {
   try {
     const body = await request.json();

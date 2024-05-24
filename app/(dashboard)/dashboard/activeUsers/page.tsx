@@ -44,9 +44,9 @@ export default async function Page({ searchParams }: paramsProps) {
 
           <EmployeeTable
             // searchKey="country"
-            pageNo={page}
+
             columns={columns}
-            totalUsers={response?.totalUsers}
+            // totalUsers={response?.totalUsers}
             data={response?.users as IUser[]}
             pageCount={response.totalPages}
           />

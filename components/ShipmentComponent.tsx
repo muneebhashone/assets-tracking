@@ -8,7 +8,7 @@ import { createShipmentEntry } from "@/services/shipment";
 import { ICreateShipment } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useSession } from "next-auth/react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -34,8 +34,6 @@ const schema = z.object({
 });
 const ShipmentComponent = (props: Props) => {
   const { data } = props;
-
-  const router = useRouter();
   const [loading, setLoading] = useState<boolean>(false);
   const searchParams = useSearchParams();
   const { toast } = useToast();
@@ -54,7 +52,7 @@ const ShipmentComponent = (props: Props) => {
     if (trackingNumber) {
       setValue("tracking_number", trackingNumber);
     }
-  }, [searchParams]);
+  }, [searchParams, setValue]);
 
   const onSubmit = async (payload: ICreateShipment) => {
     setLoading(true);

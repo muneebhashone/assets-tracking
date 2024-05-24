@@ -1,17 +1,6 @@
 "use client";
-import {
-  ColumnDef,
-  PaginationState,
-  flexRender,
-  getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  useReactTable,
-} from "@tanstack/react-table";
-import React from "react";
-
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import {
   Select,
   SelectContent,
@@ -27,21 +16,30 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Company } from "@prisma/client";
 import {
   DoubleArrowLeftIcon,
   DoubleArrowRightIcon,
 } from "@radix-ui/react-icons";
+import {
+  ColumnDef,
+  PaginationState,
+  flexRender,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  useReactTable,
+} from "@tanstack/react-table";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
+import moment from "moment";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
-import { IUser } from "@/types";
+import React from "react";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
-  data: IUser[];
+  data: Company[];
   searchKey: string;
-  pageNo: number;
-  totalUsers: number;
+
   pageSizeOptions?: number[];
   pageCount: number;
   searchParams?: {
@@ -49,12 +47,10 @@ interface DataTableProps<TData, TValue> {
   };
 }
 
-export function RejectedTable<TData, TValue>({
+export function CompanyTable<TData, TValue>({
   columns,
   data,
-  pageNo,
   searchKey,
-  totalUsers,
   pageCount,
   pageSizeOptions = [10, 20, 30, 40, 50],
 }: DataTableProps<TData, TValue>) {
@@ -71,7 +67,7 @@ export function RejectedTable<TData, TValue>({
   const tableData = data.map((entry) => {
     return {
       ...entry,
-      status: entry.status === "true" ? "Active" : "InActive",
+      createdAt:moment(entry.createdAt).format("DD-MM-YYYY"),
     };
   });
 
@@ -113,7 +109,7 @@ export function RejectedTable<TData, TValue>({
   }, [pageIndex, pageSize]);
 
   const table = useReactTable({
-    data: tableData,
+    data:tableData,
     columns,
     pageCount: pageCount ?? -1,
     getCoreRowModel: getCoreRowModel(),

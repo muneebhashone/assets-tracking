@@ -78,6 +78,7 @@ export const getRegisteredUsers = async ({
           ...(role === ROLE.ADMIN ? [{ companyId: companyId }] : []),
         ],
       } as Prisma.UserWhereInput,
+      include: { company: true },
       distinct: "id",
       skip: offset,
       take: Number(pageSize),
@@ -140,6 +141,7 @@ export const getRejectedUsers = async ({
         ],
       } as Prisma.UserWhereInput,
       distinct: "id",
+      include: { company: true },
       skip: offset,
       take: Number(pageSize),
     });
@@ -204,6 +206,7 @@ export const getActiveUser = async ({
       distinct: "id",
       skip: offset,
       take: Number(pageSize),
+      include: { company: true },
     });
     const users = await db.user.count({
       where: {
@@ -317,12 +320,20 @@ export const userData = async (id: string) => {
   }
 };
 
-export const getUserCount = async (status?: userState) => {
+export const getUserCount = async (status?: userState, companyId?: number) => {
   let filter: Prisma.UserCountArgs = {
     where: {
       AND: [{ role: { not: ROLE.SUPER_ADMIN } }],
     },
   };
+  if (companyId) {
+    (filter?.["where"]?.["AND"] as Prisma.UserWhereInput[])?.push({
+      companyId,
+    });
+    (filter?.["where"]?.["AND"] as Prisma.UserWhereInput[])?.push({
+      role: { not: ROLE.ADMIN },
+    });
+  }
   if (status) {
     switch (status) {
       case userState.ACCEPTED:

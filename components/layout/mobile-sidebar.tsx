@@ -1,14 +1,12 @@
 "use client";
 import { DashboardNav } from "@/components/dashboard-nav";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { adminNavItems, userNavItems } from "@/constants/data";
-import { auth } from "@/lib/auth-options";
-import { ROLE } from "@/types";
+import { userNavItems } from "@/constants/data";
+import { User } from "@prisma/client";
 import { MenuIcon } from "lucide-react";
+import { Session } from "next-auth";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
-
-// import { Playlist } from "../data/playlists";
 
 interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {
   // playlists: Playlist[];
@@ -18,7 +16,6 @@ export function MobileSidebar({ className }: SidebarProps) {
   const [open, setOpen] = useState(false);
   const { data: session } = useSession();
 
-  const { role } = session?.user;
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
@@ -32,7 +29,9 @@ export function MobileSidebar({ className }: SidebarProps) {
             </h2>
             <div className="space-y-1">
               <DashboardNav
-                items={role === ROLE.SUPER_ADMIN ? adminNavItems : userNavItems}
+                items={userNavItems}
+                user={session?.user as Session["user"]}
+                setOpen={setOpen}
               />
             </div>
           </div>

@@ -1,13 +1,12 @@
-import { Metadata } from "next";
-import Link from "next/link";
-import UserAuthForm from "@/components/forms/user-auth-form";
-import { Button, buttonVariants } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
 import UserAuthFormSignUp from "@/components/forms/user-auth-from-signup";
+import { buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import { Metadata } from "next";
 import Image from "next/image";
+import Link from "next/link";
 
-import { TabsList, Tabs, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import CompanyAuthFormSignUp from "@/components/forms/user-company-form";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export const metadata: Metadata = {
   title: "Authentication",

@@ -1,5 +1,5 @@
 "use client";
-import { rejectUser, softDeleteUser } from "@/actions/usersActions";
+import { softDeleteUser } from "@/actions/usersActions";
 import { AlertModal } from "@/components/modal/alert-modal";
 import { Button } from "@/components/ui/button";
 import {
@@ -12,7 +12,7 @@ import {
 import { Employee } from "@/constants/data";
 import axios from "axios";
 import { Edit, MoreHorizontal, Trash } from "lucide-react";
-import { useParams, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 interface CellActionProps {

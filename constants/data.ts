@@ -143,12 +143,13 @@ export const navItems: NavItem[] = [
     label: "employee",
     permissions: ["VIEW_USER"],
   },
-  // {
-  //   title: "Company",
-  //   href: "/dashboard/company",
-  //   icon: "laptop",
-  //   label: "company",
-  // },
+  {
+    title: "Company",
+    href: "/dashboard/company",
+    icon: "laptop",
+    label: "company",
+    permissions: ["VIEW_COMPANY"],
+  },
 ];
 export const userNavItems: NavItem[] = [
   {

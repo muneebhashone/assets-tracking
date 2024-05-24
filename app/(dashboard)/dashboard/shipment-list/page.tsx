@@ -14,7 +14,7 @@ type Props = {
 };
 const page = async (props: Props) => {
   const session = (await auth()) as Session;
-  const user = (await userData(session.user.id as string)) as User;
+  // const user = (await userData(session.user.id as string)) as User;
 
   return (
     <ScrollArea className="h-full ">

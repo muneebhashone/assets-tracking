@@ -1,16 +1,11 @@
-import React from "react";
-import { Button } from "../ui/button";
-import { ShipmentTable } from "../tables/shipment-table/shipment-table";
-import Link from "next/link";
-import { ShippingCardsView } from "../ui/ShippingCardView";
 import { getShipmentByUserId } from "@/actions/shipmentActions";
 import { auth } from "@/lib/auth-options";
-import { Session } from "next-auth";
-import { Shipment } from "@prisma/client";
-import CardViewPagination from "../pagination/CardViewPagination";
 import { shipmentDataWithPagination } from "@/types";
+import { Session } from "next-auth";
+import Link from "next/link";
 import SearchBar from "../SearchBar";
 import { columns } from "../tables/shipment-table/columns";
+import { ShipmentTable } from "../tables/shipment-table/shipment-table";
 
 type Props = {
   searchParams: {
@@ -30,8 +25,8 @@ const UserDashboard = async (props: Props) => {
 
   // ];
   const { searchParams } = props;
-  const page = Number(searchParams.page) || 1;
-  const pageLimit = Number(searchParams.limit) || 10;
+  // const page = Number(searchParams.page) || 1;
+  // const pageLimit = Number(searchParams.limit) || 10;
 
   const session = (await auth()) as Session;
   const params = {

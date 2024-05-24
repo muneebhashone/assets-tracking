@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { User } from "@prisma/client";
 // import { User } from "@/constants/data";
-import { Edit, MoreHorizontal, Trash } from "lucide-react";
+import { MoreHorizontal, Trash } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -49,11 +49,11 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
 
-          <DropdownMenuItem
+          {/* <DropdownMenuItem
             onClick={() => router.push(`/dashboard/activeUsers/${data.id}`)}
           >
             <Edit className="mr-2 h-4 w-4" /> Edit
-          </DropdownMenuItem>
+          </DropdownMenuItem> */}
           <DropdownMenuItem onClick={() => setOpen(true)}>
             <Trash className="mr-2 h-4 w-4" /> Reject
           </DropdownMenuItem>

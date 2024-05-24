@@ -1,13 +1,13 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import NavLogo from "./NavLogo";
-import Menu from "./Menu";
+import { HamburgerMenuIcon } from "@radix-ui/react-icons";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { menuitems } from "../constants/data";
 import LoginButton from "./LoginButton";
-import { HamburgerMenuIcon } from "@radix-ui/react-icons";
-import { useRouter } from "next/navigation";
-import { useSession } from "next-auth/react";
+import Menu from "./Menu";
+import NavLogo from "./NavLogo";
 import { UserNav } from "./layout/user-nav";
 
 

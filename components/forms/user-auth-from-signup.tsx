@@ -9,17 +9,14 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { signIn } from "next-auth/react";
-import { useRouter, useSearchParams } from "next/navigation";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import * as z from "zod";
-import { useMutation } from "@tanstack/react-query";
-import axios from "axios";
-import { useToast } from "../ui/use-toast";
+import { useGetAllCompanies } from "@/hooks/useQuery";
 import { createUserFormSchema } from "@/lib/form-schema";
 import { CreateUserSchemaType } from "@/types";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@tanstack/react-query";
+import axios from "axios";
+import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
 import {
   Select,
   SelectContent,
@@ -27,14 +24,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
-import { useGetAllCompanies } from "@/hooks/useQuery";
+import { useToast } from "../ui/use-toast";
 
 export default function UserAuthFormSignUp() {
   const { toast } = useToast();
-  const searchParams = useSearchParams();
+  // const searchParams = useSearchParams();
   const router = useRouter();
   const { data: companiesResponse, isFetching } = useGetAllCompanies();
-  const { mutate, isPending, isSuccess } = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationFn: async (data: CreateUserSchemaType) => {
       const { data: responseData } = await axios.post(
         "/api/user/create_user",

@@ -9,10 +9,11 @@ import { NavItem } from "@/types";
 import { Dispatch, SetStateAction } from "react";
 import { PERMISSIONS, ROLE, User } from "@prisma/client";
 import { checkPermissions } from "@/utils/checkPermissions";
+import { Session } from "next-auth";
 
 interface DashboardNavProps {
   items: NavItem[];
-  user: User;
+  user: Session["user"];
   setOpen?: Dispatch<SetStateAction<boolean>>;
 }
 

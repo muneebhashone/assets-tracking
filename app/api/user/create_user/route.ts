@@ -1,9 +1,8 @@
 import { createUser } from "@/actions/usersActions";
 import { db } from "@/lib/db";
 import { createUserFormSchema } from "@/lib/form-schema";
-import { checkUserExist, checkUserExist2 } from "@/utils";
+import { checkUserExist2 } from "@/utils";
 import { NextResponse } from "next/server";
-import * as zod from "zod";
 
 export async function POST(request: Request) {
   try {

@@ -1,4 +1,4 @@
-import { getRegisteredUsers, getRejectedUsers } from "@/actions/usersActions";
+import { getRejectedUsers } from "@/actions/usersActions";
 import BreadCrumb from "@/components/breadcrumb";
 import { columns } from "@/components/tables/rejectedUserTable/columns";
 import { RejectedTable } from "@/components/tables/rejectedUserTable/rejectedUser";

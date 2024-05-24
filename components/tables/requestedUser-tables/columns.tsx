@@ -31,6 +31,9 @@ export const columns: ColumnDef<Employee>[] = [
   {
     accessorKey: "name",
     header: "NAME",
+  },{
+    accessorKey: "company.name",
+    header: "Company Name",
   },
   
 

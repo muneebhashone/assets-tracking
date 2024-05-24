@@ -8,6 +8,7 @@ import { getPaginator } from "@/utils";
 import { Prisma, Shipment } from "@prisma/client";
 import { DefaultArgs } from "@prisma/client/runtime/library";
 import { getUserCount } from "./usersActions";
+import { Session } from "next-auth";
 interface MonthData {
   name: string;
   count: number;
@@ -181,24 +182,37 @@ export const getShipmentByTrackingNumber = async (trackingNumber: string) => {
 // };
 
 export const getAllStatusData = async () => {
-  const admin = await auth();
-  if (admin?.user.role !== ROLE.SUPER_ADMIN) {
-    return new Error("UnAuthorized");
+  let statusCounts;
+  const session = await auth();
+  if (session?.user.role === ROLE.USER) {
+    return null;
+  } else if (session?.user.role === ROLE.ADMIN) {
+    statusCounts = await db.shipment.groupBy({
+      by: ["status"],
+      _count: true,
+      where: {
+        companyId: session?.user.companyId,
+      },
+    });
+  } else {
+    statusCounts = await db.shipment.groupBy({
+      by: ["status"],
+      _count: true,
+    });
   }
-  const statusCounts = await db.shipment.groupBy({
-    by: ["status"],
-    _count: true,
-  });
 
-  // Transform the response to match the desired format
   const formattedResponse = statusCounts.map(({ status, _count }) => ({
     name: status,
     count: _count,
   }));
-  return formattedResponse;
+
+  return formattedResponse.length ? formattedResponse : null;
 };
 
-export const getShipmentDataByYear = async (year: number, userId?: number) => {
+export const getShipmentDataByYear = async (
+  year: number,
+  user?: Session["user"],
+) => {
   let query = Prisma.sql`
   SELECT
       TO_CHAR(created_at, 'Mon') AS name,
@@ -211,23 +225,24 @@ export const getShipmentDataByYear = async (year: number, userId?: number) => {
   ORDER BY
       EXTRACT(MONTH FROM created_at)
   `;
-  if (userId) {
+  if (user?.role !== ROLE.SUPER_ADMIN) {
     query = Prisma.sql`SELECT
     TO_CHAR(s.created_at, 'Mon') AS name,
     CAST(COUNT(*) AS INTEGER) AS count
 FROM 
     "Shipment" s
 JOIN 
-    "User" u ON s."userId" = u.id
+    "User" u ON s."creatorId" = u.id
 WHERE
     EXTRACT(YEAR FROM s.created_at) = ${year}
-    AND u.id = ${userId} 
+    AND u.id = ${user?.id} 
 GROUP BY
     TO_CHAR(s.created_at, 'Mon'), EXTRACT(MONTH FROM s.created_at)
 ORDER BY
     EXTRACT(MONTH FROM s.created_at)`;
   }
-  const monthCounts: MonthData[] = await db.$queryRaw(query);
+  // console.log(monthCounts)
+  const monthCounts: MonthData[] = (await db.$queryRaw(query)) || [];
   const allMonths = [
     { name: "Jan", count: 0 },
     { name: "Feb", count: 0 },
@@ -257,7 +272,7 @@ ORDER BY
   return null;
 };
 
-export const getShipmentDatabyRole = async (role: ROLE, userId: number) => {
+export const getShipmentDatabyRole = async (role: ROLE, companyId?: number) => {
   switch (role) {
     case ROLE.SUPER_ADMIN:
       return await Promise.all([
@@ -267,30 +282,38 @@ export const getShipmentDatabyRole = async (role: ROLE, userId: number) => {
         getUserCount(userState.ACCEPTED),
         getUserCount(userState.PENDING),
       ]);
+    case ROLE.ADMIN:
+      return await Promise.all([
+        shipmentNumber(undefined, companyId),
+        getUserCount(undefined, companyId),
+        getUserCount(userState.REJECTED, companyId),
+        getUserCount(userState.ACCEPTED, companyId),
+        getUserCount(userState.PENDING, companyId),
+      ]);
 
     case ROLE.USER:
       return await Promise.all([
-        shipmentNumber(undefined, userId),
-        shipmentNumber(ShipmentState.PLANNED, userId),
-        shipmentNumber(ShipmentState.UNKNOWN, userId),
-        shipmentNumber(ShipmentState.DELIVERED, userId),
-        shipmentNumber(ShipmentState.IN_TRANSIT, userId),
+        shipmentNumber(undefined, companyId),
+        shipmentNumber(ShipmentState.PLANNED, companyId),
+        shipmentNumber(ShipmentState.UNKNOWN, companyId),
+        shipmentNumber(ShipmentState.DELIVERED, companyId),
+        shipmentNumber(ShipmentState.IN_TRANSIT, companyId),
       ]);
   }
 };
 
 export const shipmentNumber = async (
   status?: ShipmentState,
-  userId?: number,
+  companyId?: number,
 ) => {
   let filter: Prisma.ShipmentCountArgs = {
     where: {
       AND: [{ user: { role: { not: ROLE.SUPER_ADMIN } } }],
     },
   };
-  if (userId) {
+  if (companyId) {
     (filter?.where?.AND as Prisma.ShipmentWhereInput[])?.push({
-      user: { id: userId },
+      company: { id: companyId },
     });
   }
   if (status) {

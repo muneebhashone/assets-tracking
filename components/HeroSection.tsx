@@ -1,17 +1,14 @@
-import React from "react";
-
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 
-import { auth } from "@/lib/auth-options";
-import { redirect } from "next/navigation";
-import { shipmentType } from "@/types/enums";
 import {
   CarrierInputIcon,
   SearchIcon,
   TrackingIcon,
 } from "@/components/Icons/index";
+import { auth } from "@/lib/auth-options";
 import { getAllSeaRatesContainer } from "@/services/searates";
+import { redirect } from "next/navigation";
 
 const HeroSection = async () => {
   const data = await getAllSeaRatesContainer();

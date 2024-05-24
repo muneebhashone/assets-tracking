@@ -62,12 +62,15 @@ export const InitializeSocket = () => {
     };
 
     if (io && session?.data?.user.id) {
+      
       const userIdMessageEvent = `${session.data.user.id}:message`;
       io.on(userIdMessageEvent, ({ status, message }) => {
         if (status === "success") {
+        
           router.refresh();
         }
-
+        console.log(session.data.user.id)
+        console.log(message)
         throwToast(status, message);
       });
 
