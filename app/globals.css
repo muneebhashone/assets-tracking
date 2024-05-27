@@ -41,7 +41,7 @@ body,
     --radius: 0.5rem;
   }
 
-  .dark {
+  /* .dark {
     --background: 240 10% 3.9%;
     --foreground: 0 0% 98%;
 
@@ -69,7 +69,7 @@ body,
     --border: 240 3.7% 15.9%;
     --input: 240 3.7% 15.9%;
     --ring: 240 4.9% 83.9%;
-  }
+  } */
 }
 
 @layer base {
@@ -94,11 +94,11 @@ body,
 
 @layer base {
   @font-face {
-    font-family: 'Roboto';
+    font-family: "Roboto";
     font-style: normal;
     font-weight: 400;
     font-display: swap;
-    src: url(/fonts/Roboto.woff2) format('woff2');
+    src: url(/fonts/Roboto.woff2) format("woff2");
   }
 }
 

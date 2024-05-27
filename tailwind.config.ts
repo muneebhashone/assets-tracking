@@ -1,7 +1,7 @@
-/** @type {import('tailwindcss').Config} */
+import { Config } from "tailwindcss";
 
-module.exports = {
-  darkMode: ["class"],
+const theme: Config = {
+  darkMode: ["variant", ".disable-dark"],
   content: [
     "./pages/**/*.{ts,tsx}",
     "./components/**/*.{ts,tsx}",
@@ -9,7 +9,6 @@ module.exports = {
     "./app/**/*.{ts,tsx}",
     "./src/**/*.{ts,tsx}",
   ],
-
   theme: {
     container: {
       center: true,
@@ -62,12 +61,12 @@ module.exports = {
       },
       keyframes: {
         "accordion-down": {
-          from: { height: 0 },
+          from: { height: "0px" },
           to: { height: "var(--radix-accordion-content-height)" },
         },
         "accordion-up": {
           from: { height: "var(--radix-accordion-content-height)" },
-          to: { height: 0 },
+          to: { height: "0px" },
         },
       },
       animation: {
@@ -75,9 +74,11 @@ module.exports = {
         "accordion-up": "accordion-up 0.2s ease-out",
       },
       zIndex: {
-        "9999": "9999",
+        9999: "9999",
       },
     },
   },
   plugins: [require("tailwindcss-animate")],
 };
+
+export default theme;
