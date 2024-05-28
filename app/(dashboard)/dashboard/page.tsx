@@ -76,7 +76,7 @@ export default async function page() {
         <h2 className="text-3xl font-bold tracking-tight ">
           Hi, Welcome back {session?.user?.name}
         </h2>
-        {session?.user.role !== ROLE.SUPER_ADMIN && (
+        {session?.user.role === ROLE.ADMIN && (
           <div className="flex flex-col ">
             <h2 className="text-2xl font-bold tracking-tight ">
               Credits: {credits}
