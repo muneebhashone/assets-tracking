@@ -89,5 +89,8 @@
     "@typescript-eslint/eslint-plugin": "^6.11.0",
     "prettier": "3.0.3",
     "prisma": "^5.14.0"
+  },
+  "engines": {
+    "node": "20.12.*"
   }
 }
