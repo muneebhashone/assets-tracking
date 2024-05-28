@@ -1,11 +1,11 @@
 {
-  "name": "nextshcdndashboardstarter",
+  "name": "zim-tracking",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev ",
-    "postinstall": "prisma generate",
-    "build": "prisma generate && next build",
+    "prebuild": "npx prisma generate && npx prisma db push",
+    "build": "next build",
     "start": "next start",
     "lint": "next lint",
     "prettier": "prettier . --write"
