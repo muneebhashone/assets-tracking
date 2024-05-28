@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev ",
-    "postbuild": "npx prisma generate && npx prisma db push",
-    "build": "next build",
+    "prisma:run": "npx prisma generate && npx prisma db push",
+    "build": "prisma:run && next build",
     "start": "next start",
     "lint": "next lint",
     "prettier": "prettier . --write"
