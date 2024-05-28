@@ -8,7 +8,11 @@ const nextConfig = {
     ignoreDuringBuilds: true,
   },
   images: {
-    domains: ["utfs.io"],
+    remotePatterns: [
+      {
+        hostname: "utfs.io",
+      },
+    ],
   },
 };
 
