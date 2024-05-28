@@ -1,4 +1,4 @@
-runprisma: 
+run-prisma: 
 	npx prisma migrate dev
 	npx prisma generate
 
