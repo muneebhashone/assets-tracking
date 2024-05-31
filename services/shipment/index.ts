@@ -21,6 +21,7 @@ export const createShipmentEntry = async (body: {
       body,
     );
   } catch (err) {
+    // @ts-ignore
     console.log(err?.message);
   }
   return {

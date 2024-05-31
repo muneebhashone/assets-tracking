@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Heading } from "@/components/ui/heading";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
+import { getAllSeaRatesContainer } from "@/services/searates";
 import { createShipmentEntry } from "@/services/shipment";
 import { ICreateShipment } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -18,10 +19,6 @@ export interface ShippingData {
   code: string;
 }
 
-type Props = {
-  data: ShippingData[] | undefined;
-};
-
 const schema = z.object({
   tracking_number: z
     .string({
@@ -32,8 +29,8 @@ const schema = z.object({
     required_error: "Please Select Carrier Type",
   }),
 });
-const ShipmentComponent = (props: Props) => {
-  const { data } = props;
+const ShipmentComponent = () => {
+  const [data, setData] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const searchParams = useSearchParams();
   const { toast } = useToast();
@@ -53,6 +50,17 @@ const ShipmentComponent = (props: Props) => {
       setValue("tracking_number", trackingNumber);
     }
   }, [searchParams, setValue]);
+
+  useEffect(() => {
+    (async () => {
+      const result = (await getAllSeaRatesContainer()) as {
+        name: string;
+        code: string;
+      }[];
+
+      setData(result);
+    })();
+  }, []);
 
   const onSubmit = async (payload: ICreateShipment) => {
     setLoading(true);
@@ -85,14 +93,15 @@ const ShipmentComponent = (props: Props) => {
                 {...register("carrier")}
               >
                 {/* <option value={shipmentType.SEARATE}>SEARATE</option> */}
-                {data &&
-                  data?.map((info, index) => {
-                    return (
-                      <option key={index} value={info.code}>
-                        {info.name}
-                      </option>
-                    );
-                  })}
+                {data.length
+                  ? data?.map((info, index) => {
+                      return (
+                        <option key={index} value={info.code}>
+                          {info.name}
+                        </option>
+                      );
+                    })
+                  : null}
               </select>
             </Suspense>
           </div>
