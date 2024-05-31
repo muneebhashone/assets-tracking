@@ -25,9 +25,11 @@ const schema = z.object({
       required_error: "Tracking Number is required",
     })
     .min(1, { message: "invalid id" }),
-  carrier: z.string({
-    required_error: "Please Select Carrier Type",
-  }),
+  carrier: z
+    .string({
+      required_error: "Please Select Carrier Type",
+    })
+    .min(1),
 });
 const ShipmentComponent = () => {
   const [data, setData] = useState<any[]>([]);
@@ -59,8 +61,9 @@ const ShipmentComponent = () => {
       }[];
 
       setData(result);
+      setValue("carrier", result[0]["code"]);
     })();
-  }, []);
+  }, [setValue]);
 
   const onSubmit = async (payload: ICreateShipment) => {
     setLoading(true);
