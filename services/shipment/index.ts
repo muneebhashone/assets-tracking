@@ -1,5 +1,3 @@
-"use server";
-
 import { coins_err } from "@/types/messgaes";
 import { checkCompanyCredits } from "@/utils";
 import axios from "axios";
@@ -10,12 +8,15 @@ export const createShipmentEntry = async (body: {
   carrier: string;
   creatorId: number;
 }) => {
-  const check = await checkCompanyCredits(Number(body.companyId));
-
-  if (!check) {
-    return { status: "error", message: coins_err };
-  }
   try {
+    const { data } = await axios.get(
+      `${process.env.NEXT_PUBLIC_QUEUE_SERVER_URL}/api/shipment/credits/${body.companyId}`,
+    );
+
+    if (!data?.credits) {
+      return { status: "error", message: coins_err };
+    }
+
     await axios.post(
       `${process.env.NEXT_PUBLIC_QUEUE_SERVER_URL}/api/shipment/insert-shipment`,
       body,
