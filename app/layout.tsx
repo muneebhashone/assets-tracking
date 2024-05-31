@@ -4,9 +4,9 @@ import "@uploadthing/react/styles.css";
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
-import { getServerSession } from "next-auth";
 import { ReactQueryClientProvider } from "@/components/ReactQueryClientProvider";
 import { InitializeSocket } from "@/stores/useSocketStore";
+import { auth } from "@/lib/auth-options";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -25,7 +25,7 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const session = await getServerSession();
+  const session = await auth();
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${poppins.className} `}>

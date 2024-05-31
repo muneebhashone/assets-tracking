@@ -1,3 +1,5 @@
+"use client";
+import { submitHandler } from "@/actions/utilActions";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 
@@ -6,30 +8,23 @@ import {
   SearchIcon,
   TrackingIcon,
 } from "@/components/Icons/index";
-import { auth } from "@/lib/auth-options";
 import { getAllSeaRatesContainer } from "@/services/searates";
-import { redirect } from "next/navigation";
+import { useEffect, useState } from "react";
 
-const HeroSection = async () => {
-  const data = await getAllSeaRatesContainer();
-  const session = await auth();
-  const submitHandler = async (formData: FormData) => {
-    "use server";
-    const [carrier, tracking_number] = Array(
-      formData.get("carrier"),
-      formData.get("tracking_number"),
-    );
+const HeroSection = () => {
+  const [data, setData] = useState<any[]>([]);
 
-    if (session?.user) {
-      redirect(
-        `/dashboard/shipment/?carrier=${carrier}&tracking_number=${tracking_number}`,
-      );
-    } else {
-      redirect(
-        `/signin/?carrier=${carrier}&tracking_number=${tracking_number}`,
-      );
-    }
-  };
+  useEffect(() => {
+    (async () => {
+      const result = (await getAllSeaRatesContainer()) as {
+        name: string;
+        code: string;
+      }[];
+
+      setData(result);
+    })();
+  }, []);
+
   return (
     <div className="w-full h-[700px] md:h-[1040px] bg-[url('/images/containerbanner.png')] bg-cover bg-center bg-no-repeat flex md:items-start justify-center pt-48">
       <div className="container">

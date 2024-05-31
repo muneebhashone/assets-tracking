@@ -11,13 +11,18 @@ export const createShipmentEntry = async (body: {
   creatorId: number;
 }) => {
   const check = await checkCompanyCredits(Number(body.companyId));
+
   if (!check) {
     return { status: "error", message: coins_err };
   }
-  await axios.post(
-    `${process.env.NEXT_PUBLIC_QUEUE_SERVER_URL}/api/shipment/insert-shipment`,
-    body,
-  );
+  try {
+    await axios.post(
+      `${process.env.NEXT_PUBLIC_QUEUE_SERVER_URL}/api/shipment/insert-shipment`,
+      body,
+    );
+  } catch (err) {
+    console.log(err?.message);
+  }
   return {
     status: "waiting",
     message:

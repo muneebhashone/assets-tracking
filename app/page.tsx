@@ -1,5 +1,3 @@
-// "use client";
-
 import FaqAccordian from "@/components/FaqAccordian";
 import FaqSectionBox from "@/components/FaqSectionBox";
 import Header from "@/components/Header";
@@ -17,24 +15,21 @@ import {
   faqcardlist,
   info,
   resources,
-  testimoniallist
+  testimoniallist,
 } from "@/constants/data";
 import Image from "next/image";
 import Link from "next/link";
 
-
 type Props = {};
 
 const LandingPage = async (props: Props) => {
-
   return (
     <div>
       <Header />
       <HeroSection />
       <main>
         <section className="container max-w-screen-2xl mx-auto mt-24">
-          <div
-            className="bg-[url('/images/midsectionbg.png')] bg-cover md:bg-contain bg-center bg-no-repeat md:h-screen">
+          <div className="bg-[url('/images/midsectionbg.png')] bg-cover md:bg-contain bg-center bg-no-repeat md:h-screen">
             <SectionHeading
               title="Easiest Way of Tracking"
               description="All you need for the shipment tracking at one tool/place/.."
