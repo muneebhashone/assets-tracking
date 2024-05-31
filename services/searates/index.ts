@@ -1,5 +1,5 @@
 import { SeaRatesApiResponse, SearatesSealineApiResponse } from "@/types";
-import axios, { AxiosResponse } from "axios";
+import axios, { AxiosError, AxiosResponse } from "axios";
 
 export const seaRatesApi = async (
   tracking_number: string,
@@ -25,7 +25,15 @@ export const getAllSeaRatesContainer = async () => {
     });
     return nameScacPairs;
   } catch (err) {
-    console.log(err);
+    if (err instanceof Error) {
+      console.log(err.message);
+    }
+
+    if (err instanceof AxiosError) {
+      console.log(err.message);
+    }
+
+    console.log(err?.message);
   }
   //   return res;
 };
