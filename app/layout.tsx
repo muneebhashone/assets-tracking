@@ -30,11 +30,9 @@ export default async function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={`${poppins.className} `}>
         <Providers session={session}>
-          <ReactQueryClientProvider>
-            <Toaster />
-            <InitializeSocket />
-            {children}
-          </ReactQueryClientProvider>
+          <Toaster />
+          <InitializeSocket />
+          <ReactQueryClientProvider>{children}</ReactQueryClientProvider>
         </Providers>
       </body>
     </html>
