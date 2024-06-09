@@ -1,5 +1,5 @@
 "use client";
-import { Shipment } from "@prisma/client";
+import { Shipment } from "@/services/shipment.queries";
 // import { User } from "@/constants/data";
 import Link from "next/link";
 
@@ -11,7 +11,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
   return (
     <>
       <Link
-        href={`/dashboard/shipment/${data.tracking_number}`}
+        href={`/dashboard/shipment/${data.id}`}
         className="hover:text-blue-400"
       >
         View Details

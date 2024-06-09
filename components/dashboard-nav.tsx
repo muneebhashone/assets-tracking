@@ -5,15 +5,13 @@ import { usePathname } from "next/navigation";
 
 import { Icons } from "@/components/icons";
 import { cn } from "@/lib/utils";
+import { User } from "@/services/auth.mutations";
 import { NavItem } from "@/types";
 import { Dispatch, SetStateAction } from "react";
-import { PERMISSIONS, ROLE, User } from "@prisma/client";
-import { checkPermissions } from "@/utils/checkPermissions";
-import { Session } from "next-auth";
 
 interface DashboardNavProps {
   items: NavItem[];
-  user: Session["user"];
+  user?: User;
   setOpen?: Dispatch<SetStateAction<boolean>>;
 }
 
@@ -27,14 +25,14 @@ export function DashboardNav({ items, setOpen, user }: DashboardNavProps) {
   return (
     <nav className="grid items-start gap-2">
       {items.map((item, index) => {
-        if (
-          user?.role !== ROLE.SUPER_ADMIN &&
-          !checkPermissions(
-            user?.permissions,
-            item.permissions as PERMISSIONS[],
-          )
-        )
-          return;
+        // if (
+        //   user?.role !== ROLE.SUPER_ADMIN &&
+        //   !checkPermissions(
+        //     user?.permissions,
+        //     item.permissions as PERMISSIONS[],
+        //   )
+        // )
+        //   return;
 
         const Icon = Icons[item.icon || "arrowRight"];
         return (

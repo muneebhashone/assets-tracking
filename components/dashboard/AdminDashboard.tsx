@@ -1,26 +1,21 @@
-import { getAllShipments } from "@/actions/shipmentActions";
-import { shipmentDataWithPagination } from "@/types";
+"use client";
+
+import { useGetShipments } from "@/services/shipment.queries";
+import { useSearchParams } from "next/navigation";
 import SearchBar from "../SearchBar";
 import { columns } from "../tables/shipment-table/columns";
 import { ShipmentTable } from "../tables/shipment-table/shipment-table";
 
-type Props = {
-  searchParams: {
-    [key: string]: string | string[] | undefined;
-  };
-};
-
-const AdminDashboard = async (props: Props) => {
-  const { searchParams } = props;
+const AdminDashboard = () => {
+  const searchParams = useSearchParams();
 
   const params = {
-    searchString: (searchParams?.search as string) || null,
+    searchString: (searchParams.get("search") as string) || "",
     limitParam: 9,
-    pageParam: Number(searchParams?.page) || 1,
+    pageParam: Number(searchParams.get("page")) || 1,
   };
-  const shipmentResponse = (await getAllShipments(
-    params,
-  )) as shipmentDataWithPagination;
+
+  const { data: result, isLoading } = useGetShipments(params);
 
   return (
     <div className="flex flex-col ">
@@ -29,12 +24,11 @@ const AdminDashboard = async (props: Props) => {
         <SearchBar />
       </div>
 
-      {shipmentResponse?.data?.length ? (
+      {result?.results?.length ? (
         <ShipmentTable
-          data={shipmentResponse.data}
+          data={result.results}
           columns={columns}
-          pageCount={shipmentResponse.paginatorInfo.pages}
-          searchParams={searchParams}
+          pageCount={result.paginatorInfo.pages}
         />
       ) : (
         <h1>no record found</h1>

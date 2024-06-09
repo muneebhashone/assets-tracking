@@ -12,6 +12,7 @@ import React from "react";
 
 import { Button } from "@/components/ui/button";
 
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import {
   Select,
   SelectContent,
@@ -27,25 +28,19 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Shipment } from "@/services/shipment.queries";
 import {
   DoubleArrowLeftIcon,
   DoubleArrowRightIcon,
 } from "@radix-ui/react-icons";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
-import {  ROLE, ShipmenAdminData } from "@/types";
-import { Shipment } from "@prisma/client";
-import { useSession } from "next-auth/react";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
-  data: ShipmenAdminData[] | Shipment[];
+  data: Shipment[];
   pageSizeOptions?: number[];
   pageCount: number;
-  searchParams?: {
-    [key: string]: string | string[] | undefined;
-  };
 }
 
 export function ShipmentTable<TData, TValue>({
@@ -57,24 +52,18 @@ export function ShipmentTable<TData, TValue>({
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const page = searchParams?.get("page") ?? "1";
+  const page = Number(searchParams?.get("page") ?? "1");
   const pageAsNumber = Number(page);
   const fallbackPage =
     isNaN(pageAsNumber) || pageAsNumber < 1 ? 1 : pageAsNumber;
   const per_page = searchParams?.get("limit") ?? "10";
   const perPageAsNumber = Number(per_page);
   const fallbackPerPage = isNaN(perPageAsNumber) ? 10 : perPageAsNumber;
-  const session = useSession();
-  const tableData = data.map((entry) => {
-    return {
-      ...entry,
-      user: entry?.user?.name,
-    };
-  });
+  const tableData = data;
 
   const createQueryString = React.useCallback(
     (params: Record<string, string | number | null>) => {
-      const newSearchParams = new URLSearchParams(searchParams?.toString());
+      const newSearchParams = new URLSearchParams(window.location.search);
 
       for (const [key, value] of Object.entries(params)) {
         if (value === null) {
@@ -112,18 +101,7 @@ export function ShipmentTable<TData, TValue>({
 
   const table = useReactTable({
     data: tableData,
-    columns:
-      session.data?.user.role === ROLE.SUPER_ADMIN
-        ? [
-            ...columns.slice(0, 2),
-            {
-              accessorKey: "user",
-              header: "User",
-            },
-            ,
-            ...columns.slice(2),
-          ]
-        : columns,
+    columns: columns,
     pageCount: pageCount ?? -1,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),

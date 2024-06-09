@@ -2,7 +2,7 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { CellAction } from "./cell-action";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Shipment } from "@prisma/client";
+import { Shipment } from "@/services/shipment.queries";
 
 export const columns: ColumnDef<Shipment>[] = [
   {
@@ -29,8 +29,16 @@ export const columns: ColumnDef<Shipment>[] = [
     header: "Type",
   },
   {
-    accessorKey: "tracking_number",
-    header: "Tracking Number",
+    accessorKey: "trackWith",
+    header: "Track With",
+  },
+  {
+    accessorKey: "containerNo",
+    header: "Container No.",
+  },
+  {
+    accessorKey: "mblNo",
+    header: "MBL No.",
   },
   {
     accessorKey: "carrier",

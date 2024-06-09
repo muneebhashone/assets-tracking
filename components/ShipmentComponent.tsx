@@ -4,11 +4,9 @@ import { Button } from "@/components/ui/button";
 import { Heading } from "@/components/ui/heading";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
-import { getAllSeaRatesContainer } from "@/services/searates";
-import { createShipmentEntry } from "@/services/shipment";
+import { useCurrentUser } from "@/services/auth.mutations";
 import { ICreateShipment } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useSession } from "next-auth/react";
 import { useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -31,12 +29,14 @@ const schema = z.object({
     })
     .min(1),
 });
+
 const ShipmentComponent = () => {
   const [data, setData] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const searchParams = useSearchParams();
   const { toast } = useToast();
-  const session = useSession();
+
+  const { data: currentUser } = useCurrentUser();
 
   const { register, handleSubmit, setValue, reset } = useForm<ICreateShipment>({
     resolver: zodResolver(schema),
@@ -53,29 +53,10 @@ const ShipmentComponent = () => {
     }
   }, [searchParams, setValue]);
 
-  useEffect(() => {
-    (async () => {
-      const result = (await getAllSeaRatesContainer()) as {
-        name: string;
-        code: string;
-      }[];
-
-      setData(result);
-      setValue("carrier", result[0]["code"]);
-    })();
-  }, [setValue]);
-
   const onSubmit = async (payload: ICreateShipment) => {
     setLoading(true);
 
-    const response = await createShipmentEntry({
-      carrier: payload.carrier,
-      trackingNumber: payload.tracking_number,
-      companyId: Number(session.data?.user.companyId),
-      creatorId: Number(session.data?.user?.id),
-    });
     setLoading(false);
-    toast({ title: response.status, description: response.message });
     reset();
   };
 

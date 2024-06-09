@@ -1,44 +1,23 @@
-import { getShipmentByUserId } from "@/actions/shipmentActions";
-import { auth } from "@/lib/auth-options";
-import { shipmentDataWithPagination } from "@/types";
-import { Session } from "next-auth";
+"use client";
+
+import { useCurrentUser } from "@/services/auth.mutations";
+import { useGetShipments } from "@/services/shipment.queries";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import SearchBar from "../SearchBar";
 import { columns } from "../tables/shipment-table/columns";
 import { ShipmentTable } from "../tables/shipment-table/shipment-table";
 
-type Props = {
-  searchParams: {
-    [key: string]: string | string[] | undefined;
-  };
-};
+const UserDashboard = () => {
+  const searchParams = useSearchParams();
 
-const UserDashboard = async (props: Props) => {
-  // type Payment = {
-  //   id: string;
-  //   shipment: string;
-  //   do: number;
-  //   status: "pending" | "processing" | "success" | "failed";
-  //   da: string;
-  // };
-  // const data: Payment[] = [
-
-  // ];
-  const { searchParams } = props;
-  // const page = Number(searchParams.page) || 1;
-  // const pageLimit = Number(searchParams.limit) || 10;
-
-  const session = (await auth()) as Session;
   const params = {
-    searchString: (searchParams?.search as string) || null,
+    searchString: (searchParams.get("search") as string) || "",
     limitParam: 9,
-    pageParam: Number(searchParams?.page) || 1,
-    creatorId: Number(session.user.id),
-    companyId: Number(session.user?.companyId),
+    pageParam: Number(searchParams.get("page")) || 1,
   };
-  const shipmentData = (await getShipmentByUserId(
-    params,
-  )) as shipmentDataWithPagination;
+
+  const { data: result, isLoading } = useGetShipments(params);
 
   return (
     <div className="flex flex-col ">
@@ -58,19 +37,18 @@ const UserDashboard = async (props: Props) => {
         </Link>
         {/* <Button variant="default">Export as pdf</Button> */}
       </div>
-      {shipmentData?.data?.length ? (
+      {Array.isArray(result?.results) ? (
         <>
           <ShipmentTable
-            data={shipmentData.data}
+            data={result?.results}
             columns={columns}
-            pageCount={shipmentData.paginatorInfo.pages}
-            searchParams={searchParams}
+            pageCount={result.paginatorInfo.pages}
           />
           {/* <ShippingCardsView shipData={shipmentData.data} /> */}
           {/* <CardViewPagination paginator={shipmentData?.paginatorInfo} /> */}
         </>
       ) : (
-        <h1>no record found</h1>
+        <h1>No Records</h1>
       )}
     </div>
   );

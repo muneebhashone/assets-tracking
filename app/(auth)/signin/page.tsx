@@ -11,19 +11,7 @@ export const metadata: Metadata = {
   description: "Authentication forms built using the components.",
 };
 
-export default function AuthenticationPage({
-  searchParams,
-}: {
-  searchParams: { [key: string]: string | string[] | undefined };
-}) {
-  const shipData =
-    searchParams["carrier"] && searchParams["tracking_number"]
-      ? {
-          carrier: searchParams["carrier"] as string,
-          tracking_number: searchParams["tracking_number"] as string,
-        }
-      : null;
-
+export default function AuthenticationPage() {
   return (
     <div className="relative h-screen flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
       <Link
@@ -63,9 +51,9 @@ export default function AuthenticationPage({
               Enter your email below to login your account
             </p>
           </div>
-          <UserAuthForm shipmentData={shipData as ICreateShipment} />
+          <UserAuthForm />
           <Link href="/signup" className="text-[#3491FE]">
-            create an account?
+            Create an account?
           </Link>
         </div>
       </div>

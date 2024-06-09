@@ -9,23 +9,20 @@ import LoginButton from "./LoginButton";
 import Menu from "./Menu";
 import NavLogo from "./NavLogo";
 import { UserNav } from "./layout/user-nav";
-
-
+import { useCurrentUser } from "@/services/auth.mutations";
+import { currentUser } from "../services/auth.mutations";
+import Link from "next/link";
 
 const Header = () => {
-
   const [open, setOpen] = useState(false);
   const router = useRouter();
   const handleOpen = () => {
     setOpen(!open);
   };
-  const { status } = useSession();
-
+  const { data: currentUser } = useCurrentUser();
   return (
     <>
-
-      <div
-        className="flex-row md:flex items-center justify-between bg-[#FFFFFF] fixed w-full px-5 md:px-20 lg:px-60 z-[9999] shadow-lg">
+      <div className="flex-row md:flex items-center justify-between bg-[#FFFFFF] fixed w-full px-5 md:px-20 lg:px-60 z-[9999] shadow-lg">
         <div className="flex items-center justify-between">
           <NavLogo
             height={60}
@@ -39,34 +36,38 @@ const Header = () => {
           </button>
         </div>
         <div className="flex-row md:flex items-center gap-28">
-          <Menu className={`${open ? "block" : "hidden"}`} listitem={menuitems} />
+          <Menu
+            className={`${open ? "block" : "hidden"}`}
+            listitem={menuitems}
+          />
           <div className="flex items-center gap-10 justify-center">
-
-            {status === "authenticated" ? <>
-                <UserNav />
-              </> :
+            {currentUser?.user ? (
+              <UserNav />
+            ) : (
               <>
-                <LoginButton
-                  onclick={() => router.push("/signin")}
-                  title="Login"
-                  classname={`bg-transparent text-[#3491FE] font-medium md:block ${open ? "block" : "hidden"
-                  }`}
-                />
+                <Link href="/signin">
+                  <LoginButton
+                    title="Login"
+                    classname={`bg-transparent text-[#3491FE] font-medium md:block ${
+                      open ? "block" : "hidden"
+                    }`}
+                  />
+                </Link>
                 <LoginButton
                   onclick={() => router.push("/signup")}
                   title="Sign Up"
-                  classname={`bg-[#3491FE] text-white font-medium md:block ${open ? "block" : "hidden"
+                  classname={`bg-[#3491FE] text-white font-medium md:block ${
+                    open ? "block" : "hidden"
                   }`}
                 />
               </>
-            }
+            )}
           </div>
         </div>
       </div>
       ;
     </>
-  )
-    ;
+  );
 };
 
 export default Header;
