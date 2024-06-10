@@ -29,6 +29,10 @@ import {
   RegisterUserInputType,
   useRegisterUser,
 } from "@/services/auth.mutations";
+import { useGetCompanies } from "@/services/companies.queries";
+
+const LIMIT = 100;
+const PAGE = 0;
 
 export default function UserAuthFormSignUp() {
   const { toast } = useToast();
@@ -59,7 +63,25 @@ export default function UserAuthFormSignUp() {
   //     });
   //   },
   // });
-  const { mutate, isPending } = useRegisterUser();
+  const { mutate, isPending } = useRegisterUser({
+    onSuccess(data, variables, context) {
+      toast({
+        title: data.message,
+        duration: 3000,
+        variant: "default",
+      });
+      router.push("/signin");
+    },
+    onError(error, variables, context) {
+      if (error instanceof Error) {
+        toast({
+          title: error?.response?.data.message,
+          duration: 2000,
+          variant: "destructive",
+        });
+      }
+    },
+  });
   const defaultValues = {};
   const form = useForm<RegisterUserInputType>({
     resolver: zodResolver(createUserFormSchema),
@@ -67,8 +89,15 @@ export default function UserAuthFormSignUp() {
   });
 
   const onSubmit = async (data: RegisterUserInputType) => {
-    mutate(data);
+    const { companyId } = data;
+    mutate({ ...data, companyId: Number(companyId) });
   };
+
+  const { data, isFetching } = useGetCompanies({
+    limitParam: LIMIT,
+    pageParam: PAGE,
+    searchString: "",
+  });
   return (
     <>
       <Form {...form}>
@@ -130,7 +159,7 @@ export default function UserAuthFormSignUp() {
               </FormItem>
             )}
           />
-          {/* <FormField
+          <FormField
             control={form.control}
             name="companyId"
             render={({ field }) => (
@@ -146,7 +175,7 @@ export default function UserAuthFormSignUp() {
                       <SelectValue placeholder="Select your company" />
                     </SelectTrigger>
                     <SelectContent>
-                      {companiesResponse?.data?.map((company) => (
+                      {data?.results?.map((company) => (
                         <SelectItem
                           key={company?.id}
                           value={String(company?.id)}
@@ -160,7 +189,7 @@ export default function UserAuthFormSignUp() {
                 <FormMessage />
               </FormItem>
             )}
-          /> */}
+          />
 
           <Button
             disabled={isPending}

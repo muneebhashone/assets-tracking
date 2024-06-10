@@ -53,6 +53,7 @@ export interface User {
 
 export const login = async (input: LoginInputType) => {
   const { data } = await apiAxios.post<LoginResponseType>("/auth/login", input);
+  console.log(data);
   return data;
 };
 

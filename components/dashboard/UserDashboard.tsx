@@ -7,6 +7,8 @@ import { useSearchParams } from "next/navigation";
 import SearchBar from "../SearchBar";
 import { columns } from "../tables/shipment-table/columns";
 import { ShipmentTable } from "../tables/shipment-table/shipment-table";
+import { Button } from "../ui/button";
+import ShipmentCreationForm from "../forms/shipment-creation-form";
 
 const UserDashboard = () => {
   const searchParams = useSearchParams();
@@ -29,12 +31,8 @@ const UserDashboard = () => {
         <SearchBar />
       </div>
       <div className="flex my-5 justify-between">
-        <Link
-          className="border rounded-md px-4 py-2 bg-[#D3991F] text-white hover:bg-zinc-900"
-          href="/dashboard/shipment"
-        >
-          Create
-        </Link>
+       
+        <ShipmentCreationForm />
         {/* <Button variant="default">Export as pdf</Button> */}
       </div>
       {Array.isArray(result?.results) ? (

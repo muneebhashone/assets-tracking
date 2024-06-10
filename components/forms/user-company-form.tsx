@@ -10,17 +10,14 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { createCompanySchema } from "@/lib/form-schema";
-import { CreateCompanySchemaType } from "@/types";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation } from "@tanstack/react-query";
-import axios from "axios";
-import { useRouter } from "next/navigation";
-import { useForm } from "react-hook-form";
-import { useToast } from "../ui/use-toast";
 import {
   RegisterCompanyInputType,
   useRegisterCompany,
 } from "@/services/auth.mutations";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
+import { useToast } from "../ui/use-toast";
 
 export default function CompanyAuthFormSignUp() {
   const { toast } = useToast();
