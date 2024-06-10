@@ -17,16 +17,17 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { useToast } from "../ui/use-toast";
+import {
+  RegisterCompanyInputType,
+  useRegisterCompany,
+} from "@/services/auth.mutations";
 
 export default function CompanyAuthFormSignUp() {
   const { toast } = useToast();
-  // const searchParams = useSearchParams();
+
   const router = useRouter();
-  const { mutate, isPending } = useMutation({
-    mutationFn: async (data: CreateCompanySchemaType) => {
-      const { data: responseData } = await axios.post("/api/company", data);
-      return responseData;
-    },
+
+  const { mutate, isPending } = useRegisterCompany({
     onSuccess(data, variables, context) {
       toast({
         title: data.message,
@@ -36,21 +37,22 @@ export default function CompanyAuthFormSignUp() {
       router.push("/signin");
     },
     onError(error, variables, context) {
-      toast({
-        //@ts-expect-error
-        title: error.response.data.message,
-        duration: 2000,
-        variant: "destructive",
-      });
+      if (error instanceof Error) {
+        toast({
+          title: error?.response?.data.message,
+          duration: 2000,
+          variant: "destructive",
+        });
+      }
     },
   });
   const defaultValues = {};
-  const form = useForm<CreateCompanySchemaType>({
+  const form = useForm<RegisterCompanyInputType>({
     resolver: zodResolver(createCompanySchema),
     defaultValues,
   });
 
-  const onSubmit = async (data: CreateCompanySchemaType) => {
+  const onSubmit = async (data: RegisterCompanyInputType) => {
     mutate(data);
   };
   return (
@@ -62,7 +64,7 @@ export default function CompanyAuthFormSignUp() {
         >
           <FormField
             control={form.control}
-            name="company_name"
+            name="companyName"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Company Name</FormLabel>

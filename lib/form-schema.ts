@@ -47,12 +47,12 @@ export const createUserFormSchema = z.object({
     .min(8, { message: "atleast 8 digit long" })
     .max(12, { message: "atmost is 12 digit" }),
   name: z.string({ required_error: "name is required" }).min(3),
-  company: z.string({ required_error: "Company is required" }).min(1),
-  role: z.string().optional(),
+  companyId: z.number().optional(),
+  // role: z.string().optional(),
 });
 
 export const createCompanySchema = z.object({
-  company_name: z.string({ required_error: "Company name is required" }).min(3),
+  companyName: z.string({ required_error: "Company name is required" }).min(3),
   country: z.string().optional(),
   city: z.string().optional(),
   email: z

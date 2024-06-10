@@ -25,50 +25,48 @@ import {
   SelectValue,
 } from "../ui/select";
 import { useToast } from "../ui/use-toast";
+import {
+  RegisterUserInputType,
+  useRegisterUser,
+} from "@/services/auth.mutations";
 
 export default function UserAuthFormSignUp() {
   const { toast } = useToast();
-  // const searchParams = useSearchParams();
   const router = useRouter();
-  const { data: companiesResponse, isFetching } = useGetAllCompanies();
-  const { mutate, isPending } = useMutation({
-    mutationFn: async (data: CreateUserSchemaType) => {
-      const { data: responseData } = await axios.post(
-        "/api/user/create_user",
-        data,
-      );
-      return responseData;
-    },
-    onSuccess(data, variables, context) {
-      toast({
-        title: data.message,
-        duration: 3000,
-        variant: "default",
-      });
-      router.push("/signin");
-    },
-    onError(error, variables, context) {
-      toast({
-        //@ts-expect-error
-        title: error.response.data.message,
-        duration: 2000,
-        variant: "destructive",
-      });
-    },
-  });
-  const defaultValues = {
-    email: "",
-    password: "",
-    name: "",
-    company: "",
-  };
-  const form = useForm<CreateUserSchemaType>({
+  // const { data: companiesResponse, isFetching } = useGetAllCompanies();
+  // const { mutate, isPending } = useMutation({
+  //   mutationFn: async (data: CreateUserSchemaType) => {
+  //     const { data: responseData } = await axios.post(
+  //       "/api/user/create_user",
+  //       data,
+  //     );
+  //     return responseData;
+  //   },
+  //   onSuccess(data, variables, context) {
+  //     toast({
+  //       title: data.message,
+  //       duration: 3000,
+  //       variant: "default",
+  //     });
+  //     router.push("/signin");
+  //   },
+  //   onError(error, variables, context) {
+  //     toast({
+
+  //       title: error.response.data.message,
+  //       duration: 2000,
+  //       variant: "destructive",
+  //     });
+  //   },
+  // });
+  const { mutate, isPending } = useRegisterUser();
+  const defaultValues = {};
+  const form = useForm<RegisterUserInputType>({
     resolver: zodResolver(createUserFormSchema),
     defaultValues,
   });
 
-  const onSubmit = async (data: CreateUserSchemaType) => {
-    // console.log({ data });
+  const onSubmit = async (data: RegisterUserInputType) => {
     mutate(data);
   };
   return (
@@ -132,9 +130,9 @@ export default function UserAuthFormSignUp() {
               </FormItem>
             )}
           />
-          <FormField
+          {/* <FormField
             control={form.control}
-            name="company"
+            name="companyId"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Company</FormLabel>
@@ -162,7 +160,7 @@ export default function UserAuthFormSignUp() {
                 <FormMessage />
               </FormItem>
             )}
-          />
+          /> */}
 
           <Button
             disabled={isPending}
