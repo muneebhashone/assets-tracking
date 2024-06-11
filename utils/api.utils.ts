@@ -20,15 +20,22 @@ apiAxios.interceptors.request.use((config) => {
 apiAxios.interceptors.response.use(
   (response) => response,
   (err: AxiosError) => {
-    console.log(err.response?.status);
-    if (err.response?.status === HttpStatusCode.Unauthorized) {
-      localStorage.removeItem(AUTH_KEY);
-      queryClient.removeQueries({ queryKey: [currentUser.name] });
-      // window.location.replace("/signin");
-      return err.response;
+    if ("response" in err && err.response) {
+      if ("status" in err.response) {
+        if (err.response.status >= 400) {
+          throw err;
+        }
+
+        if (err.response?.status === HttpStatusCode.Unauthorized) {
+          localStorage.removeItem(AUTH_KEY);
+          queryClient.removeQueries({ queryKey: [currentUser.name] });
+          // window.location.replace("/signin");
+          return err.response;
+        }
+      }
     }
 
-    return err.response;
+    return err;
   },
 );
 

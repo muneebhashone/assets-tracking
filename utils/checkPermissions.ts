@@ -1,8 +1,6 @@
-import { PERMISSIONS } from "@prisma/client";
-
 export const checkPermissions = (
-  userPermissions: PERMISSIONS[],
-  permissionsToCheck: PERMISSIONS[],
+  userPermissions: string[],
+  permissionsToCheck: string[],
 ) => {
   return permissionsToCheck.every((perm) => userPermissions.includes(perm));
 };

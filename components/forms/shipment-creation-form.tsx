@@ -9,7 +9,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
@@ -23,27 +22,32 @@ import {
 } from "@/services/shipment.mutations";
 import { CheckCircledIcon, PlusCircledIcon } from "@radix-ui/react-icons";
 import { useForm } from "react-hook-form";
-
-import { FormField } from "@/components/ui/form";
+//@ts-ignore
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { Modal } from "@/components/ui/modal";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
-import { z } from "zod";
 import { toast } from "@/components/ui/use-toast";
+import { useFetchAllSearatesContainers } from "@/services/searates.queries";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
+//@ts-ignore
+import { TagsInput } from "react-tag-input-component";
+import { z } from "zod";
+import { ModalCustom } from "../ModalComponent";
 
 const TrackWithEnum = z.enum(["CONTAINER_NUMBER", "MBL_NUMBER"]);
 
 const CreateShipmentInputSchema = z.object({
   trackWith: TrackWithEnum,
-  containerNo: z
-    .string()
-    .nullable()
-    .transform((value) => (value ? value.toUpperCase() : null)),
-  mblNo: z
-    .string()
-    .nullable()
-    .transform((value) => (value ? value.toUpperCase() : null)),
+  containerNo: z.string(),
+  mblNo: z.string().nullable(),
   carrier: z
     .string()
     .nonempty({ message: "Carrier is required and cannot be empty" }),
@@ -52,12 +56,23 @@ const CreateShipmentInputSchema = z.object({
     .string()
     .email({ message: "Each follower must be a valid email address" })
     .array(),
+
   referenceNo: z.string().nullable(),
 });
 
 export default function ShipmentCreationForm() {
   const [modalOpen, setModalOpen] = useState<boolean>(false);
-  const initialValues = {};
+  const initialValues: z.infer<typeof CreateShipmentInputSchema> = {
+    carrier: "",
+    containerNo: "",
+    followers: [],
+    mblNo: null,
+    referenceNo: null,
+    tags: [],
+    trackWith: "CONTAINER_NUMBER",
+  };
+  const { data, isFetching } = useFetchAllSearatesContainers();
+
   const router = useRouter();
   const form = useForm<CreateShipmentInputType>({
     resolver: zodResolver(CreateShipmentInputSchema),
@@ -70,7 +85,8 @@ export default function ShipmentCreationForm() {
         duration: 3000,
         variant: "default",
       });
-      router.push("/signin");
+      form.reset();
+      setModalOpen(false);
     },
     onError(error, variables, context) {
       if (error instanceof Error) {
@@ -82,10 +98,11 @@ export default function ShipmentCreationForm() {
       }
     },
   });
-  const { control, register, formState, handleSubmit, setValue, watch } = form;
+  const { control, register, formState, handleSubmit, watch } = form;
   const onSubmit = (data: CreateShipmentInputType) => {
-    mutate({ ...data, tags: [], followers: [] });
+    mutate(data);
   };
+
   // console.log(watch());
   return (
     <>
@@ -95,178 +112,262 @@ export default function ShipmentCreationForm() {
       >
         Create
       </Button>
-      <Modal isOpen={modalOpen} onClose={() => setModalOpen(false)}>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="flex h-screen w-full items-center justify-center bg-gray-100 dark:bg-gray-950">
-            <Card className="w-full max-w-xl">
-              <CardHeader>
-                <CardTitle className="text-lg font-medium text-zinc-700">
-                  Single Shipment
-                </CardTitle>
-                <CardDescription className="mt-2 mb-6">
-                  <p className="text-neutral-300 text-sm mb-6">
-                    You can track shipment by Container Number or MBL / Booking
-                    Number.
-                  </p>
-                  <div className="flex items-center space-x-2 mb-2">
-                    <CheckCircledIcon className="text-[#348cd4]" />
-                    <span className="text-neutral-500 font-medium">
-                      Choose the carrier.
-                    </span>
-                  </div>
-                  <div className="flex items-center space-x-2 mb-2">
-                    <CheckCircledIcon className="text-[#348cd4]" />
-                    <span className="text-neutral-500 font-medium">
-                      Enter your Container, Booking or BL Number.
-                    </span>
-                  </div>
-                  <div className="flex items-center space-x-2 mb-2">
-                    <CheckCircledIcon className="text-[#348cd4]" />
-                    <span className="text-neutral-500 font-medium">
-                      Click to the "Create" button.
-                    </span>
-                  </div>
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4 ">
-                <div className="flex justify-between gap-4">
-                  <div className="space-y-2 w-[100%]">
-                    <Label
-                      htmlFor="carrier"
-                      className="text-neutral-500 font-medium"
-                    >
-                      Carrier
-                    </Label>
-                    <Select {...register("carrier")}>
-                      <SelectTrigger id="carrier">
-                        <SelectValue placeholder="Select a carrier" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="carrier1">Carrier 1</SelectItem>
-                        <SelectItem value="carrier2">Carrier 2</SelectItem>
-                        <SelectItem value="carrier3">Carrier 3</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div className="space-y-2 w-[100%]">
-                    <Label
-                      htmlFor="trackWith"
-                      className="text-neutral-500 font-medium"
-                    >
-                      Track with
-                    </Label>
-                    <FormField
-                      control={control}
-                      name="trackWith"
-                      render={({ field }) => (
-                        <Select
-                          onValueChange={field.onChange}
-                          // disabled={isPending || isFetching}
-                          {...field}
-                        >
-                          <SelectTrigger id="trackWith">
-                            <SelectValue placeholder="Container Number" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="CONTAINER_NUMBER">
-                              Container Number
-                            </SelectItem>
-                            <SelectItem
-                              value="MBL_NUMBER"
+      <ModalCustom isOpen={modalOpen} onClose={() => setModalOpen(false)}>
+        <Form {...form}>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <div className="flex h-screen w-full items-center justify-center ">
+              <Card className="w-full max-w-xl border-0 shadow-none">
+                <CardHeader>
+                  <CardTitle className="text-lg font-medium text-zinc-700">
+                    Single Shipment
+                  </CardTitle>
+                  <CardDescription className="mt-2 mb-6">
+                    <p className="text-neutral-300 text-sm mb-6">
+                      You can track shipment by Container Number or MBL /
+                      Booking Number.
+                    </p>
+                    <div className="flex items-center space-x-2 mb-2">
+                      <CheckCircledIcon className="text-[#348cd4]" />
+                      <span className="text-neutral-500 font-medium">
+                        Choose the carrier.
+                      </span>
+                    </div>
+                    <div className="flex items-center space-x-2 mb-2">
+                      <CheckCircledIcon className="text-[#348cd4]" />
+                      <span className="text-neutral-500 font-medium">
+                        Enter your Container, Booking or BL Number.
+                      </span>
+                    </div>
+                    <div className="flex items-center space-x-2 mb-2">
+                      <CheckCircledIcon className="text-[#348cd4]" />
+                      <span className="text-neutral-500 font-medium">
+                        Click to the "Create" button.
+                      </span>
+                    </div>
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4 ">
+                  <div className="flex justify-between gap-4">
+                    <div className="space-y-2 w-[100%]">
+                      <FormField
+                        name="carrier"
+                        control={control}
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel
+                              htmlFor="carrier"
                               className="text-neutral-500 font-medium"
                             >
-                              MBL / Booking Number
-                            </SelectItem>
-                          </SelectContent>
-                        </Select>
+                              Carrier
+                            </FormLabel>
+                            <FormControl>
+                              <Select
+                                onValueChange={field.onChange}
+                                // disabled={isPending || isFetching}
+                                {...field}
+                              >
+                                <SelectTrigger id="carrier">
+                                  <SelectValue placeholder="Select a carrier" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  {data &&
+                                    data?.map((carrier, index) => {
+                                      return (
+                                        <SelectItem
+                                          value={carrier.code}
+                                          key={index}
+                                          disabled={isFetching}
+                                        >
+                                          {carrier.name}
+                                        </SelectItem>
+                                      );
+                                    })}
+                                </SelectContent>
+                              </Select>
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                    <div className="space-y-2 w-[100%]">
+                      <FormField
+                        name="trackWith"
+                        control={control}
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel
+                              htmlFor="trackWith"
+                              className="text-neutral-500 font-medium"
+                            >
+                              Track with
+                            </FormLabel>
+                            <FormControl>
+                              <Select
+                                onValueChange={field.onChange}
+                                // disabled={isPending || isFetching}
+                                {...field}
+                              >
+                                <SelectTrigger id="trackWith">
+                                  <SelectValue placeholder="Container Number" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  <SelectItem value="CONTAINER_NUMBER">
+                                    Container Number
+                                  </SelectItem>
+                                  <SelectItem
+                                    value="MBL_NUMBER"
+                                    className="text-neutral-500 font-medium"
+                                  >
+                                    MBL / Booking Number
+                                  </SelectItem>
+                                </SelectContent>
+                              </Select>
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <FormField
+                      name="containerNo"
+                      control={control}
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel
+                            htmlFor="containerNo"
+                            className="text-neutral-500 font-medium"
+                          >
+                            Container Number
+                          </FormLabel>
+                          <FormControl>
+                            <Input
+                              id="containerNo"
+                              placeholder="Enter Container Number"
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
                       )}
                     />
                   </div>
-                </div>
-
-                <div className="space-y-2">
-                  <Label
-                    htmlFor="containerNo"
-                    className="text-neutral-500 font-medium"
-                  >
-                    Container Number
-                  </Label>
-                  <Input
-                    id="containerNo"
-                    placeholder="Enter Container Number"
-                    {...register("containerNo")}
-                  />
-                </div>
-                {watch("trackWith") === "MBL_NUMBER" && (
-                  <div className="space-y-2">
-                    <Label
-                      htmlFor="mblNo"
-                      className="text-neutral-500 font-medium"
-                    >
-                      MBL / Booking Number
-                    </Label>
-                    <Input
+                  {watch("trackWith") === "MBL_NUMBER" && (
+                    <div className="space-y-2">
+                      {/* <Input
                       id="mblNo"
                       placeholder="Enter Mobile or Lading Number"
                       {...register("mblNo")}
+                    /> */}
+                      <FormField
+                        name="mblNo"
+                        control={control}
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel
+                              htmlFor="mblNo"
+                              className="text-neutral-500 font-medium"
+                            >
+                              MBL / Booking Number
+                            </FormLabel>
+                            <FormControl>
+                              <Input
+                                id="mblNo"
+                                placeholder="Enter Mobile or Lading Number"
+                                {...field}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                  )}
+                  <div className="space-y-2">
+                    <FormField
+                      name="tags"
+                      control={control}
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel
+                            htmlFor="tags"
+                            className="text-neutral-500 font-medium"
+                          >
+                            Tags
+                          </FormLabel>
+                          <FormControl>
+                            <TagsInput placeHolder="Enter Tags" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
                     />
                   </div>
-                )}
-                <div className="space-y-2">
-                  <Label
-                    htmlFor="tags"
-                    className="text-neutral-500 font-medium"
+                  <div className="space-y-2">
+                    <FormField
+                      name="followers"
+                      control={control}
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel
+                            htmlFor="followers"
+                            className="text-neutral-500 font-medium"
+                          >
+                            Followers
+                          </FormLabel>
+                          <FormControl>
+                            <TagsInput
+                              placeHolder="Enter Followers Email"
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <FormField
+                      name="referenceNo"
+                      control={control}
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel
+                            htmlFor="referenceNo"
+                            className="text-neutral-500 font-medium"
+                          >
+                            Reference Number
+                          </FormLabel>
+                          <FormControl>
+                            <Input
+                              id="referenceNo"
+                              placeholder="Enter Reference Number"
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                </CardContent>
+                <CardFooter className="w-full justify-end ">
+                  <Button
+                    type="submit"
+                    className="w-[25%] border-r-4 bg-[#D3991F]"
                   >
-                    Tags
-                  </Label>
-                  {/* <Combobox
-                multiple
-                options={["Tag1", "Tag2", "Tag3"]}
-                value={formState.values.tags}
-                onChange={(value) => setValue("tags", value)}
-              /> */}
-                </div>
-                {/* <div className="space-y-2">
-              <Label
-                htmlFor="followers"
-                className="text-neutral-500 font-medium"
-              >
-                Followers
-              </Label> */}
-                {/* <ComboBox form={form} options={["first"]} /> */}
-                {/* <Input
-                id="followers"
-                placeholder="Enter Follower Emails (comma-separated)"
-                {...register("followers")}
-              /> */}
-                {/* </div> */}
-                <div className="space-y-2">
-                  <Label
-                    htmlFor="referenceNo"
-                    className="text-neutral-500 font-medium"
-                  >
-                    Reference Number
-                  </Label>
-                  <Input
-                    id="referenceNo"
-                    placeholder="Enter Reference Number"
-                    {...register("referenceNo")}
-                  />
-                </div>
-              </CardContent>
-              <CardFooter className="w-full justify-end ">
-                <Button
-                  type="submit"
-                  className="w-[25%] border-r-4 bg-[#D3991F]"
-                >
-                  <span className="mr-2">Create</span>
-                  <PlusCircledIcon />
-                </Button>
-              </CardFooter>
-            </Card>
-          </div>
-        </form>
-      </Modal>
+                    <span className="mr-2">Create</span>
+                    <PlusCircledIcon />
+                  </Button>
+                </CardFooter>
+              </Card>
+            </div>
+          </form>
+        </Form>
+      </ModalCustom>
     </>
   );
 }

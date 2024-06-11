@@ -7,15 +7,24 @@ export type TrackShipmentInput = {
   carrier: string;
 };
 
+export type ShipmentFetchContainerType = {
+  name: string;
+  code: string;
+};
 export const fetchAllSearatesContainers = async () => {
-  const { data } =
+  const res =
     await searatesApiAxios.get<SearatesSealineApiResponse>(`/info/sealines`);
-
-  return data;
+  const { data } = res;
+  const nameScacPairs = data.data?.flatMap((company) => {
+    return company.scac_codes.map((scacCode) => {
+      return { name: `${company.name} (${scacCode})`, code: scacCode };
+    });
+  });
+  return nameScacPairs;
 };
 
 export const useFetchAllSearatesContainers = (
-  options?: UseQueryOptions<SearatesSealineApiResponse, unknown>,
+  options?: UseQueryOptions<ShipmentFetchContainerType[], unknown>,
 ) => {
   return useQuery({
     ...options,

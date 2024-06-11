@@ -38,7 +38,8 @@ export default function UserAuthForm() {
   const router = useRouter();
   const { toast } = useToast();
   const { mutate: loginUser, isPending } = useLogin({
-    onSuccess() {
+    onSuccess(data) {
+      console.log(data);
       toast({
         title: "Success",
         description: "Logged in successfully",

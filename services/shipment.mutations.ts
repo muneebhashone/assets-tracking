@@ -3,16 +3,16 @@ import { Shipment, TrackWithType } from "./shipment.queries";
 import { UseMutationOptions, useMutation } from "@tanstack/react-query";
 import { ErrorResponseType } from "./types.common";
 
-export type Email = `${string}@${string}.${string}`;
+// export type Email = `${string}@${string}.${string}`;
 
 export interface CreateShipmentInputType {
   trackWith: TrackWithType;
   carrier: string;
   tags: any[];
-  followers: Email[];
-  referenceNo: string;
+  followers: string[];
+  referenceNo: string | null;
   containerNo: string;
-  mblNo: string;
+  mblNo: string | null;
 }
 
 export interface CreateShipmentResponseType {

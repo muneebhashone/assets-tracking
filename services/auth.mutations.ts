@@ -9,6 +9,7 @@ import {
 } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { ErrorResponseType, SuccessResponseType } from "./types.common";
+import { AxiosError } from "axios";
 
 export type LoginInputType = {
   email: string;
@@ -47,13 +48,17 @@ export interface User {
   isActive: boolean;
   password: string;
   status: string;
+  credits: number;
   companyId: null;
   permissions: string[];
 }
 
 export const login = async (input: LoginInputType) => {
-  const { data } = await apiAxios.post<LoginResponseType>("/auth/login", input);
-  console.log(data);
+  const { data, status } = await apiAxios.post<LoginResponseType>(
+    "/auth/login",
+    input,
+  );
+
   return data;
 };
 
@@ -90,6 +95,7 @@ export const useLogin = (
     ...options,
     mutationFn: login,
     async onSuccess(data, variables, context) {
+      console.log("check");
       localStorage.setItem(AUTH_KEY, data.token);
       const checkAuthKey = setInterval(() => {
         if (Boolean(localStorage.getItem(AUTH_KEY))) {

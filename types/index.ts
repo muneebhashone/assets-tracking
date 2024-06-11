@@ -12,7 +12,7 @@ export interface NavItem {
   icon?: keyof typeof Icons;
   label?: string;
   description?: string;
-  permissions?: PERMISSIONS[];
+  permissions?: string[];
 }
 
 export interface NavItemWithChildren extends NavItem {
@@ -32,15 +32,15 @@ export interface FooterItem {
   }[];
 }
 
-export enum ROLE {
-  ADMIN = "ADMIN",
-  USER = "USER",
-  SUPER_ADMIN = "SUPER_ADMIN",
-}
-export enum Status {
-  false = "false",
-  true = "true",
-}
+export const ROLE = {
+  ADMIN: "ADMIN",
+  USER: "USER",
+  SUPER_ADMIN: "SUPER_ADMIN",
+};
+// export enum Status {
+//   false = "false",
+//   true = "true",
+// }
 export interface IUserMessage {
   id: number;
   email: string;
