@@ -103,7 +103,15 @@ export default function ShipmentCreationForm() {
     mutate(data);
   };
 
-  // console.log(watch());
+  const getContainers = () => {
+    return data?.data.map((value) => {
+      return {
+        name: value.name,
+        code: value.scac_codes[0],
+      };
+    });
+  };
+
   return (
     <>
       <Button
@@ -122,7 +130,7 @@ export default function ShipmentCreationForm() {
                     Single Shipment
                   </CardTitle>
                   <CardDescription className="mt-2 mb-6">
-                    <p className="text-neutral-300 text-sm mb-6">
+                    <p className="text-neutral-600 text-sm mb-6">
                       You can track shipment by Container Number or MBL /
                       Booking Number.
                     </p>
@@ -141,7 +149,7 @@ export default function ShipmentCreationForm() {
                     <div className="flex items-center space-x-2 mb-2">
                       <CheckCircledIcon className="text-[#348cd4]" />
                       <span className="text-neutral-500 font-medium">
-                        Click to the "Create" button.
+                        Click to the &quot;Create&quot; button.
                       </span>
                     </div>
                   </CardDescription>
@@ -171,7 +179,7 @@ export default function ShipmentCreationForm() {
                                 </SelectTrigger>
                                 <SelectContent>
                                   {data &&
-                                    data?.map((carrier, index) => {
+                                    getContainers()?.map((carrier, index) => {
                                       return (
                                         <SelectItem
                                           value={carrier.code}
@@ -299,7 +307,14 @@ export default function ShipmentCreationForm() {
                             Tags
                           </FormLabel>
                           <FormControl>
-                            <TagsInput placeHolder="Enter Tags" {...field} />
+                            <TagsInput
+                              classNames={{
+                                input: "bg-white !w-full",
+                                tag: "!w-full",
+                              }}
+                              placeHolder="Enter Tags"
+                              {...field}
+                            />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -321,6 +336,10 @@ export default function ShipmentCreationForm() {
                           <FormControl>
                             <TagsInput
                               placeHolder="Enter Followers Email"
+                              classNames={{
+                                input: "bg-white !w-full",
+                                tag: "!w-full",
+                              }}
                               {...field}
                             />
                           </FormControl>

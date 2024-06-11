@@ -31,7 +31,7 @@ export const ModalCustom: React.FC<ModalProps> = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={onChange}>
-      <DialogContent className="max-h-[70vh] overflow-auto w-[20rem]    ">
+      <DialogContent className="max-h-[70vh] overflow-auto min-w-[40rem]    ">
         <div>{children}</div>
       </DialogContent>
     </Dialog>

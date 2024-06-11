@@ -21,6 +21,8 @@ const UserDashboard = () => {
 
   const { data: result, isLoading } = useGetShipments(params);
 
+  console.log({ result });
+
   return (
     <div className="flex flex-col ">
       <h1 className="text-lg font-bold tracking-tight">List of shipment</h1>
@@ -31,7 +33,6 @@ const UserDashboard = () => {
         <SearchBar />
       </div>
       <div className="flex my-5 justify-between">
-       
         <ShipmentCreationForm />
         {/* <Button variant="default">Export as pdf</Button> */}
       </div>

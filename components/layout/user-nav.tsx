@@ -18,6 +18,7 @@ export function UserNav() {
   const { data: currentUser } = useCurrentUser();
 
   const { mutate: logout } = useLogout();
+
   if (currentUser?.user) {
     return (
       <DropdownMenu>

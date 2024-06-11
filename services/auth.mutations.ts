@@ -20,7 +20,7 @@ export type RegisterUserInputType = {
   name: string;
   email: string;
   password: string;
-  companyId?: number | null;
+  companyId?: string | null;
 };
 
 export type RegisterCompanyInputType = {

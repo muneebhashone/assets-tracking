@@ -1,6 +1,10 @@
 import { apiAxios } from "@/utils/api.utils";
-import { Shipment, TrackWithType } from "./shipment.queries";
-import { UseMutationOptions, useMutation } from "@tanstack/react-query";
+import { Shipment, TrackWithType, getShipments } from "./shipment.queries";
+import {
+  UseMutationOptions,
+  useMutation,
+  useQueryClient,
+} from "@tanstack/react-query";
 import { ErrorResponseType } from "./types.common";
 
 // export type Email = `${string}@${string}.${string}`;
@@ -39,8 +43,13 @@ export const useCreateShipment = (
     CreateShipmentInputType
   >,
 ) => {
+  const queryClient = useQueryClient();
   return useMutation({
     ...options,
     mutationFn: createShipment,
+    async onSuccess(data, variables, context) {
+      await queryClient.invalidateQueries({ queryKey: [getShipments.name] });
+      options?.onSuccess?.(data, variables, context);
+    },
   });
 };

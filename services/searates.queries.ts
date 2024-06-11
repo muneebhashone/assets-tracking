@@ -15,16 +15,12 @@ export const fetchAllSearatesContainers = async () => {
   const res =
     await searatesApiAxios.get<SearatesSealineApiResponse>(`/info/sealines`);
   const { data } = res;
-  const nameScacPairs = data.data?.flatMap((company) => {
-    return company.scac_codes.map((scacCode) => {
-      return { name: `${company.name} (${scacCode})`, code: scacCode };
-    });
-  });
-  return nameScacPairs;
+
+  return data;
 };
 
 export const useFetchAllSearatesContainers = (
-  options?: UseQueryOptions<ShipmentFetchContainerType[], unknown>,
+  options?: UseQueryOptions<SearatesSealineApiResponse, unknown>,
 ) => {
   return useQuery({
     ...options,

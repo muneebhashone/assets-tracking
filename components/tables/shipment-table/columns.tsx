@@ -49,8 +49,16 @@ export const columns: ColumnDef<Shipment>[] = [
     header: "Status",
   },
   {
+    accessorKey: "progress",
+    header: "Progress",
+  },
+  {
     accessorKey: "arrivalTime",
     header: "ESTD. Time",
+  },
+  {
+    accessorKey: "isTracking",
+    header: "In Tracking",
   },
   {
     id: "actions",

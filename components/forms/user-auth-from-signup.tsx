@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useGetAllCompanies } from "@/hooks/useQuery";
-import { createUserFormSchema } from "@/lib/form-schema";
+import { CreateUserFormSchema, createUserFormSchema } from "@/lib/form-schema";
 import { CreateUserSchemaType } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
@@ -37,32 +37,7 @@ const PAGE = 0;
 export default function UserAuthFormSignUp() {
   const { toast } = useToast();
   const router = useRouter();
-  // const { data: companiesResponse, isFetching } = useGetAllCompanies();
-  // const { mutate, isPending } = useMutation({
-  //   mutationFn: async (data: CreateUserSchemaType) => {
-  //     const { data: responseData } = await axios.post(
-  //       "/api/user/create_user",
-  //       data,
-  //     );
-  //     return responseData;
-  //   },
-  //   onSuccess(data, variables, context) {
-  //     toast({
-  //       title: data.message,
-  //       duration: 3000,
-  //       variant: "default",
-  //     });
-  //     router.push("/signin");
-  //   },
-  //   onError(error, variables, context) {
-  //     toast({
 
-  //       title: error.response.data.message,
-  //       duration: 2000,
-  //       variant: "destructive",
-  //     });
-  //   },
-  // });
   const { mutate, isPending } = useRegisterUser({
     onSuccess(data, variables, context) {
       toast({
@@ -82,15 +57,15 @@ export default function UserAuthFormSignUp() {
       }
     },
   });
-  const defaultValues = {};
-  const form = useForm<RegisterUserInputType>({
+
+  const form = useForm<CreateUserFormSchema>({
     resolver: zodResolver(createUserFormSchema),
-    defaultValues,
+    defaultValues: {},
   });
 
-  const onSubmit = async (data: RegisterUserInputType) => {
+  const onSubmit = async (data: CreateUserFormSchema) => {
     const { companyId } = data;
-    mutate({ ...data, companyId: Number(companyId) });
+    mutate({ ...data, companyId: String(companyId) });
   };
 
   const { data, isFetching } = useGetCompanies({
@@ -170,6 +145,7 @@ export default function UserAuthFormSignUp() {
                     onValueChange={field.onChange}
                     disabled={isPending || isFetching}
                     {...field}
+                    value={String(field.value)}
                   >
                     <SelectTrigger>
                       <SelectValue placeholder="Select your company" />

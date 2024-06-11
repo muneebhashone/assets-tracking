@@ -12,11 +12,7 @@ const ShipmentList = () => {
     <ScrollArea className="h-full ">
       {currentUser?.user ? (
         <div className="flex-1 space-y-4 p-4 md:p-8 pt-6">
-          {currentUser?.user.role !== ROLE.SUPER_ADMIN ? (
-            <UserDashboard />
-          ) : (
-            <AdminDashboard />
-          )}
+          <UserDashboard />
         </div>
       ) : null}
     </ScrollArea>
