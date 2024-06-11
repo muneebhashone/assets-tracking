@@ -265,11 +265,7 @@ export default function ShipmentCreationForm() {
                   </div>
                   {watch("trackWith") === "MBL_NUMBER" && (
                     <div className="space-y-2">
-                      {/* <Input
-                      id="mblNo"
-                      placeholder="Enter Mobile or Lading Number"
-                      {...register("mblNo")}
-                    /> */}
+                     
                       <FormField
                         name="mblNo"
                         control={control}
@@ -310,7 +306,7 @@ export default function ShipmentCreationForm() {
                             <TagsInput
                               classNames={{
                                 input: "bg-white !w-full",
-                                tag: "!w-full",
+                                // tag: "!w-full",
                               }}
                               placeHolder="Enter Tags"
                               {...field}
@@ -338,7 +334,7 @@ export default function ShipmentCreationForm() {
                               placeHolder="Enter Followers Email"
                               classNames={{
                                 input: "bg-white !w-full",
-                                tag: "!w-full",
+                                // tag: "!w-full",
                               }}
                               {...field}
                             />
