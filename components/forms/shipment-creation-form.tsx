@@ -177,7 +177,7 @@ export default function ShipmentCreationForm() {
                                 <SelectTrigger id="carrier">
                                   <SelectValue placeholder="Select a carrier" />
                                 </SelectTrigger>
-                                <SelectContent>
+                                <SelectContent className="overflow-y-auto max-h-[10rem]">
                                   {data &&
                                     getContainers()?.map((carrier, index) => {
                                       return (
