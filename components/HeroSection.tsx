@@ -1,5 +1,5 @@
 "use client";
-import { submitHandler } from "@/actions/utilActions";
+
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 
@@ -38,7 +38,7 @@ const HeroSection = () => {
             </span>
             <span className="inline ml-2 font-medium text-xl">Tracking</span>
           </span>
-          <form action={submitHandler}>
+          <form>
             <div className="py-5 px-5 bg-white max-w-[640px] rounded-r-[10px] rounded-b-[10px] rounde-l-[0px]">
               <div className="relative">
                 <Input

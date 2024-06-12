@@ -1,6 +1,6 @@
 import { apiAxios } from "@/utils/api.utils";
 import { UseQueryOptions, useQuery } from "@tanstack/react-query";
-import { getAllShipments } from "@/actions/shipmentActions";
+
 import { ErrorResponseType } from "./types.common";
 
 export type GetAllCompaniesInputType = {
@@ -59,6 +59,6 @@ export const useGetCompanies = (
   return useQuery({
     ...options,
     queryFn: async () => await getAllCompanies(input),
-    queryKey: [getAllShipments.name, JSON.stringify(input)],
+    queryKey: [getAllCompanies.name, JSON.stringify(input)],
   });
 };

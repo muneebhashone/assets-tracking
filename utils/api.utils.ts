@@ -45,14 +45,3 @@ export const searatesApiAxios = axios.create({
     api_key: process.env.NEXT_PUBLIC_SEARATES_API_KEY,
   },
 });
-
-// searatesApiAxios.interceptors.request.use(
-//   (config) => {
-//     config.url = config.url?.includes("?")
-//       ? config.url + `&api_key=${process.env.NEXT_PUBLIC_SEARATES_API_KEY}`
-//       : config.url + `?api_key=${process.env.NEXT_PUBLIC_SEARATES_API_KEY}`;
-
-//     return config;
-//   },
-//   (error) => Promise.reject(error),
-// );

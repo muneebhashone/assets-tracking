@@ -21,7 +21,7 @@ const UserDashboard = () => {
 
   const { data: result, isLoading } = useGetShipments(params);
 
-  console.log({ result });
+
 
   return (
     <div className="flex flex-col ">

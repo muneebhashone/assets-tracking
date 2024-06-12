@@ -39,7 +39,7 @@ export default function UserAuthForm() {
   const { toast } = useToast();
   const { mutate: loginUser, isPending } = useLogin({
     onSuccess(data) {
-      console.log(data);
+
       toast({
         title: "Success",
         description: "Logged in successfully",

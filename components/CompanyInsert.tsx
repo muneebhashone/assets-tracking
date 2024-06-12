@@ -1,6 +1,5 @@
 "use client";
 
-import { insertCoins } from "@/actions/insertCoins";
 import BreadCrumb from "@/components/breadcrumb";
 import { Button } from "@/components/ui/button";
 import { Heading } from "@/components/ui/heading";
@@ -56,20 +55,20 @@ export default function CompanyCredit({ params }: paramsProps) {
     const credits = Number(data.credits);
     try {
       const id = Number(params.id);
-      const update = await insertCoins(id, credits);
-      if (!update) {
-        toast({
-          title: "Error",
-          description: "something went wrong",
-          variant: "destructive",
-        });
-      }
+      // const update = await insertCoins(id, credits);
+      // if (!update) {
+      //   toast({
+      //     title: "Error",
+      //     description: "something went wrong",
+      //     variant: "destructive",
+      //   });
+      // }
       router.refresh();
       router.back();
-      toast({
-        title: "Coupon added",
-        description: update,
-      });
+      // toast({
+      //   title: "Coupon added",
+      //   description: update,
+      // });
       reset();
       setLoading(false);
     } catch (error) {

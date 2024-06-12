@@ -265,7 +265,6 @@ export default function ShipmentCreationForm() {
                   </div>
                   {watch("trackWith") === "MBL_NUMBER" && (
                     <div className="space-y-2">
-                     
                       <FormField
                         name="mblNo"
                         control={control}
@@ -339,7 +338,11 @@ export default function ShipmentCreationForm() {
                               {...field}
                             />
                           </FormControl>
-                          <FormMessage />
+                          {formState.errors.followers?.length && (
+                            <div className="text-[0.8rem] font-medium text-destructive">
+                              {formState?.errors.followers?.[0]?.message}
+                            </div>
+                          )}
                         </FormItem>
                       )}
                     />

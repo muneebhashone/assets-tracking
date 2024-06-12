@@ -1,5 +1,4 @@
 "use client";
-
 import { AlertModal } from "@/components/modal/alert-modal";
 import { Button } from "@/components/ui/button";
 import {
@@ -10,7 +9,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { IUser } from "@/types/user.types";
-import { MoreHorizontal, Trash } from "lucide-react";
+import axios from "axios";
+import { Edit, MoreHorizontal, Trash } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -22,14 +22,27 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
   const router = useRouter();
+
   // const onConfirm = async (email: string) => {
   //   setLoading(true);
-  //   await softDeleteUser(email);
+  //   const reject = await softDeleteUser(email);
   //   setOpen(false);
   //   router.refresh();
   //   setLoading(false);
+  //   return reject;
   // };
-
+  // const onAccept = async (email: string) => {
+  //   setLoading(true);
+  //   const { data: updateResponce } = await axios.post(
+  //     `${process.env.NEXT_PUBLIC_SITE_URL as string}/api/admin/userStatus`,
+  //     {
+  //       email: email,
+  //     },
+  //   );
+  //   router.refresh();
+  //   setLoading(false);
+  //   return updateResponce;
+  // };
   return (
     <>
       <AlertModal
@@ -48,12 +61,13 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
 
-          {/* <DropdownMenuItem
-            onClick={() => router.push(`/dashboard/activeUsers/${data.id}`)}
+          <DropdownMenuItem
+            disabled={loading}
+            // onClick={() => onAccept(data.email)}
           >
-            <Edit className="mr-2 h-4 w-4" /> Edit
-          </DropdownMenuItem> */}
-          <DropdownMenuItem onClick={() => setOpen(true)}>
+            <Edit className="mr-2 h-4 w-4" /> Approve
+          </DropdownMenuItem>
+          <DropdownMenuItem disabled={loading} onClick={() => setOpen(true)}>
             <Trash className="mr-2 h-4 w-4" /> Reject
           </DropdownMenuItem>
         </DropdownMenuContent>

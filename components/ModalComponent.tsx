@@ -30,8 +30,8 @@ export const ModalCustom: React.FC<ModalProps> = ({
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={onChange}>
-      <DialogContent className="max-h-[70vh] overflow-auto min-w-[40rem]    ">
+    <Dialog open={isOpen} onOpenChange={onChange} >
+      <DialogContent className="max-h-[70vh] overflow-auto min-w-[40rem]  mild-scrollbar backdrop-opacity-50">
         <div>{children}</div>
       </DialogContent>
     </Dialog>

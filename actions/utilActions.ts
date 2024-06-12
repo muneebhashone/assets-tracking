@@ -12,19 +12,19 @@ export const getCityOfCountry = (countryIso: string) => {
   return City.getCitiesOfCountry(countryIso);
 };
 
-export const submitHandler = async (formData: FormData) => {
-  const [carrier, tracking_number] = Array(
-    formData.get("carrier"),
-    formData.get("tracking_number"),
-  );
+// export const submitHandler = async (formData: FormData) => {
+//   const [carrier, tracking_number] = Array(
+//     formData.get("carrier"),
+//     formData.get("tracking_number"),
+//   );
 
-  const session = await auth();
+//   const session = await auth();
 
-  if (session?.user) {
-    redirect(
-      `/dashboard/shipment/?carrier=${carrier}&tracking_number=${tracking_number}`,
-    );
-  } else {
-    redirect(`/signin/?carrier=${carrier}&tracking_number=${tracking_number}`);
-  }
-};
+//   if (session?.user) {
+//     redirect(
+//       `/dashboard/shipment/?carrier=${carrier}&tracking_number=${tracking_number}`,
+//     );
+//   } else {
+//     redirect(`/signin/?carrier=${carrier}&tracking_number=${tracking_number}`);
+//   }
+// };

@@ -108,3 +108,24 @@ body,
 html {
   scroll-behavior: smooth;
 }
+
+.mild-scrollbar::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* Track */
+.mild-scrollbar::-webkit-scrollbar-track {
+  background: #ffffff;
+  border-radius: 5px;
+}
+
+/* Handle */
+.mild-scrollbar::-webkit-scrollbar-thumb {
+  background: #8b8b8b;
+  border-radius: 5px;
+}
+
+/* Handle on hover */
+/* .mild-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #ffffff;
+} */

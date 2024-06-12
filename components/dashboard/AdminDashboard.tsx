@@ -17,7 +17,7 @@ const AdminDashboard = () => {
   };
 
   const { data: result, isLoading } = useGetShipments(params);
-  console.log(result);
+
   return (
     <div className="flex flex-col ">
       <div className="  flex justify-between">

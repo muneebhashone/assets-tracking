@@ -1,9 +1,5 @@
-import { getShipmentByTrackingNumber } from "@/actions/shipmentActions";
 import { ChevronLeftIcon } from "@/components/Icons/index";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { auth } from "@/lib/auth-options";
-import { ROLE, ShipmentData } from "@/types";
 import Link from "next/link";
 
 type PageProps = {
@@ -11,13 +7,13 @@ type PageProps = {
 };
 export default async function Component(props: PageProps) {
   const { params } = props;
-  const session = await auth();
-  const shipData: ShipmentData = (await getShipmentByTrackingNumber(
-    params.trackingNumber as string,
-  )) as ShipmentData;
-  if (!params.trackingNumber) {
-    return null;
-  }
+  // const session = await auth();
+  // const shipData: ShipmentData = (await getShipmentByTrackingNumber(
+  //   params.trackingNumber as string,
+  // )) as ShipmentData;
+  // if (!params.trackingNumber) {
+  //   return null;
+  // }
 
   return (
     <div className="h-[100%] overflow-y-scroll">
@@ -32,18 +28,51 @@ export default async function Component(props: PageProps) {
             <span className="sr-only">Back</span>
           </Button>
         </Link>
-        <h1 className="text-lg font-semibold md:text-2xl">Shipment Details</h1>
+        <h1 className="text-lg font-semibold md:text-2xl">
+          Shipment # {"Shipment Number"}
+        </h1>
       </div>
       <main className="flex-1 overflow-y-auto p-4 md:p-6">
-        <div className="grid gap-6 md:grid-cols-1 lg:grid-cols-2">
+        <div className="grid gap-6 md:grid-cols-1 lg:grid-cols-1">
+          <div className="bg-gray-100 p-6 rounded-lg shadow-md">
+            <div className="grid gap-4 md:grid-cols-1 lg:grid-cols-2 text-gray-700">
+              <div className="flex">
+                <span className="font-semibold">Reference :</span>
+                <span className="ml-2">-</span>
+              </div>
+              <div className="flex ">
+                <span className="font-semibold">Status :</span>
+
+                <span className="ml-2 bg-[#ff9800] text-white px-2 py-1 rounded-sm text-sm">
+                  New
+                </span>
+              </div>
+              <div className="flex">
+                <span className="font-semibold">Booking / MBL :</span>
+                <span className="ml-2">CMA CGM</span>
+              </div>
+
+              <div className="flex ">
+                <span className="font-semibold">Container :</span>
+                <span className="ml-2">ASDASDASDVCSADSAD </span>
+              </div>
+              <div className="flex ">
+                <span className="font-semibold">Creator :</span>
+                <div>
+                  <p className="ml-2">12/06/2024 18:58:54</p>
+                  <p className="ml-2">John Doe &lt;Joan.doe@gmail.com&gt; </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        {/* <div className="grid gap-6 md:grid-cols-1 lg:grid-cols-2">
           <Card>
             <CardHeader>
               <CardTitle>Tracking Number</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-semibold">
-                {shipData?.tracking_number}
-              </div>
+              <div className="text-2xl font-semibold"></div>
             </CardContent>
           </Card>
           <Card>
@@ -51,9 +80,7 @@ export default async function Component(props: PageProps) {
               <CardTitle>Delivery Date</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-semibold">
-                {shipData?.arrivalTime}
-              </div>
+              <div className="text-2xl font-semibold"></div>
             </CardContent>
           </Card>
           <Card>
@@ -61,7 +88,7 @@ export default async function Component(props: PageProps) {
               <CardTitle>Shipping Status</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-semibold">{shipData.status}</div>
+              <div className="text-2xl font-semibold"></div>
             </CardContent>
           </Card>
           <Card>
@@ -69,13 +96,11 @@ export default async function Component(props: PageProps) {
               <CardTitle>Carrier</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-semibold">
-                {shipData.sealine} ({shipData.carrier})
-              </div>
+              <div className="text-2xl font-semibold"></div>
             </CardContent>
           </Card>
-        </div>
-        {session?.user.role === ROLE.SUPER_ADMIN && (
+        </div> */}
+        {/* {session?.user.role === ROLE.SUPER_ADMIN && (
           <>
             <div className="flex items-center h-14 border-b px-4 md:h-16 bg-gray-100/40 dark:bg-gray-800/40 mt-2 mb-2">
               <h1 className="text-lg font-semibold md:text-2xl">
@@ -111,9 +136,9 @@ export default async function Component(props: PageProps) {
               </Card>
             </div>
           </>
-        )}
+        )} */}
 
-        {shipData.vessels.length > 0 && (
+        {/* {shipData.vessels.length > 0 && (
           <>
             <div className="flex items-center h-14 border-b px-4 md:h-16 bg-gray-100/40 dark:bg-gray-800/40 mt-2 mb-2">
               <h1 className="text-lg font-semibold md:text-2xl">
@@ -149,7 +174,7 @@ export default async function Component(props: PageProps) {
               })}
             </div>
           </>
-        )}
+        )} */}
       </main>
     </div>
   );

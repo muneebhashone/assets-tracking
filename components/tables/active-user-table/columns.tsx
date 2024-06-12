@@ -2,9 +2,9 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { CellAction } from "./cell-action";
 import { Checkbox } from "@/components/ui/checkbox";
-import { IUser } from "@/types/user.types";
+import { IUserModified } from "./active-user";
 
-export const columns: ColumnDef<IUser>[] = [
+export const columns: ColumnDef<IUserModified>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -68,6 +68,6 @@ export const columns: ColumnDef<IUser>[] = [
   },
   {
     id: "actions",
-    cell: ({ row }) => <CellAction data={row.original as IUser} />,
+    cell: ({ row }) => <CellAction data={row.original} />,
   },
 ];
