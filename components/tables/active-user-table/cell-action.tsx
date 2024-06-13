@@ -10,7 +10,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { IUser } from "@/types/user.types";
-import { Edit, MoreHorizontal, Trash } from "lucide-react";
+import { Edit, MoreHorizontal, Trash, Package } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { IUserModified } from "./active-user";
@@ -62,7 +62,12 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
-
+          <DropdownMenuItem
+            disabled={loading}
+            onClick={() => console.log("here")}
+          >
+            <Package className="mr-2 h-4 w-4" /> Update Permissions
+          </DropdownMenuItem>
           {data.isActive === "Active" ? (
             <DropdownMenuItem disabled={loading} onClick={() => setOpen(true)}>
               <Trash className="mr-2 h-4 w-4" /> Deactivate

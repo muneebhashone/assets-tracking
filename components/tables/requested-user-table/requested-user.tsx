@@ -34,11 +34,12 @@ import {
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
-import { IUser } from "@/types/user.types";
+
+import { User } from "@/services/auth.mutations";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
-  data: IUser[];
+  data: User[];
   // searchKey: string;
   // pageNo: number;
   // totalUsers: number;
@@ -49,12 +50,12 @@ interface DataTableProps<TData, TValue> {
   };
 }
 
-export function RequestedUserTable<IUser>({
+export function RequestedUserTable<User>({
   columns,
   data,
   pageCount,
   pageSizeOptions = [10, 20, 30, 40, 50],
-}: DataTableProps<IUser, any>) {
+}: DataTableProps<User, any>) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -112,8 +113,8 @@ export function RequestedUserTable<IUser>({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pageIndex, pageSize]);
 
-  const table = useReactTable<IUser>({
-    data: tableData as IUser[],
+  const table = useReactTable<User>({
+    data: tableData as User[],
     columns,
     pageCount: pageCount ?? -1,
     getCoreRowModel: getCoreRowModel(),

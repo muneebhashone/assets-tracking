@@ -1,5 +1,4 @@
 import { Icons } from "@/components/icons";
-import { PERMISSIONS, Shipment, User, Vessel } from "@prisma/client";
 import { SEARATES_CODES } from "./messgaes";
 import { createCompanySchema, createUserFormSchema } from "@/lib/form-schema";
 import { infer as zInfer } from "zod";
@@ -32,41 +31,7 @@ export interface FooterItem {
   }[];
 }
 
-// export const ROLE = {
-//   ADMIN: "ADMIN",
-//   USER: "USER",
-//   SUPER_ADMIN: "SUPER_ADMIN",
-// };
-// export enum Status {
-//   false = "false",
-//   true = "true",
-// }
-// export interface IUserMessage {
-//   id: number;
-//   email: string;
-//   password: string;
-//   name: string | null;
-//   role: ROLE;
-//   status: Status;
-//   accessToken?: string;
-// }
 
-// export interface IUser {
-//   id: number;
-//   email: string;
-//   password: string;
-//   name: string;
-//   role: string;
-//   status: string;
-// }
-
-// export interface PaginatedUsers {
-//   totalUsers: number;
-//   totalPages: number;
-//   currentPage: number;
-//   perPage: number;
-//   users: IUser[];
-// }
 
 export interface IInsertCoins {
   credits: number;
@@ -79,16 +44,7 @@ export interface IResponse {
   message: string;
   status: string;
 }
-export interface ICreateShipment {
-  // carrier: string;
-  // reference: string;
-  // shipment: string;
-  // status: string;
-  // arivalTime: string;
-  tracking_number: string;
-  carrier: string;
-  userId: number;
-}
+
 interface Location {
   id: number;
   name: string;
@@ -213,29 +169,10 @@ export interface SeaRatesApiResponse {
   data: SeaRatesData;
 }
 
-export interface ShipmentProps {
-  shipData: ShipmenAdminData[];
-}
 
-export interface ShipmenAdminData extends Shipment {
-  user?: User;
-}
-export interface ShipmentData extends Shipment {
-  vessels: Vessel[];
-  user: User;
-}
-export interface shipmentDataWithPagination {
-  data: ShipmentData[] | null;
-  paginatorInfo: {
-    skip: number;
-    limit: number;
-    currentPage: number;
-    pages: number;
-    hasNextPage: boolean;
-    totalRecords: number;
-    pageSize: number;
-  };
-}
+
+
+
 
 export interface SearatesSealineApiResponse {
   status: "success" | "error";

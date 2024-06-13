@@ -8,14 +8,20 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { IUser } from "@/types/user.types";
+import { toast } from "@/components/ui/use-toast";
+import { User } from "@/services/auth.mutations";
+import {
+  UpdateStatusInputType,
+  useUpdateStatus,
+} from "@/services/user.mutations";
+
 import axios from "axios";
 import { Edit, MoreHorizontal, Trash } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 interface CellActionProps {
-  data: IUser;
+  data: User;
 }
 
 export const CellAction: React.FC<CellActionProps> = ({ data }) => {
@@ -31,24 +37,32 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
   //   setLoading(false);
   //   return reject;
   // };
-  // const onAccept = async (email: string) => {
-  //   setLoading(true);
-  //   const { data: updateResponce } = await axios.post(
-  //     `${process.env.NEXT_PUBLIC_SITE_URL as string}/api/admin/userStatus`,
-  //     {
-  //       email: email,
-  //     },
-  //   );
-  //   router.refresh();
-  //   setLoading(false);
-  //   return updateResponce;
+
+  const { mutate: statusChange } = useUpdateStatus({
+    onSuccess(data) {
+      toast({
+        variant: "default",
+        description: data.message,
+        title: "Success",
+      });
+      setOpen(false);
+    },
+    onError(error) {
+      toast({
+        variant: "destructive",
+        description: error.response?.data.message,
+        title: "Error",
+      });
+    },
+  });
+  console.log(data.status);
   // };
   return (
     <>
       <AlertModal
         isOpen={open}
         onClose={() => setOpen(false)}
-        onConfirm={() => console.log("here")}
+        onConfirm={() => statusChange({ id: data.id, status: "REJECTED" })}
         loading={loading}
       />
       <DropdownMenu modal={false}>
@@ -60,16 +74,25 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
-
           <DropdownMenuItem
             disabled={loading}
-            // onClick={() => onAccept(data.email)}
+            onClick={() => console.log('left')}
           >
-            <Edit className="mr-2 h-4 w-4" /> Approve
+            <Edit className="mr-2 h-4 w-4" /> Assign Credits
           </DropdownMenuItem>
-          <DropdownMenuItem disabled={loading} onClick={() => setOpen(true)}>
-            <Trash className="mr-2 h-4 w-4" /> Reject
-          </DropdownMenuItem>
+          {(data.status === "REJECTED" || data.status === "REQUESTED") && (
+            <DropdownMenuItem
+              disabled={loading}
+              onClick={() => statusChange({ id: data.id, status: "APPROVED" })}
+            >
+              <Edit className="mr-2 h-4 w-4" /> Approve
+            </DropdownMenuItem>
+          )}
+          {(data.status === "APPROVED" || data.status === "REQUESTED") && (
+            <DropdownMenuItem disabled={loading} onClick={() => setOpen(true)}>
+              <Trash className="mr-2 h-4 w-4" /> Reject
+            </DropdownMenuItem>
+          )}
         </DropdownMenuContent>
       </DropdownMenu>
     </>

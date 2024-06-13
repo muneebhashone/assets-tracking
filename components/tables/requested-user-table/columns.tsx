@@ -1,10 +1,13 @@
 "use client";
+import { Checkbox } from "@/components/ui/checkbox";
 import { ColumnDef } from "@tanstack/react-table";
 import { CellAction } from "./cell-action";
-import { Checkbox } from "@/components/ui/checkbox";
-import { IUser } from "@/types/user.types";
 
-export const columns: ColumnDef<IUser>[] = [
+import { Badge } from "@/components/ui/badge";
+import { User } from "@/services/auth.mutations";
+import { UserRole } from "@/utils/constants";
+
+export const columns: ColumnDef<User>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -21,6 +24,7 @@ export const columns: ColumnDef<IUser>[] = [
         aria-label="Select row"
       />
     ),
+
     enableSorting: false,
     enableHiding: false,
   },
@@ -33,9 +37,13 @@ export const columns: ColumnDef<IUser>[] = [
     header: "Name",
   },
   {
-    accessorKey: "email",
-    header: "Email",
+    accessorKey: "role",
+    header: "Role",
+    cell: ({ row }) => (
+      <p>{UserRole[row.original.role as keyof typeof UserRole]}</p>
+    ),
   },
+
   {
     accessorKey: "role",
     header: "Role",
@@ -52,15 +60,20 @@ export const columns: ColumnDef<IUser>[] = [
   {
     accessorKey: "permissions",
     header: "Permissions",
+
     cell: ({ row }) => (
       <div>
         {row.original.permissions?.map((permission, index) => (
-          <span key={index} className="mr-2">
+          <Badge
+            key={index}
+            className="bg-green-600 text-xs text-white px-2 py-1  m-0.5"
+          >
             {permission}
-          </span>
+          </Badge>
         ))}
       </div>
     ),
+    size: 10,
   },
   {
     accessorKey: "credits",
@@ -68,6 +81,6 @@ export const columns: ColumnDef<IUser>[] = [
   },
   {
     id: "actions",
-    cell: ({ row }) => <CellAction data={row.original as IUser} />,
+    cell: ({ row }) => <CellAction data={row.original} />,
   },
 ];

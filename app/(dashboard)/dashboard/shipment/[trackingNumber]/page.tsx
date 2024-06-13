@@ -1,3 +1,4 @@
+import { Badge } from "@/components/Badge";
 import { ChevronLeftIcon } from "@/components/Icons/index";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
@@ -42,10 +43,7 @@ export default async function Component(props: PageProps) {
               </div>
               <div className="flex ">
                 <span className="font-semibold">Status :</span>
-
-                <span className="ml-2 bg-[#ff9800] text-white px-2 py-1 rounded-sm text-sm">
-                  New
-                </span>
+                <Badge className="bg-[#ff9800]">New</Badge>
               </div>
               <div className="flex">
                 <span className="font-semibold">Booking / MBL :</span>

@@ -34,11 +34,11 @@ import {
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
-import { IUser } from "@/types/user.types";
+import { User } from "@/services/auth.mutations";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
-  data: IUser[];
+  data: User[];
   // searchKey: string;
   // pageNo: number;
   // totalUsers: number;
@@ -49,7 +49,7 @@ interface DataTableProps<TData, TValue> {
   };
 }
 
-export interface IUserModified extends Omit<IUser, "isActive"> {
+export interface IUserModified extends Omit<User, "isActive"> {
   isActive: "Active" | "In Active";
 }
 
@@ -126,6 +126,7 @@ export function ActiveUserTable<IUserModified>({
     state: {
       pagination: { pageIndex, pageSize },
     },
+
     onPaginationChange: setPagination,
     getPaginationRowModel: getPaginationRowModel(),
     manualPagination: true,

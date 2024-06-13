@@ -1,3 +1,4 @@
+import { cn } from "@/lib/utils";
 import React, { HTMLAttributes } from "react";
 
 interface BadgeProps extends HTMLAttributes<HTMLSpanElement> {
@@ -5,11 +6,12 @@ interface BadgeProps extends HTMLAttributes<HTMLSpanElement> {
 }
 export const Badge = (props: BadgeProps) => {
   const { children, ...options } = props;
-  
+  const { className, ...rest } = options;
+
   return (
     <span
-      className={`ml-2 ${options?.className} text-white px-2 py-1 rounded-sm text-sm`}
-      {...options}
+      className={cn("ml-2  text-white px-2 py-1 rounded-sm text-sm", className)}
+      {...rest}
     >
       {children}
     </span>

@@ -95,7 +95,6 @@ export const useLogin = (
     ...options,
     mutationFn: login,
     async onSuccess(data, variables, context) {
-   
       localStorage.setItem(AUTH_KEY, data.token);
       const checkAuthKey = setInterval(() => {
         if (Boolean(localStorage.getItem(AUTH_KEY))) {

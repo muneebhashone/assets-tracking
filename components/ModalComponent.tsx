@@ -1,5 +1,6 @@
 "use client";
 
+import { DetailedHTMLProps, HTMLAttributes } from "react";
 import {
   Dialog,
   DialogContent,
@@ -8,21 +9,18 @@ import {
   DialogTitle,
 } from "./ui/dialog";
 
-interface ModalProps {
-  title?: string;
-  description?: string;
+interface ModalProps extends HTMLAttributes<HTMLDivElement> {
   isOpen: boolean;
   onClose: () => void;
   children?: React.ReactNode;
 }
 
-export const ModalCustom: React.FC<ModalProps> = ({
-  title,
-  description,
+export const ModalCustom = ({
   isOpen,
   onClose,
   children,
-}) => {
+  ...rest
+}: ModalProps) => {
   const onChange = (open: boolean) => {
     if (!open) {
       onClose();
@@ -30,8 +28,11 @@ export const ModalCustom: React.FC<ModalProps> = ({
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={onChange} >
-      <DialogContent className="max-h-[70vh] overflow-auto min-w-[40rem]  mild-scrollbar backdrop-opacity-50">
+    <Dialog open={isOpen} onOpenChange={onChange}>
+      <DialogContent
+        className={`${rest.className}`}
+        {...rest}
+      >
         <div>{children}</div>
       </DialogContent>
     </Dialog>

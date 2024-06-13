@@ -73,7 +73,6 @@ export default function ShipmentCreationForm() {
   };
   const { data, isFetching } = useFetchAllSearatesContainers();
 
-  const router = useRouter();
   const form = useForm<CreateShipmentInputType>({
     resolver: zodResolver(CreateShipmentInputSchema),
     defaultValues: initialValues,
@@ -120,7 +119,11 @@ export default function ShipmentCreationForm() {
       >
         Create
       </Button>
-      <ModalCustom isOpen={modalOpen} onClose={() => setModalOpen(false)}>
+      <ModalCustom
+        isOpen={modalOpen}
+        onClose={() => setModalOpen(false)}
+        className="max-h-[70vh] overflow-auto min-w-[40rem] mild-scrollbar backdrop-opacity-50"
+      >
         <Form {...form}>
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="flex h-screen w-full items-center justify-center ">

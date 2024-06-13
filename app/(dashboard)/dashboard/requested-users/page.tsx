@@ -1,10 +1,16 @@
+"use client";
+
 import BreadCrumb from "@/components/breadcrumb";
 import { columns } from "@/components/tables/requested-user-table/columns";
 import { RequestedUserTable } from "@/components/tables/requested-user-table/requested-user";
 import { Heading } from "@/components/ui/heading";
 import { Separator } from "@/components/ui/separator";
 import { paginatedMockUser } from "@/mockData/user.mockData";
+import { User, useCurrentUser } from "@/services/auth.mutations";
+import { useGetUsers } from "@/services/user.queries";
 import { IUser } from "@/types/user.types";
+import { useSearchParams } from "next/navigation";
+import { useState } from "react";
 
 const breadcrumbItems = [
   { title: "Users", link: "/dashboard/requested-users" },
@@ -16,17 +22,19 @@ type paramsProps = {
   };
 };
 
-export default async function Page({ searchParams }: paramsProps) {
-  const page = Number(searchParams.page) || 1;
-  const pageLimit = Number(searchParams.limit) || 10;
-  // const offset = (page - 1) * pageLimit;
+export default function Page() {
+  const searchParams = useSearchParams();
+  const page = Number(searchParams.get("page")) || 1;
+  const pageLimit = Number(searchParams.get("limit")) || 10;
+  const search = String(searchParams.get("search")) || "";
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
 
-  // const response = await getRegisteredUsers({
-  //   pageParam: page,
-  //   pageSizeParam: pageLimit,
-  // });
-
-  // const resData = response;
+  const { data: currentUser, isLoading: selfLoading } = useCurrentUser();
+  const { data: users, isLoading: allUsersLoading } = useGetUsers({
+    limitParam: pageLimit,
+    pageParam: page,
+    searchString: search,
+  });
 
   return (
     <div className="flex-1 space-y-4  p-4 md:p-8 pt-6">
@@ -39,11 +47,11 @@ export default async function Page({ searchParams }: paramsProps) {
         />
       </div>
       <Separator />
-      <RequestedUserTable
+      {allUsersLoading ? <div>Loading ...</div> :<RequestedUserTable
         columns={columns}
-        data={paginatedMockUser.results as IUser[]}
-        pageCount={paginatedMockUser.paginatorInfo.pages}
-      />
+        data={users?.results as User[]}
+        pageCount={users?.paginatorInfo.pages || 0}
+      />}
     </div>
   );
 }
