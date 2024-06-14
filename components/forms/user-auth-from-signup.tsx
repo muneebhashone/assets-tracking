@@ -9,12 +9,10 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useGetAllCompanies } from "@/hooks/useQuery";
 import { CreateUserFormSchema, createUserFormSchema } from "@/lib/form-schema";
-import { CreateUserSchemaType } from "@/types";
+import { useRegisterUser } from "@/services/auth.mutations";
+import { useGetCompanies } from "@/services/companies.queries";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation } from "@tanstack/react-query";
-import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import {
@@ -25,11 +23,6 @@ import {
   SelectValue,
 } from "../ui/select";
 import { useToast } from "../ui/use-toast";
-import {
-  RegisterUserInputType,
-  useRegisterUser,
-} from "@/services/auth.mutations";
-import { useGetCompanies } from "@/services/companies.queries";
 
 const LIMIT = 100;
 const PAGE = 0;

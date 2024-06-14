@@ -1,5 +1,5 @@
-import { Badge } from "@/components/Badge";
 import { ChevronLeftIcon } from "@/components/Icons/index";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
@@ -7,7 +7,6 @@ type PageProps = {
   params: { trackingNumber: string };
 };
 export default async function Component(props: PageProps) {
-  const { params } = props;
   // const session = await auth();
   // const shipData: ShipmentData = (await getShipmentByTrackingNumber(
   //   params.trackingNumber as string,
