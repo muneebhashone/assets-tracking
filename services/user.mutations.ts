@@ -198,3 +198,65 @@ export const useUpdatePermissions = (
     },
   });
 };
+
+export interface ToggleActiveInputType {
+  id: number;
+}
+
+export const toggleActive = async (input: ToggleActiveInputType) => {
+  const { id } = input;
+  const { data } = await apiAxios.get<SuccessResponseType>(
+    `/users/${id}/toggle-active`,
+  );
+  return data;
+};
+
+export const useToggleActive = (
+  options?: UseMutationOptions<
+    SuccessResponseType,
+    ErrorResponseType,
+    ToggleActiveInputType
+  >,
+) => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    ...options,
+    mutationFn: toggleActive,
+    async onSuccess(data, variables, context) {
+      await queryClient.invalidateQueries({ queryKey: [getUsers.name] });
+      options?.onSuccess?.(data, variables, context);
+    },
+  });
+};
+
+export interface AssignCreditsInputType {
+  id: number;
+  credits: number;
+}
+
+export const assignCredits = async (input: AssignCreditsInputType) => {
+  const { id, credits } = input;
+  const { data } = await apiAxios.post<SuccessResponseType>(
+    `/users/${id}/credits`,
+    { credits },
+  );
+  return data;
+};
+
+export const useAssignCredits = (
+  options?: UseMutationOptions<
+    SuccessResponseType,
+    ErrorResponseType,
+    AssignCreditsInputType
+  >,
+) => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    ...options,
+    mutationFn: assignCredits,
+    async onSuccess(data, variables, context) {
+      await queryClient.invalidateQueries({ queryKey: [getUsers.name] });
+      options?.onSuccess?.(data, variables, context);
+    },
+  });
+};

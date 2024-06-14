@@ -55,7 +55,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
       });
     },
   });
-  console.log(data.status);
+
   // };
   return (
     <>
@@ -74,12 +74,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
-          <DropdownMenuItem
-            disabled={loading}
-            onClick={() => console.log('left')}
-          >
-            <Edit className="mr-2 h-4 w-4" /> Assign Credits
-          </DropdownMenuItem>
+          
           {(data.status === "REJECTED" || data.status === "REQUESTED") && (
             <DropdownMenuItem
               disabled={loading}

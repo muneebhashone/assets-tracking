@@ -137,7 +137,7 @@ export default function Page() {
         <ModalCustom
           isOpen={modalOpen}
           onClose={() => setModalOpen(false)}
-          className="h-[50vh] overflow-hidden min-w-[40rem]  backdrop-opacity-50"
+          className=" overflow-auto min-w-[40rem]  backdrop-opacity-50"
         >
           <Form {...form}>
             <form onSubmit={handleSubmit(onSubmit)}>

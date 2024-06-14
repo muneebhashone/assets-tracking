@@ -1,10 +1,23 @@
 "use client";
-import { ColumnDef } from "@tanstack/react-table";
-import { CellAction } from "./cell-action";
-import { Checkbox } from "@/components/ui/checkbox";
-import { IUserModified } from "./active-user";
 import { Badge } from "@/components/ui/badge";
+import { Checkbox } from "@/components/ui/checkbox";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { permissionEnums } from "@/types/user.types";
 import { UserRole } from "@/utils/constants";
+import { ColumnDef } from "@tanstack/react-table";
+import { useSearchParams } from "next/navigation";
+import React from "react";
+import { useForm } from "react-hook-form";
+import { IUserModified } from "./active-user";
+import { CellAction } from "./cell-action";
+import { MultiSelect } from "@/components/ui/multi-select";
+import PermissionUpdate from "@/components/forms/permission-update-form";
 
 export const columns: ColumnDef<IUserModified>[] = [
   {
@@ -60,19 +73,10 @@ export const columns: ColumnDef<IUserModified>[] = [
     accessorKey: "permissions",
     header: "Permissions",
 
-    cell: ({ row }) => (
-      <div>
-        {row.original.permissions?.map((permission, index) => (
-          <Badge
-            key={index}
-            className="bg-green-600 text-xs text-white px-2 py-1  m-0.5"
-          >
-            {permission}
-          </Badge>
-        ))}
-      </div>
-    ),
-    size: 10,
+    cell: ({ row }) => <PermissionUpdate row={row} />,
+
+    maxSize: 20,
+    minSize: 30,
   },
   {
     accessorKey: "credits",

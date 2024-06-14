@@ -125,6 +125,9 @@ html {
   border-radius: 5px;
 }
 
+.align-middle:has(.permission-access) {
+  width: 30%;
+}
 /* Handle on hover */
 /* .mild-scrollbar::-webkit-scrollbar-thumb:hover {
   background: #ffffff;
