@@ -8,19 +8,12 @@ import { Separator } from "@/components/ui/separator";
 import { paginatedMockUser } from "@/mockData/user.mockData";
 import { User, useCurrentUser } from "@/services/auth.mutations";
 import { useGetUsers } from "@/services/user.queries";
-import { IUser } from "@/types/user.types";
 import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 
 const breadcrumbItems = [
   { title: "Users", link: "/dashboard/requested-users" },
 ];
-
-type paramsProps = {
-  searchParams: {
-    [key: string]: string | string[] | undefined;
-  };
-};
 
 export default function Page() {
   const searchParams = useSearchParams();
@@ -47,11 +40,15 @@ export default function Page() {
         />
       </div>
       <Separator />
-      {allUsersLoading ? <div>Loading ...</div> :<RequestedUserTable
-        columns={columns}
-        data={users?.results as User[]}
-        pageCount={users?.paginatorInfo.pages || 0}
-      />}
+      {allUsersLoading ? (
+        <div>Loading ...</div>
+      ) : (
+        <RequestedUserTable
+          columns={columns}
+          data={users?.results as User[]}
+          pageCount={users?.paginatorInfo.pages || 0}
+        />
+      )}
     </div>
   );
 }
