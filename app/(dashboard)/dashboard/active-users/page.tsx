@@ -113,7 +113,7 @@ export default function Page() {
 
         <div className="flex items-start justify-between">
           <Heading
-            title={`Active Users (10)`}
+            title={`Active Users (${users.length || 0})`}
             description="Manage active users "
           />
         </div>
