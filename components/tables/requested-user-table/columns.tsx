@@ -45,14 +45,6 @@ export const columns: ColumnDef<User>[] = [
   },
 
   {
-    accessorKey: "role",
-    header: "Role",
-  },
-  {
-    accessorKey: "isActive",
-    header: "Active",
-  },
-  {
     accessorKey: "status",
     header: "Status",
   },

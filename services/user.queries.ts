@@ -10,7 +10,7 @@ export type GetAllUserInputType = {
   pageParam?: number;
   isRequestedUser?: boolean;
   filterByActive?: boolean;
-  filterByStatus?: string;
+  filterByStatus?: 'APPROVED' | 'REQUESTED' | 'REJECTED';
   filterByRole?: string;
 };
 

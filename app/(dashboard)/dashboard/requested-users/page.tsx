@@ -5,7 +5,6 @@ import { columns } from "@/components/tables/requested-user-table/columns";
 import { RequestedUserTable } from "@/components/tables/requested-user-table/requested-user";
 import { Heading } from "@/components/ui/heading";
 import { Separator } from "@/components/ui/separator";
-import { paginatedMockUser } from "@/mockData/user.mockData";
 import { User, useCurrentUser } from "@/services/auth.mutations";
 import { useGetUsers } from "@/services/user.queries";
 import { useSearchParams } from "next/navigation";
@@ -27,6 +26,7 @@ export default function Page() {
     limitParam: pageLimit,
     pageParam: page,
     searchString: search,
+    filterByStatus: "REQUESTED",
   });
 
   return (
@@ -35,7 +35,7 @@ export default function Page() {
 
       <div className="flex items-start justify-between">
         <Heading
-          title={`Requested Users (${paginatedMockUser.results.length})`}
+          title={`Requested Users (${users?.results.length})`}
           description="Manage requested users  "
         />
       </div>

@@ -39,8 +39,9 @@ import { useGetUsers } from "@/services/user.queries";
 import { EligibleRolesForCreation, UserRole } from "@/utils/constants";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { PlusCircledIcon } from "@radix-ui/react-icons";
+import { getCoreRowModel } from "@tanstack/react-table";
 import { useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -60,6 +61,7 @@ const createUserSchema = z.object({
 
 export default function Page() {
   const searchParams = useSearchParams();
+  const tableRef = useRef(null);
   const page = Number(searchParams.get("page")) || 1;
   const pageLimit = Number(searchParams.get("limit")) || 10;
   const search = String(searchParams.get("search")) || "";
@@ -118,12 +120,14 @@ export default function Page() {
           />
         </div>
         <Separator />
+
         <Button
           className="border rounded-md px-4 py-2 bg-[#D3991F] text-white hover:bg-zinc-900"
           onClick={() => setModalOpen((prev) => !prev)}
         >
           Create
         </Button>
+
         <Separator />
         {allUsersLoading ? (
           <div>Loading ... </div>

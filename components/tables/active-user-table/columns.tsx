@@ -1,23 +1,10 @@
 "use client";
-import { Badge } from "@/components/ui/badge";
+import PermissionUpdate from "@/components/forms/permission-update-form";
 import { Checkbox } from "@/components/ui/checkbox";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { permissionEnums } from "@/types/user.types";
 import { UserRole } from "@/utils/constants";
 import { ColumnDef } from "@tanstack/react-table";
-import { useSearchParams } from "next/navigation";
-import React from "react";
-import { useForm } from "react-hook-form";
 import { IUserModified } from "./active-user";
 import { CellAction } from "./cell-action";
-import { MultiSelect } from "@/components/ui/multi-select";
-import PermissionUpdate from "@/components/forms/permission-update-form";
 
 export const columns: ColumnDef<IUserModified>[] = [
   {

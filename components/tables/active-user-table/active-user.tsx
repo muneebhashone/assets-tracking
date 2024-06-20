@@ -96,7 +96,6 @@ export function ActiveUserTable<IUserModified>({
     [searchParams],
   );
 
-  // Handle server-side pagination
   const [{ pageIndex, pageSize }, setPagination] =
     React.useState<PaginationState>({
       pageIndex: fallbackPage - 1,
@@ -133,75 +132,21 @@ export function ActiveUserTable<IUserModified>({
     manualFiltering: true,
   });
 
-  // const searchValue = table.getColumn(searchKey)?.getFilterValue() as string;
-  // // React.useEffect(() => {
-  // //   if (debounceValue.length > 0) {
-  // //     router.push(
-  // //       `${pathname}?${createQueryString({
-  // //         [selectedOption.value]: `${debounceValue}${
-  // //           debounceValue.length > 0 ? `.${filterVariety}` : ""
-  // //         }`,
-  // //       })}`,
-  // //       {
-  // //         scroll: false,
-  // //       }
-  // //     )
-  // //   }
-
-  // //   if (debounceValue.length === 0) {
-  // //     router.push(
-  // //       `${pathname}?${createQueryString({
-  // //         [selectedOption.value]: null,
-  // //       })}`,
-  // //       {
-  // //         scroll: false,
-  // //       }
-  // //     )
-  // //   }
-  // //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // // }, [debounceValue, filterVariety, selectedOption.value])
-
-  // React.useEffect(() => {
-  //   if (searchValue?.length > 0) {
-  //     router.push(
-  //       `${pathname}?${createQueryString({
-  //         page: null,
-  //         limit: null,
-  //         search: searchValue,
-  //       })}`,
-  //       {
-  //         scroll: false,
-  //       },
-  //     );
-  //   }
-  //   if (searchValue?.length === 0 || searchValue === undefined) {
-  //     router.push(
-  //       `${pathname}?${createQueryString({
-  //         page: null,
-  //         limit: null,
-  //         search: null,
-  //       })}`,
-  //       {
-  //         scroll: false,
-  //       },
-  //     );
-  //   }
-
-  //   setPagination((prev) => ({ ...prev, pageIndex: 0 }));
-
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [searchValue]);
-
+ 
+  const selectedIds = table
+    .getSelectedRowModel()
+    .rows.map(({ original }) => original.id);
   return (
     <>
-      {/* <Input
-        placeholder={`Search ${searchKey}...`}
-        value={(table.getColumn(searchKey)?.getFilterValue() as string) ?? ""}
-        onChange={(event) =>
-          table.getColumn(searchKey)?.setFilterValue(event.target.value)
-        }
-        className="w-full md:max-w-sm"
-      /> */}
+
+      {Boolean(selectedIds.length) && (
+        <Button
+          className="border rounded-md px-4 py-2 bg-red-700 text-white hover:bg-red-600"
+          // onClick={() => setModalOpen((prev) => !prev)}
+        >
+          Delete
+        </Button>
+      )}
       <ScrollArea className="rounded-md border h-[calc(80vh-220px)]">
         <Table className="relative">
           <TableHeader>

@@ -36,19 +36,19 @@ import {
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
-interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[];
+interface DataTableProps<Shipment> {
+  columns: ColumnDef<Shipment>[];
   data: Shipment[];
   pageSizeOptions?: number[];
   pageCount: number;
 }
 
-export function ShipmentTable<TData, TValue>({
+export function ShipmentTable<Shipment>({
   columns,
   data,
   pageCount,
   pageSizeOptions = [10, 20, 30, 40, 50],
-}: DataTableProps<TData, TValue>) {
+}: DataTableProps<Shipment>) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -114,8 +114,20 @@ export function ShipmentTable<TData, TValue>({
     manualFiltering: true,
   });
 
+  const selectedIds = table
+    .getSelectedRowModel()
+    .rows.map(({ original }) => original.id);
+
   return (
     <>
+      {Boolean(selectedIds.length) && (
+        <Button
+          className="border rounded-md px-4 py-2 bg-red-700 text-white hover:bg-red-600"
+          // onClick={() => setModalOpen((prev) => !prev)}
+        >
+          Delete
+        </Button>
+      )}
       <ScrollArea className="rounded-md border h-[calc(80vh-220px)]">
         <Table className="relative">
           <TableHeader>

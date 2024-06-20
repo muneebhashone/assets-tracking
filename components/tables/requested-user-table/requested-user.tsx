@@ -92,7 +92,6 @@ export function RequestedUserTable<User>({
     [searchParams],
   );
 
-  // Handle server-side pagination
   const [{ pageIndex, pageSize }, setPagination] =
     React.useState<PaginationState>({
       pageIndex: fallbackPage - 1,
