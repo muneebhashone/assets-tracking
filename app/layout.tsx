@@ -1,8 +1,16 @@
 import Providers from "@/components/layout/providers";
+import { currentUser } from "@/services/auth.services";
+import {
+  HydrationBoundary,
+  QueryClient,
+  dehydrate,
+} from "@tanstack/react-query";
 import "@uploadthing/react/styles.css";
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
+import { cookies } from "next/headers";
 import "./globals.css";
+import { ReactQueryClientProvider } from "@/components/ReactQueryClientProvider";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -21,10 +29,27 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        staleTime: 60 * 1000,
+      },
+    },
+  });
+
+  await queryClient.prefetchQuery({
+    queryKey: [currentUser.name],
+    queryFn: () => currentUser(cookies().get("accessToken")?.value),
+  });
+
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${poppins.className} `}>
-        <Providers>{children}</Providers>
+        <ReactQueryClientProvider>
+          <HydrationBoundary state={dehydrate(queryClient)}>
+            <Providers>{children}</Providers>
+          </HydrationBoundary>
+        </ReactQueryClientProvider>
       </body>
     </html>
   );

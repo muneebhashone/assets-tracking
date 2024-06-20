@@ -1,18 +1,19 @@
 import axios, { AxiosError, HttpStatusCode } from "axios";
 import { AUTH_KEY } from "./constants";
-import { queryClient } from "@/components/ReactQueryClientProvider";
-import { currentUser } from "@/services/auth.mutations";
 
 export const apiAxios = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL + "/api",
+  withCredentials: true,
 });
 
 apiAxios.interceptors.request.use((config) => {
-  if (typeof localStorage.getItem(AUTH_KEY) === "string") {
-    config.headers["Authorization"] = `Bearer ${localStorage.getItem(
-      AUTH_KEY,
-    )}`;
-  }
+  try {
+    if (typeof localStorage.getItem(AUTH_KEY) === "string") {
+      config.headers["Authorization"] = `Bearer ${localStorage.getItem(
+        AUTH_KEY,
+      )}`;
+    }
+  } catch {}
 
   return config;
 });
@@ -27,8 +28,9 @@ apiAxios.interceptors.response.use(
         }
 
         if (err.response?.status === HttpStatusCode.Unauthorized) {
-          localStorage.removeItem(AUTH_KEY);
-          queryClient.removeQueries({ queryKey: [currentUser.name] });
+          try {
+            localStorage.removeItem(AUTH_KEY);
+          } catch {}
           // window.location.replace("/signin");
           return err.response;
         }

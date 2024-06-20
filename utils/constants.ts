@@ -1,4 +1,4 @@
-export const AUTH_KEY = "zim-user-access-token";
+export const AUTH_KEY = "accessToken";
 
 export const UserRole = {
   WHITE_LABEL_ADMIN: "White Label Admin",
