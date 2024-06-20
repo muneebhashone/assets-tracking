@@ -8,8 +8,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
     <>
       <ThemeProvider attribute="class" defaultTheme="light">
         <Toaster />
-        {/* <InitializeSocket /> */}
-        <ReactQueryClientProvider>{children}</ReactQueryClientProvider>
+        {children}
       </ThemeProvider>
     </>
   );

@@ -1,4 +1,4 @@
-import { apiAxios } from "@/utils/api.utils";
+"use client";
 import { AUTH_KEY } from "@/utils/constants";
 import {
   useMutation,
@@ -9,80 +9,21 @@ import {
 } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { ErrorResponseType, SuccessResponseType } from "./types.common";
-import { AxiosError } from "axios";
-
-export type LoginInputType = {
-  email: string;
-  password: string;
-};
-
-export type RegisterUserInputType = {
-  name: string;
-  email: string;
-  password: string;
-  companyId?: string | null;
-};
-
-export type RegisterCompanyInputType = {
-  name: string;
-  email: string;
-  password: string;
-  companyName: string;
-  country: string;
-  city: string;
-};
-
-export type LoginResponseType = {
-  token: string;
-};
-
-export interface CurrentUserResponseType {
-  user: User;
-}
-
-export interface User {
-  id: number;
-  email: string;
-  name: string;
-  role: string;
-  isActive: boolean;
-  password: string;
-  status: string;
-  credits: number;
-  companyId: null;
-  permissions: string[];
-}
-
-export const login = async (input: LoginInputType) => {
-  const { data, status } = await apiAxios.post<LoginResponseType>(
-    "/auth/login",
-    input,
-  );
-
-  return data;
-};
-
-export const currentUser = async () => {
-  const { data } = await apiAxios.get<CurrentUserResponseType>("/auth/user");
-
-  return data;
-};
-
-export const registerUser = async (input: RegisterUserInputType) => {
-  const { data } = await apiAxios.post<SuccessResponseType>(
-    "/auth/register/user",
-    input,
-  );
-  return data;
-};
-
-export const registerCompany = async (input: RegisterCompanyInputType) => {
-  const { data } = await apiAxios.post<SuccessResponseType>(
-    "/auth/register/company",
-    input,
-  );
-  return data;
-};
+import {
+  LoginInputType,
+  CurrentUserResponseType,
+  LoginResponseType,
+  RegisterCompanyInputType,
+  RegisterUserInputType,
+  User,
+} from "@/types/services/auth.types";
+import {
+  login,
+  currentUser,
+  logout,
+  registerCompany,
+  registerUser,
+} from "./auth.services";
 
 export const useLogin = (
   options?: UseMutationOptions<
@@ -137,7 +78,7 @@ export const useCurrentUser = (
 ) => {
   return useQuery({
     ...options,
-    queryFn: currentUser,
+    queryFn: () => currentUser(),
     queryKey: [currentUser.name],
   });
 };
@@ -149,11 +90,9 @@ export const useLogout = (
   const router = useRouter();
   return useMutation({
     ...options,
-    mutationFn: async () => {
-      localStorage.removeItem(AUTH_KEY);
-      return null;
-    },
+    mutationFn: logout,
     onSuccess(data, variables, context) {
+      localStorage.removeItem(AUTH_KEY);
       queryClient.removeQueries({ queryKey: [currentUser.name] });
       options?.onSuccess?.(data, variables, context);
       router.push("/signin");
