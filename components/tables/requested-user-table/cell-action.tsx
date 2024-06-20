@@ -9,13 +9,9 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { toast } from "@/components/ui/use-toast";
-import { User } from "@/services/auth.mutations";
-import {
-  UpdateStatusInputType,
-  useUpdateStatus,
-} from "@/services/user.mutations";
+import { User } from "@/types/services/auth.types";
+import { useUpdateStatus } from "@/services/user.mutations";
 
-import axios from "axios";
 import { Edit, MoreHorizontal, Trash } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -74,7 +70,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
-          
+
           {(data.status === "REJECTED" || data.status === "REQUESTED") && (
             <DropdownMenuItem
               disabled={loading}

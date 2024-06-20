@@ -35,7 +35,7 @@ import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 
-import { User } from "@/services/auth.mutations";
+import { User } from "@/types/services/auth.types";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -127,75 +127,8 @@ export function RequestedUserTable<User>({
     manualFiltering: true,
   });
 
-  // const searchValue = table.getColumn(searchKey)?.getFilterValue() as string;
-  // // React.useEffect(() => {
-  // //   if (debounceValue.length > 0) {
-  // //     router.push(
-  // //       `${pathname}?${createQueryString({
-  // //         [selectedOption.value]: `${debounceValue}${
-  // //           debounceValue.length > 0 ? `.${filterVariety}` : ""
-  // //         }`,
-  // //       })}`,
-  // //       {
-  // //         scroll: false,
-  // //       }
-  // //     )
-  // //   }
-
-  // //   if (debounceValue.length === 0) {
-  // //     router.push(
-  // //       `${pathname}?${createQueryString({
-  // //         [selectedOption.value]: null,
-  // //       })}`,
-  // //       {
-  // //         scroll: false,
-  // //       }
-  // //     )
-  // //   }
-  // //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // // }, [debounceValue, filterVariety, selectedOption.value])
-
-  // React.useEffect(() => {
-  //   if (searchValue?.length > 0) {
-  //     router.push(
-  //       `${pathname}?${createQueryString({
-  //         page: null,
-  //         limit: null,
-  //         search: searchValue,
-  //       })}`,
-  //       {
-  //         scroll: false,
-  //       },
-  //     );
-  //   }
-  //   if (searchValue?.length === 0 || searchValue === undefined) {
-  //     router.push(
-  //       `${pathname}?${createQueryString({
-  //         page: null,
-  //         limit: null,
-  //         search: null,
-  //       })}`,
-  //       {
-  //         scroll: false,
-  //       },
-  //     );
-  //   }
-
-  //   setPagination((prev) => ({ ...prev, pageIndex: 0 }));
-
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [searchValue]);
-
   return (
     <>
-      {/* <Input
-        placeholder={`Search ${searchKey}...`}
-        value={(table.getColumn(searchKey)?.getFilterValue() as string) ?? ""}
-        onChange={(event) =>
-          table.getColumn(searchKey)?.setFilterValue(event.target.value)
-        }
-        className="w-full md:max-w-sm"
-      /> */}
       <ScrollArea className="rounded-md border h-[calc(80vh-220px)]">
         <Table className="relative">
           <TableHeader>

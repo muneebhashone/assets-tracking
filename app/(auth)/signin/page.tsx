@@ -1,7 +1,6 @@
 import UserAuthForm from "@/components/forms/user-auth-form";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { ICreateShipment } from "@/types";
 import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
