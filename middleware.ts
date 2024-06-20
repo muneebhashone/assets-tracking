@@ -8,6 +8,10 @@ export async function middleware(request: NextRequest) {
   try {
     const accessToken = request.cookies.get(AUTH_KEY)?.value;
 
+    if (!accessToken) {
+      return NextResponse.redirect(new URL("/signin", request.url));
+    }
+
     await currentUser(accessToken);
   } catch {
     return NextResponse.redirect(new URL("/signin", request.url));
@@ -18,5 +22,5 @@ export async function middleware(request: NextRequest) {
 
 // See "Matching Paths" below to learn more
 export const config = {
-  matcher: "/dashboard/:path*",
+  matcher: ["/dashboard/:path*"],
 };

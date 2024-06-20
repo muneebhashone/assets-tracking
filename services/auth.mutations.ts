@@ -1,4 +1,11 @@
 "use client";
+import {
+  CurrentUserResponseType,
+  LoginInputType,
+  LoginResponseType,
+  RegisterCompanyInputType,
+  RegisterUserInputType,
+} from "@/types/services/auth.types";
 import { AUTH_KEY } from "@/utils/constants";
 import {
   useMutation,
@@ -8,22 +15,14 @@ import {
   UseQueryOptions,
 } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
-import { ErrorResponseType, SuccessResponseType } from "./types.common";
 import {
-  LoginInputType,
-  CurrentUserResponseType,
-  LoginResponseType,
-  RegisterCompanyInputType,
-  RegisterUserInputType,
-  User,
-} from "@/types/services/auth.types";
-import {
-  login,
   currentUser,
+  login,
   logout,
   registerCompany,
   registerUser,
 } from "./auth.services";
+import { ErrorResponseType, SuccessResponseType } from "./types.common";
 
 export const useLogin = (
   options?: UseMutationOptions<
