@@ -31,8 +31,8 @@ import {
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { toast } from "@/components/ui/use-toast";
-
-import { User, useCurrentUser } from "@/services/auth.mutations";
+import { User } from "@/types/services/auth.types";
+import { useCurrentUser } from "@/services/auth.mutations";
 import { useCreateUser } from "@/services/user.mutations";
 import { useGetUsers } from "@/services/user.queries";
 
@@ -64,7 +64,7 @@ export default function Page() {
   const tableRef = useRef(null);
   const page = Number(searchParams.get("page")) || 1;
   const pageLimit = Number(searchParams.get("limit")) || 10;
-  const search = String(searchParams.get("search")) || "";
+  const search = searchParams.get("search") || "";
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const { mutate } = useCreateUser({
     onSuccess(data) {
@@ -107,6 +107,7 @@ export default function Page() {
     pageParam: page,
     searchString: search,
   });
+  console.log(users);
 
   return (
     <>

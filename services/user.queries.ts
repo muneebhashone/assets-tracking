@@ -1,8 +1,7 @@
 import { apiAxios } from "@/utils/api.utils";
 import { UseQueryOptions, useQuery } from "@tanstack/react-query";
 import { ErrorResponseType } from "./types.common";
-import { User } from "./auth.mutations";
-
+import { User } from "@/types/services/auth.types";
 
 export type GetAllUserInputType = {
   searchString?: string;
@@ -10,7 +9,7 @@ export type GetAllUserInputType = {
   pageParam?: number;
   isRequestedUser?: boolean;
   filterByActive?: boolean;
-  filterByStatus?: 'APPROVED' | 'REQUESTED' | 'REJECTED';
+  filterByStatus?: "APPROVED" | "REQUESTED" | "REJECTED";
   filterByRole?: string;
 };
 
@@ -45,6 +44,5 @@ export const useGetUsers = (
     ...options,
     queryFn: async () => await getUsers(input),
     queryKey: [getUsers.name, JSON.stringify(input)],
-    refetchInterval: 3000,
   });
 };
