@@ -1,11 +1,13 @@
 "use client";
 
+import SearchBar from "@/components/SearchBar";
 import BreadCrumb from "@/components/breadcrumb";
 import { columns } from "@/components/tables/requested-user-table/columns";
 import { RequestedUserTable } from "@/components/tables/requested-user-table/requested-user";
 import { Heading } from "@/components/ui/heading";
 import { Separator } from "@/components/ui/separator";
-import { User, useCurrentUser } from "@/services/auth.mutations";
+import { useCurrentUser } from "@/services/auth.mutations";
+import { User } from "@/types/services/auth.types";
 import { useGetUsers } from "@/services/user.queries";
 import { useSearchParams } from "next/navigation";
 import { useState } from "react";
@@ -40,6 +42,7 @@ export default function Page() {
         />
       </div>
       <Separator />
+      <SearchBar />
       {allUsersLoading ? (
         <div>Loading ...</div>
       ) : (

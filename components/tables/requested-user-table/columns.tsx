@@ -4,7 +4,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { CellAction } from "./cell-action";
 
 import { Badge } from "@/components/ui/badge";
-import { User } from "@/services/auth.mutations";
+import { User } from "@/types/services/auth.types";
 import { UserRole } from "@/utils/constants";
 
 export const columns: ColumnDef<User>[] = [

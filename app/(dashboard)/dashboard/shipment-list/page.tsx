@@ -1,8 +1,6 @@
 "use client";
-import AdminDashboard from "@/components/dashboard/AdminDashboard";
 import UserDashboard from "@/components/dashboard/UserDashboard";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { ROLE } from "@/types";
 import { useCurrentUser } from "../../../../services/auth.mutations";
 
 const ShipmentList = () => {

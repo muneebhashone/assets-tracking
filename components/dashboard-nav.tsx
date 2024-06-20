@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 
 import { Icons } from "@/components/icons";
 import { cn } from "@/lib/utils";
-import { User } from "@/services/auth.mutations";
+import { User } from "@/types/services/auth.types";
 import { NavItem } from "@/types";
 import { Dispatch, SetStateAction } from "react";
 import { checkPermissions } from "@/utils/checkPermissions";

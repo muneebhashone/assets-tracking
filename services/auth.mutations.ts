@@ -1,10 +1,13 @@
 "use client";
 import {
   CurrentUserResponseType,
+  ForgetPasswordInputType,
   LoginInputType,
   LoginResponseType,
   RegisterCompanyInputType,
   RegisterUserInputType,
+  ResetPasswordInputType,
+  SetPasswordInputType,
 } from "@/types/services/auth.types";
 import { AUTH_KEY } from "@/utils/constants";
 import {
@@ -17,10 +20,13 @@ import {
 import { useRouter } from "next/navigation";
 import {
   currentUser,
+  forgetPassword,
   login,
   logout,
   registerCompany,
   registerUser,
+  resetPassword,
+  setPassword,
 } from "./auth.services";
 import { ErrorResponseType, SuccessResponseType } from "./types.common";
 
@@ -96,5 +102,44 @@ export const useLogout = (
       options?.onSuccess?.(data, variables, context);
       router.push("/signin");
     },
+  });
+};
+
+export const useSetPassword = (
+  options?: UseMutationOptions<
+    SuccessResponseType,
+    ErrorResponseType,
+    SetPasswordInputType
+  >,
+) => {
+  return useMutation({
+    ...options,
+    mutationFn: setPassword,
+  });
+};
+
+export const useResetPassword = (
+  options?: UseMutationOptions<
+    SuccessResponseType,
+    ErrorResponseType,
+    ResetPasswordInputType
+  >,
+) => {
+  return useMutation({
+    ...options,
+    mutationFn: resetPassword,
+  });
+};
+
+export const useForgetPassword = (
+  options?: UseMutationOptions<
+    SuccessResponseType,
+    ErrorResponseType,
+    ForgetPasswordInputType
+  >,
+) => {
+  return useMutation({
+    ...options,
+    mutationFn: forgetPassword,
   });
 };

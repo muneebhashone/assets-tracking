@@ -16,6 +16,7 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { useToast } from "../ui/use-toast";
+import Link from "next/link";
 
 const formSchema = z.object({
   email: z
@@ -39,7 +40,6 @@ export default function UserAuthForm() {
   const { toast } = useToast();
   const { mutate: loginUser, isPending } = useLogin({
     onSuccess(data) {
-
       toast({
         title: "Success",
         description: "Logged in successfully",
@@ -119,6 +119,9 @@ export default function UserAuthForm() {
           </Button>
         </form>
       </Form>
+      <Link href="/forget-password" className="text-[#3491FE]">
+        Forgot Password?
+      </Link>
       <div className="relative">
         <div className="absolute inset-0 flex items-center">
           <span className="w-full border-t" />

@@ -8,23 +8,45 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { toast } from "@/components/ui/use-toast";
+import { useDeletShipment } from "@/services/shipment.mutations";
 import { Shipment } from "@/services/shipment.queries";
 import { MoreHorizontal, Trash } from "lucide-react";
 import Link from "next/link";
+import { useState } from "react";
 
 interface CellActionProps {
   data: Shipment;
 }
 
 export const CellAction: React.FC<CellActionProps> = ({ data }) => {
+  const [warningOpen, setWarningOpen] = useState<boolean>(false);
+  const { mutate: deleteShipment } = useDeletShipment({
+    onSuccess(data) {
+      toast({
+        variant: "default",
+        description: data.message,
+        title: "Success",
+      });
+
+      setWarningOpen(false);
+    },
+    onError(error) {
+      toast({
+        variant: "destructive",
+        description: error.response?.data.message,
+        title: "Error",
+      });
+    },
+  });
   return (
     <>
-      {/* <AlertModal
-        isOpen={open}
-        onClose={() => setOpen(false)}
-        onConfirm={() => statusChange({ id: data.id, status: "REJECTED" })}
-        loading={loading}
-      /> */}
+      <AlertModal
+        isOpen={warningOpen}
+        onClose={() => setWarningOpen(false)}
+        onConfirm={() => deleteShipment({ id: data.id })}
+        loading={false}
+      />
       <DropdownMenu modal={false}>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" className="h-8 w-8 p-0">
@@ -35,10 +57,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
 
-          <DropdownMenuItem
-          // disabled={loading}
-          // onClick={() => statusChange({ id: data.id, status: "APPROVED" })}
-          >
+          <DropdownMenuItem>
             <Link
               href={`/dashboard/shipment/${data.id}`}
               className="hover:text-blue-400"
@@ -47,10 +66,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
             </Link>
           </DropdownMenuItem>
 
-          <DropdownMenuItem
-          //  disabled={loading}
-          //  onClick={() => setOpen(true)}
-          >
+          <DropdownMenuItem onClick={() => setWarningOpen(true)}>
             <Trash className="mr-2 h-4 w-4" /> Delete
           </DropdownMenuItem>
         </DropdownMenuContent>

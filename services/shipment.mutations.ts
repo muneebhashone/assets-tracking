@@ -5,10 +5,10 @@ import {
   useMutation,
   useQueryClient,
 } from "@tanstack/react-query";
-import { ErrorResponseType } from "./types.common";
+import { ErrorResponseType, SuccessResponseType } from "./types.common";
 
 // export type Email = `${string}@${string}.${string}`;
-
+//types
 export interface CreateShipmentInputType {
   trackWith: TrackWithType;
   carrier: string;
@@ -25,6 +25,15 @@ export interface CreateShipmentResponseType {
   data: Shipment;
 }
 
+export interface DeleteShipmentInputType {
+  id: number;
+}
+export interface DeleteBulkShipmentInputType {
+  ids: number[];
+}
+
+//services
+
 export const createShipment = async (
   input: CreateShipmentInputType,
 ): Promise<CreateShipmentResponseType> => {
@@ -36,6 +45,28 @@ export const createShipment = async (
   return data;
 };
 
+export const deleteShipment = async (input: DeleteShipmentInputType) => {
+  const { id } = input;
+  const { data } = await apiAxios.delete<SuccessResponseType>(
+    `/shipments/${id}`,
+  );
+  return data;
+};
+
+export const deleteBulkShipments = async (
+  input: DeleteBulkShipmentInputType,
+) => {
+  const { ids } = input;
+  const { data } = await apiAxios.delete<SuccessResponseType>(
+    `/shipments/bulk`,
+    {
+      params: { ids },
+    },
+  );
+  return data;
+};
+
+//hooks
 export const useCreateShipment = (
   options?: UseMutationOptions<
     CreateShipmentResponseType,
@@ -47,6 +78,42 @@ export const useCreateShipment = (
   return useMutation({
     ...options,
     mutationFn: createShipment,
+    async onSuccess(data, variables, context) {
+      await queryClient.invalidateQueries({ queryKey: [getShipments.name] });
+      options?.onSuccess?.(data, variables, context);
+    },
+  });
+};
+
+export const useDeletShipment = (
+  options?: UseMutationOptions<
+    SuccessResponseType,
+    ErrorResponseType,
+    DeleteShipmentInputType
+  >,
+) => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    ...options,
+    mutationFn: deleteShipment,
+    async onSuccess(data, variables, context) {
+      await queryClient.invalidateQueries({ queryKey: [getShipments.name] });
+      options?.onSuccess?.(data, variables, context);
+    },
+  });
+};
+
+export const useBulkDeleteShipment = (
+  options?: UseMutationOptions<
+    SuccessResponseType,
+    ErrorResponseType,
+    DeleteBulkShipmentInputType
+  >,
+) => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    ...options,
+    mutationFn: deleteBulkShipments,
     async onSuccess(data, variables, context) {
       await queryClient.invalidateQueries({ queryKey: [getShipments.name] });
       options?.onSuccess?.(data, variables, context);

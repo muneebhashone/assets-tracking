@@ -53,18 +53,18 @@ export default function AuthenticationPage() {
               Enter your details below to register
             </p>
           </div>
-          <Tabs defaultValue="user" className="w-[400px]">
-            <TabsList className="grid w-full grid-cols-2">
+          {/* <Tabs defaultValue="user" className="w-[400px]"> */}
+          {/* <TabsList className="grid w-full grid-cols-2">
               <TabsTrigger value="company">Company</TabsTrigger>
               <TabsTrigger value="user">User</TabsTrigger>
-            </TabsList>
-            <TabsContent value="user">
+            </TabsList> */}
+          {/* <TabsContent value="user">
               <UserAuthFormSignUp />
             </TabsContent>
-            <TabsContent value="company">
-              <CompanyAuthFormSignUp />
-            </TabsContent>
-          </Tabs>
+            <TabsContent value="company"> */}
+          <CompanyAuthFormSignUp />
+          {/* </TabsContent> */}
+          {/* </Tabs> */}
 
           <Link href="/signin" className="text-[#3491FE]">
             already have an account?

@@ -44,6 +44,7 @@ import { useSearchParams } from "next/navigation";
 import { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import SearchBar from "@/components/SearchBar";
 
 export type CreateUserFormSchemaType = z.infer<typeof createUserSchema>;
 
@@ -130,6 +131,7 @@ export default function Page() {
         </Button>
 
         <Separator />
+        <SearchBar />
         {allUsersLoading ? (
           <div>Loading ... </div>
         ) : (

@@ -8,10 +8,11 @@ import {
   getPaginationRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import React from "react";
+import React, { useState } from "react";
 
 import { Button } from "@/components/ui/button";
 
+import { AlertModal } from "@/components/modal/alert-modal";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import {
   Select,
@@ -28,7 +29,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Shipment } from "@/services/shipment.queries";
+import { toast } from "@/components/ui/use-toast";
+import { useBulkDeleteShipment } from "@/services/shipment.mutations";
 import {
   DoubleArrowLeftIcon,
   DoubleArrowRightIcon,
@@ -60,7 +62,7 @@ export function ShipmentTable<Shipment>({
   const perPageAsNumber = Number(per_page);
   const fallbackPerPage = isNaN(perPageAsNumber) ? 10 : perPageAsNumber;
   const tableData = data;
-
+  const [openWarning, setOpenWarning] = useState<boolean>(false);
   const createQueryString = React.useCallback(
     (params: Record<string, string | number | null>) => {
       const newSearchParams = new URLSearchParams(window.location.search);
@@ -78,7 +80,6 @@ export function ShipmentTable<Shipment>({
     [searchParams],
   );
 
-  // Handle server-side pagination
   const [{ pageIndex, pageSize }, setPagination] =
     React.useState<PaginationState>({
       pageIndex: fallbackPage - 1,
@@ -118,12 +119,39 @@ export function ShipmentTable<Shipment>({
     .getSelectedRowModel()
     .rows.map(({ original }) => original.id);
 
+  const { mutate: deleteBulkShipment } = useBulkDeleteShipment({
+    onSuccess(data) {
+      toast({
+        variant: "default",
+        description: data.message,
+        title: "Success",
+      });
+
+      setOpenWarning(false);
+    },
+    onError(error) {
+      toast({
+        variant: "destructive",
+        description: error.response?.data.message,
+        title: "Error",
+      });
+    },
+  });
   return (
     <>
+      <AlertModal
+        isOpen={openWarning}
+        loading={false}
+        onClose={() => setOpenWarning(false)}
+        onConfirm={() => {
+          deleteBulkShipment({ ids: selectedIds });
+        }}
+      />
+
       {Boolean(selectedIds.length) && (
         <Button
           className="border rounded-md px-4 py-2 bg-red-700 text-white hover:bg-red-600"
-          // onClick={() => setModalOpen((prev) => !prev)}
+          onClick={() => setOpenWarning(true)}
         >
           Delete
         </Button>

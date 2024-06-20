@@ -45,7 +45,7 @@ export const createUserFormSchema = z.object({
   password: z
     .string({ required_error: "password is required" })
     .min(8, { message: "atleast 8 charaacters long" })
-    .max(64, { message: "atmost is 12 charaacters" }),
+    .max(32, { message: "atmost is 32 characters" }),
   name: z.string({ required_error: "name is required" }).min(3),
   companyId: z
     .string({ required_error: "Company Id is required" })

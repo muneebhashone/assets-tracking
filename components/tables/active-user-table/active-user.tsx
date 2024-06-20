@@ -8,7 +8,7 @@ import {
   getPaginationRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import React from "react";
+import React, { useState } from "react";
 
 import { Button } from "@/components/ui/button";
 
@@ -34,7 +34,11 @@ import {
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
-import { User } from "@/services/auth.mutations";
+import { User } from "@/types/services/auth.types";
+import SearchBar from "@/components/SearchBar";
+import { AlertModal } from "@/components/modal/alert-modal";
+import { useBulkDeleteUser } from "@/services/user.mutations";
+import { toast } from "@/components/ui/use-toast";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -70,6 +74,7 @@ export function ActiveUserTable<IUserModified>({
   const per_page = searchParams?.get("limit") ?? "10";
   const perPageAsNumber = Number(per_page);
   const fallbackPerPage = isNaN(perPageAsNumber) ? 10 : perPageAsNumber;
+  const [openWarning, setOpenWarning] = useState<boolean>(false);
 
   const tableData = data.map((entry) => {
     return {
@@ -132,21 +137,47 @@ export function ActiveUserTable<IUserModified>({
     manualFiltering: true,
   });
 
- 
   const selectedIds = table
     .getSelectedRowModel()
     .rows.map(({ original }) => original.id);
+
+  const { mutate: deleteBulkUsers } = useBulkDeleteUser({
+    onSuccess(data) {
+      toast({
+        variant: "default",
+        description: data.message,
+        title: "Success",
+      });
+
+      setOpenWarning(false);
+    },
+    onError(error) {
+      toast({
+        variant: "destructive",
+        description: error.response?.data.message,
+        title: "Error",
+      });
+    },
+  });
   return (
     <>
-
+      <AlertModal
+        isOpen={openWarning}
+        loading={false}
+        onClose={() => setOpenWarning(false)}
+        onConfirm={() => {
+          deleteBulkUsers({ ids: selectedIds });
+        }}
+      />
       {Boolean(selectedIds.length) && (
         <Button
           className="border rounded-md px-4 py-2 bg-red-700 text-white hover:bg-red-600"
-          // onClick={() => setModalOpen((prev) => !prev)}
+          onClick={() => setOpenWarning((prev) => !prev)}
         >
           Delete
         </Button>
       )}
+
       <ScrollArea className="rounded-md border h-[calc(80vh-220px)]">
         <Table className="relative">
           <TableHeader>
