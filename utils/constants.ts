@@ -28,3 +28,15 @@ export const EligibleRolesForCreation = {
   CLIENT_SUPER_USER: ["CLIENT_USER"],
   CLIENT_USER: [],
 };
+
+export const ShipmentStatusDisplay = {
+  IN_TRANSIT: "In Transit",
+  PLANNED: "Planned",
+  UNKNOWN: "Unknown",
+  DELIVERED: "Delivered",
+};
+
+export const TrackWithDisplay = {
+  CONTAINER_NUMBER: "Container Number",
+  MBL_NUMBER: "Master Bill Of Lading Number",
+};
