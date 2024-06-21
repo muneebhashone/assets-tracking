@@ -1,3 +1,4 @@
+import useQueryUpdater from "@/hooks/useQueryUpdater";
 import { useUpdatePermissions } from "@/services/user.mutations";
 import { permissionEnums } from "@/types/user.types";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -7,17 +8,15 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { IUserModified } from "../tables/active-user-table/active-user";
 import { Badge } from "../ui/badge";
-import { MultiSelect } from "../ui/multi-select";
 import {
   Form,
   FormControl,
   FormField,
   FormItem,
-  FormLabel,
-  FormMessage,
+  FormMessage
 } from "../ui/form";
+import { MultiSelect } from "../ui/multi-select";
 import { toast } from "../ui/use-toast";
-import useQueryUpdater from "@/hooks/useQueryUpdater";
 interface PermissionUpdateProps {
   row: Row<IUserModified>;
 }

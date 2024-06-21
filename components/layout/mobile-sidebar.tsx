@@ -4,7 +4,7 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { userNavItems } from "@/constants/data";
 import { useCurrentUser } from "@/services/auth.mutations";
 import { MenuIcon } from "lucide-react";
-import { Session } from "next-auth";
+
 import { useState } from "react";
 
 interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {

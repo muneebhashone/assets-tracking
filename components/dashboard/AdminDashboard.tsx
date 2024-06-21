@@ -16,7 +16,7 @@ const AdminDashboard = () => {
     pageParam: Number(searchParams.get("page")) || 1,
   };
 
-  const { data: result, isLoading } = useGetShipments(params);
+  const { data: result } = useGetShipments(params);
 
   return (
     <div className="flex flex-col ">

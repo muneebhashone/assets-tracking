@@ -42,10 +42,7 @@ import { toast } from "@/components/ui/use-toast";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
-  data: User[];
-  // searchKey: string;
-  // pageNo: number;
-  // totalUsers: number;
+  data: TData[];
   pageSizeOptions?: number[];
   pageCount: number;
   searchParams?: {
@@ -66,7 +63,6 @@ export function ActiveUserTable<IUserModified>({
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  // Search params
   const page = searchParams?.get("page") ?? "1";
   const pageAsNumber = Number(page);
   const fallbackPage =
@@ -83,7 +79,6 @@ export function ActiveUserTable<IUserModified>({
     };
   });
 
-  // Create query string
   const createQueryString = React.useCallback(
     (params: Record<string, string | number | null>) => {
       const newSearchParams = new URLSearchParams(searchParams?.toString());

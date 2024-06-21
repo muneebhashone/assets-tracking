@@ -6,11 +6,9 @@ import { columns } from "@/components/tables/requested-user-table/columns";
 import { RequestedUserTable } from "@/components/tables/requested-user-table/requested-user";
 import { Heading } from "@/components/ui/heading";
 import { Separator } from "@/components/ui/separator";
-import { useCurrentUser } from "@/services/auth.mutations";
-import { User } from "@/types/services/auth.types";
 import { useGetUsers } from "@/services/user.queries";
+import { User } from "@/types/services/auth.types";
 import { useSearchParams } from "next/navigation";
-import { useState } from "react";
 
 const breadcrumbItems = [
   { title: "Users", link: "/dashboard/requested-users" },
@@ -21,9 +19,7 @@ export default function Page() {
   const page = Number(searchParams.get("page")) || 1;
   const pageLimit = Number(searchParams.get("limit")) || 10;
   const search = String(searchParams.get("search")) || "";
-  const [modalOpen, setModalOpen] = useState<boolean>(false);
 
-  const { data: currentUser, isLoading: selfLoading } = useCurrentUser();
   const { data: users, isLoading: allUsersLoading } = useGetUsers({
     limitParam: pageLimit,
     pageParam: page,

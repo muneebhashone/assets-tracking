@@ -1,14 +1,11 @@
 "use client";
 
-import { useCurrentUser } from "@/services/auth.mutations";
 import { useGetShipments } from "@/services/shipment.queries";
-import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import SearchBar from "../SearchBar";
+import ShipmentCreationForm from "../forms/shipment-creation-form";
 import { columns } from "../tables/shipment-table/columns";
 import { ShipmentTable } from "../tables/shipment-table/shipment-table";
-import { Button } from "../ui/button";
-import ShipmentCreationForm from "../forms/shipment-creation-form";
 
 const UserDashboard = () => {
   const searchParams = useSearchParams();
@@ -19,9 +16,7 @@ const UserDashboard = () => {
     pageParam: Number(searchParams.get("page")) || 1,
   };
 
-  const { data: result, isLoading } = useGetShipments(params);
-
-
+  const { data: result } = useGetShipments(params);
 
   return (
     <div className="flex flex-col ">

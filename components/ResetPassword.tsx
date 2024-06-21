@@ -1,6 +1,6 @@
 "use client";
 
-import { useResetPassword, useSetPassword } from "@/services/auth.mutations";
+import { useResetPassword } from "@/services/auth.mutations";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
@@ -23,14 +23,14 @@ export const resetPasswordFormType = z
     password: z
       .string({ required_error: "Password is required" })
       .min(8, { message: "Password must be at least 8 characters long" })
-      .max(32, { message: "Password must be at most 32 characters long" }),
+      .max(64, { message: "Password must be at most 64 characters long" }),
     confirmPassword: z
       .string({ required_error: "Confirm password is required" })
       .min(8, {
         message: "Confirm password must be at least 8 characters long",
       })
-      .max(32, {
-        message: "Confirm password must be at most 32 characters long",
+      .max(64, {
+        message: "Confirm password must be at most 64 characters long",
       }),
   })
   .refine((data) => data.password === data.confirmPassword, {
@@ -63,13 +63,10 @@ const ResetPassword = ({ token }: { token?: string }) => {
       });
     },
   });
-  const { control, handleSubmit, formState } = form;
+  const { control, handleSubmit } = form;
 
   const resetPasswordHandler = (data: ResetPasswordFormType) => {
-    console.log({
-        token: String(token),
-        ...data,
-      })
+  
     resetPassword({
       token: String(token),
       ...data,

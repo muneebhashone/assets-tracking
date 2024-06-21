@@ -95,7 +95,7 @@ export default function ShipmentCreationForm() {
       }
     },
   });
-  const { control, register, formState, handleSubmit, watch } = form;
+  const { control, formState, handleSubmit, watch } = form;
   const onSubmit = (data: CreateShipmentInputType) => {
     mutate(data);
   };

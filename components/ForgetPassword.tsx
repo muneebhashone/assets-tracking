@@ -49,7 +49,7 @@ const ForgetPassword = ({ token }: { token?: string }) => {
       });
     },
   });
-  const { control, handleSubmit, formState } = form;
+  const { control, handleSubmit } = form;
 
   const forgetPasswordHandler = (data: forgetPasswordFormType) => {
     forgetPassword(data);

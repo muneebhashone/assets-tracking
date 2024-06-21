@@ -21,7 +21,7 @@ import { Input } from "./input";
 import { Button } from "./button";
 import { ScrollArea, ScrollBar } from "./scroll-area";
 import { useState } from "react";
-import { PaginatedUsers } from "@/types";
+import { PaginatedUsers } from "@/types/api.types";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];

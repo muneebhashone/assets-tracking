@@ -8,7 +8,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
-import { ShipmentProps } from "@/types";
+import { ShipmentProps } from "@/types/api.types";
 import Link from "next/link";
 
 export const ShippingCardsView = (props: ShipmentProps) => {

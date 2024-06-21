@@ -15,9 +15,12 @@ export type GetAllShipmentsResponseType = {
 
 export type TrackWithType = "CONTAINER_NUMBER" | "MBL_NUMBER";
 
+export type ShipmentStatus = "PLANNED" | "IN_TRANSIT" | "DELIVERED" | "UNKNOWN";
+
+
 export type Shipment = {
   id: number;
-  status: string | null;
+  status: ShipmentStatus | null;
   carrier: string;
   aggregator: string | null;
   arrivalTime: string | null;

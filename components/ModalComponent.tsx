@@ -1,12 +1,9 @@
 "use client";
 
-import { DetailedHTMLProps, HTMLAttributes } from "react";
+import { HTMLAttributes } from "react";
 import {
   Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
+  DialogContent
 } from "./ui/dialog";
 
 interface ModalProps extends HTMLAttributes<HTMLDivElement> {

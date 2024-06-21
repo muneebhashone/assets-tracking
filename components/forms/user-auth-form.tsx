@@ -10,13 +10,12 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useLogin } from "@/services/auth.mutations";
-import { AUTH_KEY } from "@/utils/constants";
 import { zodResolver } from "@hookform/resolvers/zod";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { useToast } from "../ui/use-toast";
-import Link from "next/link";
 
 const formSchema = z.object({
   email: z
@@ -48,7 +47,7 @@ export default function UserAuthForm() {
       router.push("/dashboard");
     },
     onError(error) {
-      console.log(error);
+      
       toast({
         title: "Error",
         description: error.response?.data.message,

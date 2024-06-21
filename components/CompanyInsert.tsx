@@ -7,7 +7,6 @@ import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/components/ui/use-toast";
-import { IInsertCoins } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -32,7 +31,7 @@ export default function CompanyCredit({ params }: paramsProps) {
     formState: { errors },
     reset,
     register,
-  } = useForm<IInsertCoins>({
+  } = useForm({
     resolver: zodResolver(inserCoinSchema),
   });
   const breadcrumbItems = [
@@ -40,7 +39,7 @@ export default function CompanyCredit({ params }: paramsProps) {
     { title: "Coupens", link: "/dashboard/user/create" },
   ];
 
-  const onSubmit = async (data: IInsertCoins) => {
+  const onSubmit = async (data) => {
     setLoading(true);
     if (data.credits <= 0) {
       toast({
@@ -52,9 +51,9 @@ export default function CompanyCredit({ params }: paramsProps) {
 
       return;
     }
-    const credits = Number(data.credits);
+
     try {
-      const id = Number(params.id);
+ 
       // const update = await insertCoins(id, credits);
       // if (!update) {
       //   toast({

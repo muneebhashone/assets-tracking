@@ -63,7 +63,7 @@ const SetPassword = ({ token }: { token?: string }) => {
       });
     },
   });
-  const { control, handleSubmit, formState } = form;
+  const { control, handleSubmit } = form;
 
   const setPasswordHandler = (data: SetPasswordFormType) => {
     setPassword({

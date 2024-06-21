@@ -38,9 +38,9 @@ import {
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
-interface DataTableProps<Shipment> {
-  columns: ColumnDef<Shipment>[];
-  data: Shipment[];
+interface DataTableProps<TData, TValue> {
+  columns: ColumnDef<TData, TValue>[];
+  data: TData[];
   pageSizeOptions?: number[];
   pageCount: number;
 }
@@ -50,7 +50,7 @@ export function ShipmentTable<Shipment>({
   data,
   pageCount,
   pageSizeOptions = [10, 20, 30, 40, 50],
-}: DataTableProps<Shipment>) {
+}: DataTableProps<Shipment, any>) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -77,7 +77,7 @@ export function ShipmentTable<Shipment>({
 
       return newSearchParams.toString();
     },
-    [searchParams],
+    [],
   );
 
   const [{ pageIndex, pageSize }, setPagination] =
@@ -117,7 +117,7 @@ export function ShipmentTable<Shipment>({
 
   const selectedIds = table
     .getSelectedRowModel()
-    .rows.map(({ original }) => original.id);
+    .rows.map(({ original }) => original.id as number);
 
   const { mutate: deleteBulkShipment } = useBulkDeleteShipment({
     onSuccess(data) {

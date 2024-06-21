@@ -31,20 +31,19 @@ import {
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { toast } from "@/components/ui/use-toast";
-import { User } from "@/types/services/auth.types";
 import { useCurrentUser } from "@/services/auth.mutations";
 import { useCreateUser } from "@/services/user.mutations";
 import { useGetUsers } from "@/services/user.queries";
+import { User } from "@/types/services/auth.types";
 
+import SearchBar from "@/components/SearchBar";
 import { EligibleRolesForCreation, UserRole } from "@/utils/constants";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { PlusCircledIcon } from "@radix-ui/react-icons";
-import { getCoreRowModel } from "@tanstack/react-table";
 import { useSearchParams } from "next/navigation";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import SearchBar from "@/components/SearchBar";
 
 export type CreateUserFormSchemaType = z.infer<typeof createUserSchema>;
 
@@ -62,7 +61,7 @@ const createUserSchema = z.object({
 
 export default function Page() {
   const searchParams = useSearchParams();
-  const tableRef = useRef(null);
+
   const page = Number(searchParams.get("page")) || 1;
   const pageLimit = Number(searchParams.get("limit")) || 10;
   const search = searchParams.get("search") || "";
@@ -108,7 +107,7 @@ export default function Page() {
     pageParam: page,
     searchString: search,
   });
-  console.log(users);
+
 
   return (
     <>

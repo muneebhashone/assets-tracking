@@ -1,7 +1,8 @@
 "use client";
 
+import { useCurrentUser } from "@/services/auth.mutations";
 import { HamburgerMenuIcon } from "@radix-ui/react-icons";
-import { useSession } from "next-auth/react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { menuitems } from "../constants/data";
@@ -9,9 +10,6 @@ import LoginButton from "./LoginButton";
 import Menu from "./Menu";
 import NavLogo from "./NavLogo";
 import { UserNav } from "./layout/user-nav";
-import { useCurrentUser } from "@/services/auth.mutations";
-import { currentUser } from "../services/auth.mutations";
-import Link from "next/link";
 
 const Header = () => {
   const [open, setOpen] = useState(false);

@@ -1,4 +1,4 @@
-import { SearatesSealineApiResponse } from "@/types";
+import { SearatesSealineApiResponse } from "@/types/api.types";
 import { searatesApiAxios } from "@/utils/api.utils";
 import { UseQueryOptions, useQuery } from "@tanstack/react-query";
 

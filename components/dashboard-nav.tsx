@@ -6,9 +6,10 @@ import { usePathname } from "next/navigation";
 import { Icons } from "@/components/icons";
 import { cn } from "@/lib/utils";
 import { User } from "@/types/services/auth.types";
-import { NavItem } from "@/types";
+
 import { Dispatch, SetStateAction } from "react";
-import { checkPermissions } from "@/utils/checkPermissions";
+import { checkPermissions } from "@/utils/user.utils";
+import { NavItem } from "@/types/user.types";
 
 interface DashboardNavProps {
   items: NavItem[];

@@ -1,26 +1,5 @@
-import { Icons } from "@/components/icons";
 import { SEARATES_CODES } from "./messgaes";
-import { createCompanySchema, createUserFormSchema } from "@/lib/form-schema";
-import { infer as zInfer } from "zod";
 
-export interface NavItem {
-  title: string;
-  href?: string;
-  disabled?: boolean;
-  external?: boolean;
-  icon?: keyof typeof Icons;
-  label?: string;
-  description?: string;
-  permissions?: string[];
-}
-
-export interface NavItemWithChildren extends NavItem {
-  items: NavItemWithChildren[];
-}
-
-export interface NavItemWithOptionalChildren extends NavItem {
-  items?: NavItemWithChildren[];
-}
 
 export interface FooterItem {
   title: string;
@@ -32,18 +11,6 @@ export interface FooterItem {
 }
 
 
-
-export interface IInsertCoins {
-  credits: number;
-}
-export interface IShipmentData {
-  containerID: string;
-  containerType: string;
-}
-export interface IResponse {
-  message: string;
-  status: string;
-}
 
 interface Location {
   id: number;
@@ -193,10 +160,3 @@ interface ShippingLine {
   prefixes: string[] | null;
 }
 
-export type MainNavItem = NavItemWithOptionalChildren;
-
-export type SidebarNavItem = NavItemWithChildren;
-
-export type CreateUserSchemaType = zInfer<typeof createUserFormSchema>;
-
-export type CreateCompanySchemaType = zInfer<typeof createCompanySchema>;

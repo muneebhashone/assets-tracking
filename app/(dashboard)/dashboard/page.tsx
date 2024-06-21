@@ -3,7 +3,7 @@
 import { useCurrentUser } from "@/services/auth.mutations";
 import { UserRole } from "@/utils/constants";
 
-export default function page() {
+export default function Page() {
   const { data, isFetching } = useCurrentUser();
 
   return (
