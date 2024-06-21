@@ -54,12 +54,12 @@ export interface IUserModified extends Omit<User, "isActive"> {
   isActive: "Active" | "In Active";
 }
 
-export function ActiveUserTable<IUserModified>({
+export function ActiveUserTable<T extends IUserModified>({
   columns,
   data,
   pageCount,
   pageSizeOptions = [10, 20, 30, 40, 50],
-}: DataTableProps<IUserModified, any>) {
+}: DataTableProps<T, any>) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -116,8 +116,8 @@ export function ActiveUserTable<IUserModified>({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pageIndex, pageSize]);
 
-  const table = useReactTable<IUserModified>({
-    data: tableData as IUserModified[],
+  const table = useReactTable({
+    data: tableData,
     columns,
     pageCount: pageCount ?? -1,
     getCoreRowModel: getCoreRowModel(),
