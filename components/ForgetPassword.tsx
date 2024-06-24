@@ -28,7 +28,6 @@ const ForgetPassword = ({ token }: { token?: string }) => {
   const { push } = useRouter();
 
   const form = useForm<forgetPasswordFormType>({
-    defaultValues: { email: "" },
     resolver: zodResolver(forgetPasswordSchema),
   });
 

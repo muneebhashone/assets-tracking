@@ -1,4 +1,5 @@
 import {
+  ChangePasswordInputType,
   CurrentUserResponseType,
   ForgetPasswordInputType,
   LoginInputType,
@@ -69,6 +70,14 @@ export const resetPassword = async (input: ResetPasswordInputType) => {
 export const forgetPassword = async (input: ForgetPasswordInputType) => {
   const { data } = await apiAxios.post<SuccessResponseType>(
     "/auth/forget-password",
+    input,
+  );
+  return data;
+};
+
+export const changePassword = async (input: ChangePasswordInputType) => {
+  const { data } = await apiAxios.post<SuccessResponseType>(
+    "/auth/change-password",
     input,
   );
   return data;

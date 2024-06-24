@@ -1,8 +1,8 @@
 "use client";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Company } from "@prisma/client";
 import { ColumnDef } from "@tanstack/react-table";
 import { CellAction } from "./cell-action";
+import { Company } from "@/services/companies.queries";
 
 export const columns: ColumnDef<Company>[] = [
   {
@@ -57,7 +57,10 @@ export const columns: ColumnDef<Company>[] = [
     accessorKey: "createdAt",
     header: "Creation Date",
   },
-
+  {
+    accessorKey: "status",
+    header: "Status",
+  },
   {
     id: "actions",
     cell: ({ row }) => <CellAction data={row.original} />,

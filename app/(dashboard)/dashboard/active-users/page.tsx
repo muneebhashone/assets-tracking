@@ -2,7 +2,10 @@
 
 import { ModalCustom } from "@/components/ModalComponent";
 import BreadCrumb from "@/components/breadcrumb";
-import { ActiveUserTable } from "@/components/tables/active-user-table/active-user";
+import {
+  ActiveUserTable,
+  IUserModified,
+} from "@/components/tables/active-user-table/active-user";
 import { columns } from "@/components/tables/active-user-table/columns";
 import { Button } from "@/components/ui/button";
 import {
@@ -85,15 +88,8 @@ export default function Page() {
     },
   });
 
-  const initialValues: CreateUserFormSchemaType = {
-    email: "",
-    name: "",
-    role: "",
-  };
-
   const form = useForm<CreateUserFormSchemaType>({
     resolver: zodResolver(createUserSchema),
-    defaultValues: initialValues,
   });
   const { control, handleSubmit } = form;
 
@@ -107,7 +103,6 @@ export default function Page() {
     pageParam: page,
     searchString: search,
   });
-
 
   return (
     <>
@@ -123,7 +118,7 @@ export default function Page() {
         <Separator />
 
         <Button
-          className="border rounded-md px-4 py-2 bg-[#D3991F] text-white hover:bg-zinc-900"
+          className="border rounded-md px-4 py-2 bg-golden text-white hover:bg-zinc-900"
           onClick={() => setModalOpen((prev) => !prev)}
         >
           Create
@@ -256,7 +251,7 @@ export default function Page() {
                   <CardFooter className="w-full justify-end ">
                     <Button
                       type="submit"
-                      className="w-[25%] border-r-4 bg-[#D3991F]"
+                      className="w-[25%] border-r-4 bg-golden"
                     >
                       <span className="mr-2">Create</span>
                       <PlusCircledIcon />

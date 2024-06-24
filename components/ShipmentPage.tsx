@@ -2,12 +2,12 @@
 
 import { useGetShipments } from "@/services/shipment.queries";
 import { useSearchParams } from "next/navigation";
-import SearchBar from "../SearchBar";
-import ShipmentCreationForm from "../forms/shipment-creation-form";
-import { columns } from "../tables/shipment-table/columns";
-import { ShipmentTable } from "../tables/shipment-table/shipment-table";
+import SearchBar from "./SearchBar";
+import ShipmentCreationForm from "./forms/shipment-creation-form";
+import { columns } from "./tables/shipment-table/columns";
+import { ShipmentTable } from "./tables/shipment-table/shipment-table";
 
-const UserDashboard = () => {
+const ShipmentPage = () => {
   const searchParams = useSearchParams();
 
   const params = {
@@ -29,7 +29,6 @@ const UserDashboard = () => {
       </div>
       <div className="flex my-5 justify-between">
         <ShipmentCreationForm />
-        {/* <Button variant="default">Export as pdf</Button> */}
       </div>
       {Array.isArray(result?.results) ? (
         <>
@@ -38,8 +37,6 @@ const UserDashboard = () => {
             columns={columns}
             pageCount={result.paginatorInfo.pages}
           />
-          {/* <ShippingCardsView shipData={shipmentData.data} /> */}
-          {/* <CardViewPagination paginator={shipmentData?.paginatorInfo} /> */}
         </>
       ) : (
         <h1>No Records</h1>
@@ -48,4 +45,4 @@ const UserDashboard = () => {
   );
 };
 
-export default UserDashboard;
+export default ShipmentPage;

@@ -53,7 +53,6 @@ export default function UserAuthFormSignUp() {
 
   const form = useForm<CreateUserFormSchema>({
     resolver: zodResolver(createUserFormSchema),
-    defaultValues: {},
   });
 
   const onSubmit = async (data: CreateUserFormSchema) => {

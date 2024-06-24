@@ -1,5 +1,6 @@
 "use client";
 import {
+  ChangePasswordInputType,
   CurrentUserResponseType,
   ForgetPasswordInputType,
   LoginInputType,
@@ -19,6 +20,7 @@ import {
 } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import {
+  changePassword,
   currentUser,
   forgetPassword,
   login,
@@ -29,6 +31,7 @@ import {
   setPassword,
 } from "./auth.services";
 import { ErrorResponseType, SuccessResponseType } from "./types.common";
+import { getAllCompanies } from "./companies.queries";
 
 export const useLogin = (
   options?: UseMutationOptions<
@@ -72,9 +75,14 @@ export const useRegisterCompany = (
     RegisterCompanyInputType
   >,
 ) => {
+  const queryClient = useQueryClient();
   return useMutation({
     ...options,
     mutationFn: registerCompany,
+    onSuccess(data, variables, context) {
+      queryClient.removeQueries({ queryKey: [getAllCompanies.name] });
+      options?.onSuccess?.(data, variables, context);
+    },
   });
 };
 
@@ -141,5 +149,18 @@ export const useForgetPassword = (
   return useMutation({
     ...options,
     mutationFn: forgetPassword,
+  });
+};
+
+export const useChangePassword = (
+  options?: UseMutationOptions<
+    SuccessResponseType,
+    ErrorResponseType,
+    ChangePasswordInputType
+  >,
+) => {
+  return useMutation({
+    ...options,
+    mutationFn: changePassword,
   });
 };

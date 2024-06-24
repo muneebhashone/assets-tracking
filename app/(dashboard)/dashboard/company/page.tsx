@@ -1,26 +1,12 @@
+import CompanyPage from "@/components/CompanyPage";
+import { columns } from "@/components/tables/company-table/columns";
+import { CompanyTable } from "@/components/tables/company-table/company-table";
 import { ScrollArea } from "@/components/ui/scroll-area";
-type Props = {
-  searchParams: {
-    [key: string]: string | string[] | undefined;
-  };
-};
-const CompanyPage = async (props: Props) => {
-  // const page = Number(searchParams.page) || 1;
-  // const pageLimit = Number(searchParams.limit) || 10;
-  // const search = String(searchParams.search) || "";
+import { Company, useGetCompanies } from "@/services/companies.queries";
 
-  return (
-    <ScrollArea className="h-full ">
-      <div className="flex-1 space-y-4 p-4 md:p-8 pt-6">
-        {/* <CompanyTable
-          columns={columns}
-          data={company.data as Company[]}
-          pageCount={company.paginatorInfo?.totalRecords || 0}
-          searchKey={search}
-        /> */}
-      </div>
-    </ScrollArea>
-  );
+const Page = async () => {
+return <CompanyPage/>
+
 };
 
-export default CompanyPage;
+export default Page;

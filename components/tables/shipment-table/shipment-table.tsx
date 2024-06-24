@@ -31,6 +31,7 @@ import {
 } from "@/components/ui/table";
 import { toast } from "@/components/ui/use-toast";
 import { useBulkDeleteShipment } from "@/services/shipment.mutations";
+import { Shipment } from "@/services/shipment.queries";
 import {
   DoubleArrowLeftIcon,
   DoubleArrowRightIcon,
@@ -45,7 +46,7 @@ interface DataTableProps<TData, TValue> {
   pageCount: number;
 }
 
-export function ShipmentTable<Shipment>({
+export function ShipmentTable({
   columns,
   data,
   pageCount,
@@ -118,6 +119,7 @@ export function ShipmentTable<Shipment>({
   const selectedIds = table
     .getSelectedRowModel()
     .rows.map(({ original }) => original.id as number);
+  console.log(selectedIds);
 
   const { mutate: deleteBulkShipment } = useBulkDeleteShipment({
     onSuccess(data) {
@@ -147,15 +149,16 @@ export function ShipmentTable<Shipment>({
           deleteBulkShipment({ ids: selectedIds });
         }}
       />
-
-      {Boolean(selectedIds.length) && (
-        <Button
-          className="border rounded-md px-4 py-2 bg-red-700 text-white hover:bg-red-600"
-          onClick={() => setOpenWarning(true)}
-        >
-          Delete
-        </Button>
-      )}
+      <div className="flex justify-start mb-2">
+        {Boolean(selectedIds.length) && (
+          <Button
+            className="border rounded-md px-4 py-2 bg-red-700 text-white hover:bg-red-600"
+            onClick={() => setOpenWarning(true)}
+          >
+            Delete
+          </Button>
+        )}
+      </div>
       <ScrollArea className="rounded-md border h-[calc(80vh-220px)]">
         <Table className="relative">
           <TableHeader>

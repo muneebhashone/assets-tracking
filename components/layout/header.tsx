@@ -16,7 +16,7 @@ export default function Header() {
           </Link>
         </div>
         <div className={cn("block lg:!hidden")}>
-          <MobileSidebar />
+          <MobileSidebar  />
         </div>
 
         <div className="flex items-center gap-2">

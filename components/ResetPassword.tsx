@@ -42,7 +42,6 @@ const ResetPassword = ({ token }: { token?: string }) => {
   const { push } = useRouter();
 
   const form = useForm<ResetPasswordFormType>({
-    defaultValues: { confirmPassword: "", password: "" },
     resolver: zodResolver(resetPasswordFormType),
   });
 
@@ -66,7 +65,6 @@ const ResetPassword = ({ token }: { token?: string }) => {
   const { control, handleSubmit } = form;
 
   const resetPasswordHandler = (data: ResetPasswordFormType) => {
-  
     resetPassword({
       token: String(token),
       ...data,

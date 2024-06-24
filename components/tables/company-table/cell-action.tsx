@@ -7,9 +7,10 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Company } from "@prisma/client";
+import { Company } from "@/services/companies.queries";
 
-import { MoreHorizontal, Trash } from "lucide-react";
+
+import { MoreHorizontal, Trash, Wrench } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 interface CellActionProps {
@@ -35,7 +36,10 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
           <DropdownMenuItem
             onClick={() => router.push(`/dashboard/company/${data.id}`)}
           >
-            <Trash className="mr-2 h-4 w-4" /> Edit
+            <Wrench className="mr-2 h-4 w-4" /> Edit
+          </DropdownMenuItem>
+          <DropdownMenuItem onClick={() => console.log("here")}>
+            <Trash className="mr-2 h-4 w-4" /> Delete
           </DropdownMenuItem>
           {/* <DropdownMenuItem >
             <Trash className="mr-2 h-4 w-4" /> Details

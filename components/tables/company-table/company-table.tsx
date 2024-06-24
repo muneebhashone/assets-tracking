@@ -1,4 +1,5 @@
 "use client";
+import { AlertModal } from "@/components/modal/alert-modal";
 import { Button } from "@/components/ui/button";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import {
@@ -16,7 +17,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Company } from "@prisma/client";
+import { Company } from "@/services/companies.queries";
 import {
   DoubleArrowLeftIcon,
   DoubleArrowRightIcon,
@@ -47,13 +48,12 @@ interface DataTableProps<TData, TValue> {
   };
 }
 
-export function CompanyTable<TData, TValue>({
+export function CompanyTable({
   columns,
   data,
-  searchKey,
   pageCount,
   pageSizeOptions = [10, 20, 30, 40, 50],
-}: DataTableProps<TData, TValue>) {
+}: DataTableProps<Company, any>) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -67,7 +67,7 @@ export function CompanyTable<TData, TValue>({
   const tableData = data.map((entry) => {
     return {
       ...entry,
-      createdAt:moment(entry.createdAt).format("DD-MM-YYYY"),
+      createdAt: moment(entry.createdAt).format("DD-MM-YYYY"),
     };
   });
 
@@ -109,7 +109,7 @@ export function CompanyTable<TData, TValue>({
   }, [pageIndex, pageSize]);
 
   const table = useReactTable({
-    data:tableData,
+    data: tableData,
     columns,
     pageCount: pageCount ?? -1,
     getCoreRowModel: getCoreRowModel(),
@@ -123,41 +123,27 @@ export function CompanyTable<TData, TValue>({
     manualFiltering: true,
   });
 
-  const searchValue = table.getColumn(searchKey)?.getFilterValue() as string;
-
-  React.useEffect(() => {
-    if (searchValue?.length > 0) {
-      router.push(
-        `${pathname}?${createQueryString({
-          page: null,
-          limit: null,
-          search: searchValue,
-        })}`,
-        {
-          scroll: false,
-        },
-      );
-    }
-    if (searchValue?.length === 0 || searchValue === undefined) {
-      router.push(
-        `${pathname}?${createQueryString({
-          page: null,
-          limit: null,
-          search: null,
-        })}`,
-        {
-          scroll: false,
-        },
-      );
-    }
-
-    setPagination((prev) => ({ ...prev, pageIndex: 0 }));
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchValue]);
 
   return (
     <>
+      {/* <AlertModal
+        isOpen={openWarning}
+        loading={false}
+        onClose={() => setOpenWarning(false)}
+        onConfirm={() => {
+          deleteBulkCompany({ ids: selectedIds });
+        }}
+      />
+      <div className="flex justify-start mb-2">
+        {Boolean(selectedIds.length) && (
+          <Button
+            className="border rounded-md px-4 py-2 bg-red-700 text-white hover:bg-red-600"
+            onClick={() => setOpenWarning(true)}
+          >
+            Delete
+          </Button>
+        )}
+      </div> */}
       <ScrollArea className="rounded-md border h-[calc(80vh-220px)]">
         <Table className="relative">
           <TableHeader>

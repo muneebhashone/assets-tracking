@@ -27,20 +27,6 @@ export type RoleType = (typeof rolesEnums)[number];
 export type StatusType = (typeof statusEnums)[number];
 export type PermissionsType = (typeof permissionEnums)[number];
 
-export interface IUser {
-  id: number;
-  email: string;
-  name: string;
-  role: RoleType;
-  isActive: boolean;
-  password?: string;
-  status: StatusType;
-  companyId: number | null;
-  clientId: number | null;
-  permissions: PermissionsType[];
-  credits: number;
-}
-
 export interface NavItem {
   title: string;
   href?: string;

@@ -1,11 +1,13 @@
 "use client";
 import { DashboardNav } from "@/components/dashboard-nav";
-import { navItems } from "@/constants/data";
+// import { navItems } from "@/constants/data";
 import { cn } from "@/lib/utils";
 import { useCurrentUser } from "@/services/auth.mutations";
 import { Skeleton } from "../ui/skeleton";
+import { User } from "@/types/services/auth.types";
+import { NavItem } from "@/types/user.types";
 
-export default function Sidebar() {
+export default function Sidebar({ navItems }: { navItems: NavItem[] }) {
   const { data: user, isLoading } = useCurrentUser();
 
   return (
@@ -33,7 +35,7 @@ export default function Sidebar() {
                 </div>
               </>
             ) : (
-              <DashboardNav user={user?.user as unknown} items={navItems} />
+              <DashboardNav user={user?.user as User} items={navItems} />
             )}
           </div>
         </div>

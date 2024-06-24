@@ -71,7 +71,7 @@ export default function ShipmentCreationForm() {
   };
   const { data, isFetching } = useFetchAllSearatesContainers();
 
-  const form = useForm<CreateShipmentInputType>({
+  const form = useForm<z.infer<typeof CreateShipmentInputSchema>>({
     resolver: zodResolver(CreateShipmentInputSchema),
     defaultValues: initialValues,
   });
@@ -269,7 +269,7 @@ export default function ShipmentCreationForm() {
                       <FormField
                         name="mblNo"
                         control={control}
-                        render={({ field }) => (
+                        render={({ field: { value, ...rest } }) => (
                           <FormItem>
                             <FormLabel
                               htmlFor="mblNo"
@@ -281,7 +281,8 @@ export default function ShipmentCreationForm() {
                               <Input
                                 id="mblNo"
                                 placeholder="Enter Mobile or Lading Number"
-                                {...field}
+                                value={String(value)}
+                                {...rest}
                               />
                             </FormControl>
                             <FormMessage />
@@ -352,7 +353,7 @@ export default function ShipmentCreationForm() {
                     <FormField
                       name="referenceNo"
                       control={control}
-                      render={({ field }) => (
+                      render={({ field: { value, ...rest } }) => (
                         <FormItem>
                           <FormLabel
                             htmlFor="referenceNo"
@@ -364,7 +365,8 @@ export default function ShipmentCreationForm() {
                             <Input
                               id="referenceNo"
                               placeholder="Enter Reference Number"
-                              {...field}
+                              value={String(value)}
+                              {...rest}
                             />
                           </FormControl>
                           <FormMessage />

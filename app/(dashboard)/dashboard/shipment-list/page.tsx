@@ -1,7 +1,8 @@
 "use client";
-import UserDashboard from "@/components/dashboard/UserDashboard";
+
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useCurrentUser } from "../../../../services/auth.mutations";
+import ShipmentPage from "@/components/ShipmentPage";
 
 const ShipmentList = () => {
   const { data: currentUser } = useCurrentUser();
@@ -10,7 +11,7 @@ const ShipmentList = () => {
     <ScrollArea className="h-full ">
       {currentUser?.user ? (
         <div className="flex-1 space-y-4 p-4 md:p-8 pt-6">
-          <UserDashboard />
+          <ShipmentPage />
         </div>
       ) : null}
     </ScrollArea>

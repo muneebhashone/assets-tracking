@@ -11,7 +11,7 @@ import {
 import { toast } from "@/components/ui/use-toast";
 import { useDeletShipment } from "@/services/shipment.mutations";
 import { Shipment } from "@/services/shipment.queries";
-import { MoreHorizontal, Trash } from "lucide-react";
+import { ExternalLink, MoreHorizontal, Trash } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 
@@ -39,7 +39,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
       });
     },
   });
- 
+
   return (
     <>
       <AlertModal
@@ -63,7 +63,10 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
               href={`/dashboard/shipment/${data.id}`}
               className="hover:text-blue-400"
             >
-              View Details
+              <div className="flex">
+                <ExternalLink className="mr-2 h-4 w-4" />
+                View Details
+              </div>
             </Link>
           </DropdownMenuItem>
 

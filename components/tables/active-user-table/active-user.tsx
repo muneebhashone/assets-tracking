@@ -42,7 +42,7 @@ import { toast } from "@/components/ui/use-toast";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
-  data: TData[];
+  data: User[];
   pageSizeOptions?: number[];
   pageCount: number;
   searchParams?: {
@@ -51,15 +51,15 @@ interface DataTableProps<TData, TValue> {
 }
 
 export interface IUserModified extends Omit<User, "isActive"> {
-  isActive: "Active" | "In Active";
+  isActive: "Active" | "In Active" | string;
 }
 
-export function ActiveUserTable<T extends IUserModified>({
+export function ActiveUserTable({
   columns,
   data,
   pageCount,
   pageSizeOptions = [10, 20, 30, 40, 50],
-}: DataTableProps<T, any>) {
+}: DataTableProps<IUserModified, any>) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();

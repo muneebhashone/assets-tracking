@@ -10,16 +10,20 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { createCompanySchema } from "@/lib/form-schema";
-import {
-  RegisterCompanyInputType,
-  useRegisterCompany,
-} from "@/services/auth.mutations";
+import { useRegisterCompany } from "@/services/auth.mutations";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { useToast } from "../ui/use-toast";
+import { RegisterCompanyInputType } from "@/types/services/auth.types";
 
-export default function CompanyAuthFormSignUp() {
+export default function CompanyAuthFormSignUp({
+  redirect = true,
+  closeModal,
+}: {
+  redirect?: boolean;
+  closeModal?: () => void;
+}) {
   const { toast } = useToast();
 
   const router = useRouter();
@@ -31,7 +35,8 @@ export default function CompanyAuthFormSignUp() {
         duration: 3000,
         variant: "default",
       });
-      router.push("/signin");
+      closeModal?.();
+      redirect && router.push("/signin");
     },
     onError(error, variables, context) {
       if (error instanceof Error) {
@@ -43,10 +48,9 @@ export default function CompanyAuthFormSignUp() {
       }
     },
   });
-  const defaultValues = {};
+
   const form = useForm<RegisterCompanyInputType>({
     resolver: zodResolver(createCompanySchema),
-    defaultValues,
   });
 
   const onSubmit = async (data: RegisterCompanyInputType) => {

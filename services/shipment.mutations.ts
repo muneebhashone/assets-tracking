@@ -57,10 +57,11 @@ export const deleteBulkShipments = async (
   input: DeleteBulkShipmentInputType,
 ) => {
   const { ids } = input;
+  console.log({ ids });
   const { data } = await apiAxios.delete<SuccessResponseType>(
     `/shipments/bulk`,
     {
-      params: { ids },
+      params: { ids: ids },
     },
   );
   return data;
