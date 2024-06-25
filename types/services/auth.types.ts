@@ -1,3 +1,5 @@
+import { UserRole } from "@/utils/constants";
+
 export type LoginInputType = {
   email: string;
   password: string;
@@ -27,6 +29,7 @@ export interface ForgetPasswordInputType {
 export interface ChangePasswordInputType {
   newPassword: string;
   currentPassword: string;
+  confirmPassword: string;
 }
 export type RegisterCompanyInputType = {
   name: string;
@@ -49,17 +52,23 @@ export interface User {
   id: number;
   email: string;
   name: string;
-  role:
-    | "WHITE_LABEL_ADMIN"
-    | "WHITE_LABEL_SUB_ADMIN"
-    | "CLIENT_SUPER_USER"
-    | "CLIENT_USER"
-    | "SUPER_ADMIN"
-    | "SUB_ADMIN";
+  phoneNo?: string | null;
+  phoneCountryCode?: string | null;
+  avatar?: string;
+  role: keyof typeof UserRole;
   isActive: boolean;
   password: string;
   status: string;
   credits: number;
   companyId: number;
-  permissions: string[];
+  clientId?: number | null;
+  permissions: UserPermissions[];
 }
+type UserPermissions =
+  | "VIEW_DASHBOARD"
+  | "CREATE_USER"
+  | "CREATE_SHIPMENT"
+  | "DELETE_SHIPMENT"
+  | "DELETE_USER"
+  | "EDIT_SHIPMENT"
+  | "EDIT_USER";

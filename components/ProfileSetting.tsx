@@ -2,15 +2,17 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { useChangePassword, useCurrentUser } from "@/services/auth.mutations";
-import Image from "next/image";
+import { UserRole } from "@/utils/constants";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Edit } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { Separator } from "./ui/separator";
-import { toast } from "./ui/use-toast";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
+import PerSonalInformationForm from "./forms/personal-information-update-form";
+import UploadProfileForm from "./forms/upload-profile-form";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import {
   Form,
   FormControl,
@@ -19,26 +21,41 @@ import {
   FormLabel,
   FormMessage,
 } from "./ui/form";
+import { Separator } from "./ui/separator";
+import { toast } from "./ui/use-toast";
 
-const changePasswordFormSchema = z.object({
-  newPassword: z
-    .string({ required_error: "Password is required" })
-    .min(8, { message: "Password must be at least 8 characters long" })
-    .max(64, { message: "Password must be at most 64 characters long" }),
-  currentPassword: z
-    .string({ required_error: "Confirm password is required" })
-    .min(8, {
-      message: "Confirm password must be at least 8 characters long",
-    })
-    .max(64, {
-      message: "Confirm password must be at most 64 characters long",
-    }),
-});
+const changePasswordFormSchema = z
+  .object({
+    newPassword: z
+      .string({ required_error: "Password is required" })
+      .min(8, { message: "Password must be at least 8 characters long" })
+      .max(64, { message: "Password must be at most 64 characters long" }),
+    currentPassword: z
+      .string({ required_error: "Confirm password is required" })
+      .min(8, {
+        message: "Confirm password must be at least 8 characters long",
+      })
+      .max(64, {
+        message: "Confirm password must be at most 64 characters long",
+      }),
+    confirmPassword: z
+      .string({ required_error: "Confirm password is required" })
+      .min(8, {
+        message: "Confirm password must be at least 8 characters long",
+      })
+      .max(64, {
+        message: "Confirm password must be at most 64 characters long",
+      }),
+  })
+  .refine((data) => data.newPassword === data.confirmPassword, {
+    message: "Password and Confirm password must match",
+    path: ["confirmPassword"],
+  });
 
 type ChangePasswordFormType = z.infer<typeof changePasswordFormSchema>;
 const ProfileSetting = () => {
   const { push } = useRouter();
-  const { data: user } = useCurrentUser();
+  const { data: user, isLoading: userLoading } = useCurrentUser();
   const { mutate: changePassword } = useChangePassword({
     onSuccess(data) {
       toast({
@@ -65,50 +82,40 @@ const ProfileSetting = () => {
   const handleChangePassword = (data: ChangePasswordFormType) => {
     changePassword(data);
   };
-
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
+  console.log(user?.user);
   return (
     <div>
+      <UploadProfileForm modalOpen={modalOpen} setModalOpen={setModalOpen} />
       <div className="px-4 space-y-6 md:px-6 mb-8">
         <div className="flex items-center  flex-col">
-          <Image
-            src="/placeholder.svg"
-            alt="Avatar"
-            width={200}
-            height={200}
-            className="border rounded-full mb-2"
-          />
+          <div className="relative ">
+            <Avatar className="w-[200px] h-[200px] cursor-pointer">
+              <AvatarImage
+                src={user?.user.avatar}
+                onClick={() => setModalOpen(true)}
+              />
+              <AvatarFallback>{user?.user.name[0]}</AvatarFallback>
+            </Avatar>
+            <div className="rounded-full bg-white  absolute left-[70%] top-[70%] hover:text-blue-600 hover:bg-blue-50 cursor-pointer w-8 h-8 flex justify-center items-center">
+              <Edit onClick={() => setModalOpen(true)} />{" "}
+            </div>
+          </div>
 
-          <h1 className="text-2xl font-bold">Catherine Grant</h1>
-          <p className="text-gray-500 dark:text-gray-400">Product Designer</p>
+          <h1 className="text-2xl font-bold">{user?.user?.name}</h1>
+          <p className="text-gray-500 dark:text-gray-400">
+            {!userLoading && UserRole[user?.user.role as keyof typeof UserRole]}
+          </p>
         </div>
 
         <div className="space-y-6">
           <div className="space-y-2">
             <h2 className="text-lg font-semibold">Personal Information</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <Label htmlFor="name">Name</Label>
-                <Input
-                  id="name"
-                  placeholder="Enter your name"
-                  defaultValue="Catherine Grant"
-                />
-              </div>
-              <div>
-                <Label htmlFor="email">Email</Label>
-                <Input id="email" placeholder="Enter your email" type="email" />
-              </div>
-              <div>
-                <Label htmlFor="phone">Phone</Label>
-                <Input id="phone" placeholder="Enter your phone" type="tel" />
-              </div>
-            </div>
+            <PerSonalInformationForm />
           </div>
-          <Button size="lg" className="mt-10 bg-golden">
-            Save
-          </Button>
+
           <Separator />
-          {(user?.user.role === "WHITE_LABEL_ADMIN" ||
+          {/* {(user?.user.role === "WHITE_LABEL_ADMIN" ||
             user?.user.role === "WHITE_LABEL_SUB_ADMIN") && (
             <>
               <div className="space-y-2">
@@ -145,7 +152,7 @@ const ProfileSetting = () => {
               </Button>
               <Separator />
             </>
-          )}
+          )} */}
           <div className="space-y-2">
             <h2 className="text-lg font-semibold">Change Password</h2>
 
@@ -186,6 +193,27 @@ const ProfileSetting = () => {
                             <Input
                               type="password"
                               placeholder="Enter New Password"
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                  <div>
+                    <FormField
+                      control={control}
+                      name="confirmPassword"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel className="block text-xs mb-1">
+                            Confirm Password
+                          </FormLabel>
+                          <FormControl>
+                            <Input
+                              type="password"
+                              placeholder="Re-enter new Password"
                               {...field}
                             />
                           </FormControl>

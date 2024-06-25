@@ -1,10 +1,8 @@
 "use client";
 
 import { HTMLAttributes } from "react";
-import {
-  Dialog,
-  DialogContent
-} from "./ui/dialog";
+import { Dialog, DialogContent, DialogHeader } from "./ui/dialog";
+import { DialogDescription } from "@radix-ui/react-dialog";
 
 interface ModalProps extends HTMLAttributes<HTMLDivElement> {
   isOpen: boolean;
@@ -26,10 +24,7 @@ export const ModalCustom = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={onChange}>
-      <DialogContent
-        className={`${rest.className}`}
-        {...rest}
-      >
+      <DialogContent className={`${rest.className}`} {...rest}>
         <div>{children}</div>
       </DialogContent>
     </Dialog>

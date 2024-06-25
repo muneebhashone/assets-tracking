@@ -3,6 +3,8 @@ import { ColumnDef } from "@tanstack/react-table";
 import { CellAction } from "./cell-action";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Shipment } from "@/services/shipment.queries";
+import Link from "next/link";
+import UploadedFilesView from "@/components/UploadedFilesView";
 
 export const columns: ColumnDef<Shipment>[] = [
   {
@@ -59,6 +61,14 @@ export const columns: ColumnDef<Shipment>[] = [
   {
     accessorKey: "isTracking",
     header: "In Tracking",
+  },
+  {
+    header: "Files",
+
+    cell: ({ row }) =>(row?.original?.files?.length) && <UploadedFilesView data={row.original}/>,
+
+    maxSize: 20,
+    minSize: 30,
   },
   {
     id: "actions",

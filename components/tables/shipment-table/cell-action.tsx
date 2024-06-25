@@ -1,4 +1,5 @@
 "use client";
+import UploadShipmentFile from "@/components/forms/upload-shipment-file-form";
 import { AlertModal } from "@/components/modal/alert-modal";
 import { Button } from "@/components/ui/button";
 import {
@@ -9,9 +10,23 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { toast } from "@/components/ui/use-toast";
-import { useDeletShipment } from "@/services/shipment.mutations";
+import {
+  useBuildShipmentShareableLink,
+  useDeletShipment,
+  useDiscardShipmentShareableLink,
+  useSetFilesShareable,
+} from "@/services/shipment.mutations";
 import { Shipment } from "@/services/shipment.queries";
-import { ExternalLink, MoreHorizontal, Trash } from "lucide-react";
+import {
+  ClipboardX,
+  Cloud,
+  ExternalLink,
+  LinkIcon,
+  MoreHorizontal,
+  ToggleLeft,
+  ToggleRight,
+  Trash,
+} from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 
@@ -21,6 +36,8 @@ interface CellActionProps {
 
 export const CellAction: React.FC<CellActionProps> = ({ data }) => {
   const [warningOpen, setWarningOpen] = useState<boolean>(false);
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
+  const [shareableLink, setShareableLink] = useState<string | null>(null);
   const { mutate: deleteShipment } = useDeletShipment({
     onSuccess(data) {
       toast({
@@ -39,6 +56,59 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
       });
     },
   });
+  const { mutate: toggleFileShare } = useSetFilesShareable({
+    onSuccess() {
+      toast({
+        variant: "default",
+        description: `Sharing ${data.shareFiles ? "Disabled" : "Enabled"} `,
+        title: "Success",
+      });
+    },
+    onError(error) {
+      toast({
+        variant: "destructive",
+        description: error.response?.data.message,
+        title: "Error",
+      });
+    },
+  });
+  const { mutate: createLink } = useBuildShipmentShareableLink({
+    async onSuccess(data) {
+      toast({
+        variant: "default",
+        description: "Link generated and copied to clipboard",
+        title: "Success",
+      });
+      setShareableLink(data.data.shareableLink);
+      await navigator.clipboard.writeText(data.data.shareableLink);
+      setWarningOpen(false);
+    },
+    onError(error) {
+      toast({
+        variant: "destructive",
+        description: error.response?.data.message,
+        title: "Error",
+      });
+    },
+  });
+
+  const { mutate: discardLink } = useDiscardShipmentShareableLink({
+    onSuccess(data) {
+      toast({
+        variant: "default",
+        description: "Share link discarded",
+        title: "Success",
+      });
+      setShareableLink(null);
+    },
+    onError(error) {
+      toast({
+        variant: "destructive",
+        description: error.response?.data.message,
+        title: "Error",
+      });
+    },
+  });
 
   return (
     <>
@@ -47,6 +117,11 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
         onClose={() => setWarningOpen(false)}
         onConfirm={() => deleteShipment({ id: data.id })}
         loading={false}
+      />
+      <UploadShipmentFile
+        modalOpen={modalOpen}
+        setModalOpen={setModalOpen}
+        shipmentId={data.id}
       />
       <DropdownMenu modal={false}>
         <DropdownMenuTrigger asChild>
@@ -73,6 +148,43 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
           <DropdownMenuItem onClick={() => setWarningOpen(true)}>
             <Trash className="mr-2 h-4 w-4" /> Delete
           </DropdownMenuItem>
+
+          {(data?.files?.length) &&<DropdownMenuItem
+            onClick={() =>
+              toggleFileShare({
+                filesShareable: !data.shareFiles,
+                shipmentId: data.id,
+              })
+            }
+          >
+            { data.shareFiles ? (
+              <>
+                <ToggleRight className="mr-2 h-4 w-4" /> Disable File Share
+              </>
+            ) : (
+              <>
+                <ToggleLeft className="mr-2 h-4 w-4" /> Enable File Share
+              </>
+            )}
+          </DropdownMenuItem>}
+
+          <DropdownMenuItem onClick={() => setModalOpen(true)}>
+            <Cloud className="mr-2 h-4 w-4" /> Upload File
+          </DropdownMenuItem>
+
+          {shareableLink ? (
+            <DropdownMenuItem
+              onClick={() => discardLink({ shipmentId: String(data.id) })}
+            >
+              <ClipboardX className="mr-2 h-4 w-4" /> Discard Shareable Link
+            </DropdownMenuItem>
+          ) : (
+            <DropdownMenuItem
+              onClick={() => createLink({ shipmentId: String(data.id) })}
+            >
+              <LinkIcon className="mr-2 h-4 w-4" /> Generate Sharable Link
+            </DropdownMenuItem>
+          )}
         </DropdownMenuContent>
       </DropdownMenu>
     </>

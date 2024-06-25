@@ -9,11 +9,19 @@ import { ErrorResponseType, SuccessResponseType } from "./types.common";
 import { CreateUserFormSchemaType } from "@/app/(dashboard)/dashboard/active-users/page";
 import { User } from "@/types/services/auth.types";
 import { getUsers } from "./user.queries";
+import { ProfileImageUploadResponseType } from "./upload.mutations";
+import { currentUser } from "./auth.services";
 
 //types
 export interface CreateUserInputType {
   email: string;
   name: string;
+}
+
+export interface ProfileDataUpdateInputType {
+  name: string;
+  phoneNo: string | null;
+  phoneCountryCode: string | null;
 }
 
 export interface CreateUserResponseType {
@@ -185,6 +193,14 @@ export const deleteBulkUsers = async (input: DeleteBulkUsersInputType) => {
   return data;
 };
 
+export const profileUpdateData = async (input: ProfileDataUpdateInputType) => {
+  const { data } = await apiAxios.patch<ProfileImageUploadResponseType>(
+    `/users/profile`,
+    input,
+  );
+  return data;
+};
+
 //hooks
 
 export const useCreateUser = (
@@ -311,6 +327,24 @@ export const useBulkDeleteUser = (
     mutationFn: deleteBulkUsers,
     async onSuccess(data, variables, context) {
       await queryClient.invalidateQueries({ queryKey: [getUsers.name] });
+      options?.onSuccess?.(data, variables, context);
+    },
+  });
+};
+
+export const useUpdateProfileData = (
+  options?: UseMutationOptions<
+    ProfileImageUploadResponseType,
+    ErrorResponseType,
+    ProfileDataUpdateInputType
+  >,
+) => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    ...options,
+    mutationFn: profileUpdateData,
+    async onSuccess(data, variables, context) {
+      await queryClient.invalidateQueries({ queryKey: [currentUser.name] });
       options?.onSuccess?.(data, variables, context);
     },
   });

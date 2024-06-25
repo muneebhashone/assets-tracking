@@ -17,7 +17,6 @@ export type TrackWithType = "CONTAINER_NUMBER" | "MBL_NUMBER";
 
 export type ShipmentStatus = "PLANNED" | "IN_TRANSIT" | "DELIVERED" | "UNKNOWN";
 
-
 export type Shipment = {
   id: number;
   status: ShipmentStatus | null;
@@ -33,10 +32,12 @@ export type Shipment = {
   companyId: string | null;
   creatorId: number;
   referenceNo: string;
-  followers: any[];
-  tags: any[];
+  followers: string[];
+  tags: string[];
   progress: string;
+  shareFiles: boolean;
   isTracking: boolean;
+  files: string[];
 };
 
 export type PaginatorInfoType = {
