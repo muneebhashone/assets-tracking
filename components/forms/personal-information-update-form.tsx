@@ -1,7 +1,13 @@
 "use client";
 
-import React from "react";
-import { Label } from "../ui/label";
+import { useCurrentUser } from "@/services/auth.mutations";
+import { useUpdateProfileData } from "@/services/user.mutations";
+import { User } from "@/types/services/auth.types";
+import { useForm } from "react-hook-form";
+import PhoneInput, { CountryData } from "react-phone-input-2";
+import "react-phone-input-2/lib/style.css";
+import { z } from "zod";
+import { Button } from "../ui/button";
 import {
   Form,
   FormControl,
@@ -11,14 +17,7 @@ import {
   FormMessage,
 } from "../ui/form";
 import { Input } from "../ui/input";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { useCurrentUser } from "@/services/auth.mutations";
-import { User } from "@/types/services/auth.types";
-import PhoneInput, { CountryData } from "react-phone-input-2";
-import "react-phone-input-2/lib/style.css";
-import { Button } from "../ui/button";
-import { useUpdateProfileData } from "@/services/user.mutations";
+import { Label } from "../ui/label";
 import { toast } from "../ui/use-toast";
 
 const profileUpdateFormSchema = z.object({

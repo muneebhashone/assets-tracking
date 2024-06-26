@@ -7,14 +7,6 @@ type PageProps = {
   params: { trackingNumber: string };
 };
 export default async function Component(props: PageProps) {
-  // const session = await auth();
-  // const shipData: ShipmentData = (await getShipmentByTrackingNumber(
-  //   params.trackingNumber as string,
-  // )) as ShipmentData;
-  // if (!params.trackingNumber) {
-  //   return null;
-  // }
-
   return (
     <div className="h-[100%] overflow-y-scroll">
       <div className="flex items-center h-14 border-b px-4 md:h-16 bg-gray-100/40 dark:bg-gray-800/40">

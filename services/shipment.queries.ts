@@ -2,10 +2,15 @@ import { apiAxios } from "@/utils/api.utils";
 import { UseQueryOptions, useQuery } from "@tanstack/react-query";
 import { ErrorResponseType } from "./types.common";
 
+//types
 export type GetAllShipmentsInputType = {
   searchString: string;
   limitParam: number;
   pageParam: number;
+};
+
+export type GetSharedShipmentInputType = {
+  token: string;
 };
 
 export type GetAllShipmentsResponseType = {
@@ -13,6 +18,10 @@ export type GetAllShipmentsResponseType = {
   paginatorInfo: PaginatorInfoType;
 };
 
+export type GetSharedShipmentResponseType = {
+  data: Shipment;
+  status: string;
+};
 export type TrackWithType = "CONTAINER_NUMBER" | "MBL_NUMBER";
 
 export type ShipmentStatus = "PLANNED" | "IN_TRANSIT" | "DELIVERED" | "UNKNOWN";
@@ -23,7 +32,7 @@ export type Shipment = {
   carrier: string;
   aggregator: string | null;
   arrivalTime: string | null;
-  createdAt: Date;
+  createdAt: string;
   sealine: string | null;
   containerNo: string;
   mblNo: string;
@@ -38,6 +47,7 @@ export type Shipment = {
   shareFiles: boolean;
   isTracking: boolean;
   files: string[];
+  shareToken?: string;
 };
 
 export type PaginatorInfoType = {
@@ -50,6 +60,7 @@ export type PaginatorInfoType = {
   pageSize: number;
 };
 
+//services
 export const getShipments = async (input: GetAllShipmentsInputType) => {
   const { data } = await apiAxios.get<GetAllShipmentsResponseType>(
     "/shipments",
@@ -59,6 +70,18 @@ export const getShipments = async (input: GetAllShipmentsInputType) => {
   return data;
 };
 
+export const viewSharedShipment = async (input: GetSharedShipmentInputType) => {
+  const { token } = input;
+  const { data } = await apiAxios.get<GetSharedShipmentResponseType>(
+    "/shipments/share/view-shipment",
+    {
+      params: { token },
+    },
+  );
+  return data;
+};
+
+//hooks
 export const useGetShipments = (
   input: GetAllShipmentsInputType,
   options?: UseQueryOptions<
@@ -72,5 +95,20 @@ export const useGetShipments = (
     queryFn: async () => await getShipments(input),
     queryKey: [getShipments.name, JSON.stringify(input)],
     refetchInterval: 3000,
+  });
+};
+
+export const useGetSharedShipment = (
+  input: GetSharedShipmentInputType,
+  options?: UseQueryOptions<
+    unknown,
+    ErrorResponseType,
+    GetSharedShipmentResponseType
+  >,
+) => {
+  return useQuery({
+    ...options,
+    queryFn: async () => await viewSharedShipment(input),
+    queryKey: [viewSharedShipment.name, JSON.stringify(input)],
   });
 };

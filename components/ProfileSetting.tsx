@@ -83,7 +83,7 @@ const ProfileSetting = () => {
     changePassword(data);
   };
   const [modalOpen, setModalOpen] = useState<boolean>(false);
-  console.log(user?.user);
+
   return (
     <div>
       <UploadProfileForm modalOpen={modalOpen} setModalOpen={setModalOpen} />
@@ -115,44 +115,7 @@ const ProfileSetting = () => {
           </div>
 
           <Separator />
-          {/* {(user?.user.role === "WHITE_LABEL_ADMIN" ||
-            user?.user.role === "WHITE_LABEL_SUB_ADMIN") && (
-            <>
-              <div className="space-y-2">
-                <h2 className="text-lg font-semibold">Company Information</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <Label htmlFor="name">Name</Label>
-                    <Input
-                      id="name"
-                      placeholder="Enter your name"
-                      defaultValue="Catherine Grant"
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="email">Email</Label>
-                    <Input
-                      id="email"
-                      placeholder="Enter your email"
-                      type="email"
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="phone">Phone</Label>
-                    <Input
-                      id="phone"
-                      placeholder="Enter your phone"
-                      type="tel"
-                    />
-                  </div>
-                </div>
-              </div>
-              <Button size="lg" className="mt-10 bg-golden">
-                Save
-              </Button>
-              <Separator />
-            </>
-          )} */}
+
           <div className="space-y-2">
             <h2 className="text-lg font-semibold">Change Password</h2>
 
@@ -225,7 +188,7 @@ const ProfileSetting = () => {
                 </div>
                 <div className="mt-8">
                   <Button size="lg" className="bg-golden" type="submit">
-                    Save
+                    Submit
                   </Button>
                 </div>
               </form>

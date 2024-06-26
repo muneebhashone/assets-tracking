@@ -3,8 +3,7 @@
 import { ModalCustom } from "@/components/ModalComponent";
 import BreadCrumb from "@/components/breadcrumb";
 import {
-  ActiveUserTable,
-  IUserModified,
+  ActiveUserTable
 } from "@/components/tables/active-user-table/active-user";
 import { columns } from "@/components/tables/active-user-table/columns";
 import { Button } from "@/components/ui/button";

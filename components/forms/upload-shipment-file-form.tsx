@@ -51,7 +51,7 @@ const UploadShipmentFile = ({
         description: data.message,
         title: "Success",
       });
-      acceptedFiles.splice(acceptedFiles?.[0]);
+      acceptedFiles.splice(0);
       setModalOpen(false);
     },
     onError(error) {
@@ -104,7 +104,8 @@ const UploadShipmentFile = ({
             <p className="text-center ">File Uploaded</p>
           ) : (
             <p className="text-center align-middle">
-              Drag 'n' drop some files here, or click to select files
+              Drag &lsquo;n&rsquo; drop some files here, or click to select
+              files
             </p>
           )}
         </div>

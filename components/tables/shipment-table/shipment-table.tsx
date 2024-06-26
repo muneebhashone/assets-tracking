@@ -119,7 +119,6 @@ export function ShipmentTable({
   const selectedIds = table
     .getSelectedRowModel()
     .rows.map(({ original }) => original.id as number);
-  console.log(selectedIds);
 
   const { mutate: deleteBulkShipment } = useBulkDeleteShipment({
     onSuccess(data) {

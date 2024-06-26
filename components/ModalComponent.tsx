@@ -1,8 +1,7 @@
 "use client";
 
 import { HTMLAttributes } from "react";
-import { Dialog, DialogContent, DialogHeader } from "./ui/dialog";
-import { DialogDescription } from "@radix-ui/react-dialog";
+import { Dialog, DialogContent } from "./ui/dialog";
 
 interface ModalProps extends HTMLAttributes<HTMLDivElement> {
   isOpen: boolean;

@@ -1,10 +1,9 @@
 "use client";
-import { ColumnDef } from "@tanstack/react-table";
-import { CellAction } from "./cell-action";
+import UploadedFilesView from "@/components/UploadedFilesView";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Shipment } from "@/services/shipment.queries";
-import Link from "next/link";
-import UploadedFilesView from "@/components/UploadedFilesView";
+import { ColumnDef } from "@tanstack/react-table";
+import { CellAction } from "./cell-action";
 
 export const columns: ColumnDef<Shipment>[] = [
   {
@@ -65,7 +64,8 @@ export const columns: ColumnDef<Shipment>[] = [
   {
     header: "Files",
 
-    cell: ({ row }) =>(row?.original?.files?.length) && <UploadedFilesView data={row.original}/>,
+    cell: ({ row }) =>
+      row?.original?.files?.length && <UploadedFilesView data={row.original} />,
 
     maxSize: 20,
     minSize: 30,

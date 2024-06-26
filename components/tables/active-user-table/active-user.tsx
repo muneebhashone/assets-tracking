@@ -12,6 +12,8 @@ import React, { useState } from "react";
 
 import { Button } from "@/components/ui/button";
 
+import { AlertModal } from "@/components/modal/alert-modal";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import {
   Select,
   SelectContent,
@@ -27,18 +29,15 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { toast } from "@/components/ui/use-toast";
+import { useBulkDeleteUser } from "@/services/user.mutations";
+import { User } from "@/types/services/auth.types";
 import {
   DoubleArrowLeftIcon,
   DoubleArrowRightIcon,
 } from "@radix-ui/react-icons";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
-import { User } from "@/types/services/auth.types";
-import SearchBar from "@/components/SearchBar";
-import { AlertModal } from "@/components/modal/alert-modal";
-import { useBulkDeleteUser } from "@/services/user.mutations";
-import { toast } from "@/components/ui/use-toast";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
