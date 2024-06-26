@@ -44,7 +44,7 @@ const PerSonalInformationForm = () => {
   const { data: user, isLoading: userLoading } = useCurrentUser();
 
   const { name, phoneNo, phoneCountryCode, email, ...other } =
-    user?.user as User;
+    (user?.user as User) ?? {};
   const form = useForm<ProfileUpdateFormType>({
     defaultValues: !userLoading
       ? { name, phoneNo, phoneCountryCode, email }
