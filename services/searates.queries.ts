@@ -19,7 +19,26 @@ export const fetchAllSearatesContainers = async () => {
   return data;
 };
 
+export const fetchAllSearatesContainerSetup = async () => {
+  const res =
+    await searatesApiAxios.get<SearatesSealineApiResponse>(`/setup/sealines`);
+  const { data } = res;
+
+  return data;
+};
+
+
 export const useFetchAllSearatesContainers = (
+  options?: UseQueryOptions<SearatesSealineApiResponse, unknown>,
+) => {
+  return useQuery({
+    ...options,
+    queryFn: fetchAllSearatesContainers,
+    queryKey: [fetchAllSearatesContainers.name],
+  });
+};
+
+export const useFetchAllSearatesContainerSetup = (
   options?: UseQueryOptions<SearatesSealineApiResponse, unknown>,
 ) => {
   return useQuery({

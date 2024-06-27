@@ -1,27 +1,16 @@
 "use client";
+import ProtectedCheckbox from "@/components/ProtectedCheckbox";
 import UploadedFilesView from "@/components/UploadedFilesView";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Shipment } from "@/services/shipment.queries";
 import { ColumnDef } from "@tanstack/react-table";
 import { CellAction } from "./cell-action";
+import { TrackWithDisplay } from "@/utils/constants";
 
 export const columns: ColumnDef<Shipment>[] = [
   {
     id: "select",
-    header: ({ table }) => (
-      <Checkbox
-        checked={table.getIsAllPageRowsSelected()}
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
-      />
-    ),
+    header: ({ table }) => <ProtectedCheckbox table={table} type="shipment" />,
+    cell: ({ row }) => <ProtectedCheckbox row={row} type="shipment" />,
     enableSorting: false,
     enableHiding: false,
   },
@@ -30,8 +19,8 @@ export const columns: ColumnDef<Shipment>[] = [
     header: "Type",
   },
   {
-    accessorKey: "trackWith",
     header: "Track With",
+    cell: ({ row }) => <div> {TrackWithDisplay[row.original.trackWith]}</div>,
   },
   {
     accessorKey: "containerNo",

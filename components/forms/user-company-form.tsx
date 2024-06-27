@@ -5,7 +5,6 @@ import {
   FormControl,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
@@ -16,6 +15,7 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { useToast } from "../ui/use-toast";
 import { RegisterCompanyInputType } from "@/types/services/auth.types";
+import { Label } from "../ui/label";
 
 export default function CompanyAuthFormSignUp({
   redirect = true,
@@ -68,7 +68,7 @@ export default function CompanyAuthFormSignUp({
             name="companyName"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Company Name</FormLabel>
+                <Label>Company Name</Label>
                 <FormControl>
                   <Input
                     type="text"
@@ -86,7 +86,7 @@ export default function CompanyAuthFormSignUp({
             name="country"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Country</FormLabel>
+                <Label>Country</Label>
                 <FormControl>
                   <Input
                     type="text"
@@ -104,7 +104,7 @@ export default function CompanyAuthFormSignUp({
             name="city"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>City</FormLabel>
+                <Label>City</Label>
                 <FormControl>
                   <Input
                     type="text"
@@ -122,7 +122,7 @@ export default function CompanyAuthFormSignUp({
             name="name"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Admin Name</FormLabel>
+                <Label>Admin Name</Label>
                 <FormControl>
                   <Input
                     type="text"
@@ -140,7 +140,7 @@ export default function CompanyAuthFormSignUp({
             name="email"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Email</FormLabel>
+                <Label>Email</Label>
                 <FormControl>
                   <Input
                     type="email"
@@ -158,7 +158,7 @@ export default function CompanyAuthFormSignUp({
             name="password"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Password</FormLabel>
+                <Label>Password</Label>
                 <FormControl>
                   <Input
                     type="password"

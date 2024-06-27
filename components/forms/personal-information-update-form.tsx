@@ -13,7 +13,6 @@ import {
   FormControl,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from "../ui/form";
 import { Input } from "../ui/input";
@@ -83,9 +82,9 @@ const PerSonalInformationForm = () => {
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70 block text-xs mb-1">
+                  <Label className="font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70 block text-xs mb-1">
                     Name
-                  </FormLabel>
+                  </Label>
                   <FormControl>
                     <Input placeholder="Enter your name..." {...field} />
                   </FormControl>

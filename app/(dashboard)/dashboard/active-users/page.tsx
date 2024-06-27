@@ -2,9 +2,7 @@
 
 import { ModalCustom } from "@/components/ModalComponent";
 import BreadCrumb from "@/components/breadcrumb";
-import {
-  ActiveUserTable
-} from "@/components/tables/active-user-table/active-user";
+import { ActiveUserTable } from "@/components/tables/active-user-table/active-user";
 import { columns } from "@/components/tables/active-user-table/columns";
 import { Button } from "@/components/ui/button";
 import {
@@ -19,7 +17,6 @@ import {
   FormControl,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { Heading } from "@/components/ui/heading";
@@ -46,6 +43,7 @@ import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { Label } from "@/components/ui/label";
 
 export type CreateUserFormSchemaType = z.infer<typeof createUserSchema>;
 
@@ -155,12 +153,12 @@ export default function Page() {
                         control={control}
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel
+                            <Label
                               htmlFor="email"
                               className="text-neutral-500 font-medium"
                             >
                               Email
-                            </FormLabel>
+                            </Label>
                             <FormControl>
                               <Input
                                 id="email"
@@ -178,12 +176,12 @@ export default function Page() {
                         control={control}
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel
+                            <Label
                               htmlFor="name"
                               className="text-neutral-500 font-medium"
                             >
                               Name
-                            </FormLabel>
+                            </Label>
                             <FormControl>
                               <Input
                                 id="name"
@@ -204,12 +202,12 @@ export default function Page() {
                         control={control}
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel
+                            <Label
                               htmlFor="role"
                               className="text-neutral-500 font-medium"
                             >
                               Role
-                            </FormLabel>
+                            </Label>
                             <FormControl>
                               <Select
                                 onValueChange={field.onChange}

@@ -196,6 +196,19 @@ const ViewShipmentPage = ({ token }: { token: string }) => {
                 </span>
               </div>
               <div className="flex ">
+                <span className="font-semibold">Progress:</span>
+                <span className="ml-2">
+                  {" "}
+                  {isLoading ? (
+                    <Skeleton className="h-6 w-[100px]  py-2" />
+                  ) : data?.data.progress ? (
+                    data?.data.progress
+                  ) : (
+                    "-"
+                  )}{" "}
+                </span>
+              </div>
+              <div className="flex ">
                 <span className="font-semibold">Tags :</span>{" "}
                 {isLoading ? (
                   <Skeleton className="h-6 w-[100px]  py-2 ms-2" />
@@ -222,18 +235,18 @@ const ViewShipmentPage = ({ token }: { token: string }) => {
         </div>
       </div>
 
-      {data?.data?.followers.length && (
+      {Boolean(data?.data?.followers.length) && (
         <div className="flex-1 overflow-y-auto p-4 md:p-6">
           <div className="grid gap-6 md:grid-cols-1 lg:grid-cols-1">
             <div className="bg-gray-100 p-6 rounded-lg shadow-md">
-              <div className="flex items-center ">
-                <span className="font-semibold me-4">Followers : {" "}</span>
+              <div className="flex items-start ">
+                <span className="font-semibold me-4 mt-2">Followers : </span>
 
-                <div className="relative ">
+                <div>
                   {data?.data?.followers.length &&
                     data?.data?.followers?.map((value) => {
                       return (
-                        <>
+                        <div className="relative mb-3">
                           <Input
                             type="text"
                             value={value}
@@ -244,7 +257,7 @@ const ViewShipmentPage = ({ token }: { token: string }) => {
                             <MailCheckIcon />
                             <div className="w-[2px] h-10 bg-[#A8A8A8] ml-2"></div>
                           </div>
-                        </>
+                        </div>
                       );
                     })}
                 </div>

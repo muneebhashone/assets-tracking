@@ -5,7 +5,6 @@ import {
   FormControl,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
@@ -15,6 +14,7 @@ import { useGetCompanies } from "@/services/companies.queries";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
+import { Label } from "../ui/label";
 import {
   Select,
   SelectContent,
@@ -77,7 +77,7 @@ export default function UserAuthFormSignUp() {
             name="email"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Email</FormLabel>
+                <Label>Email</Label>
                 <FormControl>
                   <Input
                     type="email"
@@ -95,7 +95,7 @@ export default function UserAuthFormSignUp() {
             name="password"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Password</FormLabel>
+                <Label>Password</Label>
                 <FormControl>
                   <Input
                     type="password"
@@ -113,7 +113,7 @@ export default function UserAuthFormSignUp() {
             name="name"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Name</FormLabel>
+                <Label>Name</Label>
                 <FormControl>
                   <Input
                     type="text"
@@ -131,7 +131,7 @@ export default function UserAuthFormSignUp() {
             name="companyId"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Company</FormLabel>
+                <Label>Company</Label>
                 <FormControl>
                   <Select
                     onValueChange={field.onChange}

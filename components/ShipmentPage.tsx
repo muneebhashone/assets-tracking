@@ -6,6 +6,9 @@ import SearchBar from "./SearchBar";
 import ShipmentCreationForm from "./forms/shipment-creation-form";
 import { columns } from "./tables/shipment-table/columns";
 import { ShipmentTable } from "./tables/shipment-table/shipment-table";
+import { checkPermissions } from "@/utils/user.utils";
+import { useCurrentUser } from "@/services/auth.mutations";
+import { UserPermissions } from "@/types/services/auth.types";
 
 const ShipmentPage = () => {
   const searchParams = useSearchParams();
@@ -17,6 +20,7 @@ const ShipmentPage = () => {
   };
 
   const { data: result } = useGetShipments(params);
+  const { data: user } = useCurrentUser();
 
   return (
     <div className="flex flex-col ">
@@ -27,9 +31,13 @@ const ShipmentPage = () => {
         </p>
         <SearchBar />
       </div>
-      <div className="flex my-5 justify-between">
-        <ShipmentCreationForm />
-      </div>
+      {checkPermissions(user?.user.permissions as UserPermissions[], [
+        "CREATE_SHIPMENT",
+      ]) && (
+        <div className="flex my-5 justify-between">
+          <ShipmentCreationForm />
+        </div>
+      )}
       {Array.isArray(result?.results) ? (
         <>
           <ShipmentTable

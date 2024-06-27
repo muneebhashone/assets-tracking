@@ -10,6 +10,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { toast } from "@/components/ui/use-toast";
+import { useCurrentUser } from "@/services/auth.mutations";
 import {
   useBuildShipmentShareableLink,
   useDeletShipment,
@@ -17,6 +18,8 @@ import {
   useSetFilesShareable,
 } from "@/services/shipment.mutations";
 import { Shipment } from "@/services/shipment.queries";
+import { UserPermissions } from "@/types/services/auth.types";
+import { checkPermissions } from "@/utils/user.utils";
 import {
   ClipboardX,
   Cloud,
@@ -109,6 +112,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
       });
     },
   });
+  const { data: user } = useCurrentUser();
 
   return (
     <>
@@ -149,42 +153,59 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
             <Trash className="mr-2 h-4 w-4" /> Delete
           </DropdownMenuItem>
 
-          {(data?.files?.length) &&<DropdownMenuItem
-            onClick={() =>
-              toggleFileShare({
-                filesShareable: !data.shareFiles,
-                shipmentId: data.id,
-              })
-            }
-          >
-            { data.shareFiles ? (
-              <>
-                <ToggleRight className="mr-2 h-4 w-4" /> Disable File Share
-              </>
-            ) : (
-              <>
-                <ToggleLeft className="mr-2 h-4 w-4" /> Enable File Share
-              </>
+          {data?.files?.length &&
+            checkPermissions(user?.user.permissions as UserPermissions[], [
+              "EDIT_SHIPMENT",
+              "CREATE_SHIPMENT",
+              "DELETE_SHIPMENT",
+            ]) && (
+              <DropdownMenuItem
+                onClick={() =>
+                  toggleFileShare({
+                    filesShareable: !data.shareFiles,
+                    shipmentId: data.id,
+                  })
+                }
+              >
+                {data.shareFiles ? (
+                  <>
+                    <ToggleRight className="mr-2 h-4 w-4" /> Disable File Share
+                  </>
+                ) : (
+                  <>
+                    <ToggleLeft className="mr-2 h-4 w-4" /> Enable File Share
+                  </>
+                )}
+              </DropdownMenuItem>
             )}
-          </DropdownMenuItem>}
 
           <DropdownMenuItem onClick={() => setModalOpen(true)}>
             <Cloud className="mr-2 h-4 w-4" /> Upload File
           </DropdownMenuItem>
 
-          {shareableLink ? (
-            <DropdownMenuItem
-              onClick={() => discardLink({ shipmentId: String(data.id) })}
-            >
-              <ClipboardX className="mr-2 h-4 w-4" /> Discard Shareable Link
-            </DropdownMenuItem>
-          ) : (
-            <DropdownMenuItem
-              onClick={() => createLink({ shipmentId: String(data.id) })}
-            >
-              <LinkIcon className="mr-2 h-4 w-4" /> Generate Sharable Link
-            </DropdownMenuItem>
-          )}
+          {shareableLink
+            ? checkPermissions(user?.user.permissions as UserPermissions[], [
+                "EDIT_SHIPMENT",
+                "CREATE_SHIPMENT",
+                "DELETE_SHIPMENT",
+              ]) && (
+                <DropdownMenuItem
+                  onClick={() => discardLink({ shipmentId: String(data.id) })}
+                >
+                  <ClipboardX className="mr-2 h-4 w-4" /> Discard Shareable Link
+                </DropdownMenuItem>
+              )
+            : checkPermissions(user?.user.permissions as UserPermissions[], [
+                "EDIT_SHIPMENT",
+                "CREATE_SHIPMENT",
+                "DELETE_SHIPMENT",
+              ]) && (
+                <DropdownMenuItem
+                  onClick={() => createLink({ shipmentId: String(data.id) })}
+                >
+                  <LinkIcon className="mr-2 h-4 w-4" /> Generate Sharable Link
+                </DropdownMenuItem>
+              )}
         </DropdownMenuContent>
       </DropdownMenu>
     </>

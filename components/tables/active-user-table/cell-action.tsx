@@ -15,24 +15,27 @@ import {
   FormControl,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { toast } from "@/components/ui/use-toast";
 import useQueryUpdater from "@/hooks/useQueryUpdater";
+import { useCurrentUser } from "@/services/auth.mutations";
 import {
   AssignCreditsInputType,
   useAssignCredits,
   useDeleteUser,
   useToggleActive,
 } from "@/services/user.mutations";
+import { UserPermissions } from "@/types/services/auth.types";
+import { checkPermissions } from "@/utils/user.utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Edit, MoreHorizontal, Package, Trash } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { IUserModified } from "./active-user";
+import { Label } from "@/components/ui/label";
 
 interface CellActionProps {
   data: IUserModified;
@@ -112,6 +115,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
       });
     },
   });
+  const { data: user } = useCurrentUser();
 
   const handleOnSubmit = (payload: AssignCreditsFormSchema) => {
     assignCredits({ id: data.id, credits: Number(payload.credits) });
@@ -143,12 +147,12 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
                 control={control}
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel
+                    <Label
                       htmlFor="credits"
                       className="text-neutral-500 font-medium"
                     >
                       Assign Credits
-                    </FormLabel>
+                    </Label>
                     <FormControl>
                       <Input
                         id="credits"
@@ -196,12 +200,16 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
             <Edit className="mr-2 h-4 w-4" /> Assign Credits
           </DropdownMenuItem>
 
-          <DropdownMenuItem
-            //  disabled={loading}
-            onClick={() => setModalWarning(true)}
-          >
-            <Trash className="mr-2 h-4 w-4" /> Delete
-          </DropdownMenuItem>
+          {checkPermissions(user?.user.permissions as UserPermissions[], [
+            "DELETE_USER",
+          ]) && (
+            <DropdownMenuItem
+              //  disabled={loading}
+              onClick={() => setModalWarning(true)}
+            >
+              <Trash className="mr-2 h-4 w-4" /> Delete
+            </DropdownMenuItem>
+          )}
         </DropdownMenuContent>
       </DropdownMenu>
     </>

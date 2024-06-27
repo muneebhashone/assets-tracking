@@ -8,10 +8,10 @@ import {
   SearchIcon,
   TrackingIcon,
 } from "@/components/Icons/index";
-import { useFetchAllSearatesContainers } from "@/services/searates.queries";
+import { useFetchAllSearatesContainerSetup } from "@/services/searates.queries";
 
 const HeroSection = () => {
-  const { data } = useFetchAllSearatesContainers();
+  const { data } = useFetchAllSearatesContainerSetup();
 
   const getContainers = () => {
     return data?.data.map((value) => {

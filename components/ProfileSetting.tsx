@@ -18,11 +18,12 @@ import {
   FormControl,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
+
 } from "./ui/form";
 import { Separator } from "./ui/separator";
 import { toast } from "./ui/use-toast";
+import { Label } from "./ui/label";
 
 const changePasswordFormSchema = z
   .object({
@@ -128,9 +129,9 @@ const ProfileSetting = () => {
                       name="currentPassword"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel className="block text-xs mb-1">
+                          <Label className="block text-xs mb-1">
                             Current Password
-                          </FormLabel>
+                          </Label>
                           <FormControl>
                             <Input
                               type="password"
@@ -149,9 +150,9 @@ const ProfileSetting = () => {
                       name="newPassword"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel className="block text-xs mb-1">
+                          <Label className="block text-xs mb-1">
                             New Password
-                          </FormLabel>
+                          </Label>
                           <FormControl>
                             <Input
                               type="password"
@@ -170,9 +171,9 @@ const ProfileSetting = () => {
                       name="confirmPassword"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel className="block text-xs mb-1">
+                          <Label className="block text-xs mb-1">
                             Confirm Password
-                          </FormLabel>
+                          </Label>
                           <FormControl>
                             <Input
                               type="password"

@@ -6,7 +6,6 @@ import {
   FormControl,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
@@ -16,6 +15,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { Label } from "./ui/label";
 
 export type forgetPasswordFormType = z.infer<typeof forgetPasswordSchema>;
 export const forgetPasswordSchema = z.object({
@@ -71,9 +71,7 @@ const ForgetPassword = ({ token }: { token?: string }) => {
                   name="email"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="block text-xs mb-1">
-                        Email
-                      </FormLabel>
+                      <Label className="block text-xs mb-1">Email</Label>
                       <FormControl>
                         <Input
                           type="email"

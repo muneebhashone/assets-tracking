@@ -5,7 +5,6 @@ import {
   FormControl,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
@@ -16,6 +15,7 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { useToast } from "../ui/use-toast";
+import { Label } from "../ui/label";
 
 const formSchema = z.object({
   email: z
@@ -28,11 +28,6 @@ const formSchema = z.object({
 });
 
 type UserFormValue = z.infer<typeof formSchema>;
-
-const initialValues = {
-  email: "",
-  password: "",
-};
 
 export default function UserAuthForm() {
   const router = useRouter();
@@ -47,7 +42,6 @@ export default function UserAuthForm() {
       router.push("/dashboard");
     },
     onError(error) {
-      
       toast({
         title: "Error",
         description: error.response?.data.message,
@@ -58,7 +52,6 @@ export default function UserAuthForm() {
 
   const form = useForm<UserFormValue>({
     resolver: zodResolver(formSchema),
-    defaultValues: initialValues,
   });
 
   const onSubmit = async (data: UserFormValue) => {
@@ -77,7 +70,7 @@ export default function UserAuthForm() {
             name="email"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Email</FormLabel>
+                <Label>Email</Label>
                 <FormControl>
                   <Input
                     type="email"
@@ -95,7 +88,7 @@ export default function UserAuthForm() {
             name="password"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Password</FormLabel>
+                <Label>Password</Label>
                 <FormControl>
                   <Input
                     type="password"

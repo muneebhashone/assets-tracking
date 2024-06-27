@@ -28,11 +28,10 @@ import {
   FormControl,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { toast } from "@/components/ui/use-toast";
-import { useFetchAllSearatesContainers } from "@/services/searates.queries";
+import { useFetchAllSearatesContainerSetup } from "@/services/searates.queries";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 //@ts-ignore
@@ -40,6 +39,7 @@ import { TagsInput } from "react-tag-input-component";
 import { z } from "zod";
 import { ModalCustom } from "../ModalComponent";
 
+import { Label } from "../ui/label";
 const TrackWithEnum = z.enum(["CONTAINER_NUMBER", "MBL_NUMBER"]);
 
 const CreateShipmentInputSchema = z.object({
@@ -69,7 +69,7 @@ export default function ShipmentCreationForm() {
     tags: [],
     trackWith: "CONTAINER_NUMBER",
   };
-  const { data, isFetching } = useFetchAllSearatesContainers();
+  const { data, isFetching } = useFetchAllSearatesContainerSetup();
 
   const form = useForm<z.infer<typeof CreateShipmentInputSchema>>({
     resolver: zodResolver(CreateShipmentInputSchema),
@@ -163,12 +163,12 @@ export default function ShipmentCreationForm() {
                         control={control}
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel
+                            <Label
                               htmlFor="carrier"
                               className="text-neutral-500 font-medium"
                             >
                               Carrier
-                            </FormLabel>
+                            </Label>
                             <FormControl>
                               <Select
                                 onValueChange={field.onChange}
@@ -205,12 +205,12 @@ export default function ShipmentCreationForm() {
                         control={control}
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel
+                            <Label
                               htmlFor="trackWith"
                               className="text-neutral-500 font-medium"
                             >
                               Track with
-                            </FormLabel>
+                            </Label>
                             <FormControl>
                               <Select
                                 onValueChange={field.onChange}
@@ -246,12 +246,12 @@ export default function ShipmentCreationForm() {
                       control={control}
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel
+                          <Label
                             htmlFor="containerNo"
                             className="text-neutral-500 font-medium"
                           >
                             Container Number
-                          </FormLabel>
+                          </Label>
                           <FormControl>
                             <Input
                               id="containerNo"
@@ -271,17 +271,17 @@ export default function ShipmentCreationForm() {
                         control={control}
                         render={({ field: { value, ...rest } }) => (
                           <FormItem>
-                            <FormLabel
+                            <Label
                               htmlFor="mblNo"
                               className="text-neutral-500 font-medium"
                             >
                               MBL / Booking Number
-                            </FormLabel>
+                            </Label>
                             <FormControl>
                               <Input
                                 id="mblNo"
                                 placeholder="Enter Mobile or Lading Number"
-                                value={String(value)}
+                                value={value?.toString()}
                                 {...rest}
                               />
                             </FormControl>
@@ -297,12 +297,12 @@ export default function ShipmentCreationForm() {
                       control={control}
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel
+                          <Label
                             htmlFor="tags"
                             className="text-neutral-500 font-medium"
                           >
                             Tags
-                          </FormLabel>
+                          </Label>
                           <FormControl>
                             <TagsInput
                               classNames={{
@@ -324,12 +324,12 @@ export default function ShipmentCreationForm() {
                       control={control}
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel
+                          <Label
                             htmlFor="followers"
                             className="text-neutral-500 font-medium"
                           >
                             Followers
-                          </FormLabel>
+                          </Label>
                           <FormControl>
                             <TagsInput
                               placeHolder="Enter Followers Email"
@@ -355,17 +355,17 @@ export default function ShipmentCreationForm() {
                       control={control}
                       render={({ field: { value, ...rest } }) => (
                         <FormItem>
-                          <FormLabel
+                          <Label
                             htmlFor="referenceNo"
                             className="text-neutral-500 font-medium"
                           >
                             Reference Number
-                          </FormLabel>
+                          </Label>
                           <FormControl>
                             <Input
                               id="referenceNo"
                               placeholder="Enter Reference Number"
-                              value={String(value)}
+                              value={value?.toString()}
                               {...rest}
                             />
                           </FormControl>

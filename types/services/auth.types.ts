@@ -64,7 +64,7 @@ export interface User {
   clientId?: number | null;
   permissions: UserPermissions[];
 }
-type UserPermissions =
+export type UserPermissions =
   | "VIEW_DASHBOARD"
   | "CREATE_USER"
   | "CREATE_SHIPMENT"

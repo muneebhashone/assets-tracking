@@ -20,7 +20,7 @@ const UploadedFilesView = ({ data }: { data: Shipment }) => {
           <DialogHeader className="text-gray-500 font-semibold text-lg mb-4">
             Uploaded Files
           </DialogHeader>
-          <div className="grid grid-cols-2 lg:grid-cols-3">
+          <div className="grid grid-cols-2 lg:grid-cols-3 gap-2">
             {data?.files?.length ? (
               data.files.map((file, index) => {
                 const fileName = decodeURIComponent(file).split("/").pop();

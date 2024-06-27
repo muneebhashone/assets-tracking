@@ -6,16 +6,10 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Button } from "./ui/button";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "./ui/form";
+import { Form, FormControl, FormField, FormItem, FormMessage } from "./ui/form";
 import { Input } from "./ui/input";
 import { toast } from "./ui/use-toast";
+import { Label } from "./ui/label";
 
 export type SetPasswordFormType = z.infer<typeof setPasswordFormSchema>;
 export const setPasswordFormSchema = z
@@ -85,9 +79,7 @@ const SetPassword = ({ token }: { token?: string }) => {
                   name="password"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="block text-xs mb-1">
-                        Password
-                      </FormLabel>
+                      <Label className="block text-xs mb-1">Password</Label>
                       <FormControl>
                         <Input
                           type="password"
@@ -107,9 +99,9 @@ const SetPassword = ({ token }: { token?: string }) => {
                   name="confirmPassword"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="block text-xs mb-1">
+                      <Label className="block text-xs mb-1">
                         Confirm Password
-                      </FormLabel>
+                      </Label>
                       <FormControl>
                         <Input
                           type="password"

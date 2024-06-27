@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 
 import { Icons } from "@/components/icons";
 import { cn } from "@/lib/utils";
-import { User } from "@/types/services/auth.types";
+import { User, UserPermissions } from "@/types/services/auth.types";
 
 import { Dispatch, SetStateAction } from "react";
 import { checkPermissions } from "@/utils/user.utils";
@@ -29,8 +29,8 @@ export function DashboardNav({ items, setOpen, user }: DashboardNavProps) {
       {items.map((item, index) => {
         if (
           !checkPermissions(
-            user?.permissions as string[],
-            item?.permissions as string[],
+            user?.permissions as UserPermissions[],
+            item?.permissions as UserPermissions[],
           )
         )
           return;

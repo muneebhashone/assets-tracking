@@ -5,24 +5,13 @@ import { UserRole } from "@/utils/constants";
 import { ColumnDef } from "@tanstack/react-table";
 import { IUserModified } from "./active-user";
 import { CellAction } from "./cell-action";
+import ProtectedCheckbox from "@/components/ProtectedCheckbox";
 
 export const columns: ColumnDef<IUserModified>[] = [
   {
     id: "select",
-    header: ({ table }) => (
-      <Checkbox
-        checked={table.getIsAllPageRowsSelected()}
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
-      />
-    ),
+    header: ({ table }) => <ProtectedCheckbox table={table} type="user" />,
+    cell: ({ row }) => <ProtectedCheckbox row={row} type="user" />,
 
     enableSorting: false,
     enableHiding: false,

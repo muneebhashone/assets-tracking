@@ -1,6 +1,5 @@
 import { SEARATES_CODES } from "./messgaes";
 
-
 export interface FooterItem {
   title: string;
   items: {
@@ -9,8 +8,6 @@ export interface FooterItem {
     external?: boolean;
   }[];
 }
-
-
 
 interface Location {
   id: number;
@@ -136,14 +133,8 @@ export interface SeaRatesApiResponse {
   data: SeaRatesData;
 }
 
-
-
-
-
-
 export interface SearatesSealineApiResponse {
   status: "success" | "error";
-  message: "OK" | "UNEXPECTED_ERROR";
   data: ShippingLine[];
 }
 
@@ -159,4 +150,3 @@ interface ShippingLine {
   scac_codes: string[];
   prefixes: string[] | null;
 }
-
