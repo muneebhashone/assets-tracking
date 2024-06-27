@@ -30,7 +30,7 @@ const ViewShipmentPage = ({ token }: { token: string }) => {
         }, 100);
       }
     }
-  }, [isLoading]);
+  }, [push, token, data, isLoading]);
 
   return (
     <div className="h-[100%] overflow-y-scroll">
@@ -213,8 +213,12 @@ const ViewShipmentPage = ({ token }: { token: string }) => {
                 {isLoading ? (
                   <Skeleton className="h-6 w-[100px]  py-2 ms-2" />
                 ) : data?.data.tags.length ? (
-                  data?.data?.tags?.map((tag) => {
-                    return <Badge className="bg-green-600  ms-2">{tag}</Badge>;
+                  data?.data?.tags?.map((tag, index) => {
+                    return (
+                      <Badge className="bg-green-600  ms-2" key={index}>
+                        {tag}
+                      </Badge>
+                    );
                   })
                 ) : (
                   <span className="ms-2">{"-"}</span>
@@ -244,9 +248,9 @@ const ViewShipmentPage = ({ token }: { token: string }) => {
 
                 <div>
                   {data?.data?.followers.length &&
-                    data?.data?.followers?.map((value) => {
+                    data?.data?.followers?.map((value, index) => {
                       return (
-                        <div className="relative mb-3">
+                        <div className="relative mb-3" key={index}>
                           <Input
                             type="text"
                             value={value}

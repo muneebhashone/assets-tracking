@@ -63,11 +63,14 @@ const UploadShipmentFile = ({
     },
   });
 
-  const onDrop = useCallback((acceptedFiles: File[]) => {
-    const formdata = new FormData();
-    formdata.set("files", acceptedFiles?.[0]);
-    uploadShipmentFile({ files: formdata, shipmentId });
-  }, []);
+  const onDrop = useCallback(
+    (acceptedFiles: File[]) => {
+      const formdata = new FormData();
+      formdata.set("files", acceptedFiles?.[0]);
+      uploadShipmentFile({ files: formdata, shipmentId });
+    },
+    [uploadShipmentFile, shipmentId],
+  );
 
   const {
     getRootProps,

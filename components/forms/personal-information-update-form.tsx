@@ -42,8 +42,7 @@ export type ProfileUpdateFormType = z.infer<typeof profileUpdateFormSchema>;
 const PerSonalInformationForm = () => {
   const { data: user, isLoading: userLoading } = useCurrentUser();
 
-  const { name, phoneNo, phoneCountryCode, email, ...other } =
-    (user?.user as User) ?? {};
+  const { name, phoneNo, phoneCountryCode, email } = (user?.user as User) ?? {};
   const form = useForm<ProfileUpdateFormType>({
     defaultValues: !userLoading
       ? { name, phoneNo, phoneCountryCode, email }
@@ -68,6 +67,7 @@ const PerSonalInformationForm = () => {
     },
   });
   const handleUpdateProfile = (data: ProfileUpdateFormType) => {
+    /* eslint-disable */
     const { email, ...rest } = data;
     updateProfile(rest);
   };

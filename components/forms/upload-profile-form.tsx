@@ -1,21 +1,15 @@
 "use client";
 
 import { useCurrentUser } from "@/services/auth.mutations";
+import { useProfileUpload } from "@/services/upload.mutations";
 import { AvatarFallback } from "@radix-ui/react-avatar";
+import { ChangeEvent, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { ModalCustom } from "../ModalComponent";
 import { Avatar, AvatarImage } from "../ui/avatar";
 import { Button } from "../ui/button";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormMessage,
-} from "../ui/form";
-import { ChangeEvent, useRef } from "react";
-import { useProfileUpload } from "@/services/upload.mutations";
+import { Form } from "../ui/form";
 import { toast } from "../ui/use-toast";
 type UploadProfileImageFormType = z.infer<typeof UploadProfileImageFormSchema>;
 
@@ -44,9 +38,9 @@ const UploadProfileForm = ({
   setModalOpen: (state: boolean) => void;
 }) => {
   const { data: user } = useCurrentUser();
-  // console.log()
+
   const form = useForm<UploadProfileImageFormType>();
-  const { handleSubmit, register } = form;
+  const { register } = form;
   const { mutate: profileUpload, isPending } = useProfileUpload({
     onSuccess(data) {
       toast({
@@ -65,7 +59,7 @@ const UploadProfileForm = ({
   });
   const onProfileUpload = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-    console.log(event.target.files?.[0]);
+
     if (file) {
       if (file.size / 1024 / 1024 > 2) {
         alert("Should be less than 2mb");

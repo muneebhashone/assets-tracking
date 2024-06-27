@@ -9,7 +9,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Company } from "@/services/companies.queries";
 
-
 import { MoreHorizontal, Trash, Wrench } from "lucide-react";
 import { useRouter } from "next/navigation";
 
@@ -38,7 +37,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
           >
             <Wrench className="mr-2 h-4 w-4" /> Edit
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => console.log("here")}>
+          <DropdownMenuItem>
             <Trash className="mr-2 h-4 w-4" /> Delete
           </DropdownMenuItem>
           {/* <DropdownMenuItem >

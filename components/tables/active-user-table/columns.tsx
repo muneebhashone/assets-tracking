@@ -1,11 +1,10 @@
 "use client";
+import ProtectedCheckbox from "@/components/ProtectedCheckbox";
 import PermissionUpdate from "@/components/forms/permission-update-form";
-import { Checkbox } from "@/components/ui/checkbox";
 import { UserRole } from "@/utils/constants";
 import { ColumnDef } from "@tanstack/react-table";
 import { IUserModified } from "./active-user";
 import { CellAction } from "./cell-action";
-import ProtectedCheckbox from "@/components/ProtectedCheckbox";
 
 export const columns: ColumnDef<IUserModified>[] = [
   {
