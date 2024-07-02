@@ -9,10 +9,14 @@ const useQueryUpdater = () => {
   const createQueryString = useCallback(
     (name: string, value: string) => {
       const params = new URLSearchParams(searchParams.toString());
-      if (params.get(name)) {
+      if (params.get(name) === value) {
         params.delete(name);
       } else {
-        params.set(name, value);
+        if (params.get(name)) {
+          params.set(name, value);
+        } else {
+          params.set(name, value);
+        }
       }
       return params;
     },

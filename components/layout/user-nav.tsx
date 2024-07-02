@@ -8,7 +8,7 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-  DropdownMenuTrigger
+  DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useCurrentUser, useLogout } from "@/services/auth.mutations";
 import Link from "next/link";
@@ -25,7 +25,7 @@ export function UserNav() {
           <Button variant="ghost" className="relative h-8 w-8 rounded-full">
             <Avatar className="h-8 w-8">
               <AvatarImage
-                src={currentUser?.user.name ?? ""}
+                src={currentUser?.user.avatar ?? currentUser?.user.name}
                 alt={currentUser?.user.name ?? ""}
               />
               <AvatarFallback>{currentUser?.user.name[0]}</AvatarFallback>

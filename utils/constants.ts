@@ -1,3 +1,5 @@
+import { RoleType } from "@/types/user.types";
+
 export const AUTH_KEY = "accessToken";
 
 export const UserRole = {
@@ -9,7 +11,7 @@ export const UserRole = {
   SUB_ADMIN: "Sub Admin",
 };
 
-export const EligibleRolesForCreation = {
+export const EligibleRolesForCreation: Record<RoleType, RoleType[]> = {
   SUPER_ADMIN: [
     "WHITE_LABEL_ADMIN",
     "WHITE_LABEL_SUB_ADMIN",
@@ -27,7 +29,7 @@ export const EligibleRolesForCreation = {
   WHITE_LABEL_SUB_ADMIN: ["CLIENT_SUPER_USER"],
   CLIENT_SUPER_USER: ["CLIENT_USER"],
   CLIENT_USER: [],
-};
+} as const;
 
 export const ShipmentStatusDisplay = {
   IN_TRANSIT: "In Transit",

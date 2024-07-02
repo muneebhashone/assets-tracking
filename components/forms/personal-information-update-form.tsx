@@ -39,7 +39,7 @@ const profileUpdateFormSchema = z.object({
 
 export type ProfileUpdateFormType = z.infer<typeof profileUpdateFormSchema>;
 
-const PerSonalInformationForm = () => {
+const PersonalInformationForm = () => {
   const { data: user, isLoading: userLoading } = useCurrentUser();
 
   const { name, phoneNo, phoneCountryCode, email } = (user?.user as User) ?? {};
@@ -110,9 +110,8 @@ const PerSonalInformationForm = () => {
 
             <PhoneInput
               value={
-                form.watch("phoneCountryCode")?.replace("+", "") ||
-                "" + form.watch("phoneNo") ||
-                ""
+                String(form.watch("phoneCountryCode")?.replace("+", "")) +
+                String(form.watch("phoneNo"))
               }
               onChange={(number, phoneData: CountryData) => {
                 setValue("phoneNo", number.replace(phoneData.dialCode, ""));
@@ -139,4 +138,4 @@ const PerSonalInformationForm = () => {
   );
 };
 
-export default PerSonalInformationForm;
+export default PersonalInformationForm;

@@ -66,7 +66,7 @@ export default function Page() {
   const pageLimit = Number(searchParams.get("limit")) || 10;
   const search = searchParams.get("search") || "";
   const [modalOpen, setModalOpen] = useState<boolean>(false);
-  const { mutate } = useCreateUser({
+  const { mutate, isPending } = useCreateUser({
     onSuccess(data) {
       toast({
         title: data.message,
@@ -249,6 +249,7 @@ export default function Page() {
                     <Button
                       type="submit"
                       className="w-[25%] border-r-4 bg-golden"
+                      disabled={isPending}
                     >
                       <span className="mr-2">Create</span>
                       <PlusCircledIcon />

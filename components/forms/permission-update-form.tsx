@@ -1,6 +1,6 @@
 import useQueryUpdater from "@/hooks/useQueryUpdater";
+import { useCurrentUser } from "@/services/auth.mutations";
 import { useUpdatePermissions } from "@/services/user.mutations";
-import { permissionEnums } from "@/types/user.types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Row } from "@tanstack/react-table";
 import { useSearchParams } from "next/navigation";
@@ -13,7 +13,7 @@ import {
   FormControl,
   FormField,
   FormItem,
-  FormMessage
+  FormMessage,
 } from "../ui/form";
 import { MultiSelect } from "../ui/multi-select";
 import { toast } from "../ui/use-toast";
@@ -60,13 +60,15 @@ const PermissionUpdate = (props: PermissionUpdateProps) => {
       }
     },
   });
-  const permissionsEntry = permissionEnums.reduce(
+  const { data: currentUser } = useCurrentUser();
+  const permissionsEntry = currentUser?.user.permissions.reduce(
     (acc: Record<string, string>[], curr) => {
       acc.push({ label: curr, value: curr });
       return acc;
     },
     [],
   );
+  console.log(currentUser?.user.permissions);
   const onSubmit = (data: UpdatePermissionsInputType) => {
     mutate({ id: row.original.id, ...data });
   };
@@ -82,7 +84,7 @@ const PermissionUpdate = (props: PermissionUpdateProps) => {
                 <FormItem>
                   <FormControl>
                     <MultiSelect
-                      options={permissionsEntry}
+                      options={permissionsEntry as Record<string, string>[]}
                       onValueChange={field.onChange}
                       defaultValue={field.value as string[]}
                       className="bg-green-600 text-xs text-white px-2 py-1 m-0.5"

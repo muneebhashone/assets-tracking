@@ -142,7 +142,7 @@ export function ActiveUserTable({
         description: data.message,
         title: "Success",
       });
-
+      table.toggleAllPageRowsSelected(false);
       setOpenWarning(false);
     },
     onError(error) {

@@ -21,6 +21,7 @@ const baseStyle: CSSProperties = {
   backgroundColor: "#fafafa",
   color: "#bdbdbd",
   outline: "none",
+  cursor: "pointer",
   transition: "border .24s ease-in-out",
 };
 
@@ -44,7 +45,7 @@ const UploadShipmentFile = ({
   setModalOpen: (state: boolean) => void;
   shipmentId: number;
 }) => {
-  const { mutate: uploadShipmentFile } = useShipmentFileUpload({
+  const { mutate: uploadShipmentFile, isPending } = useShipmentFileUpload({
     async onSuccess(data) {
       toast({
         variant: "default",
@@ -102,13 +103,12 @@ const UploadShipmentFile = ({
           Upload Files
         </DialogHeader>
         <div {...getRootProps({ style })}>
-          <input {...getInputProps()} />
+          <input {...getInputProps()} disabled={true} />
           {acceptedFiles.length ? (
             <p className="text-center ">File Uploaded</p>
           ) : (
             <p className="text-center align-middle">
-              Drag &lsquo;n&rsquo; drop some files here, or click to select
-              files
+              Drag and drop some files here, or click to select files
             </p>
           )}
         </div>

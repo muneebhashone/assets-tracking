@@ -7,15 +7,11 @@ import { Suspense } from "react";
 type props = {
   children: React.ReactNode;
 };
-export default function DashboardLayout({ children }: props) {
+export default function AuthLayout({ children }: props) {
   return (
     <Suspense>
-      <NextTopLoader showSpinner={false} color="#D3991F"/>
-      <Header />
-      <div className="flex h-screen overflow-hidden">
-        <Sidebar  navItems={navItems}/>
-        <main className="w-full pt-16 overflow-y-auto">{children}</main>
-      </div>
+      <NextTopLoader showSpinner={false} color="#D3991F" />
+      {children}
     </Suspense>
   );
 }

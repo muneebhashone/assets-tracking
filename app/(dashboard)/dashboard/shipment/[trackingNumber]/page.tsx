@@ -10,7 +10,7 @@ export default async function Component(props: PageProps) {
   return (
     <div className="h-[100%] overflow-y-scroll">
       <div className="flex items-center h-14 border-b px-4 md:h-16 bg-gray-100/40 dark:bg-gray-800/40">
-        <Link href={"/dashboard"}>
+        <Link href={"/dashboard/shipment-list"}>
           <Button
             className="rounded-full border w-8 h-8"
             size="icon"

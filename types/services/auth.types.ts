@@ -72,3 +72,5 @@ export type UserPermissions =
   | "DELETE_USER"
   | "EDIT_SHIPMENT"
   | "EDIT_USER";
+
+

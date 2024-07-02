@@ -24,7 +24,7 @@ export const ModalCustom = ({
   return (
     <Dialog open={isOpen} onOpenChange={onChange}>
       <DialogContent className={`${rest.className}`} {...rest}>
-        <div>{children}</div>
+        {children}
       </DialogContent>
     </Dialog>
   );

@@ -10,25 +10,18 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import PerSonalInformationForm from "./forms/personal-information-update-form";
+import PersonalInformationForm from "./forms/personal-information-update-form";
 import UploadProfileForm from "./forms/upload-profile-form";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormMessage,
-
-} from "./ui/form";
+import { Form, FormControl, FormField, FormItem, FormMessage } from "./ui/form";
+import { Label } from "./ui/label";
 import { Separator } from "./ui/separator";
 import { toast } from "./ui/use-toast";
-import { Label } from "./ui/label";
 
 const changePasswordFormSchema = z
   .object({
     newPassword: z
-      .string({ required_error: "Password is required" })
+      .string({ required_error: "New Password is required" })
       .min(8, { message: "Password must be at least 8 characters long" })
       .max(64, { message: "Password must be at most 64 characters long" }),
     currentPassword: z
@@ -112,7 +105,7 @@ const ProfileSetting = () => {
         <div className="space-y-6">
           <div className="space-y-2">
             <h2 className="text-lg font-semibold">Personal Information</h2>
-            <PerSonalInformationForm />
+            <PersonalInformationForm />
           </div>
 
           <Separator />

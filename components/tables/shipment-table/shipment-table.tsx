@@ -127,7 +127,7 @@ export function ShipmentTable({
         description: data.message,
         title: "Success",
       });
-
+      table.toggleAllPageRowsSelected(false);
       setOpenWarning(false);
     },
     onError(error) {

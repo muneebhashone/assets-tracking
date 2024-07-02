@@ -61,19 +61,21 @@ const UploadProfileForm = ({
     const file = event.target.files?.[0];
 
     if (file) {
-      if (file.size / 1024 / 1024 > 2) {
-        alert("Should be less than 2mb");
+      if (file.size / 1024 / 1024 > 10) {
+        alert("Should be less than 10mb");
         return;
       }
-
+      console.log(file.type);
       if (file.type !== "image/jpeg" && file.type !== "image/png") {
         alert("Type not supported");
         return;
       }
+      const formData = new FormData();
+      formData.append("avatar", file as Blob);
+      profileUpload(formData);
+    } else {
+      return;
     }
-    const formData = new FormData();
-    formData.append("avatar", file as Blob);
-    profileUpload(formData);
   };
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -98,7 +100,10 @@ const UploadProfileForm = ({
         </p>
         <div className="flex justify-center flex-col items-center ">
           <Avatar className="w-[300px] h-[300px] mb-4 cursor-pointer">
-            <AvatarImage src={user?.user.avatar} onClick={handleClick} />
+            <AvatarImage
+              src={user?.user.avatar ?? user?.user.name[0]}
+              onClick={handleClick}
+            />
             <AvatarFallback>{user?.user.name[0]}</AvatarFallback>
           </Avatar>
           <Form {...form}>

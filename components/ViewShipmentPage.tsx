@@ -65,7 +65,7 @@ const ViewShipmentPage = ({ token }: { token: string }) => {
                   ) : data?.data.referenceNo ? (
                     data?.data.referenceNo
                   ) : (
-                    "-"
+                    "N/A"
                   )}
                 </span>
               </div>
@@ -78,7 +78,7 @@ const ViewShipmentPage = ({ token }: { token: string }) => {
                     {ShipmentStatusDisplay[data?.data.status]}
                   </Badge>
                 ) : (
-                  <span className="ms-2">{"-"}</span>
+                  <span className="ms-2">{"N/A"}</span>
                 )}
               </div>
               <div className="flex">
@@ -89,7 +89,7 @@ const ViewShipmentPage = ({ token }: { token: string }) => {
                   ) : data?.data.carrier ? (
                     data?.data.carrier
                   ) : (
-                    "-"
+                    "N/A"
                   )}
                 </span>
               </div>
@@ -104,7 +104,7 @@ const ViewShipmentPage = ({ token }: { token: string }) => {
                     ) : data?.data.containerNo ? (
                       data?.data.containerNo
                     ) : (
-                      "-"
+                      "N/A"
                     )}{" "}
                   </span>
                 </div>
@@ -120,7 +120,7 @@ const ViewShipmentPage = ({ token }: { token: string }) => {
                     ) : data?.data.containerNo ? (
                       data?.data.containerNo
                     ) : (
-                      "-"
+                      "N/A"
                     )}{" "}
                   </span>
                 </div>
@@ -134,7 +134,7 @@ const ViewShipmentPage = ({ token }: { token: string }) => {
                     ) : data?.data.createdAt ? (
                       data?.data.createdAt
                     ) : (
-                      "-"
+                      "N/A"
                     )}
                   </p>
                   {/* <p className="ml-2">John Doe &lt;Joan.doe@gmail.com&gt; </p> */}
@@ -149,7 +149,7 @@ const ViewShipmentPage = ({ token }: { token: string }) => {
                     ) : data?.data.arrivalTime ? (
                       data?.data.arrivalTime
                     ) : (
-                      "-"
+                      "N/A"
                     )}
                   </p>
                   {/* <p className="ml-2">John Doe &lt;Joan.doe@gmail.com&gt; </p> */}
@@ -164,7 +164,7 @@ const ViewShipmentPage = ({ token }: { token: string }) => {
                     ) : data?.data.trackWith ? (
                       TrackWithDisplay[data?.data.trackWith]
                     ) : (
-                      <span className="ms-2">{"-"}</span>
+                      <span className="ms-2">{"N/A"}</span>
                     )}
                   </p>
                 </div>
@@ -191,7 +191,7 @@ const ViewShipmentPage = ({ token }: { token: string }) => {
                   ) : data?.data.type ? (
                     data?.data.type
                   ) : (
-                    "-"
+                    "N/A"
                   )}{" "}
                 </span>
               </div>
@@ -204,7 +204,7 @@ const ViewShipmentPage = ({ token }: { token: string }) => {
                   ) : data?.data.progress ? (
                     data?.data.progress
                   ) : (
-                    "-"
+                    "N/A"
                   )}{" "}
                 </span>
               </div>
@@ -221,7 +221,7 @@ const ViewShipmentPage = ({ token }: { token: string }) => {
                     );
                   })
                 ) : (
-                  <span className="ms-2">{"-"}</span>
+                  <span className="ms-2">{"N/A"}</span>
                 )}
               </div>
               {data?.data.shareFiles && data?.data?.files?.length && (

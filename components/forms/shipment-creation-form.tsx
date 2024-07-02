@@ -40,6 +40,7 @@ import { z } from "zod";
 import { ModalCustom } from "../ModalComponent";
 
 import { Label } from "../ui/label";
+import { Combobox, Options } from "../ui/combobox";
 const TrackWithEnum = z.enum(["CONTAINER_NUMBER", "MBL_NUMBER"]);
 
 const CreateShipmentInputSchema = z.object({
@@ -100,14 +101,12 @@ export default function ShipmentCreationForm() {
     mutate(data);
   };
 
-  const getContainers = () => {
-    return data?.data.map((value) => {
-      return {
-        name: value.name,
-        code: value.scac_codes[0],
-      };
-    });
-  };
+  const containerNames = data?.data.map((value) => {
+    return {
+      name: value.name,
+      value: value.scac_codes[0],
+    };
+  });
 
   return (
     <>
@@ -157,7 +156,7 @@ export default function ShipmentCreationForm() {
                 </CardHeader>
                 <CardContent className="space-y-4 ">
                   <div className="flex justify-between gap-4">
-                    <div className="space-y-2 w-[100%]">
+                    <div className="space-y-2 w-[100%] contents ">
                       <FormField
                         name="carrier"
                         control={control}
@@ -170,29 +169,11 @@ export default function ShipmentCreationForm() {
                               Carrier
                             </Label>
                             <FormControl>
-                              <Select
-                                onValueChange={field.onChange}
-                                // disabled={isPending || isFetching}
+                              <Combobox
+                                className="w-[15rem] justify-between "
+                                options={containerNames as Options[]}
                                 {...field}
-                              >
-                                <SelectTrigger id="carrier">
-                                  <SelectValue placeholder="Select a carrier" />
-                                </SelectTrigger>
-                                <SelectContent className="overflow-y-auto max-h-[10rem]">
-                                  {data &&
-                                    getContainers()?.map((carrier, index) => {
-                                      return (
-                                        <SelectItem
-                                          value={carrier.code}
-                                          key={index}
-                                          disabled={isFetching}
-                                        >
-                                          {carrier.name}
-                                        </SelectItem>
-                                      );
-                                    })}
-                                </SelectContent>
-                              </Select>
+                              />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -224,10 +205,7 @@ export default function ShipmentCreationForm() {
                                   <SelectItem value="CONTAINER_NUMBER">
                                     Container Number
                                   </SelectItem>
-                                  <SelectItem
-                                    value="MBL_NUMBER"
-                                    className="text-neutral-500 font-medium"
-                                  >
+                                  <SelectItem value="MBL_NUMBER">
                                     MBL / Booking Number
                                   </SelectItem>
                                 </SelectContent>
@@ -273,7 +251,7 @@ export default function ShipmentCreationForm() {
                           <FormItem>
                             <Label
                               htmlFor="mblNo"
-                              className="text-neutral-500 font-medium"
+                              className="text-neutral-500 font-medium "
                             >
                               MBL / Booking Number
                             </Label>
@@ -306,7 +284,8 @@ export default function ShipmentCreationForm() {
                           <FormControl>
                             <TagsInput
                               classNames={{
-                                input: "bg-white !w-full",
+                                input:
+                                  "bg-white !w-full !text-sm placeholder:!text-muted-foreground",
                                 // tag: "!w-full",
                               }}
                               placeHolder="Enter Tags"
@@ -334,7 +313,8 @@ export default function ShipmentCreationForm() {
                             <TagsInput
                               placeHolder="Enter Followers Email"
                               classNames={{
-                                input: "bg-white !w-full",
+                                input:
+                                  "bg-white !w-full !text-sm placeholder:!text-muted-foreground",
                                 // tag: "!w-full",
                               }}
                               {...field}
