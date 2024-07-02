@@ -2,6 +2,7 @@ import { apiAxios } from "@/utils/api.utils";
 import { UseQueryOptions, useQuery } from "@tanstack/react-query";
 import { ErrorResponseType } from "./types.common";
 import { User } from "@/types/services/auth.types";
+import { RoleType } from "@/types/user.types";
 
 export type GetAllUserInputType = {
   searchString?: string;
@@ -10,7 +11,7 @@ export type GetAllUserInputType = {
   isRequestedUser?: boolean;
   filterByActive?: boolean;
   filterByStatus?: "APPROVED" | "REQUESTED" | "REJECTED";
-  filterByRole?: string;
+  filterByRole?: RoleType;
 };
 
 export type GetAllUserResponseType = {

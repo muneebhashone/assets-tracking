@@ -1,7 +1,6 @@
 import { Config } from "tailwindcss";
 
 const theme: Config = {
-  darkMode: ["variant"],
   content: [
     "./pages/**/*.{ts,tsx}",
     "./components/**/*.{ts,tsx}",

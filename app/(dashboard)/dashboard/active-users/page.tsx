@@ -44,6 +44,8 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Label } from "@/components/ui/label";
+import Filter, { OptionsMapperType } from "@/components/Filter";
+import { RoleType } from "@/types/user.types";
 
 export type CreateUserFormSchemaType = z.infer<typeof createUserSchema>;
 
@@ -65,6 +67,10 @@ export default function Page() {
   const page = Number(searchParams.get("page")) || 1;
   const pageLimit = Number(searchParams.get("limit")) || 10;
   const search = searchParams.get("search") || "";
+  const filterByActive = searchParams.get("filterByActive") || "";
+  const filterByRole = searchParams.get("filterByRole") || "";
+  const filterByStatus = searchParams.get("filterByStatus") || "";
+
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const { mutate, isPending } = useCreateUser({
     onSuccess(data) {
@@ -99,7 +105,17 @@ export default function Page() {
     limitParam: pageLimit,
     pageParam: page,
     searchString: search,
+    filterByActive: Boolean(filterByActive),
+    filterByRole: filterByRole ? (filterByRole as RoleType) : null,
+    filterByStatus: filterByStatus
+      ? (filterByStatus as "REQUESTED" | "APPROVED" | "REJECTED")
+      : null,
   });
+  const optionsMapper: OptionsMapperType = {
+    filterByActive: [true, false],
+    filterByRole: EligibleRolesForCreation[currentUser?.user.role as RoleType],
+    filterByStatus: ["REQUESTED", "APPROVED", "REJECTED"],
+  };
 
   return (
     <>
@@ -122,7 +138,10 @@ export default function Page() {
         </Button>
 
         <Separator />
-        <SearchBar />
+        <div className="flex justify-between">
+          <SearchBar />
+          <Filter optionsMapper={optionsMapper} />
+        </div>
         {allUsersLoading ? (
           <div>Loading ... </div>
         ) : (
