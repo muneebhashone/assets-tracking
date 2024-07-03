@@ -106,10 +106,10 @@ export default function Page() {
     pageParam: page,
     searchString: search,
     filterByActive: Boolean(filterByActive),
-    filterByRole: filterByRole ? (filterByRole as RoleType) : null,
+    filterByRole: filterByRole ? (filterByRole as RoleType) : undefined,
     filterByStatus: filterByStatus
       ? (filterByStatus as "REQUESTED" | "APPROVED" | "REJECTED")
-      : null,
+      : undefined,
   });
   const optionsMapper: OptionsMapperType = {
     filterByActive: [true, false],

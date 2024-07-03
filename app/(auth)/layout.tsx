@@ -1,6 +1,3 @@
-import Header from "@/components/layout/header";
-import Sidebar from "@/components/layout/sidebar";
-import { navItems } from "@/constants/data";
 import NextTopLoader from "nextjs-toploader";
 import { Suspense } from "react";
 

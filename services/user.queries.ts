@@ -8,7 +8,7 @@ export type GetAllUserInputType = {
   searchString?: string;
   limitParam?: number;
   pageParam?: number;
-  isRequestedUser?: boolean;
+  // isRequestedUser?: boolean;
   filterByActive?: boolean;
   filterByStatus?: "APPROVED" | "REQUESTED" | "REJECTED";
   filterByRole?: RoleType;

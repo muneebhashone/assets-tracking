@@ -24,7 +24,7 @@ export default function Page() {
     limitParam: pageLimit,
     pageParam: page,
     searchString: search,
-    isRequestedUser: true,
+    filterByStatus: "REQUESTED",
   });
 
   return (
@@ -33,7 +33,7 @@ export default function Page() {
 
       <div className="flex items-start justify-between">
         <Heading
-          title={`Requested Users (${users?.results.length})`}
+          title={`Requested Users (${users?.results.length || 0})`}
           description="Manage requested users  "
         />
       </div>

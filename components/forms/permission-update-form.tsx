@@ -68,7 +68,7 @@ const PermissionUpdate = (props: PermissionUpdateProps) => {
     },
     [],
   );
-  console.log(currentUser?.user.permissions);
+ 
   const onSubmit = (data: UpdatePermissionsInputType) => {
     mutate({ id: row.original.id, ...data });
   };

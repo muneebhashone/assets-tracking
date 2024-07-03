@@ -3,7 +3,13 @@
 import useQueryUpdater from "@/hooks/useQueryUpdater";
 import { StatusType } from "@/types/user.types";
 import { EligibleRolesForCreation } from "@/utils/constants";
-import { FilterIcon, PlusCircle, SearchIcon, XCircle } from "lucide-react";
+import {
+  FilterIcon,
+  PlusCircle,
+  RefreshCw,
+  SearchIcon,
+  XCircle,
+} from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { ModalCustom } from "./ModalComponent";
@@ -23,6 +29,8 @@ type EligibleRolesForCreationType = typeof EligibleRolesForCreation;
 
 type RoleMapping =
   EligibleRolesForCreationType[keyof EligibleRolesForCreationType];
+
+// T = shipment or user . selects filter according to
 export interface OptionsMapperType {
   filterByStatus: StatusType[];
   filterByActive: boolean[];
@@ -44,7 +52,12 @@ const Filter = ({ optionsMapper }: FilterProps) => {
   const objectKeys = Object.keys(optionsMapper);
   const [optionKey, setOptionKey] =
     useState<keyof OptionsMapperType>("filterByStatus");
-  const [filterBuilder, setFilterBuilder] = useState<TemporaryFilterState>();
+  const [filterBuilder, setFilterBuilder] = useState<
+    TemporaryFilterState | undefined
+  >({
+    filterName: optionKey,
+    value: String(optionsMapper[optionKey][0]),
+  });
 
   const handleAddFilter = () => {
     if (filterBuilder) {
@@ -55,6 +68,9 @@ const Filter = ({ optionsMapper }: FilterProps) => {
   };
   const onFilterValueChange = (value: string) => {
     setFilterBuilder({ filterName: optionKey, value: value });
+  };
+  const removeFilterValue = (key: string, value: string) => {
+    querySetter(key, value);
   };
   return (
     <>
@@ -75,9 +91,11 @@ const Filter = ({ optionsMapper }: FilterProps) => {
           <div className="flex items-center space-x-2 ">
             <div className="relative flex flex-row-reverse w-[100%]">
               <Select
-                onValueChange={(val: keyof OptionsMapperType) =>
-                  setOptionKey(val)
-                }
+                onValueChange={(val: keyof OptionsMapperType) => {
+                  setOptionKey(val);
+                  setFilterBuilder(undefined);
+                }}
+                defaultValue={filterBuilder?.filterName}
               >
                 <SelectTrigger
                   id="id"
@@ -86,8 +104,13 @@ const Filter = ({ optionsMapper }: FilterProps) => {
                   <SelectValue placeholder="Select Options" />
                 </SelectTrigger>
                 <SelectContent className="overflow-y-auto max-h-[10rem] flex-col">
-                  {objectKeys?.map((option) => {
-                    return <SelectItem value={option}> {option}</SelectItem>;
+                  {objectKeys?.map((option, index) => {
+                    return (
+                      <SelectItem value={option} key={index}>
+                        {" "}
+                        {option}
+                      </SelectItem>
+                    );
                   })}
                 </SelectContent>
               </Select>
@@ -102,17 +125,20 @@ const Filter = ({ optionsMapper }: FilterProps) => {
           </div>
 
           <div className="relative flex flex-row-reverse w-[100%] mt-2">
-            <Select onValueChange={onFilterValueChange}>
+            <Select
+              onValueChange={onFilterValueChange}
+              defaultValue={filterBuilder?.value}
+            >
               <SelectTrigger
                 id="equal"
                 className="!rounded-l-none   border-gray-500 border-[1px] border-l-0 ring-0 focus:ring-0"
               >
-                <SelectValue placeholder="Equal" />
+                <SelectValue placeholder="Select a Value" />
               </SelectTrigger>
               <SelectContent className="overflow-y-auto max-h-[10rem] flex-initial">
-                {optionsMapper[optionKey]?.map((option) => {
+                {optionsMapper[optionKey]?.map((option, index) => {
                   return (
-                    <SelectItem value={option.toString()}>
+                    <SelectItem value={option.toString()} key={index}>
                       {" "}
                       {option.toString()}
                     </SelectItem>
@@ -128,21 +154,34 @@ const Filter = ({ optionsMapper }: FilterProps) => {
             <Button
               className="bg-blue-500 text-white gap-2"
               onClick={handleAddFilter}
+              disabled={!filterBuilder}
             >
-              <PlusCircle className="text-sm text-blue-500 bg-white rounded-full" />
-              {searchParams.has(optionKey) ? "Change Filter" : "Add Filter"}
+              {searchParams.has(optionKey) ? (
+                <>
+                  <RefreshCw className="text-sm text-blue-500 bg-white rounded-full" />
+                  {"Change Filter"}
+                </>
+              ) : (
+                <>
+                  <PlusCircle className="text-sm text-blue-500 bg-white rounded-full" />
+                  {"Add Filter"}
+                </>
+              )}
             </Button>
           </div>
         </div>
         <Separator />
 
         {Array.from(searchParams)
-          .filter(([key, value]) => {
+          .filter(([key]) => {
             return key !== "page" && key !== "limit" && key !== "search";
           })
-          .map(([key, value]) => {
+          .map(([key, value], index) => {
             return (
-              <div className="flex  p-2 h-10 w-100% rounded-lg justify-between border-gray-500 border-[1px]">
+              <div
+                className="flex  p-2 h-10 w-100% rounded-lg justify-between border-gray-500 border-[1px]"
+                key={index}
+              >
                 <div className="flex gap-3">
                   <Badge className="bg-blue-600">{key} </Badge>
                   <Badge className="bg-slate-800">Equals</Badge>
@@ -151,7 +190,7 @@ const Filter = ({ optionsMapper }: FilterProps) => {
                 <XCircle
                   fill="gray"
                   className="text-white cursor-pointer"
-                  onClick={() => querySetter(key, value)}
+                  onClick={() => removeFilterValue(key, value)}
                 />
               </div>
             );

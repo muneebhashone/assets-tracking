@@ -45,7 +45,7 @@ const UploadShipmentFile = ({
   setModalOpen: (state: boolean) => void;
   shipmentId: number;
 }) => {
-  const { mutate: uploadShipmentFile, isPending } = useShipmentFileUpload({
+  const { mutate: uploadShipmentFile } = useShipmentFileUpload({
     async onSuccess(data) {
       toast({
         variant: "default",

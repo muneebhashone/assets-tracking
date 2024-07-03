@@ -65,7 +65,7 @@ const UploadProfileForm = ({
         alert("Should be less than 10mb");
         return;
       }
-      console.log(file.type);
+
       if (file.type !== "image/jpeg" && file.type !== "image/png") {
         alert("Type not supported");
         return;

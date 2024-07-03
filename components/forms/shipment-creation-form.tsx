@@ -70,7 +70,7 @@ export default function ShipmentCreationForm() {
     tags: [],
     trackWith: "CONTAINER_NUMBER",
   };
-  const { data, isFetching } = useFetchAllSearatesContainerSetup();
+  const { data } = useFetchAllSearatesContainerSetup();
 
   const form = useForm<z.infer<typeof CreateShipmentInputSchema>>({
     resolver: zodResolver(CreateShipmentInputSchema),
