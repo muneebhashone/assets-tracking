@@ -62,12 +62,21 @@ const UploadProfileForm = ({
 
     if (file) {
       if (file.size / 1024 / 1024 > 10) {
-        alert("Should be less than 10mb");
+        toast({
+          title: "Error",
+          description: "Should be less than 10mb",
+          variant: "destructive",
+        });
         return;
       }
 
       if (file.type !== "image/jpeg" && file.type !== "image/png") {
-        alert("Type not supported");
+        toast({
+          title: "Error",
+          description: "Type not supported",
+          variant: "destructive",
+        });
+
         return;
       }
       const formData = new FormData();

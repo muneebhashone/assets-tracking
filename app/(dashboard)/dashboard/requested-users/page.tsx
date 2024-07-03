@@ -24,7 +24,7 @@ export default function Page() {
     limitParam: pageLimit,
     pageParam: page,
     searchString: search,
-    filterByStatus: "REQUESTED",
+    filterByStatus: ["REQUESTED", "REJECTED"],
   });
 
   return (

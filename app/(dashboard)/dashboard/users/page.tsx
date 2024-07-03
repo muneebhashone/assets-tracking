@@ -2,8 +2,8 @@
 
 import { ModalCustom } from "@/components/ModalComponent";
 import BreadCrumb from "@/components/breadcrumb";
-import { ActiveUserTable } from "@/components/tables/active-user-table/active-user";
-import { columns } from "@/components/tables/active-user-table/columns";
+
+import { columns } from "@/components/tables/users-table/columns";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -33,7 +33,7 @@ import { toast } from "@/components/ui/use-toast";
 import { useCurrentUser } from "@/services/auth.mutations";
 import { useCreateUser } from "@/services/user.mutations";
 import { useGetUsers } from "@/services/user.queries";
-import { User } from "@/types/services/auth.types";
+import { User, UserPermissions } from "@/types/services/auth.types";
 
 import SearchBar from "@/components/SearchBar";
 import { EligibleRolesForCreation, UserRole } from "@/utils/constants";
@@ -46,6 +46,8 @@ import { z } from "zod";
 import { Label } from "@/components/ui/label";
 import Filter, { OptionsMapperType } from "@/components/Filter";
 import { RoleType } from "@/types/user.types";
+import { UsersTable } from "@/components/tables/users-table/users";
+import { checkPermissions } from "@/utils/user.utils";
 
 export type CreateUserFormSchemaType = z.infer<typeof createUserSchema>;
 
@@ -107,14 +109,12 @@ export default function Page() {
     searchString: search,
     filterByActive: Boolean(filterByActive),
     filterByRole: filterByRole ? (filterByRole as RoleType) : undefined,
-    filterByStatus: filterByStatus
-      ? (filterByStatus as "REQUESTED" | "APPROVED" | "REJECTED")
-      : undefined,
+    filterByStatus: ["APPROVED"],
   });
   const optionsMapper: OptionsMapperType = {
     filterByActive: [true, false],
     filterByRole: EligibleRolesForCreation[currentUser?.user.role as RoleType],
-    filterByStatus: ["REQUESTED", "APPROVED", "REJECTED"],
+    // filterByStatus: ["REQUESTED", "APPROVED", "REJECTED"],
   };
 
   return (
@@ -124,18 +124,22 @@ export default function Page() {
 
         <div className="flex items-start justify-between">
           <Heading
-            title={`Active Users (${users?.results.length || 0})`}
-            description="Manage active users "
+            title={`Users (${users?.results.length || 0})`}
+            description="Manage users "
           />
         </div>
         <Separator />
 
-        <Button
-          className="border rounded-md px-4 py-2 bg-golden text-white hover:bg-zinc-900"
-          onClick={() => setModalOpen((prev) => !prev)}
-        >
-          Create
-        </Button>
+        {checkPermissions(currentUser?.user.permissions as UserPermissions[], [
+          "CREATE_USER",
+        ]) && (
+          <Button
+            className="border rounded-md px-4 py-2 bg-golden text-white hover:bg-zinc-900"
+            onClick={() => setModalOpen((prev) => !prev)}
+          >
+            Create
+          </Button>
+        )}
 
         <Separator />
         <div className="flex justify-between">
@@ -145,7 +149,7 @@ export default function Page() {
         {allUsersLoading ? (
           <div>Loading ... </div>
         ) : (
-          <ActiveUserTable
+          <UsersTable
             columns={columns}
             data={users?.results as User[]}
             pageCount={users?.paginatorInfo.pages || 0}

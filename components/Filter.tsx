@@ -32,7 +32,7 @@ type RoleMapping =
 
 // T = shipment or user . selects filter according to
 export interface OptionsMapperType {
-  filterByStatus: StatusType[];
+  // filterByStatus: StatusType[];
   filterByActive: boolean[];
   filterByRole: RoleMapping;
 }
@@ -51,7 +51,7 @@ const Filter = ({ optionsMapper }: FilterProps) => {
   const searchParams = useSearchParams();
   const objectKeys = Object.keys(optionsMapper);
   const [optionKey, setOptionKey] =
-    useState<keyof OptionsMapperType>("filterByStatus");
+    useState<keyof OptionsMapperType>("filterByRole");
   const [filterBuilder, setFilterBuilder] = useState<
     TemporaryFilterState | undefined
   >({
@@ -99,7 +99,7 @@ const Filter = ({ optionsMapper }: FilterProps) => {
               >
                 <SelectTrigger
                   id="id"
-                  className="!rounded-l-none   border-gray-500 border-[1px] border-l-0 ring-0 focus:ring-0"
+                  className="!rounded-l-none    border-[1px] border-l-0 ring-0 focus:ring-0"
                 >
                   <SelectValue placeholder="Select Options" />
                 </SelectTrigger>
@@ -114,7 +114,7 @@ const Filter = ({ optionsMapper }: FilterProps) => {
                   })}
                 </SelectContent>
               </Select>
-              <div className="relative left-0 top-0 flex items-center justify-center px-3 bg-[#f7f7f7] border-gray-500 border-[1px] ">
+              <div className="relative left-0 top-0 flex items-center justify-center px-3 bg-[#f7f7f7]  border-[1px] ">
                 <FilterIcon
                   fill="#6c757d"
                   size={"20px"}
@@ -131,7 +131,7 @@ const Filter = ({ optionsMapper }: FilterProps) => {
             >
               <SelectTrigger
                 id="equal"
-                className="!rounded-l-none   border-gray-500 border-[1px] border-l-0 ring-0 focus:ring-0"
+                className="!rounded-l-none    border-[1px] border-l-0 ring-0 focus:ring-0"
               >
                 <SelectValue placeholder="Select a Value" />
               </SelectTrigger>
@@ -146,7 +146,7 @@ const Filter = ({ optionsMapper }: FilterProps) => {
                 })}
               </SelectContent>
             </Select>
-            <div className="relative left-0 top-0 flex items-center justify-center px-3 bg-[#f7f7f7] border-gray-500 border-[1px] ">
+            <div className="relative left-0 top-0 flex items-center justify-center px-3 bg-[#f7f7f7]  border-[1px] ">
               <SearchIcon className="text-[#6c757d] text-xs" size={"20px"} />
             </div>
           </div>
@@ -179,7 +179,7 @@ const Filter = ({ optionsMapper }: FilterProps) => {
           .map(([key, value], index) => {
             return (
               <div
-                className="flex  p-2 h-10 w-100% rounded-lg justify-between border-gray-500 border-[1px]"
+                className="flex  p-2 h-10 w-100% rounded-lg justify-between border-gray-400 border-[1px]"
                 key={index}
               >
                 <div className="flex gap-3">

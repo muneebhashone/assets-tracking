@@ -15,16 +15,10 @@ export const navItems: NavItem[] = [
     label: "Shipment",
     permissions: ["VIEW_SHIPMENT"],
   },
-  // {
-  //   title: "Track New Shipment",
-  //   href: "/dashboard/shipment",
-  //   icon: "moon",
-  //   label: "Shipment",
-  //   permissions: ["CREATE_SHIPMENT"],
-  // },
+
   {
     title: "Acitve User",
-    href: "/dashboard/active-users",
+    href: "/dashboard/users",
     icon: "user",
     label: "user",
     permissions: ["VIEW_USER"],
@@ -36,13 +30,7 @@ export const navItems: NavItem[] = [
     label: "employee",
     permissions: ["VIEW_USER"],
   },
-  // {
-  //   title: "Rejected User",
-  //   href: "/dashboard/rejectedUsers",
-  //   icon: "employee",
-  //   label: "employee",
-  //   permissions: ["VIEW_USER"],
-  // },
+
   {
     title: "Company",
     href: "/dashboard/company",
@@ -76,7 +64,7 @@ export const profileSettingItems: NavItem[] = [
   // },
   {
     title: "Acitve User",
-    href: "/dashboard/active-users",
+    href: "/dashboard/users",
     icon: "user",
     label: "user",
     permissions: ["VIEW_USER"],
@@ -88,13 +76,7 @@ export const profileSettingItems: NavItem[] = [
     label: "employee",
     permissions: ["VIEW_USER"],
   },
-  // {
-  //   title: "Rejected User",
-  //   href: "/dashboard/rejectedUsers",
-  //   icon: "employee",
-  //   label: "employee",
-  //   permissions: ["VIEW_USER"],
-  // },
+ 
   {
     title: "Company",
     href: "/dashboard/company",

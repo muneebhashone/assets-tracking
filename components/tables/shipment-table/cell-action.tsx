@@ -1,4 +1,5 @@
 "use client";
+import UpdateShipmentForm from "@/components/forms/update-shipment-form";
 import UploadShipmentFile from "@/components/forms/upload-shipment-file-form";
 import { AlertModal } from "@/components/modal/alert-modal";
 import { Button } from "@/components/ui/button";
@@ -23,6 +24,7 @@ import { checkPermissions } from "@/utils/user.utils";
 import {
   ClipboardX,
   Cloud,
+  Edit,
   ExternalLink,
   LinkIcon,
   MoreHorizontal,
@@ -40,6 +42,7 @@ interface CellActionProps {
 export const CellAction: React.FC<CellActionProps> = ({ data }) => {
   const [warningOpen, setWarningOpen] = useState<boolean>(false);
   const [modalOpen, setModalOpen] = useState<boolean>(false);
+  const [updateModalOpen, setUpdateModalOpen] = useState<boolean>(false);
   const [shareableLink, setShareableLink] = useState<string | null>(null);
   const { mutate: deleteShipment } = useDeletShipment({
     onSuccess(data) {
@@ -127,6 +130,13 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
         setModalOpen={setModalOpen}
         shipmentId={data.id}
       />
+      
+        <UpdateShipmentForm
+          setModalOpen={setUpdateModalOpen}
+          modalOpen={updateModalOpen}
+          shipmentData={data}
+        />
+      
       <DropdownMenu modal={false}>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" className="h-8 w-8 p-0">
@@ -182,30 +192,32 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
           <DropdownMenuItem onClick={() => setModalOpen(true)}>
             <Cloud className="mr-2 h-4 w-4" /> Upload File
           </DropdownMenuItem>
+          {checkPermissions(user?.user.permissions as UserPermissions[], [
+            "EDIT_SHIPMENT",
+          ]) && (
+            <DropdownMenuItem onClick={() => setUpdateModalOpen(true)}>
+              <Edit className="mr-2 h-4 w-4" /> Update Shipment
+            </DropdownMenuItem>
+          )}
 
-          {shareableLink
-            ? checkPermissions(user?.user.permissions as UserPermissions[], [
-                "EDIT_SHIPMENT",
-                "CREATE_SHIPMENT",
-                "DELETE_SHIPMENT",
-              ]) && (
-                <DropdownMenuItem
-                  onClick={() => discardLink({ shipmentId: String(data.id) })}
-                >
-                  <ClipboardX className="mr-2 h-4 w-4" /> Discard Shareable Link
-                </DropdownMenuItem>
-              )
-            : checkPermissions(user?.user.permissions as UserPermissions[], [
-                "EDIT_SHIPMENT",
-                "CREATE_SHIPMENT",
-                "DELETE_SHIPMENT",
-              ]) && (
-                <DropdownMenuItem
-                  onClick={() => createLink({ shipmentId: String(data.id) })}
-                >
-                  <LinkIcon className="mr-2 h-4 w-4" /> Generate Sharable Link
-                </DropdownMenuItem>
-              )}
+          {checkPermissions(user?.user.permissions as UserPermissions[], [
+            "EDIT_SHIPMENT",
+            "CREATE_SHIPMENT",
+            "DELETE_SHIPMENT",
+          ]) &&
+            (shareableLink ? (
+              <DropdownMenuItem
+                onClick={() => discardLink({ shipmentId: String(data.id) })}
+              >
+                <ClipboardX className="mr-2 h-4 w-4" /> Discard Shareable Link
+              </DropdownMenuItem>
+            ) : (
+              <DropdownMenuItem
+                onClick={() => createLink({ shipmentId: String(data.id) })}
+              >
+                <LinkIcon className="mr-2 h-4 w-4" /> Generate Sharable Link
+              </DropdownMenuItem>
+            ))}
         </DropdownMenuContent>
       </DropdownMenu>
     </>

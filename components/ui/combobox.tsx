@@ -1,5 +1,8 @@
 "use client";
 
+import * as React from "react";
+import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
+import { cn } from "@/lib/utils";
 import { Button, ButtonProps } from "@/components/ui/button";
 import {
   Command,
@@ -14,10 +17,8 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { cn } from "@/lib/utils";
-import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
-import * as React from "react";
 import { ControllerRenderProps } from "react-hook-form";
+import { ScrollArea } from "./scroll-area";
 
 export interface Options {
   value: string;
@@ -35,24 +36,23 @@ type FormProps = ControllerRenderProps<
   },
   "carrier"
 >;
-interface ComboboxProps extends ButtonProps , React.RefAttributes<HTMLButtonElement> {
+interface ComboboxProps extends FormProps {
   options: Options[];
   placeholder?: string;
-  field?: FormProps;
 }
 
 export function Combobox({
   options,
   placeholder = "Search from Options ...",
-  field,
   ...rest
 }: ComboboxProps) {
   const [open, setOpen] = React.useState(false);
 
-  // const { onChange, value, ...rest } = field;
+  // console.log(field)
+  const { onChange, value, ...props } = rest;
 
   const handleSelect = (currentValue: string) => {
-    field?.onChange(currentValue === field?.value ? "" : currentValue);
+    onChange(currentValue === value ? "" : currentValue);
     setOpen(false);
   };
 
@@ -64,10 +64,10 @@ export function Combobox({
           role="combobox"
           aria-expanded={open}
           id="carrier"
-          {...rest}
+          className="w-[15rem] justify-between "
         >
-          {field?.value
-            ? options.find((option) => option.value === field?.value)?.name
+          {value
+            ? options.find((option) => option.value === value)?.name
             : placeholder}
           <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
@@ -83,7 +83,7 @@ export function Combobox({
               return 1;
             return 0;
           }}
-          {...field}
+          {...props}
         >
           <CommandInput placeholder={placeholder} className="h-9" />
           <CommandList>
@@ -99,9 +99,7 @@ export function Combobox({
                   <CheckIcon
                     className={cn(
                       "ml-auto h-4 w-4",
-                      field?.value === option.value
-                        ? "opacity-100"
-                        : "opacity-0",
+                      value === option.value ? "opacity-100" : "opacity-0",
                     )}
                   />
                 </CommandItem>

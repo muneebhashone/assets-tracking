@@ -3,7 +3,7 @@ import ProtectedCheckbox from "@/components/ProtectedCheckbox";
 import PermissionUpdate from "@/components/forms/permission-update-form";
 import { UserRole } from "@/utils/constants";
 import { ColumnDef } from "@tanstack/react-table";
-import { IUserModified } from "./active-user";
+import { IUserModified } from "./users";
 import { CellAction } from "./cell-action";
 
 export const columns: ColumnDef<IUserModified>[] = [

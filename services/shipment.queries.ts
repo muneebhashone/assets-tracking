@@ -18,6 +18,13 @@ export type GetAllShipmentsResponseType = {
   paginatorInfo: PaginatorInfoType;
 };
 
+export type GetShipmentByIdInput = {
+  shipmentId: number;
+};
+export type GetShipmentByIdResponse = {
+  result: Shipment;
+};
+
 export type GetSharedShipmentResponseType = {
   data: Shipment;
   status: string;
@@ -70,6 +77,15 @@ export const getShipments = async (input: GetAllShipmentsInputType) => {
   return data;
 };
 
+export const getShipmentById = async (input: GetShipmentByIdInput) => {
+  const { shipmentId } = input;
+  const { data } = await apiAxios.get<GetShipmentByIdResponse>(
+    `/shipments/${shipmentId}/id`,
+  );
+
+  return data;
+};
+
 export const viewSharedShipment = async (input: GetSharedShipmentInputType) => {
   const { token } = input;
   const { data } = await apiAxios.get<GetSharedShipmentResponseType>(
@@ -95,6 +111,21 @@ export const useGetShipments = (
     queryFn: async () => await getShipments(input),
     queryKey: [getShipments.name, JSON.stringify(input)],
     refetchInterval: 3000,
+  });
+};
+
+export const useGetShipmentById = (
+  input: GetShipmentByIdInput,
+  options?: UseQueryOptions<
+    unknown,
+    ErrorResponseType,
+    GetShipmentByIdResponse
+  >,
+) => {
+  return useQuery({
+    ...options,
+    queryFn: async () => await getShipmentById(input),
+    queryKey: [getShipmentById.name, JSON.stringify(input)],
   });
 };
 

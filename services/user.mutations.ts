@@ -6,7 +6,7 @@ import {
 } from "@tanstack/react-query";
 import { ErrorResponseType, SuccessResponseType } from "./types.common";
 
-import { CreateUserFormSchemaType } from "@/app/(dashboard)/dashboard/active-users/page";
+import { CreateUserFormSchemaType } from "@/app/(dashboard)/dashboard/users/page";
 import { User } from "@/types/services/auth.types";
 import { getUsers } from "./user.queries";
 import { ProfileImageUploadResponseType } from "./upload.mutations";

@@ -53,7 +53,7 @@ export interface IUserModified extends Omit<User, "isActive"> {
   isActive: "Active" | "In Active" | string;
 }
 
-export function ActiveUserTable({
+export function UsersTable({
   columns,
   data,
   pageCount,

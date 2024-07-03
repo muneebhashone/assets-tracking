@@ -34,7 +34,7 @@ import { Edit, MoreHorizontal, Package, Trash } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { IUserModified } from "./active-user";
+import { IUserModified } from "./users";
 import { Label } from "@/components/ui/label";
 
 interface CellActionProps {

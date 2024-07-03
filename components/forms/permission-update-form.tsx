@@ -6,7 +6,6 @@ import { Row } from "@tanstack/react-table";
 import { useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { IUserModified } from "../tables/active-user-table/active-user";
 import { Badge } from "../ui/badge";
 import {
   Form,
@@ -17,6 +16,7 @@ import {
 } from "../ui/form";
 import { MultiSelect } from "../ui/multi-select";
 import { toast } from "../ui/use-toast";
+import { IUserModified } from "../tables/users-table/users";
 interface PermissionUpdateProps {
   row: Row<IUserModified>;
 }
@@ -68,7 +68,7 @@ const PermissionUpdate = (props: PermissionUpdateProps) => {
     },
     [],
   );
- 
+
   const onSubmit = (data: UpdatePermissionsInputType) => {
     mutate({ id: row.original.id, ...data });
   };

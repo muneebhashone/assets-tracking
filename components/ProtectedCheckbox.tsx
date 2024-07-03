@@ -4,8 +4,9 @@ import { UserPermissions } from "@/types/services/auth.types";
 import { checkPermissions } from "@/utils/user.utils";
 import { Row, Table } from "@tanstack/react-table";
 import React from "react";
-import { IUserModified } from "./tables/active-user-table/active-user";
+
 import { Checkbox } from "./ui/checkbox";
+import { IUserModified } from "./tables/users-table/users";
 
 interface ProtectedProps<T> {
   table?: Table<T>;

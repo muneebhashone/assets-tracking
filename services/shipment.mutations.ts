@@ -12,14 +12,21 @@ import { ErrorResponseType, SuccessResponseType } from "./types.common";
 export interface CreateShipmentInputType {
   trackWith: TrackWithType;
   carrier: string;
-  tags: any[];
+  tags: string[];
   followers: string[];
   referenceNo: string | null;
   containerNo: string;
   mblNo: string | null;
 }
 
-export interface CreateShipmentResponseType {
+export interface UpdateShipmentInputType {
+  tags?: string[];
+  followers?: string[];
+  referenceNo?: string | null;
+  id?: number;
+}
+
+export interface CreateUpdateShipmentResponseType {
   status: string;
   message: string;
   data: Shipment;
@@ -54,8 +61,8 @@ export interface BuildShipmentShareableLinkResponseType
 
 export const createShipment = async (
   input: CreateShipmentInputType,
-): Promise<CreateShipmentResponseType> => {
-  const { data } = await apiAxios.post<CreateShipmentResponseType>(
+): Promise<CreateUpdateShipmentResponseType> => {
+  const { data } = await apiAxios.post<CreateUpdateShipmentResponseType>(
     "/shipments",
     input,
   );
@@ -113,10 +120,19 @@ export const setFilesShareable = async (input: SetFilesShareableInputType) => {
   return data;
 };
 
+export const updateShipment = async (input: UpdateShipmentInputType) => {
+  const { id, ...rest } = input;
+  const { data } = await apiAxios.patch<CreateUpdateShipmentResponseType>(
+    `/shipments/${id}`,
+    rest,
+  );
+  return data;
+};
+
 //hooks
 export const useCreateShipment = (
   options?: UseMutationOptions<
-    CreateShipmentResponseType,
+    CreateUpdateShipmentResponseType,
     ErrorResponseType,
     CreateShipmentInputType
   >,
@@ -215,6 +231,24 @@ export const useBulkDeleteShipment = (
   return useMutation({
     ...options,
     mutationFn: deleteBulkShipments,
+    async onSuccess(data, variables, context) {
+      await queryClient.invalidateQueries({ queryKey: [getShipments.name] });
+      options?.onSuccess?.(data, variables, context);
+    },
+  });
+};
+
+export const useUpdateShipment = (
+  options?: UseMutationOptions<
+    CreateUpdateShipmentResponseType,
+    ErrorResponseType,
+    UpdateShipmentInputType
+  >,
+) => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    ...options,
+    mutationFn: updateShipment,
     async onSuccess(data, variables, context) {
       await queryClient.invalidateQueries({ queryKey: [getShipments.name] });
       options?.onSuccess?.(data, variables, context);
