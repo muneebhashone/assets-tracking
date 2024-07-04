@@ -106,7 +106,7 @@ export const MultiSelect = React.forwardRef<
     };
 
     const toggleOption = (value: string) => {
-      const newSelectedValues = selectedValues.includes(value)
+      const newSelectedValues = selectedValues?.includes(value)
         ? selectedValues.filter((v) => v !== value)
         : [...selectedValues, value];
       setSelectedValues(newSelectedValues);
@@ -261,7 +261,7 @@ export const MultiSelect = React.forwardRef<
                   <span>(Select All)</span>
                 </CommandItem>
                 {options.map((option) => {
-                  const isSelected = selectedValues.includes(option.value);
+                  const isSelected = selectedValues?.includes(option.value);
                   return (
                     <CommandItem
                       key={option.value}

@@ -5,11 +5,11 @@ import { usePathname } from "next/navigation";
 
 import { Icons } from "@/components/icons";
 import { cn } from "@/lib/utils";
-import { User, UserPermissions } from "@/types/services/auth.types";
+import { User } from "@/types/services/auth.types";
 
 import { Dispatch, SetStateAction } from "react";
 import { checkPermissions } from "@/utils/user.utils";
-import { NavItem } from "@/types/user.types";
+import { NavItem, PermissionsType } from "@/types/user.types";
 
 interface DashboardNavProps {
   items: NavItem[];
@@ -29,8 +29,8 @@ export function DashboardNav({ items, setOpen, user }: DashboardNavProps) {
       {items.map((item, index) => {
         if (
           !checkPermissions(
-            user?.permissions as UserPermissions[],
-            item?.permissions as UserPermissions[],
+            user?.permissions as PermissionsType[],
+            item?.permissions as PermissionsType[],
           )
         )
           return;

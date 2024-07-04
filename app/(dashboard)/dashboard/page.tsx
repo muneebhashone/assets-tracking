@@ -1,54 +1,9 @@
-"use client";
+import DashboardPage from "@/components/page-client/DashboardPage";
+import RoleWrapper from "@/components/wrapper/role-wrapper";
+import React from "react";
 
-import { useCurrentUser } from "@/services/auth.mutations";
-import { UserRole } from "@/utils/constants";
+const Page = () => {
+  return <DashboardPage />;
+};
 
-export default function Page() {
-  const { data, isFetching } = useCurrentUser();
-
-  return (
-    <div className="flex-1 space-y-4 p-4 md:p-8 pt-6 ">
-      <div className="flex items-center justify-between space-y-2">
-        <h2 className="text-3xl font-bold tracking-tight ">
-          {" "}
-          {isFetching
-            ? "Loading..."
-            : `Hi, Welcome back ${data?.user.name} ( ${
-                UserRole[data?.user.role as keyof typeof UserRole]
-              } )`}
-        </h2>
-        {/* {data?.user.role !== ROLE.SUPER_ADMIN && ( */}
-        <div className="flex flex-col ">
-          <h2 className="text-2xl font-bold tracking-tight ">
-            Credits: {data?.user.credits}
-          </h2>
-        </div>
-        {/* )} */}
-      </div>
-
-      {/* {session?.user.role === ROLE.USER ? (
-        <UserDashboardView  {session?.user.role === ROLE.USER ? (
-        <UserDashboardView
-          chartData={chartData}
-          kpiData={kpiData as IKpiData["userKpi"]}
-        />
-      ) : (
-        <DashboardView
-          adminData={adminChart}
-          kpiData={kpiData as IKpiData["adminKpi"]}
-          chartData={chartData}
-        />
-      )}
-          chartData={chartData}
-          kpiData={kpiData as IKpiData["userKpi"]}
-        />
-      ) : (
-        <DashboardView
-          adminData={adminChart}
-          kpiData={kpiData as IKpiData["adminKpi"]}
-          chartData={chartData}
-        />
-      )} */}
-    </div>
-  );
-}
+export default RoleWrapper(Page, "VIEW_DASHBOARD");

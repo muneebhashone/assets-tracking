@@ -28,7 +28,7 @@ export function UserNav() {
                 src={currentUser?.user.avatar ?? currentUser?.user.name}
                 alt={currentUser?.user.name ?? ""}
               />
-              <AvatarFallback>{currentUser?.user.name[0]}</AvatarFallback>
+              <AvatarFallback>{currentUser?.user?.name?.[0]}</AvatarFallback>
             </Avatar>
           </Button>
         </DropdownMenuTrigger>

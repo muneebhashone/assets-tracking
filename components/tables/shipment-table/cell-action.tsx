@@ -19,7 +19,7 @@ import {
   useSetFilesShareable,
 } from "@/services/shipment.mutations";
 import { Shipment } from "@/services/shipment.queries";
-import { UserPermissions } from "@/types/services/auth.types";
+import { PermissionsType } from "@/types/user.types";
 import { checkPermissions } from "@/utils/user.utils";
 import {
   ClipboardX,
@@ -130,13 +130,13 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
         setModalOpen={setModalOpen}
         shipmentId={data.id}
       />
-      
-        <UpdateShipmentForm
-          setModalOpen={setUpdateModalOpen}
-          modalOpen={updateModalOpen}
-          shipmentData={data}
-        />
-      
+
+      <UpdateShipmentForm
+        setModalOpen={setUpdateModalOpen}
+        modalOpen={updateModalOpen}
+        shipmentData={data}
+      />
+
       <DropdownMenu modal={false}>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" className="h-8 w-8 p-0">
@@ -164,7 +164,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
           </DropdownMenuItem>
 
           {data?.files?.length &&
-            checkPermissions(user?.user.permissions as UserPermissions[], [
+            checkPermissions(user?.user.permissions as PermissionsType[], [
               "EDIT_SHIPMENT",
               "CREATE_SHIPMENT",
               "DELETE_SHIPMENT",
@@ -192,7 +192,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
           <DropdownMenuItem onClick={() => setModalOpen(true)}>
             <Cloud className="mr-2 h-4 w-4" /> Upload File
           </DropdownMenuItem>
-          {checkPermissions(user?.user.permissions as UserPermissions[], [
+          {checkPermissions(user?.user.permissions as PermissionsType[], [
             "EDIT_SHIPMENT",
           ]) && (
             <DropdownMenuItem onClick={() => setUpdateModalOpen(true)}>
@@ -200,7 +200,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
             </DropdownMenuItem>
           )}
 
-          {checkPermissions(user?.user.permissions as UserPermissions[], [
+          {checkPermissions(user?.user.permissions as PermissionsType[], [
             "EDIT_SHIPMENT",
             "CREATE_SHIPMENT",
             "DELETE_SHIPMENT",

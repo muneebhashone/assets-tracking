@@ -47,7 +47,7 @@ export function Combobox({
 }: ComboboxProps) {
   const [open, setOpen] = React.useState(false);
 
-  // console.log(field)
+
   const { onChange, value, ...props } = rest;
 
   const handleSelect = (currentValue: string) => {
@@ -71,13 +71,13 @@ export function Combobox({
           <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[200px] p-0">
+      <PopoverContent className="w-[200px] p-0 ">
         <Command
           filter={(value, search) => {
             if (
               options
                 .find((option) => option.value === value)
-                ?.name.includes(search)
+                ?.name?.includes(search)
             )
               return 1;
             return 0;
@@ -85,7 +85,7 @@ export function Combobox({
           {...props}
         >
           <CommandInput placeholder={placeholder} className="h-9" />
-          <CommandList>
+          <CommandList className="max-h-[250px]">
             <CommandEmpty>No Options found.</CommandEmpty>
             <CommandGroup>
               {options?.map((option) => (

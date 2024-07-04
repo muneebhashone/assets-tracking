@@ -1,6 +1,5 @@
 "use client";
 import { DashboardNav } from "@/components/dashboard-nav";
-// import { navItems } from "@/constants/data";
 import { cn } from "@/lib/utils";
 import { useCurrentUser } from "@/services/auth.mutations";
 import { Skeleton } from "../ui/skeleton";

@@ -7,6 +7,8 @@ export type GetAllShipmentsInputType = {
   searchString: string;
   limitParam: number;
   pageParam: number;
+  tags?:string[];
+  trackWith?:TrackWithType
 };
 
 export type GetSharedShipmentInputType = {

@@ -16,8 +16,13 @@ export const columns: ColumnDef<IUserModified>[] = [
     enableHiding: false,
   },
   {
+    header: "S#",
+    cell: ({ row }) => <p className="text-center">{row?.index}</p>,
+  },
+  {
     accessorKey: "id",
-    header: "ID",
+    header: "User ID",
+    
   },
   {
     accessorKey: "name",

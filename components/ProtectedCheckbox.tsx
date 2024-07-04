@@ -1,12 +1,13 @@
 import { useCurrentUser } from "@/services/auth.mutations";
 import { Shipment } from "@/services/shipment.queries";
-import { UserPermissions } from "@/types/services/auth.types";
+
 import { checkPermissions } from "@/utils/user.utils";
 import { Row, Table } from "@tanstack/react-table";
 import React from "react";
 
-import { Checkbox } from "./ui/checkbox";
 import { IUserModified } from "./tables/users-table/users";
+import { Checkbox } from "./ui/checkbox";
+import { PermissionsType } from "@/types/user.types";
 
 interface ProtectedProps<T> {
   table?: Table<T>;
@@ -19,11 +20,11 @@ const ProtectedCheckbox: React.FC<
 > = ({ table, row, type }) => {
   const { data: user } = useCurrentUser();
 
-  const userDeletePermission: UserPermissions[] = ["DELETE_USER"];
-  const shipmentDeletePermission: UserPermissions[] = ["DELETE_SHIPMENT"];
+  const userDeletePermission: PermissionsType[] = ["DELETE_USER"];
+  const shipmentDeletePermission: PermissionsType[] = ["DELETE_SHIPMENT"];
   return (
     checkPermissions(
-      user?.user.permissions as UserPermissions[],
+      user?.user.permissions as PermissionsType[],
       type === "user" ? userDeletePermission : shipmentDeletePermission,
     ) && (
       <>

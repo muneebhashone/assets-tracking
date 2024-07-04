@@ -17,7 +17,7 @@ const HeroSection = () => {
     return data?.data.map((value) => {
       return {
         name: value.name,
-        code: value.scac_codes[0],
+        code: value.scac_codes?.[0],
       };
     });
   };

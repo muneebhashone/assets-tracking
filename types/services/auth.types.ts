@@ -1,4 +1,5 @@
 import { UserRole } from "@/utils/constants";
+import { PermissionsType } from "../user.types";
 
 export type LoginInputType = {
   email: string;
@@ -62,15 +63,5 @@ export interface User {
   credits: number;
   companyId: number;
   clientId?: number | null;
-  permissions: UserPermissions[];
+  permissions: PermissionsType[];
 }
-export type UserPermissions =
-  | "VIEW_DASHBOARD"
-  | "CREATE_USER"
-  | "CREATE_SHIPMENT"
-  | "DELETE_SHIPMENT"
-  | "DELETE_USER"
-  | "EDIT_SHIPMENT"
-  | "EDIT_USER";
-
-

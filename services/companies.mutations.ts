@@ -8,7 +8,6 @@ import {
 import { ErrorResponseType, SuccessResponseType } from "./types.common";
 import { useSearchParams } from "next/navigation";
 
-// export type Email = `${string}@${string}.${string}`;
 //types
 export interface CreateShipmentInputType {
   trackWith: TrackWithType;
@@ -253,7 +252,6 @@ export const useUpdateShipment = (
     ...options,
     mutationFn: updateShipment,
     async onSuccess(data, variables, context) {
-     
       await queryClient.invalidateQueries({ queryKey: [getShipments.name] });
       options?.onSuccess?.(data, variables, context);
     },

@@ -23,50 +23,83 @@ import {
   SelectValue,
 } from "./ui/select";
 import { Separator } from "./ui/separator";
+import { User } from "@/types/services/auth.types";
+import { Shipment, TrackWithType } from "@/services/shipment.queries";
+import { TrackShipmentInput } from "@/services/searates.queries";
+import { TagsInput } from "react-tag-input-component";
 
 type EligibleRolesForCreationType = typeof EligibleRolesForCreation;
 
 type RoleMapping =
   EligibleRolesForCreationType[keyof EligibleRolesForCreationType];
 
-// T = shipment or user . selects filter according to
+type IRecord = {
+  [x: string]: Record<string, unknown>;
+};
+
 export interface OptionsMapperType {
-  // filterByStatus: StatusType[];
-  filterByActive: boolean[];
-  filterByRole: RoleMapping;
+  Shipment: {
+    trackWith: TrackWithType[];
+    tags: null;
+  };
+  User: {
+    filterByActive: boolean[];
+    filterByRole: RoleMapping;
+  };
 }
 
-interface FilterProps {
-  optionsMapper: OptionsMapperType;
+type OptionsSelectorType = "Shipment" | "User";
+interface FilterProps<T extends OptionsSelectorType> {
+  optionsMapper: OptionsMapperType[T];
+  type: T;
+  defaultValue: keyof OptionsMapperType[T];
 }
+
 interface TemporaryFilterState {
   filterName: string;
-  value: string;
+  value: string | null | string[];
 }
 
-const Filter = ({ optionsMapper }: FilterProps) => {
+const Filter = <T extends OptionsSelectorType>({
+  optionsMapper,
+  type,
+  defaultValue,
+}: FilterProps<T>) => {
   const [openModal, setOpenModal] = useState<boolean>(false);
   const { querySetter } = useQueryUpdater();
   const searchParams = useSearchParams();
-  const objectKeys = Object.keys(optionsMapper);
+  const objectKeys = Object.keys(
+    optionsMapper,
+  ) as (keyof OptionsMapperType[T])[];
   const [optionKey, setOptionKey] =
-    useState<keyof OptionsMapperType>("filterByRole");
+    useState<keyof OptionsMapperType[T]>(defaultValue);
   const [filterBuilder, setFilterBuilder] = useState<
     TemporaryFilterState | undefined
   >({
-    filterName: optionKey,
-    value: String(optionsMapper[optionKey][0]),
+    filterName: optionKey as string,
+    value: String(
+      Array.isArray(optionsMapper?.[optionKey])
+        ? optionsMapper?.[optionKey]?.[0]
+        : "",
+    ),
   });
 
   const handleAddFilter = () => {
     if (filterBuilder) {
-      if (filterBuilder.value !== searchParams.get(optionKey)) {
+      if (Array.isArray(filterBuilder.value)) {
         querySetter(filterBuilder?.filterName, filterBuilder?.value);
+      } else {
+        if (filterBuilder.value !== searchParams.get(optionKey as string)) {
+          querySetter(
+            filterBuilder?.filterName,
+            filterBuilder?.value as string,
+          );
+        }
       }
     }
   };
-  const onFilterValueChange = (value: string) => {
-    setFilterBuilder({ filterName: optionKey, value: value });
+  const onFilterValueChange = (value: string | string[]) => {
+    setFilterBuilder({ filterName: optionKey as string, value: value });
   };
   const removeFilterValue = (key: string, value: string) => {
     querySetter(key, value);
@@ -90,8 +123,8 @@ const Filter = ({ optionsMapper }: FilterProps) => {
           <div className="flex items-center space-x-2 ">
             <div className="relative flex flex-row-reverse w-[100%]">
               <Select
-                onValueChange={(val: keyof OptionsMapperType) => {
-                  setOptionKey(val);
+                onValueChange={(val) => {
+                  setOptionKey(val as keyof OptionsMapperType[T]);
                   setFilterBuilder(undefined);
                 }}
                 defaultValue={filterBuilder?.filterName}
@@ -105,9 +138,8 @@ const Filter = ({ optionsMapper }: FilterProps) => {
                 <SelectContent className="overflow-y-auto max-h-[10rem] flex-col">
                   {objectKeys?.map((option, index) => {
                     return (
-                      <SelectItem value={option} key={index}>
-                        {" "}
-                        {option}
+                      <SelectItem value={option as string} key={index}>
+                        {option as string}
                       </SelectItem>
                     );
                   })}
@@ -124,27 +156,33 @@ const Filter = ({ optionsMapper }: FilterProps) => {
           </div>
 
           <div className="relative flex flex-row-reverse w-[100%] mt-2">
-            <Select
-              onValueChange={onFilterValueChange}
-              defaultValue={filterBuilder?.value}
-            >
-              <SelectTrigger
-                id="equal"
-                className="!rounded-l-none    border-[1px] border-l-0 ring-0 focus:ring-0"
+            {Array.isArray(optionsMapper[optionKey]) ? (
+              <Select
+                onValueChange={onFilterValueChange}
+                defaultValue={filterBuilder?.value as string}
               >
-                <SelectValue placeholder="Select a Value" />
-              </SelectTrigger>
-              <SelectContent className="overflow-y-auto max-h-[10rem] flex-initial">
-                {optionsMapper[optionKey]?.map((option, index) => {
-                  return (
-                    <SelectItem value={option.toString()} key={index}>
-                      {" "}
-                      {option.toString()}
-                    </SelectItem>
-                  );
-                })}
-              </SelectContent>
-            </Select>
+                <SelectTrigger
+                  id="equal"
+                  className="!rounded-l-none    border-[1px] border-l-0 ring-0 focus:ring-0"
+                >
+                  <SelectValue placeholder="Select a Value" />
+                </SelectTrigger>
+                <SelectContent className="overflow-y-auto max-h-[10rem] flex-initial">
+                  {optionsMapper[optionKey]?.map((option, index) => {
+                    return (
+                      <SelectItem value={option.toString()} key={index}>
+                        {option.toString()}
+                      </SelectItem>
+                    );
+                  })}
+                </SelectContent>
+              </Select>
+            ) : (
+              <TagsInput
+                onChange={onFilterValueChange}
+                value={filterBuilder?.value as string[]}
+              />
+            )}
             <div className="relative left-0 top-0 flex items-center justify-center px-3 bg-[#f7f7f7]  border-[1px] ">
               <SearchIcon className="text-[#6c757d] text-xs" size={"20px"} />
             </div>
@@ -155,7 +193,7 @@ const Filter = ({ optionsMapper }: FilterProps) => {
               onClick={handleAddFilter}
               disabled={!filterBuilder}
             >
-              {searchParams.has(optionKey) ? (
+              {searchParams.has(optionKey as string) ? (
                 <>
                   <RefreshCw className="text-sm text-blue-500 bg-white rounded-full" />
                   {"Change Filter"}

@@ -74,7 +74,7 @@ const PermissionUpdate = (props: PermissionUpdateProps) => {
   };
   return (
     <div className="permission-access">
-      {permissions.includes(String(row.original.id)) ? (
+      {permissions?.includes(String(row.original.id)) ? (
         <Form {...form}>
           <form>
             <FormField

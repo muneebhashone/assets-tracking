@@ -73,7 +73,7 @@ export default function UpdateShipmentForm({
         duration: 3000,
         variant: "default",
       });
-      form.reset();
+      // form.reset();
       setModalOpen(false);
     },
     onError(error, variables, context) {

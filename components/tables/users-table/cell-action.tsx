@@ -18,6 +18,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { toast } from "@/components/ui/use-toast";
 import useQueryUpdater from "@/hooks/useQueryUpdater";
 import { useCurrentUser } from "@/services/auth.mutations";
@@ -27,15 +28,21 @@ import {
   useDeleteUser,
   useToggleActive,
 } from "@/services/user.mutations";
-import { UserPermissions } from "@/types/services/auth.types";
+import { PermissionsType } from "@/types/user.types";
 import { checkPermissions } from "@/utils/user.utils";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Edit, MoreHorizontal, Package, Trash } from "lucide-react";
+import {
+  CheckCircle,
+  Edit,
+  MoreHorizontal,
+  Package,
+  Trash,
+  XCircle,
+} from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { IUserModified } from "./users";
-import { Label } from "@/components/ui/label";
 
 interface CellActionProps {
   data: IUserModified;
@@ -189,18 +196,20 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
           </DropdownMenuItem>
           {data.isActive === "Active" ? (
             <DropdownMenuItem onClick={() => setOpen(true)}>
-              <Trash className="mr-2 h-4 w-4" /> Deactivate
+              <XCircle className="mr-2 h-4 w-4" />
+              Deactivate
             </DropdownMenuItem>
           ) : (
             <DropdownMenuItem onClick={() => toggleActive({ id: data.id })}>
-              <Edit className="mr-2 h-4 w-4" /> Activate
+              <CheckCircle className="mr-2 h-4 w-4" />
+              Activate
             </DropdownMenuItem>
           )}
           <DropdownMenuItem onClick={() => setOpenAssignCreditModal(true)}>
             <Edit className="mr-2 h-4 w-4" /> Assign Credits
           </DropdownMenuItem>
 
-          {checkPermissions(user?.user.permissions as UserPermissions[], [
+          {checkPermissions(user?.user.permissions as PermissionsType[], [
             "DELETE_USER",
           ]) && (
             <DropdownMenuItem
