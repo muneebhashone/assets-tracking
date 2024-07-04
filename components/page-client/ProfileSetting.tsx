@@ -10,13 +10,13 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import PersonalInformationForm from "./forms/personal-information-update-form";
-import UploadProfileForm from "./forms/upload-profile-form";
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
-import { Form, FormControl, FormField, FormItem, FormMessage } from "./ui/form";
-import { Label } from "./ui/label";
-import { Separator } from "./ui/separator";
-import { toast } from "./ui/use-toast";
+import PersonalInformationForm from "../forms/personal-information-update-form";
+import UploadProfileForm from "../forms/upload-profile-form";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { Form, FormControl, FormField, FormItem, FormMessage } from "../ui/form";
+import { Label } from "../ui/label";
+import { Separator } from "../ui/separator";
+import { toast } from "../ui/use-toast";
 
 const changePasswordFormSchema = z
   .object({
@@ -47,7 +47,7 @@ const changePasswordFormSchema = z
   });
 
 type ChangePasswordFormType = z.infer<typeof changePasswordFormSchema>;
-const ProfileSetting = () => {
+const ProfileSettingPage = () => {
   const { push } = useRouter();
   const { data: user, isLoading: userLoading } = useCurrentUser();
   const { mutate: changePassword } = useChangePassword({
@@ -194,4 +194,4 @@ const ProfileSetting = () => {
   );
 };
 
-export default ProfileSetting;
+export default ProfileSettingPage;

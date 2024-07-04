@@ -1,4 +1,4 @@
-import ViewShipmentPage from "@/components/ViewShipmentPage";
+import ViewShipmentPage from "@/components/page-client/ViewShipmentPage";
 import { redirect } from "next/navigation";
 import React from "react";
 interface PageProps {

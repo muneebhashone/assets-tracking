@@ -2,13 +2,13 @@
 import { Company, useGetCompanies } from "@/services/companies.queries";
 import { useSearchParams } from "next/navigation";
 import React, { useState } from "react";
-import { ScrollArea } from "./ui/scroll-area";
-import { columns } from "./tables/company-table/columns";
-import { CompanyTable } from "./tables/company-table/company-table";
-import SearchBar from "./SearchBar";
-import { Button } from "./ui/button";
-import CompanyAuthFormSignUp from "./forms/user-company-form";
-import { ModalCustom } from "./ModalComponent";
+import { ScrollArea } from "../ui/scroll-area";
+import { columns } from "../tables/company-table/columns";
+import { CompanyTable } from "../tables/company-table/company-table";
+import SearchBar from "../SearchBar";
+import { Button } from "../ui/button";
+import CompanyAuthFormSignUp from "../forms/user-company-form";
+import { ModalCustom } from "../ModalComponent";
 
 const CompanyPage = () => {
   const searchParams = useSearchParams();

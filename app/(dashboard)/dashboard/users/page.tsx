@@ -71,7 +71,6 @@ export default function Page() {
   const search = searchParams.get("search") || "";
   const filterByActive = searchParams.get("filterByActive") || "";
   const filterByRole = searchParams.get("filterByRole") || "";
-  const filterByStatus = searchParams.get("filterByStatus") || "";
 
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const { mutate, isPending } = useCreateUser({

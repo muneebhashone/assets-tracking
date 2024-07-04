@@ -1,4 +1,4 @@
-import CompanyPage from "@/components/CompanyPage";
+import CompanyPage from "@/components/page-client/CompanyPage";
 
 const Page = async () => {
 return <CompanyPage/>

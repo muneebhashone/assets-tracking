@@ -1,8 +1,8 @@
-import ForgetPassword from "@/components/ForgetPassword";
+import ForgetPasswordPage from "@/components/page-client/ForgetPasswordPage";
 import React from "react";
 
 const page = () => {
-  return <ForgetPassword />;
+  return <ForgetPasswordPage />;
 };
 
 export default page;

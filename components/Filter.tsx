@@ -1,7 +1,6 @@
 "use client";
 
 import useQueryUpdater from "@/hooks/useQueryUpdater";
-import { StatusType } from "@/types/user.types";
 import { EligibleRolesForCreation } from "@/utils/constants";
 import {
   FilterIcon,

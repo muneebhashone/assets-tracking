@@ -2,10 +2,10 @@
 
 import { useGetShipments } from "@/services/shipment.queries";
 import { useSearchParams } from "next/navigation";
-import SearchBar from "./SearchBar";
-import ShipmentCreationForm from "./forms/shipment-creation-form";
-import { columns } from "./tables/shipment-table/columns";
-import { ShipmentTable } from "./tables/shipment-table/shipment-table";
+import SearchBar from "../SearchBar";
+import ShipmentCreationForm from "../forms/shipment-creation-form";
+import { columns } from "../tables/shipment-table/columns";
+import { ShipmentTable } from "../tables/shipment-table/shipment-table";
 import { checkPermissions } from "@/utils/user.utils";
 import { useCurrentUser } from "@/services/auth.mutations";
 import { UserPermissions } from "@/types/services/auth.types";

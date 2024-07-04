@@ -15,7 +15,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { Label } from "./ui/label";
+import { Label } from "../ui/label";
 
 export type forgetPasswordFormType = z.infer<typeof forgetPasswordSchema>;
 export const forgetPasswordSchema = z.object({
@@ -24,7 +24,7 @@ export const forgetPasswordSchema = z.object({
     .email({ message: "Not a valid email type" }),
 });
 
-const ForgetPassword = ({ token }: { token?: string }) => {
+const ForgetPasswordPage = ({ token }: { token?: string }) => {
   const { push } = useRouter();
 
   const form = useForm<forgetPasswordFormType>({
@@ -100,4 +100,4 @@ const ForgetPassword = ({ token }: { token?: string }) => {
   );
 };
 
-export default ForgetPassword;
+export default ForgetPasswordPage;

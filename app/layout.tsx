@@ -5,12 +5,11 @@ import {
   QueryClient,
   dehydrate,
 } from "@tanstack/react-query";
-import "@uploadthing/react/styles.css";
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import { cookies } from "next/headers";
 import "./globals.css";
-import { ReactQueryClientProvider } from "@/components/ReactQueryClientProvider";
+import { ReactQueryClientProvider } from "@/components/layout/react-query-provider";
 
 const poppins = Poppins({
   subsets: ["latin"],

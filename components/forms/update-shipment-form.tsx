@@ -92,7 +92,7 @@ export default function UpdateShipmentForm({
       mutate({ id: shipmentData.id, ...data });
     }
   };
-  console.log(initialValues);
+
   return (
     <>
       <ModalCustom

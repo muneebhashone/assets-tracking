@@ -2,7 +2,7 @@
 
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useCurrentUser } from "../../../../services/auth.mutations";
-import ShipmentPage from "@/components/ShipmentPage";
+import ShipmentPage from "@/components/page-client/ShipmentPage";
 
 const ShipmentList = () => {
   const { data: currentUser } = useCurrentUser();
