@@ -3,6 +3,7 @@ import { apiAxios } from "@/utils/api.utils";
 import { UseQueryOptions, useQuery } from "@tanstack/react-query";
 
 import { ErrorResponseType } from "./types.common";
+import { PaginatorInfoType } from "./user.queries";
 
 export type GetAllCompaniesInputType = {
   searchString: string;
@@ -28,16 +29,6 @@ export type Company = {
   createdAt: string | null;
   updatedAt: string | null;
   credits: number | null;
-};
-
-export type PaginatorInfoType = {
-  skip: number;
-  limit: number;
-  currentPage: number;
-  pages: number;
-  hasNextPage: boolean;
-  totalRecords: number;
-  pageSize: number;
 };
 
 export const getAllCompanies = async (input: GetAllCompaniesInputType) => {

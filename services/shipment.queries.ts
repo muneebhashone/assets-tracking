@@ -1,6 +1,7 @@
 import { apiAxios } from "@/utils/api.utils";
 import { UseQueryOptions, useQuery } from "@tanstack/react-query";
 import { ErrorResponseType } from "./types.common";
+import { PaginatorInfoType } from "./user.queries";
 
 //types
 export type GetAllShipmentsInputType = {
@@ -59,15 +60,6 @@ export type Shipment = {
   shareToken?: string;
 };
 
-export type PaginatorInfoType = {
-  skip: number;
-  limit: number;
-  currentPage: number;
-  pages: number;
-  hasNextPage: boolean;
-  totalRecords: number;
-  pageSize: number;
-};
 
 //services
 export const getShipments = async (input: GetAllShipmentsInputType) => {
