@@ -21,6 +21,7 @@ const CompanyPage = () => {
     pageParam: page,
     searchString: search,
   });
+  console.log(company);
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   return (
     <>
@@ -55,13 +56,15 @@ const CompanyPage = () => {
             <ScrollArea className="h-full ">
               {isLoading ? (
                 <div>Loading...</div>
-              ) : (
+              ) : Array.isArray(company?.results) ? (
                 <CompanyTable
                   columns={columns}
                   data={company?.results as Company[]}
                   pageCount={company?.paginatorInfo?.totalRecords || 0}
                   searchKey={search}
                 />
+              ) : (
+                "No Record Found"
               )}
             </ScrollArea>
           </div>

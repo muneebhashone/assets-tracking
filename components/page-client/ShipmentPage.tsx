@@ -15,6 +15,7 @@ import { columns } from "../tables/shipment-table/columns";
 import { ShipmentTable } from "../tables/shipment-table/shipment-table";
 import { ScrollArea } from "../ui/scroll-area";
 import Filter, { OptionsMapperType } from "../Filter";
+import { Separator } from "../ui/separator";
 
 const ShipmentPage = () => {
   const searchParams = useSearchParams();
@@ -47,15 +48,8 @@ const ShipmentPage = () => {
             <p className="text-sm tracking-tight">
               You can create, view and edit all shipments from the table below.
             </p>
-            <div className="flex justify-between">
-              <SearchBar />
-              <Filter
-                optionsMapper={optionsMapper}
-                type="Shipment"
-                defaultValue={"trackWith"}
-              />
-            </div>
           </div>
+
           {checkPermissions(user?.user.permissions as PermissionsType[], [
             "CREATE_SHIPMENT",
           ]) && (
@@ -63,6 +57,15 @@ const ShipmentPage = () => {
               <ShipmentCreationForm />
             </div>
           )}
+          <div className="flex justify-between mb-2">
+            <SearchBar />
+            <Filter
+              optionsMapper={optionsMapper}
+              type="Shipment"
+              defaultValue={"trackWith"}
+            />
+          </div>
+
           {Array.isArray(result?.results) ? (
             <>
               <ShipmentTable

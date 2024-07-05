@@ -191,9 +191,13 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
-          <DropdownMenuItem onClick={() => querySetter("pe", `${data.id}`)}>
-            <Package className="mr-2 h-4 w-4" /> Update Permissions
-          </DropdownMenuItem>
+          {checkPermissions(user?.user.permissions as PermissionsType[], [
+            "UPDATE_PERMISSIONS",
+          ]) && (
+            <DropdownMenuItem onClick={() => querySetter("pe", `${data.id}`)}>
+              <Package className="mr-2 h-4 w-4" /> Update Permissions
+            </DropdownMenuItem>
+          )}
           {data.isActive === "Active" ? (
             <DropdownMenuItem onClick={() => setOpen(true)}>
               <XCircle className="mr-2 h-4 w-4" />
@@ -205,9 +209,13 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
               Activate
             </DropdownMenuItem>
           )}
-          <DropdownMenuItem onClick={() => setOpenAssignCreditModal(true)}>
-            <Edit className="mr-2 h-4 w-4" /> Assign Credits
-          </DropdownMenuItem>
+          {checkPermissions(user?.user.permissions as PermissionsType[], [
+            "ASSIGN_CREDITS",
+          ]) && (
+            <DropdownMenuItem onClick={() => setOpenAssignCreditModal(true)}>
+              <Edit className="mr-2 h-4 w-4" /> Assign Credits
+            </DropdownMenuItem>
+          )}
 
           {checkPermissions(user?.user.permissions as PermissionsType[], [
             "DELETE_USER",

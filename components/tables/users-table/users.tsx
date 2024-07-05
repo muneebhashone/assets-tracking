@@ -71,7 +71,7 @@ export function UsersTable({
   const fallbackPerPage = isNaN(perPageAsNumber) ? 10 : perPageAsNumber;
   const [openWarning, setOpenWarning] = useState<boolean>(false);
 
-  const tableData = data.map((entry) => {
+  const tableData = data?.map((entry) => {
     return {
       ...entry,
       isActive: entry.isActive ? "Active" : "In Active",
@@ -193,8 +193,8 @@ export function UsersTable({
             ))}
           </TableHeader>
           <TableBody>
-            {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
+            {table?.getRowModel().rows?.length ? (
+              table?.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}

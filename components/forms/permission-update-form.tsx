@@ -17,6 +17,8 @@ import {
 import { MultiSelect } from "../ui/multi-select";
 import { toast } from "../ui/use-toast";
 import { IUserModified } from "../tables/users-table/users";
+import { checkPermissions } from "@/utils/user.utils";
+import { PermissionsType } from "@/types/user.types";
 interface PermissionUpdateProps {
   row: Row<IUserModified>;
 }
@@ -72,7 +74,10 @@ const PermissionUpdate = (props: PermissionUpdateProps) => {
   const onSubmit = (data: UpdatePermissionsInputType) => {
     mutate({ id: row.original.id, ...data });
   };
-  return (
+
+  return checkPermissions(currentUser?.user.permissions as PermissionsType[], [
+    "VIEW_PERMISSIONS",
+  ]) ? (
     <div className="permission-access">
       {permissions?.includes(String(row.original.id)) ? (
         <Form {...form}>
@@ -113,7 +118,7 @@ const PermissionUpdate = (props: PermissionUpdateProps) => {
         ))
       )}
     </div>
-  );
+  ) : null;
 };
 
 export default PermissionUpdate;

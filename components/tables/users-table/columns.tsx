@@ -5,6 +5,7 @@ import { UserRole } from "@/utils/constants";
 import { ColumnDef } from "@tanstack/react-table";
 import { IUserModified } from "./users";
 import { CellAction } from "./cell-action";
+import ProtectedHeader from "@/components/ProtectedHeader";
 
 export const columns: ColumnDef<IUserModified>[] = [
   {
@@ -22,7 +23,6 @@ export const columns: ColumnDef<IUserModified>[] = [
   {
     accessorKey: "id",
     header: "User ID",
-    
   },
   {
     accessorKey: "name",
@@ -51,7 +51,9 @@ export const columns: ColumnDef<IUserModified>[] = [
 
   {
     accessorKey: "permissions",
-    header: "Permissions",
+    header: ({ table }) => (
+      <ProtectedHeader columnName="Permissions" permission="VIEW_PERMISSIONS" />
+    ),
 
     cell: ({ row }) => <PermissionUpdate row={row} />,
 

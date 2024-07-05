@@ -48,7 +48,7 @@ export default function SearchBar({
       <div className="relative">
         <SearchIcon className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-500 dark:text-gray-400" />
         <Input
-          className="pl-8 sm:w-[20px] md:w-[20px] lg:w-[20px] transition-all duration-300 ease-in-out hover:w-[150px] rounded-full w-9 h-9 flex items-center justify-center bg-gray-100 dark:bg-gray-800 focus:w-[150px] md:focus:w-[250px] md:hover:w-[250px]"
+          className="pl-8 transition-all duration-300 ease-in-out w-[150px] rounded-full  h-9 flex items-center justify-center bg-gray-100 dark:bg-gray-800  md:w-[250px]"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           name="search"

@@ -68,7 +68,7 @@ export function RequestedUserTable<User>({
   const perPageAsNumber = Number(per_page);
   const fallbackPerPage = isNaN(perPageAsNumber) ? 10 : perPageAsNumber;
 
-  const tableData = data.map((entry) => {
+  const tableData = data?.map((entry) => {
     return {
       ...entry,
     };
@@ -150,8 +150,8 @@ export function RequestedUserTable<User>({
             ))}
           </TableHeader>
           <TableBody>
-            {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
+            {table?.getRowModel().rows?.length ? (
+              table?.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}

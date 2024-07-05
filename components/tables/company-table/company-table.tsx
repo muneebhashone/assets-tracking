@@ -63,7 +63,7 @@ export function CompanyTable({
   const per_page = searchParams?.get("limit") ?? "10";
   const perPageAsNumber = Number(per_page);
   const fallbackPerPage = isNaN(perPageAsNumber) ? 10 : perPageAsNumber;
-  const tableData = data.map((entry) => {
+  const tableData = data?.map((entry) => {
     return {
       ...entry,
       createdAt: moment(entry.createdAt).format("DD-MM-YYYY"),
@@ -122,27 +122,8 @@ export function CompanyTable({
     manualFiltering: true,
   });
 
-
   return (
     <>
-      {/* <AlertModal
-        isOpen={openWarning}
-        loading={false}
-        onClose={() => setOpenWarning(false)}
-        onConfirm={() => {
-          deleteBulkCompany({ ids: selectedIds });
-        }}
-      />
-      <div className="flex justify-start mb-2">
-        {Boolean(selectedIds.length) && (
-          <Button
-            className="border rounded-md px-4 py-2 bg-red-700 text-white hover:bg-red-600"
-            onClick={() => setOpenWarning(true)}
-          >
-            Delete
-          </Button>
-        )}
-      </div> */}
       <ScrollArea className="rounded-md border h-[calc(80vh-220px)]">
         <Table className="relative">
           <TableHeader>
@@ -164,8 +145,8 @@ export function CompanyTable({
             ))}
           </TableHeader>
           <TableBody>
-            {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
+            {table?.getRowModel().rows?.length ? (
+              table?.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}

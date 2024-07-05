@@ -12,6 +12,10 @@ export const permissionEnums = [
   "VIEW_DASHBOARD",
   "VIEW_COMPANY",
   "DELETE_COMPANY",
+  "ASSIGN_CREDITS",
+  "DEDUCT_CREDITS",
+  "VIEW_PERMISSIONS",
+  "UPDATE_PERMISSIONS",
 ] as const;
 
 export const rolesEnums = [
