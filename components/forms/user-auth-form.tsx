@@ -16,15 +16,13 @@ import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { useToast } from "../ui/use-toast";
 import { Label } from "../ui/label";
+import { passwordValidation } from "@/utils/auth.utils";
 
 const formSchema = z.object({
   email: z
     .string({ required_error: "Email is required" })
     .email({ message: "Enter a valid email address" }),
-  password: z
-    .string({ required_error: "Password is required" })
-    .min(8, "Password must contain atleast 8 characters")
-    .max(64, "Password should not be more than 64 characters"),
+  password: passwordValidation('password'),
 });
 
 type UserFormValue = z.infer<typeof formSchema>;
