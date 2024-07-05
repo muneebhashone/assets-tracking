@@ -43,7 +43,6 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
   const [warningOpen, setWarningOpen] = useState<boolean>(false);
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [updateModalOpen, setUpdateModalOpen] = useState<boolean>(false);
-  const [shareableLink, setShareableLink] = useState<string | null>(null);
   const { mutate: deleteShipment } = useDeletShipment({
     onSuccess(data) {
       toast({
@@ -85,7 +84,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
         description: "Link generated and copied to clipboard",
         title: "Success",
       });
-      setShareableLink(data.data.shareableLink);
+
       await navigator.clipboard.writeText(data.data.shareableLink);
       setWarningOpen(false);
     },
@@ -105,7 +104,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
         description: "Share link discarded",
         title: "Success",
       });
-      setShareableLink(null);
+      // setShareableLink(null);
     },
     onError(error) {
       toast({
@@ -205,7 +204,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
             "CREATE_SHIPMENT",
             "DELETE_SHIPMENT",
           ]) &&
-            (shareableLink ? (
+            (data.shareToken ? (
               <DropdownMenuItem
                 onClick={() => discardLink({ shipmentId: String(data.id) })}
               >

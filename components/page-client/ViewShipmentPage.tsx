@@ -2,35 +2,17 @@
 
 import { useGetSharedShipment } from "@/services/shipment.queries";
 import Link from "next/link";
-import { useEffect } from "react";
 import { Button } from "../ui/button";
 
 import { ShipmentStatusDisplay, TrackWithDisplay } from "@/utils/constants";
 import { ChevronLeftIcon, MailCheckIcon } from "lucide-react";
-import { useRouter } from "next/navigation";
 import UploadedFilesView from "../UploadedFilesView";
 import { Badge } from "../ui/badge";
 import { Input } from "../ui/input";
 import { Skeleton } from "../ui/skeleton";
-import { toast } from "../ui/use-toast";
 
 const ViewShipmentPage = ({ token }: { token: string }) => {
   const { data, isLoading } = useGetSharedShipment({ token });
-  const { push } = useRouter();
-
-  useEffect(() => {
-    if (!isLoading) {
-      if (data?.data.shareToken !== token) {
-        toast({
-          description: "Invalid Shipment Token",
-          variant: "destructive",
-        });
-        setTimeout(() => {
-          push("/");
-        }, 100);
-      }
-    }
-  }, [push, token, data, isLoading]);
 
   return (
     <div className="h-[100%] overflow-y-scroll">
