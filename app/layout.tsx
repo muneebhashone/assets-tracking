@@ -1,4 +1,5 @@
 import Providers from "@/components/layout/providers";
+import { ReactQueryClientProvider } from "@/components/layout/react-query-provider";
 import { currentUser } from "@/services/auth.services";
 import {
   HydrationBoundary,
@@ -9,8 +10,6 @@ import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import { cookies } from "next/headers";
 import "./globals.css";
-import { ReactQueryClientProvider } from "@/components/layout/react-query-provider";
-import { parseJwt } from "@/utils/user.utils";
 
 const poppins = Poppins({
   subsets: ["latin"],

@@ -1,4 +1,5 @@
-import ResetPassword from "@/components/ResetPassword";
+
+import ResetPasswordPage from "@/components/page-client/ResetPasswordPage";
 import { redirect } from "next/navigation";
 import React from "react";
 interface PageProps {
@@ -10,7 +11,7 @@ const page = ({ searchParams }: PageProps) => {
   if (!searchParams.token) {
     redirect("/");
   }
-  return <ResetPassword token={searchParams.token} />;
+  return <ResetPasswordPage token={searchParams.token} />;
 };
 
 export default page;

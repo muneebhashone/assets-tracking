@@ -2,12 +2,12 @@
 
 import { useCurrentUser } from "@/services/auth.mutations";
 import { useProfileUpload } from "@/services/upload.mutations";
-import { AvatarFallback } from "@radix-ui/react-avatar";
+
 import { ChangeEvent, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { ModalCustom } from "../ModalComponent";
-import { Avatar, AvatarImage } from "../ui/avatar";
+import { Avatar, AvatarImage, AvatarFallback } from "../ui/avatar";
 import { Button } from "../ui/button";
 import { Form } from "../ui/form";
 import { toast } from "../ui/use-toast";
@@ -108,12 +108,14 @@ const UploadProfileForm = ({
           signed in to your account
         </p>
         <div className="flex justify-center flex-col items-center ">
-          <Avatar className="w-[300px] h-[300px] mb-4 cursor-pointer">
-            <AvatarImage
-              src={user?.user.avatar ?? user?.user.name[0]}
-              onClick={handleClick}
-            />
-            <AvatarFallback>{user?.user.name[0]}</AvatarFallback>
+          <Avatar
+            className="w-[300px] h-[300px] mb-4 cursor-pointer"
+            onClick={handleClick}
+          >
+            <AvatarImage src={user?.user.avatar} />
+            <AvatarFallback className="bg-slate-400">
+              {user?.user.name[0]}
+            </AvatarFallback>
           </Avatar>
           <Form {...form}>
             <form className="space-y-2 w-full">

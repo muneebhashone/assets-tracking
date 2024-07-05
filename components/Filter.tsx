@@ -1,6 +1,7 @@
 "use client";
 
 import useQueryUpdater from "@/hooks/useQueryUpdater";
+import { TrackWithType } from "@/services/shipment.queries";
 import { EligibleRolesForCreation } from "@/utils/constants";
 import {
   FilterIcon,
@@ -11,6 +12,7 @@ import {
 } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import { useState } from "react";
+import { TagsInput } from "react-tag-input-component";
 import { ModalCustom } from "./ModalComponent";
 import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
@@ -23,19 +25,15 @@ import {
   SelectValue,
 } from "./ui/select";
 import { Separator } from "./ui/separator";
-import { User } from "@/types/services/auth.types";
-import { Shipment, TrackWithType } from "@/services/shipment.queries";
-import { TrackShipmentInput } from "@/services/searates.queries";
-import { TagsInput } from "react-tag-input-component";
 
 type EligibleRolesForCreationType = typeof EligibleRolesForCreation;
 
 type RoleMapping =
   EligibleRolesForCreationType[keyof EligibleRolesForCreationType];
 
-type IRecord = {
-  [x: string]: Record<string, unknown>;
-};
+// type IRecord = {
+//   [x: string]: Record<string, unknown>;
+// };
 
 export interface OptionsMapperType {
   Shipment: {

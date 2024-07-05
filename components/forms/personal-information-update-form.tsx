@@ -18,25 +18,32 @@ import {
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { toast } from "../ui/use-toast";
+import { zodResolver } from "@hookform/resolvers/zod";
 
-const profileUpdateFormSchema = z.object({
-  name: z.string({
-    required_error: "This field is required",
-  }),
+const profileUpdateFormSchema = z
+  .object({
+    name: z.string().min(1),
+    phoneNo: z
+      .string({ message: "Please write Phone number" })
+      .min(1)
+      .optional(),
+    phoneCountryCode: z
+      .string({ message: "Please write Phone number" })
+      .min(1)
+      .optional(),
+    email: z.string().nullable(),
+  })
+  .refine((args) => {
+    if (args.phoneNo && !args.phoneCountryCode) {
+      return false;
+    }
 
-  phoneNo: z
-    .string({ message: "Must be a string value" })
+    if (args.phoneCountryCode && !args.phoneNo) {
+      return false;
+    }
 
-    .nullable(),
-
-  phoneCountryCode: z
-    .string()
-    .min(2, "Invalid Country Code")
-    .regex(/^\+\d+$/, "Not a valid country code")
-    .nullable(),
-  email: z.string().nullable(),
-});
-
+    return true;
+  }, "phoneNo and phoneCountryCode must be provided together");
 export type ProfileUpdateFormType = z.infer<typeof profileUpdateFormSchema>;
 
 const PersonalInformationForm = () => {
@@ -47,6 +54,7 @@ const PersonalInformationForm = () => {
     defaultValues: !userLoading
       ? { name, phoneNo, phoneCountryCode, email }
       : {},
+    resolver: zodResolver(profileUpdateFormSchema),
   });
   const { control, handleSubmit, register, setValue, formState } = form;
 
@@ -69,6 +77,7 @@ const PersonalInformationForm = () => {
   const handleUpdateProfile = (data: ProfileUpdateFormType) => {
     /* eslint-disable */
     const { email, ...rest } = data;
+    console.log(rest);
     updateProfile(rest);
   };
 

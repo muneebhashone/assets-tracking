@@ -9,5 +9,5 @@ export type ErrorResponseType = AxiosError<{
 export type SuccessResponseType = {
   status: "success" | string;
   message: string;
-  payload?: Record<any, any>;
+  data?: Record<any, any>;
 };

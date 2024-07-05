@@ -13,38 +13,35 @@ import { z } from "zod";
 import PersonalInformationForm from "../forms/personal-information-update-form";
 import UploadProfileForm from "../forms/upload-profile-form";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import { Form, FormControl, FormField, FormItem, FormMessage } from "../ui/form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from "../ui/form";
 import { Label } from "../ui/label";
 import { Separator } from "../ui/separator";
 import { toast } from "../ui/use-toast";
+import { passwordValidation } from "@/utils/auth.utils";
 
 const changePasswordFormSchema = z
   .object({
-    newPassword: z
-      .string({ required_error: "New Password is required" })
-      .min(8, { message: "Password must be at least 8 characters long" })
-      .max(64, { message: "Password must be at most 64 characters long" }),
     currentPassword: z
-      .string({ required_error: "Confirm password is required" })
-      .min(8, {
-        message: "Confirm password must be at least 8 characters long",
-      })
-      .max(64, {
-        message: "Confirm password must be at most 64 characters long",
-      }),
-    confirmPassword: z
-      .string({ required_error: "Confirm password is required" })
-      .min(8, {
-        message: "Confirm password must be at least 8 characters long",
-      })
-      .max(64, {
-        message: "Confirm password must be at most 64 characters long",
-      }),
+      .string({ required_error: "Current password is required" })
+      .min(1),
+    newPassword: passwordValidation("new password"),
+    confirmPassword: passwordValidation("confirm password"),
   })
-  .refine((data) => data.newPassword === data.confirmPassword, {
-    message: "Password and Confirm password must match",
-    path: ["confirmPassword"],
-  });
+  .refine(
+    ({ newPassword, confirmPassword }) => {
+      return newPassword === confirmPassword;
+    },
+    {
+      message: "Password and confirm password must be same",
+      path: ["confirmPassword"],
+    },
+  );
 
 type ChangePasswordFormType = z.infer<typeof changePasswordFormSchema>;
 const ProfileSettingPage = () => {
@@ -84,11 +81,11 @@ const ProfileSettingPage = () => {
       <div className="px-4 space-y-6 md:px-6 mb-8">
         <div className="flex items-center  flex-col">
           <div className="relative ">
-            <Avatar className="w-[200px] h-[200px] cursor-pointer">
-              <AvatarImage
-                src={user?.user.avatar}
-                onClick={() => setModalOpen(true)}
-              />
+            <Avatar
+              className="w-[200px] h-[200px] cursor-pointer"
+              onClick={() => setModalOpen(true)}
+            >
+              <AvatarImage src={user?.user.avatar} alt="avatar" />
               <AvatarFallback>{user?.user.name[0]}</AvatarFallback>
             </Avatar>
             <div className="rounded-full bg-white  absolute left-[70%] top-[70%] hover:text-blue-600 hover:bg-blue-50 cursor-pointer w-8 h-8 flex justify-center items-center">

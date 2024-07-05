@@ -1,13 +1,11 @@
+import { passwordValidation } from "@/utils/auth.utils";
 import { z, infer as zInfer } from "zod";
 
 export const createUserFormSchema = z.object({
   email: z
     .string({ required_error: "email is required" })
     .email({ message: "Enter a valid email address" }),
-  password: z
-    .string({ required_error: "password is required" })
-    .min(8, { message: "atleast 8 charaacters long" })
-    .max(64, { message: "atmost is 64 characters" }),
+  password: passwordValidation("password"),
   name: z.string({ required_error: "name is required" }).min(3),
   companyId: z
     .string({ required_error: "Company Id is required" })
@@ -23,10 +21,7 @@ export const createCompanySchema = z.object({
   email: z
     .string({ required_error: "email is required" })
     .email({ message: "Enter a valid email address" }),
-  password: z
-    .string({ required_error: "password is required" })
-    .min(8, { message: "atleast 8 characters long" })
-    .max(64, { message: "atmost is 12 characters" }),
+  password: passwordValidation("password"),
   name: z.string({ required_error: "name is required" }).min(3),
 });
 

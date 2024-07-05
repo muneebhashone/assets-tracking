@@ -53,8 +53,8 @@ export interface User {
   id: number;
   email: string;
   name: string;
-  phoneNo?: string | null;
-  phoneCountryCode?: string | null;
+  phoneNo?: string;
+  phoneCountryCode?: string;
   avatar?: string;
   role: keyof typeof UserRole;
   isActive: boolean;

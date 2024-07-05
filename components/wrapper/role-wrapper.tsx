@@ -4,7 +4,7 @@ import { cookies } from "next/headers";
 
 import { redirect } from "next/navigation";
 import { ComponentType } from "react";
-
+/* eslint-disable */
 const RoleWrapper =
   (Component: ComponentType<unknown | any>, permission: PermissionsType) =>
   async (props: any) => {

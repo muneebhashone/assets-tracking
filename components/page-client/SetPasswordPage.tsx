@@ -5,34 +5,31 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { Button } from "./ui/button";
-import { Form, FormControl, FormField, FormItem, FormMessage } from "./ui/form";
-import { Input } from "./ui/input";
-import { toast } from "./ui/use-toast";
-import { Label } from "./ui/label";
+import { Button } from "../ui/button";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from "../ui/form";
+import { Input } from "../ui/input";
+import { toast } from "../ui/use-toast";
+import { Label } from "../ui/label";
+import { passwordValidation } from "@/utils/auth.utils";
 
 export type SetPasswordFormType = z.infer<typeof setPasswordFormSchema>;
 export const setPasswordFormSchema = z
   .object({
-    password: z
-      .string({ required_error: "Password is required" })
-      .min(8, { message: "Password must be at least 8 characters long" })
-      .max(32, { message: "Password must be at most 32 characters long" }),
-    confirmPassword: z
-      .string({ required_error: "Confirm password is required" })
-      .min(8, {
-        message: "Confirm password must be at least 8 characters long",
-      })
-      .max(32, {
-        message: "Confirm password must be at most 32 characters long",
-      }),
+    password: passwordValidation("password"),
+    confirmPassword: passwordValidation("confirm password"),
   })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: "Password and Confirm password must match",
+  .refine((values) => values.confirmPassword === values.password, {
+    message: "Password and confirm password must be same",
     path: ["confirmPassword"],
   });
 
-const SetPassword = ({ token }: { token?: string }) => {
+const SetPasswordPage = ({ token }: { token?: string }) => {
   const { push } = useRouter();
 
   const form = useForm<SetPasswordFormType>({
@@ -129,4 +126,4 @@ const SetPassword = ({ token }: { token?: string }) => {
   );
 };
 
-export default SetPassword;
+export default SetPasswordPage;
