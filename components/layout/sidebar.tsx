@@ -5,6 +5,7 @@ import { useCurrentUser } from "@/services/auth.mutations";
 import { Skeleton } from "../ui/skeleton";
 import { User } from "@/types/services/auth.types";
 import { NavItem } from "@/types/user.types";
+import { AdminDashboardNav } from "../admin-dashboard";
 
 export default function Sidebar({ navItems }: { navItems: NavItem[] }) {
   const { data: user, isLoading } = useCurrentUser();
@@ -33,6 +34,8 @@ export default function Sidebar({ navItems }: { navItems: NavItem[] }) {
                   <Skeleton className="h-4 w-[200px]" />
                 </div>
               </>
+            ) : user?.user.role === "SUPER_ADMIN" ? (
+              <AdminDashboardNav user={user?.user as User} items={navItems} />
             ) : (
               <DashboardNav user={user?.user as User} items={navItems} />
             )}

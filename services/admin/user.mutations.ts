@@ -8,7 +8,7 @@ import {
 import { User } from "@/types/services/auth.types";
 
 import { CreateUserFormSchemaType } from "@/components/page-client/UsersPage";
-import { PermissionsType } from "@/types/user.types";
+import { PermissionsType, StatusType } from "@/types/user.types";
 import { ErrorResponseType, SuccessResponseType } from "../types.common";
 import { getUsers } from "../user.queries";
 
@@ -19,13 +19,15 @@ export interface AdminCreateUserInputType {
   phoneNo: string;
   role: string;
   permissions: PermissionsType[];
-  isActive: true;
-  status: string;
+  isActive: boolean;
+  status: StatusType;
   credits: number;
+  companyId: string;
+  clientId: string;
 }
 export interface AdminUpdateUserInputType
   extends Partial<AdminCreateUserInputType> {
-  id: number;
+  id: string;
 }
 
 export interface AdminDeleteUserInputType {
@@ -42,7 +44,7 @@ const adminCreateUser = async (
   input: AdminCreateUserInputType,
 ): Promise<AdminCreateOrUpdateUserResponseType> => {
   const { data } = await apiAxios.post<AdminCreateOrUpdateUserResponseType>(
-    `/api/admin/users`,
+    `/admin/users`,
     input,
   );
   return data;
@@ -53,7 +55,7 @@ const adminUpdateUser = async (
 ): Promise<AdminCreateOrUpdateUserResponseType> => {
   const { id, ...rest } = input;
   const { data } = await apiAxios.patch<AdminCreateOrUpdateUserResponseType>(
-    `/api/admin/users/${id}`,
+    `/admin/users/${id}`,
     rest,
   );
   return data;
@@ -64,7 +66,7 @@ const adminDeleteUser = async (
 ): Promise<SuccessResponseType> => {
   const { id, ...rest } = input;
   const { data } = await apiAxios.patch<SuccessResponseType>(
-    `/api/admin/users/${id}`,
+    `/admin/users/${id}`,
   );
   return data;
 };

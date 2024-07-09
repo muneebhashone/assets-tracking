@@ -1,5 +1,5 @@
 import { UserRole } from "@/utils/constants";
-import { PermissionsType } from "../user.types";
+import { PermissionsType, StatusType } from "../user.types";
 
 export type LoginInputType = {
   email: string;
@@ -59,9 +59,12 @@ export interface User {
   role: keyof typeof UserRole;
   isActive: boolean;
   password: string;
-  status: string;
+  status: StatusType;
   credits: number;
   companyId: number;
   clientId?: number | null;
   permissions: PermissionsType[];
+  setPasswordToken?: string;
+  passwordResetToken?: string;
+  updatedAt?: string;
 }

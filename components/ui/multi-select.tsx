@@ -1,11 +1,5 @@
 import { cva, type VariantProps } from "class-variance-authority";
-import {
-  Check,
-  CheckIcon,
-  ChevronDown,
-  XCircle,
-  XIcon
-} from "lucide-react";
+import { Check, CheckIcon, ChevronDown, XCircle, XIcon } from "lucide-react";
 import * as React from "react";
 
 import { Badge } from "@/components/ui/badge";
@@ -52,12 +46,13 @@ interface MultiSelectProps
     VariantProps<typeof multiSelectVariants> {
   options: Record<string, string>[];
   onValueChange: (value: string[]) => void;
-  handleSubmit: () => void;
+  handleSubmit?: () => void;
   defaultValue: string[];
   placeholder?: string;
   animation?: number;
   maxCount?: number;
   asChild?: boolean;
+  check?: boolean;
   className?: string;
 }
 
@@ -76,6 +71,7 @@ export const MultiSelect = React.forwardRef<
       maxCount = 3,
       asChild = false,
       handleSubmit,
+      check,
       className,
       ...props
     },
@@ -84,7 +80,6 @@ export const MultiSelect = React.forwardRef<
     const [selectedValues, setSelectedValues] =
       React.useState<string[]>(defaultValue);
     const [isPopoverOpen, setIsPopoverOpen] = React.useState(false);
-
 
     React.useEffect(() => {
       if (JSON.stringify(selectedValues) !== JSON.stringify(defaultValue)) {
@@ -146,7 +141,7 @@ export const MultiSelect = React.forwardRef<
             {...props}
             onClick={handleTogglePopover}
             className={cn(
-              "flex w-[70%] p-1 rounded-md border min-h-10 h-auto items-center justify-between bg-inherit hover:bg-inherit",
+              "flex w-[100%] p-1 rounded-md border min-h-10 h-auto items-center justify-between bg-inherit hover:bg-inherit",
             )}
           >
             {selectedValues.length > 0 ? (
@@ -159,7 +154,6 @@ export const MultiSelect = React.forwardRef<
                       <Badge
                         key={value}
                         className={cn(
-                         
                           multiSelectVariants({ variant, className }),
                         )}
                         style={{ animationDuration: `${animation}s` }}
@@ -179,7 +173,7 @@ export const MultiSelect = React.forwardRef<
                     <Badge
                       className={cn(
                         "bg-transparent text-foreground border-foreground/1 hover:bg-transparent",
-                       
+
                         multiSelectVariants({ variant, className }),
                       )}
                       style={{ animationDuration: `${animation}s` }}
@@ -204,19 +198,17 @@ export const MultiSelect = React.forwardRef<
                         handleClear();
                       }}
                     />
-                    <Check
-                      onClick={(event) => {
-                        event.stopPropagation();
-                        handleSubmit?.();
-                      }}
-                      className="h-4 mx-2 cursor-pointer text-muted-foreground"
-                    />
+                    {check && (
+                      <Check
+                        onClick={(event) => {
+                          event.stopPropagation();
+                          handleSubmit?.();
+                        }}
+                        className="h-4 mx-2 cursor-pointer text-muted-foreground"
+                      />
+                    )}
+                    <ChevronDown className="h-4 mx-2 cursor-pointer text-muted-foreground" />
                   </div>
-                  <Separator
-                    orientation="vertical"
-                    className="flex min-h-6 h-full"
-                  />
-                  <ChevronDown className="h-4 mx-2 cursor-pointer text-muted-foreground" />
                 </div>
               </div>
             ) : (
@@ -230,7 +222,7 @@ export const MultiSelect = React.forwardRef<
           </Button>
         </PopoverTrigger>
         <PopoverContent
-          className="w-[200px] p-0"
+          className=" p-0"
           align="start"
           onEscapeKeyDown={() => setIsPopoverOpen(false)}
         >
@@ -267,7 +259,7 @@ export const MultiSelect = React.forwardRef<
                       key={option.value}
                       onSelect={() => toggleOption(option.value)}
                       style={{ pointerEvents: "auto", opacity: 1 }}
-                      className="cursor-pointer"
+                      className="cursor-pointer "
                     >
                       <div
                         className={cn(

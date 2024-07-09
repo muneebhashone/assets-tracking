@@ -40,51 +40,6 @@ export const navItems: NavItem[] = [
   },
 ];
 
-export const profileSettingItems: NavItem[] = [
-  {
-    title: "Change Password",
-    href: "/profile/change-password",
-    icon: "dashboard",
-    label: "Dashboard",
-    permissions: ["VIEW_DASHBOARD"],
-  },
-  {
-    title: "Shipment List",
-    href: "/dashboard/shipment-list",
-    icon: "laptop",
-    label: "Shipment",
-    permissions: ["VIEW_SHIPMENT"],
-  },
-  // {
-  //   title: "Track New Shipment",
-  //   href: "/dashboard/shipment",
-  //   icon: "moon",
-  //   label: "Shipment",
-  //   permissions: ["CREATE_SHIPMENT"],
-  // },
-  {
-    title: "Acitve User",
-    href: "/dashboard/users",
-    icon: "user",
-    label: "user",
-    permissions: ["VIEW_USER"],
-  },
-  {
-    title: "Requested User",
-    href: "/dashboard/requested-users",
-    icon: "employee",
-    label: "employee",
-    permissions: ["VIEW_USER"],
-  },
- 
-  {
-    title: "Company",
-    href: "/dashboard/company",
-    icon: "laptop",
-    label: "company",
-    permissions: ["VIEW_COMPANY"],
-  },
-];
 export const userNavItems: NavItem[] = [
   {
     title: "Dashboard",

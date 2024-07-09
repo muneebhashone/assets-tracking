@@ -34,6 +34,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import {
   CheckCircle,
   Edit,
+  Edit2,
   MoreHorizontal,
   Package,
   Trash,
@@ -43,30 +44,25 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { IUserModified } from "./users";
+import {
+  useAdminDeleteUser,
+  useAdminUpdateUser,
+} from "@/services/admin/user.mutations";
+import AssignCreditForm from "@/components/forms/assign-credits-form";
+import AdminUpdateUserForm from "@/components/forms/admin-update-user-form";
 
 interface CellActionProps {
   data: IUserModified;
 }
-const creditValidationSchema = z.object({
-  credits: z
-
-    .string({ required_error: "This is required " })
-    .min(1, "Value cannot be in negative")
-    .transform(Number),
-});
-interface AssignCreditsFormSchema extends Omit<AssignCreditsInputType, "id"> {}
 
 export const CellAction: React.FC<CellActionProps> = ({ data }) => {
   const [open, setOpen] = useState(false);
   const [openAssignCreditModal, setOpenAssignCreditModal] = useState(false);
-  const [modalWarning, setModalWarning] = useState(false);
+  const [modalWarning, setModalWarning] = useState<boolean>(false);
+  const [adminModalState, setAdminModalState] = useState<boolean>(false);
 
   const { querySetter } = useQueryUpdater();
-  const form = useForm<AssignCreditsFormSchema>({
-    resolver: zodResolver(creditValidationSchema),
-  });
 
-  const { control, handleSubmit } = form;
   const { mutate: toggleActive } = useToggleActive({
     onSuccess(data) {
       toast({
@@ -75,25 +71,6 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
         title: "Success",
       });
       setOpen(false);
-    },
-    onError(error) {
-      toast({
-        variant: "destructive",
-        description: error.response?.data.message,
-        title: "Error",
-      });
-    },
-  });
-
-  const { mutate: assignCredits } = useAssignCredits({
-    onSuccess(data) {
-      toast({
-        variant: "default",
-        description: data.message,
-        title: "Success",
-      });
-
-      setOpenAssignCreditModal(false);
     },
     onError(error) {
       toast({
@@ -122,11 +99,41 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
       });
     },
   });
+  const { mutate: adminDeleteUser } = useAdminDeleteUser({
+    onSuccess(data) {
+      toast({
+        variant: "default",
+        description: data.message,
+        title: "Success",
+      });
+
+      setModalWarning(false);
+    },
+    onError(error) {
+      toast({
+        variant: "destructive",
+        description: error.response?.data.message,
+        title: "Error",
+      });
+    },
+  });
+
   const { data: user } = useCurrentUser();
 
-  const handleOnSubmit = (payload: AssignCreditsFormSchema) => {
-    assignCredits({ id: data.id, credits: Number(payload.credits) });
+  const deleteUserHandler = () => {
+    user?.user.role === "SUPER_ADMIN"
+      ? deleteUser({ id: data.id })
+      : adminDeleteUser({ id: data.id });
   };
+  const {
+    avatar,
+    password,
+    phoneCountryCode,
+    passwordResetToken,
+    setPasswordToken,
+    phoneNo,
+    ...rest
+  } = data;
   return (
     <>
       <AlertModal
@@ -140,48 +147,29 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
         isOpen={modalWarning}
         loading={false}
         onClose={() => setModalWarning(false)}
-        onConfirm={() => deleteUser({ id: data.id })}
+        onConfirm={deleteUserHandler}
       />
-      <ModalCustom
-        isOpen={openAssignCreditModal}
-        onClose={() => setOpenAssignCreditModal(false)}
-      >
-        <Form {...form}>
-          <form onSubmit={handleSubmit(handleOnSubmit)}>
-            <div className="space-y-2">
-              <FormField
-                name="credits"
-                control={control}
-                render={({ field }) => (
-                  <FormItem>
-                    <Label
-                      htmlFor="credits"
-                      className="text-neutral-500 font-medium"
-                    >
-                      Assign Credits
-                    </Label>
-                    <FormControl>
-                      <Input
-                        id="credits"
-                        placeholder="Enter Credits"
-                        type="number"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <Button
-                className="border rounded-md px-4 py-2 bg-[#D3991F] text-white hover:bg-zinc-900"
-                type="submit"
-              >
-                Save
-              </Button>
-            </div>
-          </form>
-        </Form>
-      </ModalCustom>
+      <AssignCreditForm
+        openAssignCreditModal={openAssignCreditModal}
+        setOpenAssignCreditModal={setOpenAssignCreditModal}
+        userData={data}
+      />
+      <AdminUpdateUserForm
+        modalState={adminModalState}
+        setModalState={setAdminModalState}
+        userData={{
+          ...rest,
+          phoneNo:
+            phoneCountryCode && phoneNo
+              ? phoneCountryCode?.toString() + phoneNo?.toString()
+              : undefined,
+          clientId:
+            data.role === "CLIENT_SUPER_USER" ? data.clientId : undefined,
+          companyId: String(data.companyId),
+          credits: String(data.credits),
+          isActive: data.isActive === "Active" ? true : false,
+        }}
+      />
       <DropdownMenu modal={false}>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" className="h-8 w-8 p-0">
@@ -216,14 +204,15 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
               <Edit className="mr-2 h-4 w-4" /> Assign Credits
             </DropdownMenuItem>
           )}
-
+          {user?.user.role === "SUPER_ADMIN" && (
+            <DropdownMenuItem onClick={() => setAdminModalState(true)}>
+              <Edit2 className="mr-2 h-4 w-4" /> Update
+            </DropdownMenuItem>
+          )}
           {checkPermissions(user?.user.permissions as PermissionsType[], [
             "DELETE_USER",
           ]) && (
-            <DropdownMenuItem
-              //  disabled={loading}
-              onClick={() => setModalWarning(true)}
-            >
+            <DropdownMenuItem onClick={() => setModalWarning(true)}>
               <Trash className="mr-2 h-4 w-4" /> Delete
             </DropdownMenuItem>
           )}

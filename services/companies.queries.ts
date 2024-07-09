@@ -6,9 +6,9 @@ import { ErrorResponseType } from "./types.common";
 import { PaginatorInfoType } from "./user.queries";
 
 export type GetAllCompaniesInputType = {
-  searchString: string;
-  limitParam: number;
-  pageParam: number;
+  searchString?: string;
+  limitParam?: number;
+  pageParam?: number;
 };
 
 export type GetAllCompaniesResponseType = {

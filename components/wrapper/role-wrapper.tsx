@@ -10,7 +10,7 @@ const RoleWrapper =
   async (props: any) => {
     const { user } = await currentUser(cookies().get("accessToken")?.value);
 
-    if (!user.permissions.includes(permission)) {
+    if (!user.permissions.includes(permission) || user.role !== "SUPER_ADMIN") {
       redirect("./");
     }
     return <Component {...props} />;
