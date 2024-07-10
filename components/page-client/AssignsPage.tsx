@@ -7,13 +7,11 @@ import { Button } from "@/components/ui/button";
 import { Heading } from "@/components/ui/heading";
 import { Separator } from "@/components/ui/separator";
 import { AssignsType, useGetAssigns } from "@/services/admin/assigns.queries";
-import { useCurrentUser } from "@/services/auth.mutations";
 import { useSearchParams } from "next/navigation";
 import { useState } from "react";
+import CreateAssignForm from "../forms/create-assign-form";
 import { AssignsTable } from "../tables/assings-table/assigns";
 import { columns } from "../tables/assings-table/columns";
-import CreateAssignForm from "../forms/create-assign-form";
-import PermissionWrapper from "../wrapper/permission-wrapper";
 
 const breadcrumbItems = [{ title: "Assigns", link: "/dashboard/assigns" }];
 

@@ -100,6 +100,10 @@ const Filter = <T extends OptionsSelectorType>({
     setFilterBuilder({ filterName: optionKey as string, value: value });
   };
   const removeFilterValue = (key: string, value: string) => {
+    if (searchParams.getAll(key).length === 1) {
+      setFilterBuilder({ filterName: optionKey as string, value: null });
+    }
+
     querySetter(key, value);
   };
   return (
@@ -178,10 +182,19 @@ const Filter = <T extends OptionsSelectorType>({
             ) : (
               <TagsInput
                 onChange={onFilterValueChange}
-                value={filterBuilder?.value as string[]}
+                value={
+                  searchParams.getAll(optionKey as string).length
+                    ? searchParams.getAll(optionKey as string)
+                    : ((filterBuilder?.value ?? []) as string[])
+                }
+                classNames={{
+                  input: "!rounded-l-none  !w-[400px]",
+                  tag: "filter-cross-button",
+                }}
+                disableBackspaceRemove={true}
               />
             )}
-            <div className="relative left-0 top-0 flex items-center justify-center px-3 bg-[#f7f7f7]  border-[1px] ">
+            <div className="relative left-0 top-0 flex items-center  justify-center px-3 bg-[#f7f7f7]  border-[1px] ">
               <SearchIcon className="text-[#6c757d] text-xs" size={"20px"} />
             </div>
           </div>

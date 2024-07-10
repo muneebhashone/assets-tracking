@@ -117,10 +117,6 @@ export function SupportTable({
     manualFiltering: true,
   });
 
-  const selectedIds = table
-    .getSelectedRowModel()
-    .rows.map(({ original }) => original.id);
-
   return (
     <>
       <ScrollArea className="rounded-md border h-[calc(80vh-220px)]">

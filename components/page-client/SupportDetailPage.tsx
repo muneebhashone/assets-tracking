@@ -1,16 +1,14 @@
 "use client";
-import React from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
-import { Label } from "../ui/label";
 import { useGetSupportFormById } from "@/services/admin/support.queries";
 import { Badge } from "../ui/badge";
-import PermissionWrapper from "../wrapper/permission-wrapper";
+import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
+import { Label } from "../ui/label";
 interface SupportDetailPageProps {
   id: string;
 }
 const SupportDetailPage = ({ id }: SupportDetailPageProps) => {
   const { data: supportForm } = useGetSupportFormById({ id });
-  console.log(supportForm);
+ 
   return (
     <div className="w-full">
       <section className="bg-muted py-12 md:py-20 lg:py-24">

@@ -1,8 +1,8 @@
 "use client";
 import { useCreateSupportForm } from "@/services/admin/support.mutations";
 import { useGetUsers } from "@/services/user.queries";
-import { sanitizeObject } from "@/utils/common.utils";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import validator from "validator";
 import { z } from "zod";
@@ -24,7 +24,6 @@ import {
   SelectValue,
 } from "../ui/select";
 import { toast } from "../ui/use-toast";
-import { useRouter } from "next/navigation";
 
 const createSupportFormSchema = z
   .object({
@@ -127,9 +126,9 @@ const CreateSupportForm = () => {
                         </SelectTrigger>
                         <SelectContent>
                           {Array.isArray(users?.results) &&
-                            users?.results.map((user) => {
+                            users?.results.map((user, index) => {
                               return (
-                                <SelectItem value={String(user.id)}>
+                                <SelectItem value={String(user.id)} key={index}>
                                   {user.name}
                                 </SelectItem>
                               );

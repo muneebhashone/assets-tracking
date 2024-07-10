@@ -7,7 +7,7 @@ interface PageProps {
   };
 }
 const page = ({ params }: PageProps) => {
-  console.log(params);
+
   if (params.id) {
     return <SupportDetailPage id={params.id} />;
   }

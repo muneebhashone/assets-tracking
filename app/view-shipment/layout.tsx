@@ -1,7 +1,6 @@
 import Header from "@/components/layout/header";
-import MainFooter from "@/components/MainFooter";
 import NextTopLoader from "nextjs-toploader";
-import React, { ReactNode, Suspense } from "react";
+import { ReactNode, Suspense } from "react";
 
 const ViewShipmentLayout = ({ children }: { children: ReactNode }) => {
   return (

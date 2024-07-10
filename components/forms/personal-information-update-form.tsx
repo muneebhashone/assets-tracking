@@ -3,9 +3,11 @@
 import { useCurrentUser } from "@/services/auth.mutations";
 import { useUpdateProfileData } from "@/services/user.mutations";
 import { User } from "@/types/services/auth.types";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import PhoneInput, { CountryData } from "react-phone-input-2";
+import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
+import validator from "validator";
 import { z } from "zod";
 import { Button } from "../ui/button";
 import {
@@ -18,8 +20,6 @@ import {
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { toast } from "../ui/use-toast";
-import { zodResolver } from "@hookform/resolvers/zod";
-import validator from "validator";
 
 const profileUpdateFormSchema = z.object({
   name: z.string().min(1),
@@ -46,7 +46,7 @@ const PersonalInformationForm = () => {
       : {},
     resolver: zodResolver(profileUpdateFormSchema),
   });
-  const { control, handleSubmit, register, setValue, formState } = form;
+  const { control, handleSubmit, register } = form;
 
   const { mutate: updateProfile } = useUpdateProfileData({
     onSuccess(data) {

@@ -3,23 +3,18 @@
 import BreadCrumb from "@/components/breadcrumb";
 
 import SearchBar from "@/components/SearchBar";
-import { Button } from "@/components/ui/button";
 import { Heading } from "@/components/ui/heading";
 import { Separator } from "@/components/ui/separator";
-import { AssignsType, useGetAssigns } from "@/services/admin/assigns.queries";
-import { useCurrentUser } from "@/services/auth.mutations";
 import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 
-import CreateAssignForm from "../forms/create-assign-form";
 import {
   SupportType,
   useGetAllSupportForms,
 } from "@/services/admin/support.queries";
-import { Switch } from "../ui/switch";
-import { SupportTable } from "../tables/support-table/support";
 import { columns } from "../tables/support-table/columns";
-import PermissionWrapper from "../wrapper/permission-wrapper";
+import { SupportTable } from "../tables/support-table/support";
+import { Switch } from "../ui/switch";
 
 const breadcrumbItems = [
   { title: "Support Forms", link: "/dashboard/support" },
@@ -31,8 +26,6 @@ const SupportPage = () => {
   const page = Number(searchParams.get("page")) || 1;
   const pageLimit = Number(searchParams.get("limit")) || 10;
   const search = searchParams.get("search") || "";
-
-  // const [assignOpen, setAssignOpen] = useState<boolean>(false);
   const [filterResolved, setFilterResolved] = useState<boolean>(false);
 
   const { data: support, isLoading: allSupportLoading } = useGetAllSupportForms(
@@ -43,7 +36,6 @@ const SupportPage = () => {
       filterByResolved: filterResolved ? filterResolved : undefined,
     },
   );
-  console.log(support);
 
   return (
     <>

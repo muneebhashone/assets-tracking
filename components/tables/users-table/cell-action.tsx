@@ -1,6 +1,7 @@
 "use client";
 
-import { ModalCustom } from "@/components/ModalComponent";
+import AdminUpdateUserForm from "@/components/forms/admin-update-user-form";
+import AssignCreditForm from "@/components/forms/assign-credits-form";
 import { AlertModal } from "@/components/modal/alert-modal";
 import { Button } from "@/components/ui/button";
 import {
@@ -10,27 +11,18 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { toast } from "@/components/ui/use-toast";
 import useQueryUpdater from "@/hooks/useQueryUpdater";
+import {
+  useAdminDeleteUser
+} from "@/services/admin/user.mutations";
 import { useCurrentUser } from "@/services/auth.mutations";
 import {
-  AssignCreditsInputType,
-  useAssignCredits,
   useDeleteUser,
-  useToggleActive,
+  useToggleActive
 } from "@/services/user.mutations";
 import { PermissionsType } from "@/types/user.types";
 import { checkPermissions } from "@/utils/user.utils";
-import { zodResolver } from "@hookform/resolvers/zod";
 import {
   CheckCircle,
   Edit,
@@ -41,15 +33,7 @@ import {
   XCircle,
 } from "lucide-react";
 import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
 import { IUserModified } from "./users";
-import {
-  useAdminDeleteUser,
-  useAdminUpdateUser,
-} from "@/services/admin/user.mutations";
-import AssignCreditForm from "@/components/forms/assign-credits-form";
-import AdminUpdateUserForm from "@/components/forms/admin-update-user-form";
 
 interface CellActionProps {
   data: IUserModified;

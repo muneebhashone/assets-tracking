@@ -35,6 +35,7 @@ import {
 } from "../ui/select";
 import { toast } from "../ui/use-toast";
 import { passwordValidation } from "@/utils/auth.utils";
+import { useGetUsers } from "@/services/user.queries";
 
 const adminCreateUserFormSchema = z
   .object({
@@ -57,7 +58,7 @@ const adminCreateUserFormSchema = z
       .enum(permissionEnums, { required_error: "Permissions must be defined" })
       .array()
       .min(1),
-    isActive: z.boolean(),
+    isActive: z.boolean().default(false),
     status: z.enum(statusEnums, { required_error: "Status must be defined" }),
     credits: z
       .string()
@@ -115,6 +116,11 @@ const AdminCreateUserForm = ({
     resolver: zodResolver(adminCreateUserFormSchema),
   });
   const { control, handleSubmit, reset, watch } = form;
+  const { data: clientSuperUsers } = useGetUsers({
+    filterByRole: "CLIENT_SUPER_USER",
+    filterByStatus: ["APPROVED"],
+    filterByActive: true,
+  });
 
   const { mutate, isPending } = useAdminCreateUser({
     onSuccess(data) {
@@ -242,12 +248,18 @@ const AdminCreateUserForm = ({
                               <SelectValue placeholder="Clients" />
                             </SelectTrigger>
                             <SelectContent>
-                              {/* <SelectItem value="">
-                                      Container Number
+                              {clientSuperUsers?.results.map(
+                                (clientSuperUser, index) => {
+                                  return (
+                                    <SelectItem
+                                      value={String(clientSuperUser.id)}
+                                      key={index}
+                                    >
+                                      {clientSuperUser.name}
                                     </SelectItem>
-                                    <SelectItem value="MBL_NUMBER">
-                                      MBL / Booking Number
-                                    </SelectItem> */}
+                                  );
+                                },
+                              )}
                             </SelectContent>
                           </Select>
                         </FormControl>
@@ -284,9 +296,12 @@ const AdminCreateUserForm = ({
                               <SelectValue placeholder="Select a Company" />
                             </SelectTrigger>
                             <SelectContent>
-                              {companies?.results.map((company) => {
+                              {companies?.results.map((company, index) => {
                                 return (
-                                  <SelectItem value={String(company.id)}>
+                                  <SelectItem
+                                    value={String(company.id)}
+                                    key={index}
+                                  >
                                     {company.name}
                                   </SelectItem>
                                 );
@@ -356,9 +371,9 @@ const AdminCreateUserForm = ({
                           </SelectTrigger>
                           <SelectContent>
                             {EligibleRolesForCreation["SUPER_ADMIN"]?.map(
-                              (role) => {
+                              (role, index) => {
                                 return (
-                                  <SelectItem value={String(role)}>
+                                  <SelectItem value={String(role)} key={index}>
                                     {UserRole[role]}
                                   </SelectItem>
                                 );
@@ -388,11 +403,12 @@ const AdminCreateUserForm = ({
                             <SelectValue placeholder="Select the Status" />
                           </SelectTrigger>
                           <SelectContent>
-                            {statusEnums.map((status) => {
+                            {statusEnums.map((status, index) => {
                               return (
                                 <SelectItem
                                   value={status}
                                   className="capitalize"
+                                  key={index}
                                 >
                                   {status}
                                 </SelectItem>

@@ -29,8 +29,8 @@ interface CellActionProps {
 }
 
 export const CellAction: React.FC<CellActionProps> = ({ data }) => {
-  const [open, setOpen] = useState(false);
-  const [resolveOpen, setResolveOpen] = useState(false);
+  const [open, setOpen] = useState<boolean>(false);
+
   const { mutate: deleteSupportForm } = useDeleteSupportForm({
     onSuccess(data) {
       toast({
@@ -56,8 +56,6 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
         description: data.message,
         title: "Success",
       });
-
-      setResolveOpen(false);
     },
     onError(error) {
       toast({

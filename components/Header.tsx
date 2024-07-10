@@ -2,6 +2,7 @@
 
 import { useCurrentUser } from "@/services/auth.mutations";
 import { HamburgerMenuIcon } from "@radix-ui/react-icons";
+import { HelpCircleIcon } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -10,7 +11,6 @@ import LoginButton from "./LoginButton";
 import Menu from "./Menu";
 import NavLogo from "./NavLogo";
 import { UserNav } from "./layout/user-nav";
-import { HelpCircle, HelpCircleIcon } from "lucide-react";
 
 const Header = () => {
   const [open, setOpen] = useState(false);

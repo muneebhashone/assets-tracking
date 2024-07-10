@@ -9,13 +9,12 @@ import {
 import { PermissionsType } from "@/types/user.types";
 import { checkPermissions } from "@/utils/user.utils";
 import { useSearchParams } from "next/navigation";
+import Filter, { OptionsMapperType } from "../Filter";
 import SearchBar from "../SearchBar";
 import ShipmentCreationForm from "../forms/shipment-creation-form";
 import { columns } from "../tables/shipment-table/columns";
 import { ShipmentTable } from "../tables/shipment-table/shipment-table";
 import { ScrollArea } from "../ui/scroll-area";
-import Filter, { OptionsMapperType } from "../Filter";
-import { Separator } from "../ui/separator";
 
 const ShipmentPage = () => {
   const searchParams = useSearchParams();

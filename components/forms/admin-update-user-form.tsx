@@ -288,9 +288,12 @@ const AdminUpdateUserForm = ({
                             <SelectValue placeholder="Select a Company" />
                           </SelectTrigger>
                           <SelectContent>
-                            {companies?.results.map((company) => {
+                            {companies?.results.map((company, index) => {
                               return (
-                                <SelectItem value={String(company.id)}>
+                                <SelectItem
+                                  value={String(company.id)}
+                                  key={index}
+                                >
                                   {company.name}
                                 </SelectItem>
                               );
@@ -363,9 +366,9 @@ const AdminUpdateUserForm = ({
                           </SelectTrigger>
                           <SelectContent>
                             {EligibleRolesForCreation["SUPER_ADMIN"]?.map(
-                              (role) => {
+                              (role, index) => {
                                 return (
-                                  <SelectItem value={String(role)}>
+                                  <SelectItem value={String(role)} key={index}>
                                     {UserRole[role]}
                                   </SelectItem>
                                 );
@@ -399,10 +402,11 @@ const AdminUpdateUserForm = ({
                             <SelectValue placeholder="Select the Status" />
                           </SelectTrigger>
                           <SelectContent>
-                            {statusEnums.map((status) => {
+                            {statusEnums.map((status, index) => {
                               return (
                                 <SelectItem
                                   value={status}
+                                  key={index}
                                   className="capitalize"
                                 >
                                   {status}
