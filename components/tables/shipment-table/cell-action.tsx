@@ -162,48 +162,50 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
             <Trash className="mr-2 h-4 w-4" /> Delete
           </DropdownMenuItem>
 
-          {data?.files?.length &&
+          {(user?.user.role === "SUPER_ADMIN" ||
             checkPermissions(user?.user.permissions as PermissionsType[], [
               "EDIT_SHIPMENT",
               "CREATE_SHIPMENT",
               "DELETE_SHIPMENT",
-            ]) && (
-              <DropdownMenuItem
-                onClick={() =>
-                  toggleFileShare({
-                    filesShareable: !data.shareFiles,
-                    shipmentId: data.id,
-                  })
-                }
-              >
-                {data.shareFiles ? (
-                  <>
-                    <ToggleRight className="mr-2 h-4 w-4" /> Disable File Share
-                  </>
-                ) : (
-                  <>
-                    <ToggleLeft className="mr-2 h-4 w-4" /> Enable File Share
-                  </>
-                )}
-              </DropdownMenuItem>
-            )}
+            ])) && (
+            <DropdownMenuItem
+              onClick={() =>
+                toggleFileShare({
+                  filesShareable: !data.shareFiles,
+                  shipmentId: data.id,
+                })
+              }
+            >
+              {data.shareFiles ? (
+                <>
+                  <ToggleRight className="mr-2 h-4 w-4" /> Disable File Share
+                </>
+              ) : (
+                <>
+                  <ToggleLeft className="mr-2 h-4 w-4" /> Enable File Share
+                </>
+              )}
+            </DropdownMenuItem>
+          )}
 
           <DropdownMenuItem onClick={() => setModalOpen(true)}>
             <Cloud className="mr-2 h-4 w-4" /> Upload File
           </DropdownMenuItem>
-          {checkPermissions(user?.user.permissions as PermissionsType[], [
-            "EDIT_SHIPMENT",
-          ]) && (
+          {(user?.user.role === "SUPER_ADMIN" ||
+            checkPermissions(user?.user.permissions as PermissionsType[], [
+              "EDIT_SHIPMENT",
+            ])) && (
             <DropdownMenuItem onClick={() => setUpdateModalOpen(true)}>
               <Edit className="mr-2 h-4 w-4" /> Update Shipment
             </DropdownMenuItem>
           )}
 
-          {checkPermissions(user?.user.permissions as PermissionsType[], [
-            "EDIT_SHIPMENT",
-            "CREATE_SHIPMENT",
-            "DELETE_SHIPMENT",
-          ]) &&
+          {(user?.user.role === "SUPER_ADMIN" ||
+            checkPermissions(user?.user.permissions as PermissionsType[], [
+              "EDIT_SHIPMENT",
+              "CREATE_SHIPMENT",
+              "DELETE_SHIPMENT",
+            ])) &&
             (data.shareToken ? (
               <DropdownMenuItem
                 onClick={() => discardLink({ shipmentId: String(data.id) })}

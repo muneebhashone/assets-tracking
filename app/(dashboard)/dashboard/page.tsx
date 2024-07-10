@@ -1,9 +1,10 @@
 import DashboardPage from "@/components/page-client/DashboardPage";
-import RoleWrapper from "@/components/wrapper/role-wrapper";
+import PermissionWrapper from "@/components/wrapper/permission-wrapper";
+
 import React from "react";
 
 const Page = () => {
   return <DashboardPage />;
 };
 
-export default RoleWrapper(Page, "VIEW_DASHBOARD");
+export default PermissionWrapper(Page, "VIEW_DASHBOARD");

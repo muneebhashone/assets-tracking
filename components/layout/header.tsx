@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { MobileSidebar } from "./mobile-sidebar";
 import { UserNav } from "./user-nav";
+import { HelpCircle } from "lucide-react";
 
 export default function Header() {
   return (
@@ -19,6 +20,9 @@ export default function Header() {
 
         <div className="flex items-center gap-2">
           <UserNav />
+          <Link href={"/support-request"}>
+            <HelpCircle />
+          </Link>
         </div>
       </nav>
     </div>

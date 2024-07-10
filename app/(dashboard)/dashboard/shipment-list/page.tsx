@@ -1,8 +1,10 @@
 import ShipmentPage from "@/components/page-client/ShipmentPage";
-import RoleWrapper from "@/components/wrapper/role-wrapper";
+import PermissionWrapper from "@/components/wrapper/permission-wrapper";
+
+
 
 const ShipmentList = () => {
   return <ShipmentPage />;
 };
 
-export default RoleWrapper(ShipmentList, "VIEW_SHIPMENT");
+export default PermissionWrapper(ShipmentList, "VIEW_SHIPMENT");

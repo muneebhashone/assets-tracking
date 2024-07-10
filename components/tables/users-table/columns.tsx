@@ -18,7 +18,7 @@ export const columns: ColumnDef<IUserModified>[] = [
   },
   {
     header: "S#",
-    cell: ({ row }) => <p className="text-center">{row?.index}</p>,
+    cell: ({ row }) => <p className="text-center">{row?.index + 1}</p>,
   },
   {
     accessorKey: "id",

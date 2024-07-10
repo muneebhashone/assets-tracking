@@ -1,6 +1,6 @@
 "use client";
 import { Switch } from "@/components/ui/switch";
-import { useAdminUpdateUser } from "@/services/admin/user.mutations";
+import { useAdminCreateUser } from "@/services/admin/user.mutations";
 import { useGetCompanies } from "@/services/companies.queries";
 import {
   permissionEnums,
@@ -12,7 +12,6 @@ import { EligibleRolesForCreation, UserRole } from "@/utils/constants";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Dispatch, SetStateAction } from "react";
 import { useForm } from "react-hook-form";
-
 import validator from "validator";
 import { z } from "zod";
 import { ModalCustom } from "../ModalComponent";
@@ -35,16 +34,15 @@ import {
   SelectValue,
 } from "../ui/select";
 import { toast } from "../ui/use-toast";
+import { passwordValidation } from "@/utils/auth.utils";
 
-const adminUserUpdateFormSchema = z
+const adminCreateUserFormSchema = z
   .object({
-    id: z.string().min(1),
     email: z
       .string({ required_error: "Email is required" })
       .min(1)
-      .email("Email must be valid")
-      .optional(),
-    name: z.string({ required_error: "Name is required" }).min(1).optional(),
+      .email("Email must be valid"),
+    name: z.string({ required_error: "Name is required" }).min(1),
     phoneNo: z
       .string()
       .min(1)
@@ -53,27 +51,19 @@ const adminUserUpdateFormSchema = z
         "Phone no. must be valid",
       )
       .optional(),
-    role: z
-      .enum(rolesEnums, { required_error: "Role must be defined" })
-      .optional(),
+    role: z.enum(rolesEnums, { required_error: "Role must be defined" }),
+    password: passwordValidation("password").optional(),
     permissions: z
       .enum(permissionEnums, { required_error: "Permissions must be defined" })
       .array()
+      .min(1),
+    isActive: z.boolean(),
+    status: z.enum(statusEnums, { required_error: "Status must be defined" }),
+    credits: z
+      .string()
       .min(1)
-      .optional(),
-    isActive: z.boolean().optional(),
-    status: z
-      .enum(statusEnums, { required_error: "Status must be defined" })
-      .optional(),
-    credits: z.union([
-      z
-        .string()
-        .min(1)
-        .refine((value) => validator.isNumeric(value))
-        .transform(Number),
-      z.number(),
-    ]),
-
+      .refine((value) => validator.isNumeric(value))
+      .transform(Number),
     companyId: z
       .string()
       .min(1)
@@ -110,26 +100,23 @@ const adminUserUpdateFormSchema = z
     }
   });
 
-type AdminUserUpdateFormSchemaType = z.infer<typeof adminUserUpdateFormSchema>;
+type AdminCreateUserFormSchemaType = z.infer<typeof adminCreateUserFormSchema>;
 
-interface AdminUpdateUserFormProps {
+interface AdminCreateUserFormProps {
   setModalState: Dispatch<SetStateAction<boolean>>;
   modalState: boolean;
-  userData: AdminUserUpdateFormSchemaType;
 }
 
-const AdminUpdateUserForm = ({
+const AdminCreateUserForm = ({
   modalState,
   setModalState,
-  userData,
-}: AdminUpdateUserFormProps) => {
-  const form = useForm<AdminUserUpdateFormSchemaType>({
-    values: userData as AdminUserUpdateFormSchemaType,
-    resolver: zodResolver(adminUserUpdateFormSchema),
+}: AdminCreateUserFormProps) => {
+  const form = useForm<AdminCreateUserFormSchemaType>({
+    resolver: zodResolver(adminCreateUserFormSchema),
   });
-  const { control, handleSubmit, reset } = form;
+  const { control, handleSubmit, reset, watch } = form;
 
-  const { mutate, isPending } = useAdminUpdateUser({
+  const { mutate, isPending } = useAdminCreateUser({
     onSuccess(data) {
       toast({
         variant: "default",
@@ -148,15 +135,8 @@ const AdminUpdateUserForm = ({
     },
   });
 
-  const adminUpdateFormHandler = (data: AdminUserUpdateFormSchemaType) => {
-    if (data.clientId) {
-      const { email, ...rest } = data;
-      mutate(rest);
-    } else {
-      const { clientId, email, ...rest } = data;
-
-      mutate(rest);
-    }
+  const adminUpdateFormHandler = (data: AdminCreateUserFormSchemaType) => {
+    mutate(data);
   };
 
   const { data: companies } = useGetCompanies({
@@ -197,11 +177,24 @@ const AdminUpdateUserForm = ({
                         Email
                       </Label>
                       <FormControl>
-                        <Input
-                          placeholder="Enter your name..."
-                          disabled={true}
-                          {...field}
-                        />
+                        <Input placeholder="Enter your name..." {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <div>
+                <FormField
+                  control={control}
+                  name="password"
+                  render={({ field }) => (
+                    <FormItem>
+                      <Label className="font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70 block text-xs mb-1">
+                        Password
+                      </Label>
+                      <FormControl>
+                        <Input placeholder="Enter Password" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -226,7 +219,7 @@ const AdminUpdateUserForm = ({
                 />
               </div>
 
-              {userData.role === "CLIENT_USER" && (
+              {watch("role") === "CLIENT_USER" && (
                 <div>
                   <FormField
                     name="clientId"
@@ -265,44 +258,48 @@ const AdminUpdateUserForm = ({
                 </div>
               )}
 
-              <div>
-                <FormField
-                  name="companyId"
-                  control={control}
-                  render={({ field }) => (
-                    <FormItem>
-                      <Label
-                        htmlFor="companyId"
-                        className="font-medium text-xs"
-                      >
-                        Company
-                      </Label>
-                      <FormControl>
-                        <Select
-                          onValueChange={field.onChange}
-                          value={String(field.value)}
-                          defaultValue={field.value}
-                          // disabled={isPending || isFetching}
+              {(watch("role") === "CLIENT_SUPER_USER" ||
+                watch("role") === "WHITE_LABEL_ADMIN" ||
+                watch("role") === "WHITE_LABEL_SUB_ADMIN") && (
+                <div>
+                  <FormField
+                    name="companyId"
+                    control={control}
+                    render={({ field }) => (
+                      <FormItem>
+                        <Label
+                          htmlFor="companyId"
+                          className="font-medium text-xs"
                         >
-                          <SelectTrigger id="companyId">
-                            <SelectValue placeholder="Select a Company" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {companies?.results.map((company) => {
-                              return (
-                                <SelectItem value={String(company.id)}>
-                                  {company.name}
-                                </SelectItem>
-                              );
-                            })}
-                          </SelectContent>
-                        </Select>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
+                          Company
+                        </Label>
+                        <FormControl>
+                          <Select
+                            onValueChange={field.onChange}
+                            value={String(field.value)}
+                            defaultValue={field.value}
+                            // disabled={isPending || isFetching}
+                          >
+                            <SelectTrigger id="companyId">
+                              <SelectValue placeholder="Select a Company" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {companies?.results.map((company) => {
+                                return (
+                                  <SelectItem value={String(company.id)}>
+                                    {company.name}
+                                  </SelectItem>
+                                );
+                              })}
+                            </SelectContent>
+                          </Select>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              )}
 
               <div>
                 <FormField
@@ -353,11 +350,7 @@ const AdminUpdateUserForm = ({
                         Role
                       </Label>
                       <FormControl>
-                        <Select
-                          onValueChange={field.onChange}
-                          // disabled={isPending || isFetching}
-                          {...field}
-                        >
+                        <Select onValueChange={field.onChange} {...field}>
                           <SelectTrigger id="role">
                             <SelectValue placeholder="Select the Role" />
                           </SelectTrigger>
@@ -390,11 +383,7 @@ const AdminUpdateUserForm = ({
                         Status
                       </Label>
                       <FormControl>
-                        <Select
-                          onValueChange={field.onChange}
-                          // disabled={isPending || isFetching}
-                          {...field}
-                        >
+                        <Select onValueChange={field.onChange} {...field}>
                           <SelectTrigger id="status">
                             <SelectValue placeholder="Select the Status" />
                           </SelectTrigger>
@@ -444,7 +433,7 @@ const AdminUpdateUserForm = ({
               </div>
             </div>
             <Button size="lg" className="mt-10 bg-golden" disabled={isPending}>
-              Save
+              Create
             </Button>
           </form>
         </Form>
@@ -453,4 +442,4 @@ const AdminUpdateUserForm = ({
   );
 };
 
-export default AdminUpdateUserForm;
+export default AdminCreateUserForm;

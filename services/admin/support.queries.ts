@@ -28,10 +28,10 @@ export type GetAllSupportFormInputType = {
   searchString?: string;
   limitParam?: number;
   pageParam?: number;
-  filterByResolved?: number;
+  filterByResolved?: boolean;
 };
 export type GetSupportFormByIdType = {
-  id: number;
+  id: string;
 };
 export interface GetAllSupportFormsResponseType
   extends Omit<SuccessResponseType, "data"> {
@@ -46,7 +46,7 @@ export interface GetSupportFormByIdResponseType
 
 export const getAllSupportForms = async (input: GetAllSupportFormInputType) => {
   const { data } = await apiAxios.get<GetAllSupportFormsResponseType>(
-    "/admin/assign",
+    "/admin/support-form",
     {
       params: input,
     },
@@ -58,7 +58,7 @@ export const getAllSupportForms = async (input: GetAllSupportFormInputType) => {
 export const getSupportFormById = async (input: GetSupportFormByIdType) => {
   const { id } = input;
   const { data } = await apiAxios.get<GetAllSupportFormsResponseType>(
-    `/admin/assign/${id}`,
+    `/admin/support-form/${id}`,
   );
 
   return data;

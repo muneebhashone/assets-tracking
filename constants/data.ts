@@ -38,6 +38,20 @@ export const navItems: NavItem[] = [
     label: "company",
     permissions: ["VIEW_COMPANY"],
   },
+  {
+    title: "Assigns",
+    href: "/dashboard/assigns",
+    icon: "laptop",
+    label: "assigns",
+    permissions: ["SUPER_ADMIN"],
+  },
+  {
+    title: "Support",
+    href: "/dashboard/support",
+    icon: "help",
+    label: "support",
+    permissions: ["SUPER_ADMIN"],
+  },
 ];
 
 export const userNavItems: NavItem[] = [

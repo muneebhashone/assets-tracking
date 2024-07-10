@@ -5,15 +5,28 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { ComponentType } from "react";
 /* eslint-disable */
-const RoleWrapper =
-  (Component: ComponentType<unknown | any>, permission: PermissionsType) =>
+
+const checkSuperAdminOrPermission = (
+  user: any,
+  permission?: PermissionsType,
+) => {
+  if (permission) {
+    return user.permissions.includes(permission);
+  } else {
+    return user.role === "SUPER_ADMIN";
+  }
+};
+const PermissionWrapper =
+  (Component: ComponentType<any>, permission?: PermissionsType) =>
   async (props: any) => {
     const { user } = await currentUser(cookies().get("accessToken")?.value);
 
-    if (!user.permissions.includes(permission) || user.role !== "SUPER_ADMIN") {
+    if (!checkSuperAdminOrPermission(user, permission)) {
       redirect("./");
+      return null;
     }
+
     return <Component {...props} />;
   };
 
-export default RoleWrapper;
+export default PermissionWrapper;

@@ -15,25 +15,23 @@ export type AssignUsersInputType = {
   childId: string;
 };
 export type DeleteAssignUserInputType = {
-  assignmentId: string;
+  assignmentId: number;
 };
 
 //services
 
 export const assignUsers = async (input: AssignUsersInputType) => {
-  const { data } = await apiAxios.post<SuccessResponseType>("/admin/assign", {
-    body: input,
-  });
+  const { data } = await apiAxios.post<SuccessResponseType>(
+    "/admin/assign",
+    input,
+  );
   return data;
 };
 
 export const deleteAssignment = async (input: DeleteAssignUserInputType) => {
   const { assignmentId } = input;
-  const { data } = await apiAxios.post<SuccessResponseType>(
+  const { data } = await apiAxios.delete<SuccessResponseType>(
     `/admin/assign/${assignmentId}`,
-    {
-      body: input,
-    },
   );
   return data;
 };

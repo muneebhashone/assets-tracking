@@ -19,40 +19,30 @@ import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { toast } from "../ui/use-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
+import validator from "validator";
 
-const profileUpdateFormSchema = z
-  .object({
-    name: z.string().min(1),
-    phoneNo: z
-      .string({ message: "Please write Phone number" })
-      .min(1)
-      .optional(),
-    phoneCountryCode: z
-      .string({ message: "Please write Phone number" })
-      .min(1)
-      .optional(),
-    email: z.string().nullable(),
-  })
-  .refine((args) => {
-    if (args.phoneNo && !args.phoneCountryCode) {
-      return false;
-    }
+const profileUpdateFormSchema = z.object({
+  name: z.string().min(1),
+  phoneNo: z
+    .string()
+    .min(1)
+    .refine(
+      (value) => validator.isMobilePhone(value, "any", { strictMode: true }),
+      "Phone no. must be valid",
+    )
+    .optional(),
+  email: z.string().nullable(),
+});
 
-    if (args.phoneCountryCode && !args.phoneNo) {
-      return false;
-    }
-
-    return true;
-  }, "phoneNo and phoneCountryCode must be provided together");
 export type ProfileUpdateFormType = z.infer<typeof profileUpdateFormSchema>;
 
 const PersonalInformationForm = () => {
   const { data: user, isLoading: userLoading } = useCurrentUser();
 
-  const { name, phoneNo, phoneCountryCode, email } = (user?.user as User) ?? {};
+  const { name, phoneNo, email } = (user?.user as User) ?? {};
   const form = useForm<ProfileUpdateFormType>({
     defaultValues: !userLoading
-      ? { name, phoneNo, phoneCountryCode, email }
+      ? { name, phoneNo: phoneNo?.replace("+", ""), email }
       : {},
     resolver: zodResolver(profileUpdateFormSchema),
   });
@@ -77,7 +67,7 @@ const PersonalInformationForm = () => {
   const handleUpdateProfile = (data: ProfileUpdateFormType) => {
     /* eslint-disable */
     const { email, ...rest } = data;
-    console.log(rest);
+
     updateProfile(rest);
   };
 
@@ -113,30 +103,26 @@ const PersonalInformationForm = () => {
             <Input type="email" disabled {...register("email")} />
           </div>
           <div>
-            <Label className="font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70 block text-xs mb-1">
-              Phone Number
-            </Label>
-
-            <PhoneInput
-              value={
-                String(form.watch("phoneCountryCode")?.replace("+", "")) +
-                String(form.watch("phoneNo"))
-              }
-              onChange={(number, phoneData: CountryData) => {
-                setValue("phoneNo", number.replace(phoneData.dialCode, ""));
-                setValue("phoneCountryCode", `+${phoneData.dialCode}`);
-              }}
+            <FormField
+              control={control}
+              name="phoneNo"
+              render={({ field }) => (
+                <FormItem>
+                  <Label className="font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70 block text-xs mb-1">
+                    Phone Number
+                  </Label>
+                  <FormControl>
+                    <PhoneInput
+                      value={field.value}
+                      onChange={(number) => {
+                        field.onChange("+" + number);
+                      }}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
-            {formState.errors.phoneNo?.message && (
-              <div className="text-[0.8rem] font-medium text-destructive">
-                {formState?.errors.phoneNo?.message}
-              </div>
-            )}
-            {formState.errors.phoneCountryCode?.message && (
-              <div className="text-[0.8rem] font-medium text-destructive">
-                {formState?.errors.phoneNo?.message}
-              </div>
-            )}
           </div>
         </div>
         <Button size="lg" className="mt-10 bg-golden">

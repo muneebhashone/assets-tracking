@@ -6,8 +6,6 @@ import {
 } from "@tanstack/react-query";
 
 import { User } from "@/types/services/auth.types";
-
-import { CreateUserFormSchemaType } from "@/components/page-client/UsersPage";
 import { PermissionsType, StatusType } from "@/types/user.types";
 import { ErrorResponseType, SuccessResponseType } from "../types.common";
 import { getUsers } from "../user.queries";
@@ -16,14 +14,15 @@ import { getUsers } from "../user.queries";
 export interface AdminCreateUserInputType {
   email: string;
   name: string;
-  phoneNo: string;
+  phoneNo?: string;
   role: string;
   permissions: PermissionsType[];
+  password?: string;
   isActive: boolean;
   status: StatusType;
   credits: number;
-  companyId: string;
-  clientId: string;
+  companyId?: string;
+  clientId?: string;
 }
 export interface AdminUpdateUserInputType
   extends Partial<AdminCreateUserInputType> {

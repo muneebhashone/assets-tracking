@@ -3,7 +3,6 @@ import { NextRequest } from "next/server";
 import { AUTH_KEY } from "./utils/constants";
 import { currentUser } from "./services/auth.services";
 
-// This function can be marked `async` if using `await` inside
 export async function middleware(request: NextRequest) {
   try {
     const accessToken = request.cookies.get(AUTH_KEY)?.value;

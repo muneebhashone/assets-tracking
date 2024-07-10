@@ -128,12 +128,18 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
   const {
     avatar,
     password,
-    phoneCountryCode,
     passwordResetToken,
     setPasswordToken,
-    phoneNo,
-    ...rest
+    ...updateData
   } = data;
+  const userUpdateData = {
+    ...updateData,
+    id: String(data.id),
+    clientId: data.role === "CLIENT_USER" ? String(data.clientId) : undefined,
+    companyId: String(data.companyId),
+    isActive: data.isActive === "Active" ? true : false,
+  };
+
   return (
     <>
       <AlertModal
@@ -157,18 +163,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
       <AdminUpdateUserForm
         modalState={adminModalState}
         setModalState={setAdminModalState}
-        userData={{
-          ...rest,
-          phoneNo:
-            phoneCountryCode && phoneNo
-              ? phoneCountryCode?.toString() + phoneNo?.toString()
-              : undefined,
-          clientId:
-            data.role === "CLIENT_SUPER_USER" ? data.clientId : undefined,
-          companyId: String(data.companyId),
-          credits: String(data.credits),
-          isActive: data.isActive === "Active" ? true : false,
-        }}
+        userData={userUpdateData}
       />
       <DropdownMenu modal={false}>
         <DropdownMenuTrigger asChild>

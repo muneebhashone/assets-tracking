@@ -10,13 +10,13 @@ import { getAllSupportForms } from "./support.queries";
 
 //types
 
-type CreateSupportInputType = {
+export type CreateSupportInputType = {
   name?: string;
   email?: string;
   phoneNo?: string;
   subject: string;
   message: string;
-  userId?: number;
+  userId?: string;
 };
 type DeleteSupportInputType = {
   id: number;
@@ -46,7 +46,7 @@ export const resolveSupportForm = async (
   input: ResolveSupportFormInputType,
 ) => {
   const { id } = input;
-  const { data } = await apiAxios.delete<SuccessResponseType>(
+  const { data } = await apiAxios.post<SuccessResponseType>(
     `/admin/support-form/${id}/resolved`,
   );
   return data;
@@ -94,7 +94,7 @@ export const useDeleteSupportForm = (
   });
 };
 
-export const useResloveSupportForm = (
+export const useResolveSupportForm = (
   options?: UseMutationOptions<
     SuccessResponseType,
     ErrorResponseType,

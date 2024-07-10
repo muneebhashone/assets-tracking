@@ -54,7 +54,6 @@ export interface User {
   email: string;
   name: string;
   phoneNo?: string;
-  phoneCountryCode?: string;
   avatar?: string;
   role: keyof typeof UserRole;
   isActive: boolean;
@@ -62,7 +61,7 @@ export interface User {
   status: StatusType;
   credits: number;
   companyId: number;
-  clientId?: number | null;
+  clientId?: number;
   permissions: PermissionsType[];
   setPasswordToken?: string;
   passwordResetToken?: string;

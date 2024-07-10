@@ -10,6 +10,7 @@ import LoginButton from "./LoginButton";
 import Menu from "./Menu";
 import NavLogo from "./NavLogo";
 import { UserNav } from "./layout/user-nav";
+import { HelpCircle, HelpCircleIcon } from "lucide-react";
 
 const Header = () => {
   const [open, setOpen] = useState(false);
@@ -60,6 +61,9 @@ const Header = () => {
                 />
               </>
             )}
+            <Link href={"/support-request"}>
+              <HelpCircleIcon />
+            </Link>
           </div>
         </div>
       </div>

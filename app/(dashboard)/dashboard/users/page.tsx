@@ -1,9 +1,8 @@
 import UsersPage from "@/components/page-client/UsersPage";
-import RoleWrapper from "@/components/wrapper/role-wrapper";
-import React from "react";
+import PermissionWrapper from "@/components/wrapper/permission-wrapper";
 
 const Page = () => {
   return <UsersPage />;
 };
 
-export default RoleWrapper(Page, "VIEW_USER");
+export default PermissionWrapper(Page, "VIEW_USER");

@@ -6,6 +6,7 @@ import { User } from "@/types/services/auth.types";
 
 //types
 export interface AssignsType {
+  id: number;
   parentId: number;
   childId: number;
   createdAt: string;
