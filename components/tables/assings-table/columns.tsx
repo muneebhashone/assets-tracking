@@ -23,6 +23,8 @@ export const columns: ColumnDef<AssignsType>[] = [
 
   {
     id: "actions",
+    header: () => <div className="text-center">Actions</div>,
+
     cell: ({ row }) => <CellAction data={row.original} />,
   },
 ];

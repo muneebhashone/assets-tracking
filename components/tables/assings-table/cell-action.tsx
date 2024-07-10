@@ -48,8 +48,16 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
         onClose={() => setOpen(false)}
         onConfirm={() => deleteAssignment({ assignmentId: data.id })}
       />
+      <div className="w-full flex justify-center">
+        <Button
+          onClick={() => setOpen(true)}
+          className="bg-transparent text-red-700 hover:bg-transparent hover:text-red-600"
+        >
+          <Trash className="mr-2 h-4 w-4" /> Delete
+        </Button>
+      </div>
 
-      <DropdownMenu modal={false}>
+      {/* <DropdownMenu modal={false}>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" className="h-8 w-8 p-0">
             <span className="sr-only">Open menu</span>
@@ -59,11 +67,11 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
 
-          <DropdownMenuItem onClick={() => setOpen(true)}>
-            <Trash className="mr-2 h-4 w-4" /> Delete
+          <DropdownMenuItem>
+           
           </DropdownMenuItem>
         </DropdownMenuContent>
-      </DropdownMenu>
+      </DropdownMenu> */}
     </>
   );
 };

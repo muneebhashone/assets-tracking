@@ -30,6 +30,7 @@ import { ModalCustom } from "../ModalComponent";
 
 import { Shipment } from "@/services/shipment.queries";
 import { Label } from "../ui/label";
+import { sanitizeObject } from "@/utils/common.utils";
 
 interface UpdateFormProps {
   shipmentData: Shipment;
@@ -89,7 +90,8 @@ export default function UpdateShipmentForm({
   const { control, formState, handleSubmit } = form;
   const onSubmit = (data: UpdateShipmenFormtInputType) => {
     if (data) {
-      mutate({ id: shipmentData.id, ...data });
+      const sanitizedResult = sanitizeObject(data);
+      mutate({ id: shipmentData.id, ...sanitizedResult });
     }
   };
 

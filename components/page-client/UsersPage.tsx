@@ -28,8 +28,8 @@ const UsersPage = () => {
   const page = Number(searchParams.get("page")) || 1;
   const pageLimit = Number(searchParams.get("limit")) || 10;
   const search = searchParams.get("search") || "";
-  const filterByActive = searchParams.get("filterByActive") || "";
-  const filterByRole = searchParams.get("filterByRole") || "";
+  const filterByActive = searchParams.get("filterByActive");
+  const filterByRole = searchParams.get("filterByRole");
 
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [adminModal, setAdminModal] = useState<boolean>(false);
@@ -39,7 +39,7 @@ const UsersPage = () => {
     limitParam: pageLimit,
     pageParam: page,
     searchString: search,
-    filterByActive: Boolean(filterByActive),
+    filterByActive: filterByActive ? filterByActive : undefined,
     filterByRole: filterByRole ? (filterByRole as RoleType) : undefined,
     filterByStatus: ["APPROVED"],
   });

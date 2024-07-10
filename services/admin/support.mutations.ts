@@ -6,7 +6,7 @@ import {
 } from "@tanstack/react-query";
 import { ErrorResponseType, SuccessResponseType } from "../types.common";
 import { getAssigns } from "./assigns.queries";
-import { getAllSupportForms } from "./support.queries";
+import { getAllSupportForms, getSupportFormById } from "./support.queries";
 
 //types
 
@@ -108,6 +108,9 @@ export const useResolveSupportForm = (
     async onSuccess(data, variables, context) {
       await queryClient.invalidateQueries({
         queryKey: [getAllSupportForms.name],
+      });
+      await queryClient.invalidateQueries({
+        queryKey: [getSupportFormById.name],
       });
       options?.onSuccess?.(data, variables, context);
     },

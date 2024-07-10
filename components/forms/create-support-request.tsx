@@ -1,5 +1,6 @@
 "use client";
 import { useCreateSupportForm } from "@/services/admin/support.mutations";
+import { useCurrentUser } from "@/services/auth.mutations";
 import { useGetUsers } from "@/services/user.queries";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
@@ -16,14 +17,11 @@ import {
 } from "../ui/form";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../ui/select";
+import { Textarea } from "../ui/textarea";
+
 import { toast } from "../ui/use-toast";
+import { cookies } from "next/headers";
+import { User } from "@/types/services/auth.types";
 
 const createSupportFormSchema = z
   .object({
@@ -63,20 +61,22 @@ const createSupportFormSchema = z
   });
 type CreateSuppotFormSchemaType = z.infer<typeof createSupportFormSchema>;
 
-const CreateSupportForm = () => {
+interface CreateSupportFormProps {
+  currentUser?: User;
+}
+
+const CreateSupportForm = ({ currentUser }: CreateSupportFormProps) => {
   const form = useForm<CreateSuppotFormSchemaType>({
     resolver: zodResolver(createSupportFormSchema),
+    defaultValues: {
+      userId: currentUser?.id ? String(currentUser?.id) : undefined,
+    },
   });
   const { push } = useRouter();
-  const { handleSubmit, control, reset } = form;
+  const { handleSubmit, control, reset, register, formState } = form;
   const requestSupportHandler = (data: CreateSuppotFormSchemaType) => {
     createSupportForm(data);
   };
-
-  const { data: users } = useGetUsers({
-    filterByStatus: ["APPROVED"],
-    filterByActive: true,
-  });
 
   const { mutate: createSupportForm, isPending } = useCreateSupportForm({
     onSuccess(data) {
@@ -96,6 +96,8 @@ const CreateSupportForm = () => {
       });
     },
   });
+  
+
   return (
     <div className="p-6">
       <h1 className="text-2xl font-bold mb-4">Create Support Request</h1>
@@ -106,94 +108,94 @@ const CreateSupportForm = () => {
 
       <Form {...form}>
         <form onSubmit={handleSubmit(requestSupportHandler)}>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className=" flex flex-col gap-6 bg-transparent">
             <div className="space-y-2">
-              <FormField
-                name="userId"
-                control={control}
-                render={({ field }) => (
-                  <FormItem>
-                    <Label htmlFor="userId" className="font-medium text-xs">
-                      Users
-                    </Label>
-                    <FormControl>
-                      <Select
-                        onValueChange={field?.onChange}
-                        value={String(field?.value)}
-                      >
-                        <SelectTrigger id="userId">
-                          <SelectValue placeholder="Select User" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {Array.isArray(users?.results) &&
-                            users?.results.map((user, index) => {
-                              return (
-                                <SelectItem value={String(user.id)} key={index}>
-                                  {user.name}
-                                </SelectItem>
-                              );
-                            })}
-                        </SelectContent>
-                      </Select>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              {currentUser ? (
+                <Input {...register("userId")} className="hidden" />
+              ) : (
+                <>
+                  <div className="space-y-2">
+                    <FormField
+                      name="name"
+                      control={control}
+                      render={({ field }) => (
+                        <FormItem>
+                          <Label
+                            htmlFor="name"
+                            className="text-neutral-500 font-medium"
+                          >
+                            Name
+                          </Label>
+                          <FormControl>
+                            <Input
+                              id="name"
+                              placeholder="Enter your name"
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <FormField
+                      name="email"
+                      control={control}
+                      render={({ field }) => (
+                        <FormItem>
+                          <Label
+                            htmlFor="email"
+                            className="text-neutral-500 font-medium"
+                          >
+                            Email
+                          </Label>
+                          <FormControl>
+                            <Input
+                              id="email"
+                              placeholder="Enter your email"
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <FormField
+                      name="phoneNo"
+                      control={control}
+                      render={({ field }) => (
+                        <FormItem>
+                          <Label
+                            htmlFor="phoneNo"
+                            className="text-neutral-500 font-medium"
+                          >
+                            Phone Number
+                          </Label>
+                          <FormControl>
+                            <Input
+                              id="phoneNo"
+                              placeholder="Enter your phone number"
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                </>
+              )}
             </div>
-            <div className="space-y-2">
-              <FormField
-                name="name"
-                control={control}
-                render={({ field: { value, ...rest } }) => (
-                  <FormItem>
-                    <Label
-                      htmlFor="name"
-                      className="text-neutral-500 font-medium"
-                    >
-                      Name
-                    </Label>
-                    <FormControl>
-                      <Input
-                        id="name"
-                        placeholder="Enter your name"
-                        {...rest}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-            <div className="space-y-2">
-              <FormField
-                name="email"
-                control={control}
-                render={({ field: { value, ...rest } }) => (
-                  <FormItem>
-                    <Label
-                      htmlFor="email"
-                      className="text-neutral-500 font-medium"
-                    >
-                      Email
-                    </Label>
-                    <FormControl>
-                      <Input
-                        id="email"
-                        placeholder="Enter your email"
-                        {...rest}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
+
             <div className="space-y-2">
               <FormField
                 name="subject"
                 control={control}
-                render={({ field: { value, ...rest } }) => (
+                render={({ field }) => (
                   <FormItem>
                     <Label
                       htmlFor="subject"
@@ -205,7 +207,7 @@ const CreateSupportForm = () => {
                       <Input
                         id="subject"
                         placeholder="Enter subject "
-                        {...rest}
+                        {...field}
                       />
                     </FormControl>
                     <FormMessage />
@@ -217,7 +219,7 @@ const CreateSupportForm = () => {
               <FormField
                 name="message"
                 control={control}
-                render={({ field: { value, ...rest } }) => (
+                render={({ field }) => (
                   <FormItem>
                     <Label
                       htmlFor="message"
@@ -226,34 +228,11 @@ const CreateSupportForm = () => {
                       Message
                     </Label>
                     <FormControl>
-                      <Input
+                      <Textarea
                         id="message"
                         placeholder="Enter message here"
-                        {...rest}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-            <div className="space-y-2">
-              <FormField
-                name="phoneNo"
-                control={control}
-                render={({ field: { value, ...rest } }) => (
-                  <FormItem>
-                    <Label
-                      htmlFor="phoneNo"
-                      className="text-neutral-500 font-medium"
-                    >
-                      Phone Number
-                    </Label>
-                    <FormControl>
-                      <Input
-                        id="phoneNo"
-                        placeholder="Enter your phone number"
-                        {...rest}
+                        className="h-60"
+                        {...field}
                       />
                     </FormControl>
                     <FormMessage />

@@ -8,8 +8,8 @@ export type GetAllShipmentsInputType = {
   searchString: string;
   limitParam: number;
   pageParam: number;
-  tags?:string[];
-  trackWith?:TrackWithType
+  tags?: string[];
+  trackWith?: TrackWithType;
 };
 
 export type GetSharedShipmentInputType = {
@@ -59,7 +59,6 @@ export type Shipment = {
   files: string[];
   shareToken?: string;
 };
-
 
 //services
 export const getShipments = async (input: GetAllShipmentsInputType) => {

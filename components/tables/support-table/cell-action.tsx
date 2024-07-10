@@ -30,6 +30,7 @@ interface CellActionProps {
 
 export const CellAction: React.FC<CellActionProps> = ({ data }) => {
   const [open, setOpen] = useState<boolean>(false);
+  const [resolveAlertOpen, setResolveAlertOpen] = useState<boolean>(false);
 
   const { mutate: deleteSupportForm } = useDeleteSupportForm({
     onSuccess(data) {
@@ -56,6 +57,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
         description: data.message,
         title: "Success",
       });
+      setResolveAlertOpen(false);
     },
     onError(error) {
       toast({
@@ -74,6 +76,12 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
         onClose={() => setOpen(false)}
         onConfirm={() => deleteSupportForm({ id: data.id })}
       />
+      <AlertModal
+        isOpen={resolveAlertOpen}
+        loading={false}
+        onClose={() => setOpen(false)}
+        onConfirm={() => resolveForm({ id: data.id })}
+      />
 
       <DropdownMenu modal={false}>
         <DropdownMenuTrigger asChild>
@@ -88,8 +96,8 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
           <DropdownMenuItem onClick={() => setOpen(true)}>
             <Trash className="mr-2 h-4 w-4" /> Delete
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => resolveForm({ id: data.id })}>
-            <Paperclip className="mr-2 h-4 w-4" /> Resolve Form
+          <DropdownMenuItem onClick={() => setResolveAlertOpen(true)}>
+            <Paperclip className="mr-2 h-4 w-4" /> Resolve Ticket
           </DropdownMenuItem>
           <DropdownMenuItem>
             <Link href={`/dashboard/support/${data.id}`} className="flex">

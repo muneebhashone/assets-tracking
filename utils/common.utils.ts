@@ -21,3 +21,4 @@ export function sanitizeObject<T extends Record<string, any>>(
     return acc;
   }, {} as Partial<T>);
 }
+

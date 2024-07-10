@@ -98,6 +98,9 @@ importers:
       autoprefixer:
         specifier: 10.4.15
         version: 10.4.15(postcss@8.4.28)
+      awesome-phonenumber:
+        specifier: ^6.10.0
+        version: 6.10.0
       axios:
         specifier: ^1.6.7
         version: 1.7.2
@@ -1303,6 +1306,10 @@ packages:
   available-typed-arrays@1.0.7:
     resolution: {integrity: sha512-wvUjBtSGN7+7SjNpq/9M2Tg350UZD3q62IFZLbRAR1bSMlCo1ZaeW+BJ+D090e4hIIZLBcTDWe4Mh4jvUDajzQ==}
     engines: {node: '>= 0.4'}
+
+  awesome-phonenumber@6.10.0:
+    resolution: {integrity: sha512-nLzMoIWl7cP/1xL7ErlT3+zoGu9S/nbdZ89HdLwiW75U4tV26vaDkFQiz6QdIm5SWRY+BmI5LN9+HiiqFHHq8Q==}
+    engines: {node: '>=18'}
 
   axe-core@4.7.0:
     resolution: {integrity: sha512-M0JtH+hlOL5pLQwHOLNYZaXuhqmvS8oExsqB1SBYgA4Dk7u/xx+YdGHXaK5pyUfed5mYXdlYiphWq3G8cRi5JQ==}
@@ -4194,6 +4201,8 @@ snapshots:
   available-typed-arrays@1.0.7:
     dependencies:
       possible-typed-array-names: 1.0.0
+
+  awesome-phonenumber@6.10.0: {}
 
   axe-core@4.7.0: {}
 

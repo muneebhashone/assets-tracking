@@ -12,15 +12,10 @@ const useQueryUpdater = () => {
       const params = new URLSearchParams(searchParams.toString());
       if (Array.isArray(value)) {
         for (const queryValue of value) {
-          const alreadyPresent = params.getAll(name);
-          if (!alreadyPresent.includes(queryValue)) {
-            params.append(name, queryValue);
-          }
+          params.append(name, queryValue);
         }
       } else {
-        if (params.getAll(name).length) {
-          params.delete(name, value);
-        } else if (params.get(name) === value) {
+        if (params.get(name) === value) {
           params.delete(name);
         } else {
           params.set(name, value);

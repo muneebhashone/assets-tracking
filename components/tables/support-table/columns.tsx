@@ -14,17 +14,14 @@ export const columns: ColumnDef<SupportType>[] = [
     header: "Support ID",
   },
   {
-    accessorKey: "Name",
-    header: "name",
+    accessorKey: "name",
+    header: "Name",
   },
   {
     accessorKey: "email",
     header: "Email",
   },
-  {
-    accessorKey: "user.name",
-    header: "Support Assign To",
-  },
+
   {
     accessorKey: "subject",
     header: "Subject",

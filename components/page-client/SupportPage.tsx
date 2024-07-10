@@ -43,8 +43,8 @@ const SupportPage = () => {
         <BreadCrumb items={breadcrumbItems} />
         <div className="flex items-start justify-between">
           <Heading
-            title={`Assigns (${support?.data?.results.length || 0})`}
-            description="Manage assigns "
+            title={`Support Requests (${support?.data?.results.length || 0})`}
+            description="Manage tickets "
           />
         </div>
         <Separator /> <Separator />
