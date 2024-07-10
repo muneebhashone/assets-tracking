@@ -95,6 +95,7 @@ const PermissionUpdate = (props: PermissionUpdateProps) => {
                       className="bg-green-600 text-xs text-white px-2 py-1 m-0.5"
                       placeholder="Select permissions"
                       variant="inverted"
+                      check={true}
                       handleSubmit={handleSubmit(onSubmit)}
                       animation={2}
                       maxCount={2}

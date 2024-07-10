@@ -71,7 +71,7 @@ export const MultiSelect = React.forwardRef<
       maxCount = 3,
       asChild = false,
       handleSubmit,
-      check,
+      check = true,
       className,
       ...props
     },
