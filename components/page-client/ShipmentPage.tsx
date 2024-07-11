@@ -58,11 +58,11 @@ const ShipmentPage = () => {
           )}
           <div className="flex justify-between mb-2">
             <SearchBar />
-            <Filter
+            {/* <Filter
               optionsMapper={optionsMapper}
               type="Shipment"
               defaultValue={"trackWith"}
-            />
+            /> */}
           </div>
 
           {Array.isArray(result?.results) ? (

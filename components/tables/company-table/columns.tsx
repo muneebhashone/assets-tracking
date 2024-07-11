@@ -3,6 +3,13 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { ColumnDef } from "@tanstack/react-table";
 import { CellAction } from "./cell-action";
 import { Company } from "@/services/companies.queries";
+import SwitchMutation from "@/components/SwitchMutation";
+import { useToggleCompanyActive } from "@/services/companies.mutations";
+import { toast } from "@/components/ui/use-toast";
+import ProtectedHeader from "@/components/ProtectedHeader";
+import { useCurrentUser } from "@/services/auth.mutations";
+import { checkPermissions } from "@/utils/user.utils";
+import { PermissionsType } from "@/types/user.types";
 
 export const columns: ColumnDef<Company>[] = [
   {
@@ -33,8 +40,42 @@ export const columns: ColumnDef<Company>[] = [
     header: "Name ",
   },
   {
-    accessorKey: "credits",
-    header: "Credits",
+    accessorKey: "isActive",
+
+    header: () => (
+      <ProtectedHeader columnName="Active" permission="EDIT_COMPANY" />
+    ),
+    cell: ({ row }) => {
+      const { mutate: toggleActive } = useToggleCompanyActive({
+        onSuccess(data) {
+          toast({
+            variant: "default",
+            description: data.message,
+            title: "Success",
+          });
+        },
+        onError(error) {
+          toast({
+            variant: "destructive",
+            description: error.response?.data.message,
+            title: "Error",
+          });
+        },
+      });
+      const { data: currentUser } = useCurrentUser();
+      return (
+        checkPermissions(currentUser?.user.permissions as PermissionsType[], [
+          "EDIT_COMPANY",
+        ]) && (
+          <>
+            <SwitchMutation
+              switchState={row.original.isActive}
+              mutationFn={() => toggleActive({ id: row.original.id })}
+            />
+          </>
+        )
+      );
+    },
   },
   {
     accessorKey: "address",

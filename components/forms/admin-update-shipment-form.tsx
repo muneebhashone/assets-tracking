@@ -167,7 +167,7 @@ const AdminUpdateShipmentForm = ({
                       <FormField
                         name="carrier"
                         control={control}
-                        render={({ field }) => (
+                        render={({ field: { value, ...rest } }) => (
                           <FormItem>
                             <Label
                               htmlFor="carrier"
@@ -178,7 +178,8 @@ const AdminUpdateShipmentForm = ({
                             <FormControl>
                               <Combobox
                                 options={containerNames as Options[]}
-                                {...field}
+                                value={value as string}
+                                {...rest}
                               />
                             </FormControl>
                             <FormMessage />

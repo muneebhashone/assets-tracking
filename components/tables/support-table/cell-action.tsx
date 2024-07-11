@@ -79,7 +79,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
       <AlertModal
         isOpen={resolveAlertOpen}
         loading={false}
-        onClose={() => setOpen(false)}
+        onClose={() => setResolveAlertOpen(false)}
         onConfirm={() => resolveForm({ id: data.id })}
       />
 
@@ -96,9 +96,11 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
           <DropdownMenuItem onClick={() => setOpen(true)}>
             <Trash className="mr-2 h-4 w-4" /> Delete
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => setResolveAlertOpen(true)}>
-            <Paperclip className="mr-2 h-4 w-4" /> Resolve Ticket
-          </DropdownMenuItem>
+          {!data.resolved && (
+            <DropdownMenuItem onClick={() => setResolveAlertOpen(true)}>
+              <Paperclip className="mr-2 h-4 w-4" /> Resolve Ticket
+            </DropdownMenuItem>
+          )}
           <DropdownMenuItem>
             <Link href={`/dashboard/support/${data.id}`} className="flex">
               <LinkIcon className="mr-2 h-4 w-4" /> View

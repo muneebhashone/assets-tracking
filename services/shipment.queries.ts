@@ -113,7 +113,7 @@ export const useGetShipments = (
     ...options,
     queryFn: async () => await getShipments(input),
     queryKey: [getShipments.name, JSON.stringify(input)],
-    refetchInterval: 3000,
+    refetchInterval: 900000,
   });
 };
 
