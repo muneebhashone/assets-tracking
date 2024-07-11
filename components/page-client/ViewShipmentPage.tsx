@@ -1,6 +1,9 @@
 "use client";
 
-import { useGetSharedShipment } from "@/services/shipment.queries";
+import {
+  ShipmentProgressStatusType,
+  useGetSharedShipment,
+} from "@/services/shipment.queries";
 import Link from "next/link";
 import { Button } from "../ui/button";
 

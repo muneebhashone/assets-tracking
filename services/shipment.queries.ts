@@ -32,7 +32,17 @@ export type GetSharedShipmentResponseType = {
   data: Shipment;
   status: string;
 };
-export type TrackWithType = "CONTAINER_NUMBER" | "MBL_NUMBER";
+export const trackWithEnums = ["CONTAINER_NUMBER", "MBL_NUMBER"] as const;
+export const SHIPMENT_PROGRESS_STATUSES = {
+  IN_PROGRESS: "IN_PROGRESS",
+  FOUND: "FOUND",
+  NOT_FOUND: "NOT_FOUND",
+  QUEUED: "QUEUED",
+  INSUFFICIENT_CREDITS: "INSUFFICIENT_CREDITS",
+} as const;
+export type TrackWithType = (typeof trackWithEnums)[number];
+export type ShipmentProgressStatusType =
+  keyof typeof SHIPMENT_PROGRESS_STATUSES;
 
 export type ShipmentStatus = "PLANNED" | "IN_TRANSIT" | "DELIVERED" | "UNKNOWN";
 
@@ -53,7 +63,7 @@ export type Shipment = {
   referenceNo: string;
   followers: string[];
   tags: string[];
-  progress: string;
+  progress: ShipmentProgressStatusType;
   shareFiles: boolean;
   isTracking: boolean;
   files: string[];

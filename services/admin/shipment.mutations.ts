@@ -15,8 +15,15 @@ import { getShipments } from "../shipment.queries";
 import { ErrorResponseType } from "../types.common";
 
 //services
+interface AdminUpdateShipmentInputType extends UpdateShipmentInputType {
+  containerNo?: string;
+  mblNo?: string;
+  carrier?: string;
+}
 
-export const adminUpdateShipment = async (input: UpdateShipmentInputType) => {
+export const adminUpdateShipment = async (
+  input: AdminUpdateShipmentInputType,
+) => {
   const { id, ...rest } = input;
   const { data } = await apiAxios.patch<CreateUpdateShipmentResponseType>(
     `/admin/shipments/${id}`,
@@ -31,7 +38,7 @@ export const useAdminUpdateShipment = (
   options?: UseMutationOptions<
     CreateUpdateShipmentResponseType,
     ErrorResponseType,
-    UpdateShipmentInputType
+    AdminUpdateShipmentInputType
   >,
 ) => {
   const queryClient = useQueryClient();

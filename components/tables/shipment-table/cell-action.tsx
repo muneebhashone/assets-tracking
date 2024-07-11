@@ -1,4 +1,5 @@
 "use client";
+import AdminUpdateShipmentForm from "@/components/forms/admin-update-shipment-form";
 import UpdateShipmentForm from "@/components/forms/update-shipment-form";
 import UploadShipmentFile from "@/components/forms/upload-shipment-file-form";
 import { AlertModal } from "@/components/modal/alert-modal";
@@ -43,6 +44,8 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
   const [warningOpen, setWarningOpen] = useState<boolean>(false);
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [updateModalOpen, setUpdateModalOpen] = useState<boolean>(false);
+  const [adminUpdateModalOpen, setAdminUpdateModalOpen] =
+    useState<boolean>(false);
   const { mutate: deleteShipment } = useDeletShipment({
     onSuccess(data) {
       toast({
@@ -135,6 +138,11 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
         modalOpen={updateModalOpen}
         shipmentData={data}
       />
+      <AdminUpdateShipmentForm
+        setModalOpen={setAdminUpdateModalOpen}
+        modalOpen={adminUpdateModalOpen}
+        shipmentData={data}
+      />
 
       <DropdownMenu modal={false}>
         <DropdownMenuTrigger asChild>
@@ -191,13 +199,18 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
           <DropdownMenuItem onClick={() => setModalOpen(true)}>
             <Cloud className="mr-2 h-4 w-4" /> Upload File
           </DropdownMenuItem>
-          {(user?.user.role === "SUPER_ADMIN" ||
-            checkPermissions(user?.user.permissions as PermissionsType[], [
-              "EDIT_SHIPMENT",
-            ])) && (
-            <DropdownMenuItem onClick={() => setUpdateModalOpen(true)}>
+          {user?.user.role === "SUPER_ADMIN" ? (
+            <DropdownMenuItem onClick={() => setAdminUpdateModalOpen(true)}>
               <Edit className="mr-2 h-4 w-4" /> Update Shipment
             </DropdownMenuItem>
+          ) : (
+            checkPermissions(user?.user.permissions as PermissionsType[], [
+              "EDIT_SHIPMENT",
+            ]) && (
+              <DropdownMenuItem onClick={() => setUpdateModalOpen(true)}>
+                <Edit className="mr-2 h-4 w-4" /> Update Shipment
+              </DropdownMenuItem>
+            )
           )}
 
           {(user?.user.role === "SUPER_ADMIN" ||
