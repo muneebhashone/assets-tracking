@@ -47,7 +47,7 @@ const SupportPage = () => {
             description="Manage tickets "
           />
         </div>
-        <Separator /> <Separator />
+        <Separator />
         <div className="flex justify-between">
           <SearchBar />
           <div className="flex items-center space-x-2">

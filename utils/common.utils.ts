@@ -22,3 +22,12 @@ export function sanitizeObject<T extends Record<string, any>>(
   }, {} as Partial<T>);
 }
 
+export const handlePhoneNumber = (
+  value: string,
+  changFn: (...event: any[]) => void,
+) => {
+  if (value.length === 0) {
+    return changFn(value);
+  }
+  return changFn("+" + value);
+};

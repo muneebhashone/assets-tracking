@@ -9,7 +9,6 @@ import {
 import { PermissionsType } from "@/types/user.types";
 import { checkPermissions } from "@/utils/user.utils";
 import { useSearchParams } from "next/navigation";
-import Filter, { OptionsMapperType } from "../Filter";
 import SearchBar from "../SearchBar";
 import ShipmentCreationForm from "../forms/shipment-creation-form";
 import { columns } from "../tables/shipment-table/columns";
@@ -33,10 +32,10 @@ const ShipmentPage = () => {
 
   const { data: result } = useGetShipments(params);
   const { data: user } = useCurrentUser();
-  const optionsMapper: OptionsMapperType["Shipment"] = {
-    tags: null,
-    trackWith: ["CONTAINER_NUMBER", "MBL_NUMBER"],
-  };
+  // const optionsMapper: OptionsMapperType["Shipment"] = {
+  //   tags: null,
+  //   trackWith: ["CONTAINER_NUMBER", "MBL_NUMBER"],
+  // };
 
   return (
     <ScrollArea className="h-full ">

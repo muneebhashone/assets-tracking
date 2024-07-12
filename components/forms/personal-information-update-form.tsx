@@ -20,6 +20,7 @@ import {
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { toast } from "../ui/use-toast";
+import { handlePhoneNumber } from "@/utils/common.utils";
 
 const profileUpdateFormSchema = z.object({
   name: z.string().min(1),
@@ -114,10 +115,12 @@ const PersonalInformationForm = () => {
                   <FormControl>
                     <PhoneInput
                       value={field.value}
-                      onChange={(number) => {
-                        field.onChange("+" + number);
+                      onChange={(value) => {
+                        handlePhoneNumber(value, field.onChange);
                       }}
+                      inputClass="!w-full"
                     />
+                    
                   </FormControl>
                   <FormMessage />
                 </FormItem>

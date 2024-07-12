@@ -8,11 +8,19 @@ import {
   RoleType,
   statusEnums,
 } from "@/types/user.types";
-import { EligibleRolesForCreation, UserRole } from "@/utils/constants";
+import {
+  EligibleRolesForCreation,
+  PermissionsForDisplay,
+  UserRole,
+} from "@/utils/constants";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Dispatch, SetStateAction } from "react";
 import { useForm } from "react-hook-form";
 
+import { User } from "@/types/services/auth.types";
+import { handlePhoneNumber, sanitizeObject } from "@/utils/common.utils";
+import PhoneInput from "react-phone-input-2";
+import "react-phone-input-2/lib/style.css";
 import validator from "validator";
 import { z } from "zod";
 import { ModalCustom } from "../ModalComponent";
@@ -38,7 +46,6 @@ import { toast } from "../ui/use-toast";
 
 const adminUserUpdateFormSchema = z
   .object({
-    id: z.string().min(1),
     email: z
       .string({ required_error: "Email is required" })
       .min(1)
@@ -115,7 +122,7 @@ type AdminUserUpdateFormSchemaType = z.infer<typeof adminUserUpdateFormSchema>;
 interface AdminUpdateUserFormProps {
   setModalState: Dispatch<SetStateAction<boolean>>;
   modalState: boolean;
-  userData: AdminUserUpdateFormSchemaType;
+  userData: User;
 }
 
 const AdminUpdateUserForm = ({
@@ -123,10 +130,26 @@ const AdminUpdateUserForm = ({
   setModalState,
   userData,
 }: AdminUpdateUserFormProps) => {
+  const initialData: AdminUserUpdateFormSchemaType = {
+    clientId:
+      userData.role === "CLIENT_USER" ? String(userData.clientId) : undefined,
+
+    credits: userData.credits,
+    companyId: userData.companyId ? String(userData.companyId) : undefined,
+    email: userData.email,
+    isActive: userData.isActive,
+
+    name: userData.name,
+    permissions: userData.permissions,
+    phoneNo: userData.phoneNo,
+    role: userData.role,
+    status: userData.status,
+  };
   const form = useForm<AdminUserUpdateFormSchemaType>({
-    values: userData as AdminUserUpdateFormSchemaType,
+    defaultValues: initialData,
     resolver: zodResolver(adminUserUpdateFormSchema),
   });
+
   const { control, handleSubmit, reset } = form;
 
   const { mutate, isPending } = useAdminUpdateUser({
@@ -149,14 +172,9 @@ const AdminUpdateUserForm = ({
   });
 
   const adminUpdateFormHandler = (data: AdminUserUpdateFormSchemaType) => {
-    if (data.clientId) {
-      const { email, ...rest } = data;
-      mutate(rest);
-    } else {
-      const { clientId, email, ...rest } = data;
-
-      mutate(rest);
-    }
+    // eslint-disable-next-line
+    const { email, ...sanitizedPayload } = sanitizeObject(data);
+    mutate({ id: String(userData.id), ...sanitizedPayload });
   };
 
   const { data: companies } = useGetCompanies({
@@ -218,7 +236,13 @@ const AdminUpdateUserForm = ({
                         Phone Number
                       </Label>
                       <FormControl>
-                        <Input {...field} />
+                        <PhoneInput
+                          value={field.value}
+                          inputClass="!w-full"
+                          onChange={(value) =>
+                            handlePhoneNumber(value, field.onChange)
+                          }
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -332,11 +356,12 @@ const AdminUpdateUserForm = ({
                   render={({ field }) => (
                     <FormItem>
                       <Label className="font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70 block text-xs mb-1">
-                        isActive
+                        Is Active
                       </Label>
                       <FormControl>
                         <Switch
                           checked={field.value}
+                          className="data-[state=checked]:bg-green-500"
                           onCheckedChange={field.onChange}
                         />
                       </FormControl>
@@ -396,9 +421,10 @@ const AdminUpdateUserForm = ({
                         <Select
                           onValueChange={field.onChange}
                           // disabled={isPending || isFetching}
+
                           {...field}
                         >
-                          <SelectTrigger id="status">
+                          <SelectTrigger id="status" className="capitalize">
                             <SelectValue placeholder="Select the Status" />
                           </SelectTrigger>
                           <SelectContent>
@@ -409,7 +435,7 @@ const AdminUpdateUserForm = ({
                                   key={index}
                                   className="capitalize"
                                 >
-                                  {status}
+                                  {status.toLowerCase()}
                                 </SelectItem>
                               );
                             })}
@@ -437,7 +463,10 @@ const AdminUpdateUserForm = ({
                           className="bg-green-600 text-xs text-white px-2 py-1 m-0.5"
                           check={false}
                           options={permissionEnums.map((permission) => {
-                            return { label: permission, value: permission };
+                            return {
+                              label: PermissionsForDisplay[permission],
+                              value: permission,
+                            };
                           })}
                         />
                       </FormControl>

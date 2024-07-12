@@ -1,7 +1,5 @@
 "use client";
 import { useCreateSupportForm } from "@/services/admin/support.mutations";
-import { useCurrentUser } from "@/services/auth.mutations";
-import { useGetUsers } from "@/services/user.queries";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
@@ -19,24 +17,29 @@ import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { Textarea } from "../ui/textarea";
 
-import { toast } from "../ui/use-toast";
-import { cookies } from "next/headers";
 import { User } from "@/types/services/auth.types";
+import PhoneInput from "react-phone-input-2";
+import { toast } from "../ui/use-toast";
+import "react-phone-input-2/lib/style.css";
+import { handlePhoneNumber } from "@/utils/common.utils";
 
 const createSupportFormSchema = z
   .object({
-    name: z.string().min(1).optional(),
-    email: z.string().email().optional(),
+    name: z.string({ message: "Enter Name" }).min(1).optional(),
+    email: z
+      .string({ message: "Enter Your Subject" })
+      .email({ message: "Invalid Email" })
+      .optional(),
     phoneNo: z
-      .string()
+      .string({ message: "Enter Phone Number" })
       .min(1)
       .refine(
         (value) => validator.isMobilePhone(value, "any", { strictMode: true }),
-        "phoneNo must be valid",
+        "Phone Number must be valid",
       )
       .optional(),
-    subject: z.string({ required_error: "subject is required" }).min(1),
-    message: z.string({ required_error: "message is required" }).min(1),
+    subject: z.string({ required_error: "Enter Subject" }).min(1),
+    message: z.string({ required_error: "Enter Message" }).min(1),
     userId: z
       .string()
       .min(1)
@@ -52,7 +55,7 @@ const createSupportFormSchema = z
         if (!value[field]) {
           ctx.addIssue({
             code: "custom",
-            message: `${field} is required`,
+            message: `Enter ${field}`,
             path: [field],
           });
         }
@@ -73,7 +76,7 @@ const CreateSupportForm = ({ currentUser }: CreateSupportFormProps) => {
     },
   });
   const { push } = useRouter();
-  const { handleSubmit, control, reset, register, formState } = form;
+  const { handleSubmit, control, reset, register } = form;
   const requestSupportHandler = (data: CreateSuppotFormSchemaType) => {
     createSupportForm(data);
   };
@@ -96,7 +99,6 @@ const CreateSupportForm = ({ currentUser }: CreateSupportFormProps) => {
       });
     },
   });
-  
 
   return (
     <div className="p-6">
@@ -138,54 +140,58 @@ const CreateSupportForm = ({ currentUser }: CreateSupportFormProps) => {
                       )}
                     />
                   </div>
-                  <div className="space-y-2">
-                    <FormField
-                      name="email"
-                      control={control}
-                      render={({ field }) => (
-                        <FormItem>
-                          <Label
-                            htmlFor="email"
-                            className="text-neutral-500 font-medium"
-                          >
-                            Email
-                          </Label>
-                          <FormControl>
-                            <Input
-                              id="email"
-                              placeholder="Enter your email"
-                              {...field}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
+                  <div className="flex gap-4">
+                    <div className="space-y-2 w-full">
+                      <FormField
+                        name="email"
+                        control={control}
+                        render={({ field }) => (
+                          <FormItem>
+                            <Label
+                              htmlFor="email"
+                              className="text-neutral-500 font-medium"
+                            >
+                              Email
+                            </Label>
+                            <FormControl>
+                              <Input
+                                id="email"
+                                placeholder="Enter your email"
+                                {...field}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
 
-                  <div className="space-y-2">
-                    <FormField
-                      name="phoneNo"
-                      control={control}
-                      render={({ field }) => (
-                        <FormItem>
-                          <Label
-                            htmlFor="phoneNo"
-                            className="text-neutral-500 font-medium"
-                          >
-                            Phone Number
-                          </Label>
-                          <FormControl>
-                            <Input
-                              id="phoneNo"
-                              placeholder="Enter your phone number"
-                              {...field}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
+                    <div className="space-y-2 w-full">
+                      <FormField
+                        name="phoneNo"
+                        control={control}
+                        render={({ field }) => (
+                          <FormItem>
+                            <Label
+                              htmlFor="phoneNo"
+                              className="text-neutral-500 font-medium"
+                            >
+                              Phone Number
+                            </Label>
+                            <FormControl>
+                              <PhoneInput
+                                inputClass="!w-full"
+                                onChange={(value) =>
+                                  handlePhoneNumber(value, field.onChange)
+                                }
+                                value={field.value}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
                   </div>
                 </>
               )}
@@ -242,7 +248,7 @@ const CreateSupportForm = ({ currentUser }: CreateSupportFormProps) => {
             </div>
           </div>
           <Button size="lg" className="mt-10 bg-golden" disabled={isPending}>
-            Request
+            Submit Ticket
           </Button>
         </form>
       </Form>

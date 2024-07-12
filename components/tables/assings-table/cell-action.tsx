@@ -2,17 +2,10 @@
 
 import { AlertModal } from "@/components/modal/alert-modal";
 import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { toast } from "@/components/ui/use-toast";
 import { useDeleteAssignment } from "@/services/admin/assigns.mutation";
 import { AssignsType } from "@/services/admin/assigns.queries";
-import { MoreHorizontal, Trash } from "lucide-react";
+import { Trash } from "lucide-react";
 import { useState } from "react";
 
 interface CellActionProps {

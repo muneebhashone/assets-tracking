@@ -8,7 +8,11 @@ import {
   RoleType,
   statusEnums,
 } from "@/types/user.types";
-import { EligibleRolesForCreation, UserRole } from "@/utils/constants";
+import {
+  EligibleRolesForCreation,
+  PermissionsForDisplay,
+  UserRole,
+} from "@/utils/constants";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Dispatch, SetStateAction } from "react";
 import { useForm } from "react-hook-form";
@@ -36,6 +40,9 @@ import {
 import { toast } from "../ui/use-toast";
 import { passwordValidation } from "@/utils/auth.utils";
 import { useGetUsers } from "@/services/user.queries";
+import "react-phone-input-2/lib/style.css";
+import PhoneInput from "react-phone-input-2";
+import { handlePhoneNumber } from "@/utils/common.utils";
 
 const adminCreateUserFormSchema = z
   .object({
@@ -119,7 +126,7 @@ const AdminCreateUserForm = ({
   const { data: clientSuperUsers } = useGetUsers({
     filterByRole: "CLIENT_SUPER_USER",
     filterByStatus: ["APPROVED"],
-    filterByActive: true,
+    filterByActive: "true",
   });
 
   const { mutate, isPending } = useAdminCreateUser({
@@ -217,7 +224,13 @@ const AdminCreateUserForm = ({
                         Phone Number
                       </Label>
                       <FormControl>
-                        <Input {...field} />
+                        <PhoneInput
+                          value={field.value}
+                          inputClass="!w-full"
+                          onChange={(value) =>
+                            handlePhoneNumber(value, field.onChange)
+                          }
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -341,12 +354,13 @@ const AdminCreateUserForm = ({
                   render={({ field }) => (
                     <FormItem>
                       <Label className="font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70 block text-xs mb-1">
-                        isActive
+                        Is Active
                       </Label>
                       <FormControl>
                         <Switch
                           checked={field.value}
                           onCheckedChange={field.onChange}
+                          className="data-[state=checked]:bg-green-500"
                         />
                       </FormControl>
                       <FormMessage />
@@ -399,7 +413,7 @@ const AdminCreateUserForm = ({
                       </Label>
                       <FormControl>
                         <Select onValueChange={field.onChange} {...field}>
-                          <SelectTrigger id="status">
+                          <SelectTrigger id="status" className="capitalize">
                             <SelectValue placeholder="Select the Status" />
                           </SelectTrigger>
                           <SelectContent>
@@ -410,7 +424,7 @@ const AdminCreateUserForm = ({
                                   className="capitalize"
                                   key={index}
                                 >
-                                  {status}
+                                  {status.toLowerCase()}
                                 </SelectItem>
                               );
                             })}
@@ -438,7 +452,10 @@ const AdminCreateUserForm = ({
                           className="bg-green-600 text-xs text-white px-2 py-1 m-0.5"
                           check={false}
                           options={permissionEnums.map((permission) => {
-                            return { label: permission, value: permission };
+                            return {
+                              label: PermissionsForDisplay[permission],
+                              value: permission,
+                            };
                           })}
                         />
                       </FormControl>

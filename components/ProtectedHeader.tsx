@@ -10,9 +10,10 @@ interface ProtectedHeaderProps {
 }
 const ProtectedHeader = ({ columnName, permission }: ProtectedHeaderProps) => {
   const { data: currentuser } = useCurrentUser();
-  return checkPermissions(currentuser?.user.permissions as PermissionsType[], [
-    permission,
-  ]) ? (
+  return (currentuser?.user.role === "SUPER_ADMIN" ||
+    checkPermissions(currentuser?.user.permissions as PermissionsType[], [
+      permission,
+    ])) ? (
     <p>{columnName}</p>
   ) : null;
 };

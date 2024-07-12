@@ -27,17 +27,17 @@ export interface GetCompanyByIdResponseType
 export type CompanyStatus = "REJECTED" | "APPROVED" | "REQUESTED";
 
 export type Company = {
-  country: string | null;
-  city: string | null;
+  country?: string;
+  city?: string;
   status: CompanyStatus;
   id: number;
-  name: string | null;
-  address: string | null;
-  industry: string | null;
-  createdAt: string | null;
+  name?: string;
+  address?: string;
+  industry?: string;
+  createdAt?: string;
   isActive: boolean;
-  updatedAt: string | null;
-  credits: number | null;
+  updatedAt?: string;
+  credits?: number;
 };
 
 //services

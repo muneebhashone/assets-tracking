@@ -1,4 +1,5 @@
 "use client";
+import CompanyUpdateForm from "@/components/forms/company-update-form";
 import { AlertModal } from "@/components/modal/alert-modal";
 import { Button } from "@/components/ui/button";
 import {
@@ -10,9 +11,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { toast } from "@/components/ui/use-toast";
 import { useCurrentUser } from "@/services/auth.mutations";
-import {
-  useDeleteCompany
-} from "@/services/companies.mutations";
+import { useDeleteCompany } from "@/services/companies.mutations";
 import { Company } from "@/services/companies.queries";
 import { PermissionsType } from "@/types/user.types";
 import { checkPermissions } from "@/utils/user.utils";
@@ -27,7 +26,6 @@ interface CellActionProps {
 export const CellAction: React.FC<CellActionProps> = ({ data }) => {
   const [open, setOpen] = useState<boolean>(false);
   const [editModal, setEditModal] = useState<boolean>(false);
-
 
   const { mutate: deleteCompany } = useDeleteCompany({
     onSuccess(data) {
@@ -49,7 +47,6 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
   });
   const { data: currentUser } = useCurrentUser();
 
-
   return (
     <>
       <AlertModal
@@ -57,6 +54,11 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
         isOpen={open}
         onClose={() => setOpen(false)}
         onConfirm={() => deleteCompany({ id: data.id })}
+      />
+      <CompanyUpdateForm
+        companyData={data}
+        modalOpen={editModal}
+        setModalOpen={setEditModal}
       />
 
       <DropdownMenu modal={false}>
@@ -68,18 +70,20 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
-          {checkPermissions(
-            currentUser?.user.permissions as PermissionsType[],
-            ["EDIT_COMPANY"],
-          ) && (
+          {(currentUser?.user.role === "SUPER_ADMIN" ||
+            checkPermissions(
+              currentUser?.user.permissions as PermissionsType[],
+              ["EDIT_COMPANY"],
+            )) && (
             <DropdownMenuItem onClick={() => setEditModal(true)}>
               <Wrench className="mr-2 h-4 w-4" /> Edit
             </DropdownMenuItem>
           )}
-          {checkPermissions(
-            currentUser?.user.permissions as PermissionsType[],
-            ["DELETE_COMPANY"],
-          ) && (
+          {(currentUser?.user.role === "SUPER_ADMIN" ||
+            checkPermissions(
+              currentUser?.user.permissions as PermissionsType[],
+              ["DELETE_COMPANY"],
+            )) && (
             <DropdownMenuItem onClick={() => setOpen(true)}>
               <Trash className="mr-2 h-4 w-4" /> Delete
             </DropdownMenuItem>
@@ -92,5 +96,3 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
     </>
   );
 };
-// onClick={() => setOpen(true)}
-// /dashboard/activeUsers/${data.id}

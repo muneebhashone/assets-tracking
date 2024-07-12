@@ -42,3 +42,22 @@ export const TrackWithDisplay = {
   CONTAINER_NUMBER: "Container Number",
   MBL_NUMBER: "Master Bill Of Lading Number",
 };
+
+export const PermissionsForDisplay = {
+  VIEW_SHIPMENT: "View Shipment",
+  CREATE_SHIPMENT: "Create Shipment",
+  EDIT_SHIPMENT: "Edit Shipment",
+  DELETE_SHIPMENT: "Delete Shipment",
+  VIEW_USER: "View User",
+  CREATE_USER: "Create User",
+  EDIT_USER: "Edit User",
+  DELETE_USER: "Delete User",
+  VIEW_DASHBOARD: "View Dashboard",
+  VIEW_COMPANY: "View Company",
+  DELETE_COMPANY: "Delete Company",
+  EDIT_COMPANY: "Edit Company",
+  ASSIGN_CREDITS: "Assign Credits",
+  DEDUCT_CREDITS: "Deduct Credits",
+  VIEW_PERMISSIONS: "View Permissions",
+  UPDATE_PERMISSIONS: "Update Permissions",
+};

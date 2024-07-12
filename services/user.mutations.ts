@@ -7,10 +7,10 @@ import {
 import { ErrorResponseType, SuccessResponseType } from "./types.common";
 
 import { User } from "@/types/services/auth.types";
-import { getUsers } from "./user.queries";
-import { ProfileImageUploadResponseType } from "./upload.mutations";
 import { currentUser } from "./auth.services";
-import { CreateUserFormSchemaType } from "@/components/page-client/UsersPage";
+import { ProfileImageUploadResponseType } from "./upload.mutations";
+import { getUsers } from "./user.queries";
+import { CreateUserFormSchemaType } from "@/components/forms/user-create-form";
 
 //types
 export interface CreateUserInputType {
@@ -162,7 +162,7 @@ export const updatePermissions = async (input: UpdatePermissionsInputType) => {
   return data;
 };
 
-export const toggleActive = async (input: ToggleActiveInputType) => {
+export const userToggleActive = async (input: ToggleActiveInputType) => {
   const { id } = input;
   const { data } = await apiAxios.get<SuccessResponseType>(
     `/users/${id}/toggle-active`,
@@ -260,7 +260,7 @@ export const useUpdatePermissions = (
   });
 };
 
-export const useToggleActive = (
+export const useUserToggleActive = (
   options?: UseMutationOptions<
     SuccessResponseType,
     ErrorResponseType,
@@ -270,7 +270,7 @@ export const useToggleActive = (
   const queryClient = useQueryClient();
   return useMutation({
     ...options,
-    mutationFn: toggleActive,
+    mutationFn: userToggleActive,
     async onSuccess(data, variables, context) {
       await queryClient.invalidateQueries({ queryKey: [getUsers.name] });
       options?.onSuccess?.(data, variables, context);

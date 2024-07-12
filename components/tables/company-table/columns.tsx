@@ -1,36 +1,16 @@
 "use client";
-import { Checkbox } from "@/components/ui/checkbox";
+import ProtectedHeader from "@/components/ProtectedHeader";
+import SwitchMutation from "@/components/SwitchMutation";
+import { toast } from "@/components/ui/use-toast";
+import { useCurrentUser } from "@/services/auth.mutations";
+import { useToggleCompanyActive } from "@/services/companies.mutations";
+import { Company } from "@/services/companies.queries";
+import { PermissionsType } from "@/types/user.types";
+import { checkPermissions } from "@/utils/user.utils";
 import { ColumnDef } from "@tanstack/react-table";
 import { CellAction } from "./cell-action";
-import { Company } from "@/services/companies.queries";
-import SwitchMutation from "@/components/SwitchMutation";
-import { useToggleCompanyActive } from "@/services/companies.mutations";
-import { toast } from "@/components/ui/use-toast";
-import ProtectedHeader from "@/components/ProtectedHeader";
-import { useCurrentUser } from "@/services/auth.mutations";
-import { checkPermissions } from "@/utils/user.utils";
-import { PermissionsType } from "@/types/user.types";
 
 export const columns: ColumnDef<Company>[] = [
-  {
-    id: "select",
-    header: ({ table }) => (
-      <Checkbox
-        checked={table.getIsAllPageRowsSelected()}
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
-      />
-    ),
-    enableSorting: false,
-    enableHiding: false,
-  },
   {
     accessorKey: "id",
     header: "ID ",
@@ -46,6 +26,7 @@ export const columns: ColumnDef<Company>[] = [
       <ProtectedHeader columnName="Active" permission="EDIT_COMPANY" />
     ),
     cell: ({ row }) => {
+       /* eslint-disable */
       const { mutate: toggleActive } = useToggleCompanyActive({
         onSuccess(data) {
           toast({
@@ -62,11 +43,13 @@ export const columns: ColumnDef<Company>[] = [
           });
         },
       });
+       /* eslint-disable */
       const { data: currentUser } = useCurrentUser();
       return (
-        checkPermissions(currentUser?.user.permissions as PermissionsType[], [
-          "EDIT_COMPANY",
-        ]) && (
+        (currentUser?.user.role === "SUPER_ADMIN" ||
+          checkPermissions(currentUser?.user.permissions as PermissionsType[], [
+            "EDIT_COMPANY",
+          ])) && (
           <>
             <SwitchMutation
               switchState={row.original.isActive}
@@ -99,8 +82,10 @@ export const columns: ColumnDef<Company>[] = [
     header: "Creation Date",
   },
   {
-    accessorKey: "status",
     header: "Status",
+    cell: ({ row }) => (
+      <div className="capitalize">{row.original.status.toLowerCase()}</div>
+    ),
   },
   {
     id: "actions",

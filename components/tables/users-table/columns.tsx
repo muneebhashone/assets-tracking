@@ -1,13 +1,19 @@
 "use client";
 import ProtectedCheckbox from "@/components/ProtectedCheckbox";
-import PermissionUpdate from "@/components/forms/permission-update-form";
-import { UserRole } from "@/utils/constants";
-import { ColumnDef } from "@tanstack/react-table";
-import { IUserModified } from "./users";
-import { CellAction } from "./cell-action";
 import ProtectedHeader from "@/components/ProtectedHeader";
+import SwitchMutation from "@/components/SwitchMutation";
+import PermissionUpdate from "@/components/forms/permission-update-form";
+import { toast } from "@/components/ui/use-toast";
+import { useCurrentUser } from "@/services/auth.mutations";
+import { useUserToggleActive } from "@/services/user.mutations";
+import { User } from "@/types/services/auth.types";
+import { PermissionsType } from "@/types/user.types";
+import { UserRole } from "@/utils/constants";
+import { checkPermissions } from "@/utils/user.utils";
+import { ColumnDef } from "@tanstack/react-table";
+import { CellAction } from "./cell-action";
 
-export const columns: ColumnDef<IUserModified>[] = [
+export const columns: ColumnDef<User>[] = [
   {
     id: "select",
     header: ({ table }) => <ProtectedCheckbox table={table} type="user" />,
@@ -42,11 +48,50 @@ export const columns: ColumnDef<IUserModified>[] = [
   },
   {
     accessorKey: "isActive",
-    header: "Active",
+
+    header: () => (
+      <ProtectedHeader columnName="Active" permission="EDIT_COMPANY" />
+    ),
+    cell: ({ row }) => {
+       /* eslint-disable */
+      const { mutate: toggleActive } = useUserToggleActive({
+        onSuccess(data) {
+          toast({
+            variant: "default",
+            description: data.message,
+            title: "Success",
+          });
+        },
+        onError(error) {
+          toast({
+            variant: "destructive",
+            description: error.response?.data.message,
+            title: "Error",
+          });
+        },
+      });
+       /* eslint-disable */
+      const { data: currentUser } = useCurrentUser();
+      return (
+        (currentUser?.user.role === "SUPER_ADMIN" ||
+          checkPermissions(currentUser?.user.permissions as PermissionsType[], [
+            "EDIT_USER",
+          ])) && (
+          <>
+            <SwitchMutation
+              switchState={row.original.isActive}
+              mutationFn={() => toggleActive({ id: row.original.id })}
+            />
+          </>
+        )
+      );
+    },
   },
   {
-    accessorKey: "status",
     header: "Status",
+    cell: ({ row }) => (
+      <div className="capitalize">{row.original.status.toLowerCase()}</div>
+    ),
   },
 
   {
@@ -54,7 +99,7 @@ export const columns: ColumnDef<IUserModified>[] = [
     header: ({ table }) => (
       <ProtectedHeader columnName="Permissions" permission="VIEW_PERMISSIONS" />
     ),
-
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     cell: ({ row }) => <PermissionUpdate row={row} />,
 
     maxSize: 20,

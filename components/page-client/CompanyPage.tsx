@@ -9,12 +9,16 @@ import SearchBar from "../SearchBar";
 import { Button } from "../ui/button";
 import CompanyAuthFormSignUp from "../forms/user-company-form";
 import { ModalCustom } from "../ModalComponent";
+import { checkPermissions } from "@/utils/user.utils";
+import { useCurrentUser } from "@/services/auth.mutations";
+import { PermissionsType } from "@/types/user.types";
 
 const CompanyPage = () => {
   const searchParams = useSearchParams();
   const page = Number(searchParams.get("page")) || 1;
   const pageLimit = Number(searchParams.get("limit")) || 10;
   const search = searchParams.get("search") || "";
+  const { data: currentUser } = useCurrentUser();
 
   const { data: company, isLoading } = useGetCompanies({
     limitParam: pageLimit,
@@ -48,11 +52,20 @@ const CompanyPage = () => {
               </p>
               <SearchBar />
             </div>
-            <div className="flex mb-4">
-              <Button className="bg-golden" onClick={() => setModalOpen(true)}>
-                Create
-              </Button>
-            </div>
+            {(currentUser?.user.role === "SUPER_ADMIN" ||
+              checkPermissions(
+                currentUser?.user.permissions as PermissionsType[],
+                ["CREATE_USER"],
+              )) && (
+              <div className="flex mb-4">
+                <Button
+                  className="bg-golden"
+                  onClick={() => setModalOpen(true)}
+                >
+                  Create
+                </Button>
+              </div>
+            )}
             <ScrollArea className="h-full ">
               {isLoading ? (
                 <div>Loading...</div>

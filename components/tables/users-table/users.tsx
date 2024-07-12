@@ -49,16 +49,12 @@ interface DataTableProps<TData, TValue> {
   };
 }
 
-export interface IUserModified extends Omit<User, "isActive"> {
-  isActive: "Active" | "In Active" | string;
-}
-
 export function UsersTable({
   columns,
   data,
   pageCount,
   pageSizeOptions = [10, 20, 30, 40, 50],
-}: DataTableProps<IUserModified, any>) {
+}: DataTableProps<User, any>) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -70,13 +66,6 @@ export function UsersTable({
   const perPageAsNumber = Number(per_page);
   const fallbackPerPage = isNaN(perPageAsNumber) ? 10 : perPageAsNumber;
   const [openWarning, setOpenWarning] = useState<boolean>(false);
-
-  const tableData = data?.map((entry) => {
-    return {
-      ...entry,
-      isActive: entry.isActive ? "Active" : "In Active",
-    };
-  });
 
   const createQueryString = React.useCallback(
     (params: Record<string, string | number | null>) => {
@@ -116,7 +105,7 @@ export function UsersTable({
   }, [pageIndex, pageSize]);
 
   const table = useReactTable({
-    data: tableData,
+    data,
     columns,
     pageCount: pageCount ?? -1,
     getCoreRowModel: getCoreRowModel(),

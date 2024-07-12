@@ -1,5 +1,14 @@
-import React, { Dispatch, SetStateAction } from "react";
+import {
+  AssignCreditsInputType,
+  useAssignCredits,
+} from "@/services/user.mutations";
+import { User } from "@/types/services/auth.types";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Dispatch, SetStateAction } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 import { ModalCustom } from "../ModalComponent";
+import { Button } from "../ui/button";
 import {
   Form,
   FormControl,
@@ -7,18 +16,9 @@ import {
   FormItem,
   FormMessage,
 } from "../ui/form";
-import {
-  AssignCreditsInputType,
-  useAssignCredits,
-} from "@/services/user.mutations";
-import { toast } from "../ui/use-toast";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import { IUserModified } from "../tables/users-table/users";
-import { Label } from "../ui/label";
 import { Input } from "../ui/input";
-import { Button } from "../ui/button";
+import { Label } from "../ui/label";
+import { toast } from "../ui/use-toast";
 const creditValidationSchema = z.object({
   credits: z
     .string({ required_error: "This is required " })
@@ -29,7 +29,7 @@ interface AssignCreditsFormSchema extends Omit<AssignCreditsInputType, "id"> {}
 
 interface AssignCreditsFormProps {
   setOpenAssignCreditModal: Dispatch<SetStateAction<boolean>>;
-  userData: IUserModified;
+  userData: User;
   openAssignCreditModal: boolean;
 }
 

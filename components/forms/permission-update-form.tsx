@@ -1,6 +1,9 @@
 import useQueryUpdater from "@/hooks/useQueryUpdater";
 import { useCurrentUser } from "@/services/auth.mutations";
 import { useUpdatePermissions } from "@/services/user.mutations";
+import { User } from "@/types/services/auth.types";
+import { PermissionsType } from "@/types/user.types";
+import { checkPermissions } from "@/utils/user.utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Row } from "@tanstack/react-table";
 import { useSearchParams } from "next/navigation";
@@ -16,11 +19,9 @@ import {
 } from "../ui/form";
 import { MultiSelect } from "../ui/multi-select";
 import { toast } from "../ui/use-toast";
-import { IUserModified } from "../tables/users-table/users";
-import { checkPermissions } from "@/utils/user.utils";
-import { PermissionsType } from "@/types/user.types";
+import { PermissionsForDisplay } from "@/utils/constants";
 interface PermissionUpdateProps {
-  row: Row<IUserModified>;
+  row: Row<User>;
 }
 type UpdatePermissionsInputType = z.infer<typeof permissionUpdateZod>;
 const permissionUpdateZod = z.object({
@@ -65,7 +66,7 @@ const PermissionUpdate = (props: PermissionUpdateProps) => {
   const { data: currentUser } = useCurrentUser();
   const permissionsEntry = currentUser?.user.permissions.reduce(
     (acc: Record<string, string>[], curr) => {
-      acc.push({ label: curr, value: curr });
+      acc.push({ label: PermissionsForDisplay[curr], value: curr });
       return acc;
     },
     [],
@@ -114,7 +115,7 @@ const PermissionUpdate = (props: PermissionUpdateProps) => {
             key={index}
             className="bg-green-600 text-xs text-white px-2 py-1 m-0.5"
           >
-            {permission}
+            {PermissionsForDisplay[permission]}
           </Badge>
         ))
       )}
