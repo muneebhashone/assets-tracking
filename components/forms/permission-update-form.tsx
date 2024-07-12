@@ -93,7 +93,7 @@ const PermissionUpdate = (props: PermissionUpdateProps) => {
                       options={permissionsEntry as Record<string, string>[]}
                       onValueChange={field.onChange}
                       defaultValue={field.value as string[]}
-                      className="bg-green-600 text-xs text-white px-2 py-1 m-0.5"
+                      className="bg-green-600 text-xs text-white px-2 py-1 m-0.5 "
                       placeholder="Select permissions"
                       variant="inverted"
                       check={true}

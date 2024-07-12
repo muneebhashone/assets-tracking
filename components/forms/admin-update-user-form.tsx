@@ -460,7 +460,7 @@ const AdminUpdateUserForm = ({
                         <MultiSelect
                           defaultValue={field.value as string[]}
                           onValueChange={field.onChange}
-                          className="bg-green-600 text-xs text-white px-2 py-1 m-0.5"
+                          className="bg-green-600 text-xs text-white px-2 py-1 m-0.5 "
                           check={false}
                           options={permissionEnums.map((permission) => {
                             return {
