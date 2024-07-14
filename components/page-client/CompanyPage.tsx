@@ -73,7 +73,7 @@ const CompanyPage = () => {
                 <CompanyTable
                   columns={columns}
                   data={company?.results as Company[]}
-                  pageCount={company?.paginatorInfo?.totalRecords || 0}
+                  pageCount={company?.paginatorInfo?.pages || 0}
                   searchKey={search}
                 />
               ) : (
