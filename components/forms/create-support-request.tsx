@@ -72,13 +72,21 @@ const createSupportFormSchema = z
   })
   .strict()
   .superRefine((value, ctx) => {
-    const requiredFields = [
-      "name",
-      "email",
-      "phoneNo",
-      "subject",
-      "message",
-    ] as const;
+    const requiredFields = ["name", "email", "phoneNo"] as const;
+    if (!value.subject) {
+      ctx.addIssue({
+        code: "custom",
+        message: `Enter your Subject`,
+        path: ["subject"],
+      });
+    }
+    if (!value.message) {
+      ctx.addIssue({
+        code: "custom",
+        message: `Enter your Message`,
+        path: ["message"],
+      });
+    }
 
     if (!value.userId) {
       requiredFields.forEach((field) => {
