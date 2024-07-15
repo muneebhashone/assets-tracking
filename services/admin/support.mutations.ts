@@ -14,8 +14,8 @@ export type CreateSupportInputType = {
   name?: string;
   email?: string;
   phoneNo?: string;
-  subject: string;
-  message: string;
+  subject?: string;
+  message?: string;
   userId?: string;
 };
 type DeleteSupportInputType = {

@@ -109,6 +109,7 @@ export const useLogout = (
       queryClient.removeQueries({ queryKey: [currentUser.name] });
       options?.onSuccess?.(data, variables, context);
       router.push("/signin");
+      router.refresh();
     },
   });
 };

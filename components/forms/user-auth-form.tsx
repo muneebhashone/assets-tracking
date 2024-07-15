@@ -22,7 +22,7 @@ const formSchema = z.object({
   email: z
     .string({ required_error: "Email is required" })
     .email({ message: "Enter a valid email address" }),
-  password: passwordValidation('password'),
+  password: passwordValidation("password"),
 });
 
 type UserFormValue = z.infer<typeof formSchema>;
@@ -38,6 +38,7 @@ export default function UserAuthForm() {
         variant: "default",
       });
       router.push("/dashboard");
+      router.refresh();
     },
     onError(error) {
       toast({

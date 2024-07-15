@@ -25,43 +25,76 @@ import { handlePhoneNumber } from "@/utils/common.utils";
 
 const createSupportFormSchema = z
   .object({
-    name: z.string({ message: "Enter Name" }).min(1).optional(),
+    name: z
+      .string({
+        message: "Enter Your Name",
+        invalid_type_error: "Enter Your Name",
+      })
+      .min(1, { message: "Enter Your Name" })
+      .optional(),
     email: z
-      .string({ message: "Enter Your Subject" })
+      .string({
+        message: "Enter Your Subject",
+        invalid_type_error: "Enter Your Subject",
+      })
       .email({ message: "Invalid Email" })
       .optional(),
     phoneNo: z
-      .string({ message: "Enter Phone Number" })
-      .min(1)
+      .string({
+        message: "Enter your Phone Number",
+        invalid_type_error: "Enter your Phone Number",
+      })
+      .min(1, { message: "Enter your Phone Number" })
       .refine(
         (value) => validator.isMobilePhone(value, "any", { strictMode: true }),
-        "Phone Number must be valid",
+        { message: "Phone Number must be valid" },
       )
       .optional(),
-    subject: z.string({ required_error: "Enter Subject" }).min(1),
-    message: z.string({ required_error: "Enter Message" }).min(1),
+    subject: z
+      .string({
+        required_error: "Enter your Subject",
+        message: "Enter your Subject",
+      })
+      .optional(),
+    message: z
+      .string({
+        required_error: "Enter your Message",
+        message: "Enter your Message",
+      })
+      .optional(),
     userId: z
       .string()
       .min(1)
-      .refine((value) => validator.isNumeric(value), "userId must be valid")
+      .refine((value) => validator.isNumeric(value), {
+        message: "userId must be valid",
+      })
       .optional(),
   })
   .strict()
   .superRefine((value, ctx) => {
-    if (!value?.userId) {
-      const requiredFields = ["name", "email", "phoneNo"] as const;
+    const requiredFields = [
+      "name",
+      "email",
+      "phoneNo",
+      "subject",
+      "message",
+    ] as const;
 
-      for (const field of requiredFields) {
+    if (!value.userId) {
+      requiredFields.forEach((field) => {
         if (!value[field]) {
           ctx.addIssue({
             code: "custom",
-            message: `Enter ${field}`,
+            message: `Enter your ${
+              field === "phoneNo" ? "phone number" : field
+            }`,
             path: [field],
           });
         }
-      }
+      });
     }
   });
+
 type CreateSuppotFormSchemaType = z.infer<typeof createSupportFormSchema>;
 
 interface CreateSupportFormProps {
@@ -88,7 +121,11 @@ const CreateSupportForm = ({ currentUser }: CreateSupportFormProps) => {
         description: data.message,
         title: "Success",
       });
-      push("/");
+      if (currentUser && currentUser?.role === "SUPER_ADMIN") {
+        push("/dashboard/support");
+      } else {
+        push("/");
+      }
       reset();
     },
     onError(error) {
