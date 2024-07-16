@@ -135,7 +135,6 @@ const AdminCreateUserForm = ({
         variant: "default",
         description: data.message,
         title: "Success",
-        
       });
       reset();
       setModalState(false);
@@ -262,7 +261,7 @@ const AdminCreateUserForm = ({
                               <SelectValue placeholder="Clients" />
                             </SelectTrigger>
                             <SelectContent>
-                              {clientSuperUsers?.results.map(
+                              {clientSuperUsers?.results?.map(
                                 (clientSuperUser, index) => {
                                   return (
                                     <SelectItem
@@ -310,7 +309,7 @@ const AdminCreateUserForm = ({
                               <SelectValue placeholder="Select a Company" />
                             </SelectTrigger>
                             <SelectContent>
-                              {companies?.results.map((company, index) => {
+                              {companies?.results?.map((company, index) => {
                                 return (
                                   <SelectItem
                                     value={String(company.id)}
@@ -418,7 +417,7 @@ const AdminCreateUserForm = ({
                             <SelectValue placeholder="Select the Status" />
                           </SelectTrigger>
                           <SelectContent>
-                            {statusEnums.map((status, index) => {
+                            {statusEnums?.map((status, index) => {
                               return (
                                 <SelectItem
                                   value={status}
@@ -452,7 +451,7 @@ const AdminCreateUserForm = ({
                           onValueChange={field.onChange}
                           className="bg-green-600 text-xs text-white px-2 py-1 m-0.5 "
                           check={false}
-                          options={permissionEnums.map((permission) => {
+                          options={permissionEnums?.map((permission) => {
                             return {
                               label: PermissionsForDisplay[permission],
                               value: permission,

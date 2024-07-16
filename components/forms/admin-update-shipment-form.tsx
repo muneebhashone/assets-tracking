@@ -17,7 +17,7 @@ import {
   CardContent,
   CardFooter,
   CardHeader,
-  CardTitle
+  CardTitle,
 } from "../ui/card";
 import { Combobox, Options } from "../ui/combobox";
 import {
@@ -106,7 +106,7 @@ const AdminUpdateShipmentForm = ({
     },
   });
   const { data: containers } = useFetchAllSearatesContainerSetup();
-  const containerNames = containers?.data.map((value) => {
+  const containerNames = containers?.data?.map((value) => {
     return {
       name: value.name,
       value: value.scac_codes?.[0],

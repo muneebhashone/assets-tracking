@@ -152,7 +152,7 @@ export function UsersTable({
           deleteBulkUsers({ ids: selectedIds });
         }}
       />
-      {Boolean(selectedIds.length) && (
+      {Boolean(selectedIds?.length) && (
         <Button
           className="border rounded-md px-4 py-2 bg-red-700 text-white hover:bg-red-600"
           onClick={() => setOpenWarning((prev) => !prev)}
@@ -164,9 +164,9 @@ export function UsersTable({
       <ScrollArea className="rounded-md border h-[calc(80vh-220px)]">
         <Table className="relative">
           <TableHeader>
-            {table.getHeaderGroups().map((headerGroup) => (
+            {table.getHeaderGroups()?.map((headerGroup) => (
               <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => {
+                {headerGroup.headers?.map((header) => {
                   return (
                     <TableHead key={header.id}>
                       {header.isPlaceholder
@@ -183,12 +183,12 @@ export function UsersTable({
           </TableHeader>
           <TableBody>
             {table?.getRowModel().rows?.length ? (
-              table?.getRowModel().rows.map((row) => (
+              table?.getRowModel().rows?.map((row) => (
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
                 >
-                  {row.getVisibleCells().map((cell) => (
+                  {row.getVisibleCells()?.map((cell) => (
                     <TableCell key={cell.id}>
                       {flexRender(
                         cell.column.columnDef.cell,
@@ -201,7 +201,7 @@ export function UsersTable({
             ) : (
               <TableRow>
                 <TableCell
-                  colSpan={columns.length}
+                  colSpan={columns?.length}
                   className="h-24 text-center"
                 >
                   No results.
@@ -216,8 +216,8 @@ export function UsersTable({
       <div className="flex flex-col gap-2 sm:flex-row items-center justify-end space-x-2 py-4">
         <div className="flex items-center justify-between w-full">
           <div className="flex-1 text-sm text-muted-foreground">
-            {table.getFilteredSelectedRowModel().rows.length} of{" "}
-            {table.getFilteredRowModel().rows.length} row(s) selected.
+            {table.getFilteredSelectedRowModel().rows?.length} of{" "}
+            {table.getFilteredRowModel().rows?.length} row(s) selected.
           </div>
           <div className="flex flex-col items-center gap-4 sm:flex-row sm:gap-6 lg:gap-8">
             <div className="flex items-center space-x-2">
@@ -236,7 +236,7 @@ export function UsersTable({
                   />
                 </SelectTrigger>
                 <SelectContent side="top">
-                  {pageSizeOptions.map((pageSize) => (
+                  {pageSizeOptions?.map((pageSize) => (
                     <SelectItem key={pageSize} value={`${pageSize}`}>
                       {pageSize}
                     </SelectItem>

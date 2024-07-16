@@ -49,26 +49,6 @@ export const columns: ColumnDef<User>[] = [
       <div className="capitalize">{row.original.status?.toLowerCase()}</div>
     ),
   },
-
-  // {
-  //   accessorKey: "permissions",
-  //   header: ({ table }) => (
-  //     <ProtectedHeader columnName="Permissions" permission="VIEW_PERMISSIONS" />
-  //   ),
-
-  //   cell: ({ row }) => (
-  //     <div className="permission-access">
-  //       {row.original.permissions?.map((permission, index) => (
-  //         <Badge
-  //           key={index}
-  //           className="bg-green-600 text-xs text-white px-2 py-1  m-0.5"
-  //         >
-  //           {PermissionsForDisplay[permission]}
-  //         </Badge>
-  //       ))}
-  //     </div>
-  //   ),
-  // },
   {
     accessorKey: "credits",
     header: "Credits",

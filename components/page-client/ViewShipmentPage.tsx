@@ -196,7 +196,7 @@ const ViewShipmentPage = ({ token }: { token: string }) => {
                 <span className="font-semibold">Tags :</span>{" "}
                 {isLoading ? (
                   <Skeleton className="h-6 w-[100px]  py-2 ms-2" />
-                ) : data?.data.tags.length ? (
+                ) : data?.data.tags?.length ? (
                   data?.data?.tags?.map((tag, index) => {
                     return (
                       <Badge className="bg-green-600  ms-2" key={index}>
@@ -223,7 +223,7 @@ const ViewShipmentPage = ({ token }: { token: string }) => {
         </div>
       </div>
 
-      {Boolean(data?.data?.followers.length) && (
+      {Boolean(data?.data?.followers?.length) && (
         <div className="flex-1 overflow-y-auto p-4 md:p-6">
           <div className="grid gap-6 md:grid-cols-1 lg:grid-cols-1">
             <div className="bg-gray-100 p-6 rounded-lg shadow-md">
@@ -231,7 +231,7 @@ const ViewShipmentPage = ({ token }: { token: string }) => {
                 <span className="font-semibold me-4 mt-2">Followers : </span>
 
                 <div>
-                  {data?.data?.followers.length &&
+                  {data?.data?.followers?.length &&
                     data?.data?.followers?.map((value, index) => {
                       return (
                         <div className="relative mb-3" key={index}>

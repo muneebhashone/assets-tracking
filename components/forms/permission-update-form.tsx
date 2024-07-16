@@ -112,7 +112,7 @@ const PermissionUpdate = (props: PermissionUpdateProps) => {
           </form>
         </Form>
       ) : (
-        row?.permissions.map((permission, index) => (
+        row?.permissions?.map((permission, index) => (
           <Badge
             key={index}
             className="bg-green-600 text-xs text-white px-2 py-1 m-0.5"

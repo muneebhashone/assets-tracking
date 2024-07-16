@@ -51,7 +51,7 @@ const UsersPage = () => {
 
     filterByRole: EligibleRolesForCreation[
       currentUser?.user.role as RoleType
-    ].map((role) => {
+    ]?.map((role) => {
       return {
         value: role,
         label: role.split("_").join(" ").toLocaleLowerCase(),
@@ -66,7 +66,7 @@ const UsersPage = () => {
 
         <div className="flex items-start justify-between">
           <Heading
-            title={`Users (${users?.results.length || 0})`}
+            title={`Users (${users?.results?.length || 0})`}
             description="Manage users "
           />
         </div>
@@ -107,11 +107,13 @@ const UsersPage = () => {
         {allUsersLoading ? (
           <div>Loading ... </div>
         ) : (
-          <UsersTable
-            columns={columns}
-            data={users?.results as User[]}
-            pageCount={users?.paginatorInfo.pages || 0}
-          />
+          users?.results?.length && (
+            <UsersTable
+              columns={columns}
+              data={users?.results as User[]}
+              pageCount={users?.paginatorInfo.pages || 0}
+            />
+          )
         )}
         <UserCreateForm modalState={modalOpen} setModalState={setModalOpen} />
         <AdminCreateUserForm

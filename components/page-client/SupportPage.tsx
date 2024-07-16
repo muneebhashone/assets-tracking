@@ -43,7 +43,7 @@ const SupportPage = () => {
         <BreadCrumb items={breadcrumbItems} />
         <div className="flex items-start justify-between">
           <Heading
-            title={`Support Requests (${support?.data?.results.length || 0})`}
+            title={`Support Requests (${support?.data?.results?.length || 0})`}
             description="Manage tickets "
           />
         </div>
@@ -63,16 +63,14 @@ const SupportPage = () => {
         {allSupportLoading ? (
           <div>Loading ... </div>
         ) : (
-          <SupportTable
-            columns={columns}
-            data={support?.data.results as SupportType[]}
-            pageCount={support?.data?.paginatorInfo.pages || 0}
-          />
+          support?.data?.results?.length && (
+            <SupportTable
+              columns={columns}
+              data={support?.data?.results as SupportType[]}
+              pageCount={support?.data?.paginatorInfo.pages || 0}
+            />
+          )
         )}
-        {/* <CreateAssignForm
-          setModalState={setAssignOpen}
-          modalState={assignOpen}
-        /> */}
       </div>
     </>
   );

@@ -122,16 +122,16 @@ export function AssignsTable({
       <ScrollArea className="rounded-md border h-[calc(80vh-220px)]">
         <Table className="relative">
           <TableHeader>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => {
+            {table?.getHeaderGroups()?.map((headerGroup) => (
+              <TableRow key={headerGroup?.id}>
+                {headerGroup?.headers?.map((header) => {
                   return (
                     <TableHead key={header.id}>
                       {header.isPlaceholder
                         ? null
                         : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext(),
+                            header?.column?.columnDef?.header,
+                            header?.getContext(),
                           )}
                     </TableHead>
                   );
@@ -141,25 +141,27 @@ export function AssignsTable({
           </TableHeader>
           <TableBody>
             {table?.getRowModel().rows?.length ? (
-              table?.getRowModel().rows.map((row) => (
+              table?.getRowModel().rows?.map((row) => (
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
                 >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext(),
-                      )}
-                    </TableCell>
-                  ))}
+                  {row
+                    ?.getVisibleCells()
+                    ?.map((cell) => (
+                      <TableCell key={cell?.id}>
+                        {flexRender(
+                          cell?.column?.columnDef?.cell,
+                          cell?.getContext(),
+                        )}
+                      </TableCell>
+                    ))}
                 </TableRow>
               ))
             ) : (
               <TableRow>
                 <TableCell
-                  colSpan={columns.length}
+                  colSpan={columns?.length}
                   className="h-24 text-center"
                 >
                   No results.
@@ -174,8 +176,8 @@ export function AssignsTable({
       <div className="flex flex-col gap-2 sm:flex-row items-center justify-end space-x-2 py-4">
         <div className="flex items-center justify-between w-full">
           <div className="flex-1 text-sm text-muted-foreground">
-            {table.getFilteredSelectedRowModel().rows.length} of{" "}
-            {table.getFilteredRowModel().rows.length} row(s) selected.
+            {table.getFilteredSelectedRowModel().rows?.length || 0} of{" "}
+            {table.getFilteredRowModel().rows?.length || 0} row(s) selected.
           </div>
           <div className="flex flex-col items-center gap-4 sm:flex-row sm:gap-6 lg:gap-8">
             <div className="flex items-center space-x-2">
@@ -194,7 +196,7 @@ export function AssignsTable({
                   />
                 </SelectTrigger>
                 <SelectContent side="top">
-                  {pageSizeOptions.map((pageSize) => (
+                  {pageSizeOptions?.map((pageSize) => (
                     <SelectItem key={pageSize} value={`${pageSize}`}>
                       {pageSize}
                     </SelectItem>

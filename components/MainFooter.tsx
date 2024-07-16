@@ -41,7 +41,7 @@ const MainFooter = ({
           </div>
           <div className="col-span-1 pt-16">
             <h2 className="text-[#424D5F] font-semibold text-lg">Company</h2>
-            {companylist.map((item) => (
+            {companylist?.map((item) => (
               <ul key={item.id} className="mt-7">
                 <li className="text-[#424D5F] mb-1 text-sm">
                   <Link href={item.link}>{item.text}</Link>
@@ -51,7 +51,7 @@ const MainFooter = ({
           </div>
           <div className="col-span-1 pt-16">
             <h2 className="text-[#424D5F] text-lg font-semibold">Resources</h2>
-            {resourceslist.map((item) => (
+            {resourceslist?.map((item) => (
               <ul key={item.id} className="mt-7">
                 <li className="text-[#424D5F] mb-1 text-sm">
                   <Link href={item.link}>{item.text}</Link>
@@ -63,7 +63,7 @@ const MainFooter = ({
             <h2 className="text-[#424D5F] text-lg font-semibold">
               Information
             </h2>
-            {infolist.map((item) => (
+            {infolist?.map((item) => (
               <ul key={item.id} className="mt-7">
                 <li className="text-[#424D5F] mb-1 text-sm">
                   <Link href={item.link}>{item.text}</Link>

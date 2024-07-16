@@ -16,7 +16,7 @@ interface FaqType {
 const FaqAccordian = ({ faqaccordian }: { faqaccordian: FaqType[] }) => {
   return (
     <Accordion type="single" collapsible className="w-full mt-5">
-      {faqaccordian.map((item) => (
+      {faqaccordian?.map((item) => (
         <AccordionItem key={item.id} value={item.value} className="">
           <AccordionTrigger className="text-[#424D5F] text-base font-semibold px-8 py-6 bg-white">
             {item.title}

@@ -4,7 +4,7 @@ export const checkPermissions = (
   userPermissions: PermissionsType[],
   permissionsToCheck: PermissionsType[],
 ) => {
-  return permissionsToCheck.every((perm) => userPermissions?.includes(perm));
+  return permissionsToCheck?.every((perm) => userPermissions?.includes(perm));
 };
 
 export function parseJwt(token?: string) {

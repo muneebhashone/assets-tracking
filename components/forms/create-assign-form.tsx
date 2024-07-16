@@ -98,8 +98,8 @@ const CreateAssignForm = ({
                           <SelectValue placeholder="Select Sub Admin" />
                         </SelectTrigger>
                         <SelectContent>
-                          {Array.isArray(subAdmins?.results) &&
-                            subAdmins?.results.map((subadmin, index) => {
+                          {subAdmins?.results?.length &&
+                            subAdmins?.results?.map((subadmin, index) => {
                               return (
                                 <SelectItem
                                   value={String(subadmin.id)}
@@ -135,8 +135,8 @@ const CreateAssignForm = ({
                           <SelectValue placeholder="Select White Label Admin" />
                         </SelectTrigger>
                         <SelectContent>
-                          {Array.isArray(whiteLabel?.results) &&
-                            whiteLabel?.results.map((whiteLabel, index) => {
+                          {whiteLabel?.results?.length &&
+                            whiteLabel?.results?.map((whiteLabel, index) => {
                               return (
                                 <SelectItem
                                   value={String(whiteLabel.id)}

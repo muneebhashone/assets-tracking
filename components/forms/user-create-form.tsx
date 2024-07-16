@@ -166,10 +166,10 @@ const UserCreateForm = ({ modalState, setModalState }: UserCreateFormProps) => {
                               <SelectValue placeholder="Select a Role from the list" />
                             </SelectTrigger>
                             <SelectContent className="overflow-y-auto max-h-[10rem]">
-                              {EligibleRolesForCreation[
+                              {EligibleRolesForCreation?.[
                                 currentUser?.user
-                                  .role as keyof typeof EligibleRolesForCreation
-                              ].map((role, index) => {
+                                  ?.role as keyof typeof EligibleRolesForCreation
+                              ]?.map((role, index) => {
                                 return (
                                   <SelectItem
                                     value={role}

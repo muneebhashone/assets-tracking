@@ -10,6 +10,7 @@ import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import { cookies } from "next/headers";
 import "./globals.css";
+import { Suspense } from "react";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -44,11 +45,13 @@ export default async function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${poppins.className} `}>
-        <ReactQueryClientProvider>
-          <HydrationBoundary state={dehydrate(queryClient)}>
-            <Providers>{children}</Providers>
-          </HydrationBoundary>
-        </ReactQueryClientProvider>
+        <Suspense>
+          <ReactQueryClientProvider>
+            <HydrationBoundary state={dehydrate(queryClient)}>
+              <Providers>{children}</Providers>
+            </HydrationBoundary>
+          </ReactQueryClientProvider>
+        </Suspense>
       </body>
     </html>
   );

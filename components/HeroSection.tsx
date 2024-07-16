@@ -14,7 +14,7 @@ const HeroSection = () => {
   const { data } = useFetchAllSearatesContainerSetup();
 
   const getContainers = () => {
-    return data?.data.map((value) => {
+    return data?.data?.map((value) => {
       return {
         name: value.name,
         code: value.scac_codes?.[0],

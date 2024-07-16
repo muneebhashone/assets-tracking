@@ -166,7 +166,7 @@ const Filter = <T extends OptionsSelectorType>({
                   <SelectValue placeholder="Select a Value" />
                 </SelectTrigger>
                 <SelectContent className="overflow-y-auto max-h-[10rem] flex-initial">
-                  {optionsMapper[optionKey]?.map((option, index) => {
+                  {optionsMapper?.[optionKey]?.map((option, index) => {
                     return (
                       <SelectItem
                         value={option.value.toString()}

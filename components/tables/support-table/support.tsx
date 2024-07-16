@@ -62,8 +62,7 @@ export function SupportTable({
   const per_page = searchParams?.get("limit") ?? "10";
   const perPageAsNumber = Number(per_page);
   const fallbackPerPage = isNaN(perPageAsNumber) ? 10 : perPageAsNumber;
-  // const [openWarning, setOpenWarning] = useState<boolean>(false);
-
+ 
   const createQueryString = React.useCallback(
     (params: Record<string, string | number | null>) => {
       const newSearchParams = new URLSearchParams(searchParams?.toString());
@@ -122,9 +121,9 @@ export function SupportTable({
       <ScrollArea className="rounded-md border h-[calc(80vh-220px)]">
         <Table className="relative">
           <TableHeader>
-            {table.getHeaderGroups().map((headerGroup) => (
+            {table.getHeaderGroups()?.map((headerGroup) => (
               <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => {
+                {headerGroup.headers?.map((header) => {
                   return (
                     <TableHead key={header.id}>
                       {header.isPlaceholder
@@ -141,12 +140,12 @@ export function SupportTable({
           </TableHeader>
           <TableBody>
             {table?.getRowModel().rows?.length ? (
-              table?.getRowModel().rows.map((row) => (
+              table?.getRowModel().rows?.map((row) => (
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
                 >
-                  {row.getVisibleCells().map((cell) => (
+                  {row.getVisibleCells()?.map((cell) => (
                     <TableCell key={cell.id}>
                       {flexRender(
                         cell.column.columnDef.cell,
@@ -159,7 +158,7 @@ export function SupportTable({
             ) : (
               <TableRow>
                 <TableCell
-                  colSpan={columns.length}
+                  colSpan={columns?.length}
                   className="h-24 text-center"
                 >
                   No results.
@@ -173,10 +172,7 @@ export function SupportTable({
 
       <div className="flex flex-col gap-2 sm:flex-row items-center justify-end space-x-2 py-4">
         <div className="flex items-center justify-between w-full">
-          {/* <div className="flex-1 text-sm text-muted-foreground">
-            {table.getFilteredSelectedRowModel().rows.length} of{" "}
-            {table.getFilteredRowModel().rows.length} row(s) selected.
-          </div> */}
+         
           <div className="flex flex-col items-center gap-4 sm:flex-row sm:gap-6 lg:gap-8">
             <div className="flex items-center space-x-2">
               <p className="whitespace-nowrap text-sm font-medium">
@@ -194,7 +190,7 @@ export function SupportTable({
                   />
                 </SelectTrigger>
                 <SelectContent side="top">
-                  {pageSizeOptions.map((pageSize) => (
+                  {pageSizeOptions?.map((pageSize) => (
                     <SelectItem key={pageSize} value={`${pageSize}`}>
                       {pageSize}
                     </SelectItem>

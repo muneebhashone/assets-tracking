@@ -124,10 +124,10 @@ export const MultiSelect = React.forwardRef<
     };
 
     const toggleAll = () => {
-      if (selectedValues.length === options.length) {
+      if (selectedValues?.length === options?.length) {
         handleClear();
       } else {
-        const allValues = options.map((option) => option.value);
+        const allValues = options?.map((option) => option.value);
         setSelectedValues(allValues);
         onValueChange(allValues);
       }
@@ -144,10 +144,10 @@ export const MultiSelect = React.forwardRef<
               "flex w-[100%] p-1 rounded-md border min-h-10 h-auto items-center justify-between bg-inherit hover:bg-inherit",
             )}
           >
-            {selectedValues.length > 0 ? (
+            {selectedValues?.length > 0 ? (
               <div className="flex justify-between items-center w-full">
                 <div className="flex flex-wrap items-center">
-                  {selectedValues.slice(0, maxCount)?.map((value) => {
+                  {selectedValues?.slice(0, maxCount)?.map((value) => {
                     const option = options.find((o) => o.value === value);
 
                     return (
@@ -178,7 +178,7 @@ export const MultiSelect = React.forwardRef<
                       )}
                       style={{ animationDuration: `${animation}s` }}
                     >
-                      {`+ ${selectedValues.length - maxCount} more`}
+                      {`+ ${selectedValues?.length - maxCount} more`}
                       <XCircle
                         className="ml-2 h-4 w-4 cursor-pointer"
                         onClick={(event) => {
@@ -243,7 +243,7 @@ export const MultiSelect = React.forwardRef<
                   <div
                     className={cn(
                       "mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary",
-                      selectedValues.length === options.length
+                      selectedValues?.length === options?.length
                         ? "bg-primary text-primary-foreground"
                         : "opacity-50 [&_svg]:invisible",
                     )}
@@ -280,7 +280,7 @@ export const MultiSelect = React.forwardRef<
               <CommandSeparator />
               <CommandGroup>
                 <div className="flex items-center justify-between">
-                  {selectedValues.length > 0 && (
+                  {selectedValues?.length > 0 && (
                     <>
                       <CommandItem
                         onSelect={handleClear}

@@ -1,11 +1,14 @@
 "use client";
 import { DashboardNav } from "@/components/dashboard-nav";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { userNavItems } from "@/constants/data";
+import { navItems, userNavItems } from "@/constants/data";
 import { useCurrentUser } from "@/services/auth.mutations";
 import { MenuIcon } from "lucide-react";
 
 import { useState } from "react";
+import { Skeleton } from "../ui/skeleton";
+import { AdminDashboardNav } from "../admin-dashboard";
+import { User } from "@/types/services/auth.types";
 
 interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {
   // playlists: Playlist[];
@@ -13,7 +16,7 @@ interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {
 
 export function MobileSidebar({ className }: SidebarProps) {
   const [open, setOpen] = useState(false);
-  const { data: currentUser } = useCurrentUser();
+  const { data: currentUser, isLoading } = useCurrentUser();
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
@@ -27,11 +30,28 @@ export function MobileSidebar({ className }: SidebarProps) {
               Overview
             </h2>
             <div className="space-y-1">
-              <DashboardNav
-                items={userNavItems}
-                user={currentUser?.user}
-                setOpen={setOpen}
-              />
+              {isLoading ? (
+                <>
+                  <div className="py-2">
+                    <Skeleton className="h-4 w-[200px] mb-4 py-2" />
+                    <Skeleton className="h-4 w-[200px] mb-4 py-2" />
+                    <Skeleton className="h-4 w-[200px] mb-4 py-2" />
+                    <Skeleton className="h-4 w-[200px] mb-4 py-2" />
+                    <Skeleton className="h-4 w-[200px] mb-4 py-2" />
+                    <Skeleton className="h-4 w-[200px]" />
+                  </div>
+                </>
+              ) : currentUser?.user.role === "SUPER_ADMIN" ? (
+                <AdminDashboardNav
+                  user={currentUser?.user as User}
+                  items={navItems}
+                />
+              ) : (
+                <DashboardNav
+                  user={currentUser?.user as User}
+                  items={navItems}
+                />
+              )}
             </div>
           </div>
         </div>

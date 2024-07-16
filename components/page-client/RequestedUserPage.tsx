@@ -33,7 +33,7 @@ export default function RequestedUserPage() {
 
       <div className="flex items-start justify-between">
         <Heading
-          title={`Requested Users (${users?.results.length || 0})`}
+          title={`Requested Users (${users?.results?.length || 0})`}
           description="Manage requested users  "
         />
       </div>

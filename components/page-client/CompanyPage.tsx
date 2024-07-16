@@ -69,15 +69,14 @@ const CompanyPage = () => {
             <ScrollArea className="h-full ">
               {isLoading ? (
                 <div>Loading...</div>
-              ) : Array.isArray(company?.results) ? (
-                <CompanyTable
-                  columns={columns}
-                  data={company?.results as Company[]}
-                  pageCount={company?.paginatorInfo?.pages || 0}
-                  searchKey={search}
-                />
               ) : (
-                "No Record Found"
+                company?.results?.length && (
+                  <CompanyTable
+                    columns={columns}
+                    data={company?.results as Company[]}
+                    pageCount={company?.paginatorInfo?.pages || 0}
+                  />
+                )
               )}
             </ScrollArea>
           </div>

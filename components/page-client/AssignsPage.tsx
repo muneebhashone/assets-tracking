@@ -45,10 +45,10 @@ const AssignsPage = () => {
     filterByActive: "true",
     filterByStatus: ["APPROVED"],
   });
-  const parentMapper = subAdmin?.results.map((parent) => {
+  const parentMapper = subAdmin?.results?.map((parent) => {
     return { label: parent.name, value: parent.id };
   }) as IRecord<string, number>[];
-  const childMapper = whiteLabel?.results.map((child) => {
+  const childMapper = whiteLabel?.results?.map((child) => {
     return { label: child.name, value: child.id };
   }) as IRecord<string, number>[];
 
@@ -62,7 +62,7 @@ const AssignsPage = () => {
         <BreadCrumb items={breadcrumbItems} />
         <div className="flex items-start justify-between">
           <Heading
-            title={`Assigns (${assigns?.data?.results.length || 0})`}
+            title={`Assigns (${assigns?.data?.results?.length || 0})`}
             description="Manage assigns "
           />
         </div>
@@ -85,11 +85,13 @@ const AssignsPage = () => {
         {allAssignsLoading ? (
           <div>Loading ... </div>
         ) : (
-          <AssignsTable
-            columns={columns}
-            data={assigns?.data.results as AssignsType[]}
-            pageCount={assigns?.data?.paginatorInfo.pages || 0}
-          />
+          assigns?.data?.results?.length && (
+            <AssignsTable
+              columns={columns}
+              data={assigns?.data.results as AssignsType[]}
+              pageCount={assigns?.data?.paginatorInfo.pages || 0}
+            />
+          )
         )}
         <CreateAssignForm
           setModalState={setAssignOpen}

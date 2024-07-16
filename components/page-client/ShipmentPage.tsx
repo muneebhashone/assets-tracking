@@ -65,7 +65,7 @@ const ShipmentPage = () => {
             /> */}
           </div>
 
-          {Array.isArray(result?.results) ? (
+          {result?.results?.length && (
             <>
               <ShipmentTable
                 data={result?.results}
@@ -73,8 +73,6 @@ const ShipmentPage = () => {
                 pageCount={result?.paginatorInfo.pages}
               />
             </>
-          ) : (
-            <h1>No Records</h1>
           )}
         </div>
       </div>

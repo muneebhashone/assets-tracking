@@ -101,7 +101,7 @@ export default function ShipmentCreationForm() {
     mutate(data);
   };
 
-  const containerNames = data?.data.map((value) => {
+  const containerNames = data?.data?.map((value) => {
     return {
       name: value.name,
       value: value.scac_codes?.[0],

@@ -312,7 +312,7 @@ const AdminUpdateUserForm = ({
                             <SelectValue placeholder="Select a Company" />
                           </SelectTrigger>
                           <SelectContent>
-                            {companies?.results.map((company, index) => {
+                            {companies?.results?.map((company, index) => {
                               return (
                                 <SelectItem
                                   value={String(company.id)}
@@ -390,11 +390,11 @@ const AdminUpdateUserForm = ({
                             <SelectValue placeholder="Select the Role" />
                           </SelectTrigger>
                           <SelectContent>
-                            {EligibleRolesForCreation["SUPER_ADMIN"]?.map(
+                            {EligibleRolesForCreation?.["SUPER_ADMIN"]?.map(
                               (role, index) => {
                                 return (
                                   <SelectItem value={String(role)} key={index}>
-                                    {UserRole[role]}
+                                    {UserRole?.[role]}
                                   </SelectItem>
                                 );
                               },
@@ -428,7 +428,7 @@ const AdminUpdateUserForm = ({
                             <SelectValue placeholder="Select the Status" />
                           </SelectTrigger>
                           <SelectContent>
-                            {statusEnums.map((status, index) => {
+                            {statusEnums?.map((status, index) => {
                               return (
                                 <SelectItem
                                   value={status}
@@ -462,7 +462,7 @@ const AdminUpdateUserForm = ({
                           onValueChange={field.onChange}
                           className="bg-green-600 text-xs text-white px-2 py-1 m-0.5 "
                           check={false}
-                          options={permissionEnums.map((permission) => {
+                          options={permissionEnums?.map((permission) => {
                             return {
                               label: PermissionsForDisplay[permission],
                               value: permission,
