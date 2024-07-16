@@ -11,7 +11,7 @@ const checkSuperAdminOrPermission = (
   permission?: PermissionsType,
 ) => {
   if (permission) {
-    return user.permissions.includes(permission);
+    return user?.permissions?.includes(permission);
   } else {
     return user.role === "SUPER_ADMIN";
   }
