@@ -3,18 +3,25 @@
 import { useCurrentUser } from "@/services/auth.mutations";
 import { PermissionsType } from "@/types/user.types";
 import { checkPermissions } from "@/utils/user.utils";
-import React from "react";
+import React, { ReactNode } from "react";
 interface ProtectedHeaderProps {
   columnName: string;
   permission: PermissionsType;
+  children?: ReactNode;
 }
-const ProtectedHeader = ({ columnName, permission }: ProtectedHeaderProps) => {
+const ProtectedHeader = ({
+  columnName,
+  permission,
+  children,
+}: ProtectedHeaderProps) => {
   const { data: currentuser } = useCurrentUser();
-  return (currentuser?.user.role === "SUPER_ADMIN" ||
+  return currentuser?.user.role === "SUPER_ADMIN" ||
     checkPermissions(currentuser?.user.permissions as PermissionsType[], [
       permission,
-    ])) ? (
-    <p>{columnName}</p>
+    ]) ? (
+    <p className="flex justify-center gap-2">
+      {columnName} {children && children}
+    </p>
   ) : null;
 };
 

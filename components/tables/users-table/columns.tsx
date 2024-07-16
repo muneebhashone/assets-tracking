@@ -53,7 +53,7 @@ export const columns: ColumnDef<User>[] = [
       <ProtectedHeader columnName="Active" permission="EDIT_COMPANY" />
     ),
     cell: ({ row }) => {
-       /* eslint-disable */
+      /* eslint-disable */
       const { mutate: toggleActive } = useUserToggleActive({
         onSuccess(data) {
           toast({
@@ -70,7 +70,7 @@ export const columns: ColumnDef<User>[] = [
           });
         },
       });
-       /* eslint-disable */
+      /* eslint-disable */
       const { data: currentUser } = useCurrentUser();
       return (
         (currentUser?.user.role === "SUPER_ADMIN" ||

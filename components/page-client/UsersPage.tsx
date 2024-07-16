@@ -2,7 +2,7 @@
 
 import BreadCrumb from "@/components/breadcrumb";
 
-import Filter, { OptionsMapperType } from "@/components/Filter";
+import Filter, { IRecord, OptionsMapperType } from "@/components/Filter";
 import SearchBar from "@/components/SearchBar";
 import { columns } from "@/components/tables/users-table/columns";
 import { UsersTable } from "@/components/tables/users-table/users";
@@ -44,8 +44,19 @@ const UsersPage = () => {
     filterByStatus: ["APPROVED"],
   });
   const optionsMapper: OptionsMapperType["User"] = {
-    filterByActive: [true, false],
-    filterByRole: EligibleRolesForCreation[currentUser?.user.role as RoleType],
+    filterByActive: [
+      { label: "true", value: true },
+      { label: "false", value: false },
+    ] as IRecord<string, boolean>[],
+
+    filterByRole: EligibleRolesForCreation[
+      currentUser?.user.role as RoleType
+    ].map((role) => {
+      return {
+        value: role,
+        label: role.split("_").join(" ").toLocaleLowerCase(),
+      };
+    }) as IRecord<string, RoleType>[],
   };
 
   return (

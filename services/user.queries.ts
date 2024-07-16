@@ -1,9 +1,11 @@
 import { apiAxios } from "@/utils/api.utils";
 import { UseQueryOptions, useQuery } from "@tanstack/react-query";
-import { ErrorResponseType } from "./types.common";
+import { ErrorResponseType, SuccessResponseType } from "./types.common";
 import { User } from "@/types/services/auth.types";
 import { RoleType } from "@/types/user.types";
 
+
+//types
 export type GetAllUserInputType = {
   searchString?: string;
   limitParam?: number;
@@ -28,7 +30,16 @@ export type PaginatorInfoType = {
   totalRecords: number;
   pageSize: number;
 };
+export type GetUserByIdInputType = {
+  id: string;
+};
 
+export interface GetUserByIdResponseType
+  extends Omit<SuccessResponseType, "data"> {
+  data: User;
+}
+
+//services
 export const getUsers = async (input: GetAllUserInputType) => {
   const { data } = await apiAxios.get<GetAllUserResponseType>("/users", {
     params: { ...input },
@@ -36,6 +47,18 @@ export const getUsers = async (input: GetAllUserInputType) => {
 
   return data;
 };
+
+
+export const getUserById = async (input: GetUserByIdInputType) => {
+  const { id } = input;
+  const { data } = await apiAxios.get<GetUserByIdResponseType>(
+    `/userd/${id}`,
+  );
+
+  return data;
+};
+
+//mutations
 
 export const useGetUsers = (
   input: GetAllUserInputType,
@@ -47,3 +70,31 @@ export const useGetUsers = (
     queryKey: [getUsers.name, JSON.stringify(input)],
   });
 };
+
+export const useGetUserById = (
+  input: GetUserByIdInputType,
+  options?: Partial<UseQueryOptions<
+    unknown,
+    ErrorResponseType,
+    GetUserByIdResponseType
+  >>,
+) => {
+  return useQuery({
+    ...options,
+    queryFn: async () => await getUserById(input),
+    queryKey: [getUserById.name, JSON.stringify(input)],
+  });
+};
+
+
+
+
+
+
+
+
+
+
+
+
+

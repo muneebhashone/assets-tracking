@@ -49,12 +49,12 @@ const CreateAssignForm = ({
   const { data: subAdmins } = useGetUsers({
     filterByRole: "SUB_ADMIN",
     filterByStatus: ["APPROVED"],
-    filterByActive: true,
+    filterByActive: "true",
   });
   const { data: whiteLabel } = useGetUsers({
     filterByRole: "WHITE_LABEL_ADMIN",
     filterByStatus: ["APPROVED"],
-    filterByActive: true,
+    filterByActive: "true",
   });
 
   const { mutate: assignUser, isPending } = useAssignUsers({

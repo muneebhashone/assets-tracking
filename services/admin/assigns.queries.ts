@@ -27,8 +27,8 @@ export type GetAllAssignsInputType = {
   searchString?: string;
   limitParam?: number;
   pageParam?: number;
-  childId?: number;
-  parentId?: number;
+  childId?: string;
+  parentId?: string;
 };
 
 //services

@@ -59,6 +59,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
         companyData={data}
         modalOpen={editModal}
         setModalOpen={setEditModal}
+        key={data.id}
       />
 
       <DropdownMenu modal={false}>

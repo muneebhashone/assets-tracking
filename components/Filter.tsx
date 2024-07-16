@@ -25,15 +25,17 @@ import {
   SelectValue,
 } from "./ui/select";
 import { Separator } from "./ui/separator";
+import { RoleType } from "@/types/user.types";
 
 type EligibleRolesForCreationType = typeof EligibleRolesForCreation;
 
 type RoleMapping =
   EligibleRolesForCreationType[keyof EligibleRolesForCreationType];
 
-// type IRecord = {
-//   [x: string]: Record<string, unknown>;
-// };
+export type IRecord<TLabel, TValue> = {
+  label: TLabel;
+  value: TValue;
+};
 
 export interface OptionsMapperType {
   Shipment: {
@@ -41,12 +43,16 @@ export interface OptionsMapperType {
     tags: null;
   };
   User: {
-    filterByActive: boolean[];
-    filterByRole: RoleMapping;
+    filterByActive: IRecord<string, boolean>[];
+    filterByRole: IRecord<string, RoleType>[];
+  };
+  Assign: {
+    childId: IRecord<string, number>[];
+    parentId: IRecord<string, number>[];
   };
 }
 
-type OptionsSelectorType = "Shipment" | "User";
+type OptionsSelectorType = "Shipment" | "User" | "Assign";
 interface FilterProps<T extends OptionsSelectorType> {
   optionsMapper: OptionsMapperType[T];
   type: T;
@@ -161,15 +167,19 @@ const Filter = <T extends OptionsSelectorType>({
               >
                 <SelectTrigger
                   id="equal"
-                  className="!rounded-l-none    border-[1px] border-l-0 ring-0 focus:ring-0"
+                  className="!rounded-l-none    border-[1px] border-l-0 ring-0 focus:ring-0 capitalize"
                 >
                   <SelectValue placeholder="Select a Value" />
                 </SelectTrigger>
                 <SelectContent className="overflow-y-auto max-h-[10rem] flex-initial">
                   {optionsMapper[optionKey]?.map((option, index) => {
                     return (
-                      <SelectItem value={option.toString()} key={index}>
-                        {option.toString()}
+                      <SelectItem
+                        value={option.value.toString()}
+                        key={index}
+                        className=" capitalize"
+                      >
+                        {option.label.toString()}
                       </SelectItem>
                     );
                   })}
@@ -224,7 +234,9 @@ const Filter = <T extends OptionsSelectorType>({
                 <div className="flex gap-3">
                   <Badge className="bg-blue-600">{key} </Badge>
                   <Badge className="bg-slate-800">Equals</Badge>
-                  <Badge className="bg-zinc-900">{value}</Badge>
+                  <Badge className="bg-zinc-900 capitalize">
+                    {value.split("_").join(" ").toLowerCase()}
+                  </Badge>
                 </div>
                 <XCircle
                   fill="gray"

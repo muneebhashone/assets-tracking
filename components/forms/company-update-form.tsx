@@ -50,18 +50,18 @@ const CompanyUpdateForm = ({
   companyData,
 }: CompanyUpdateFormProps) => {
   const initialValues: UpdateCompanyFormSchemaType = {
-    address: companyData?.address,
-    city: companyData?.city,
-    country: companyData?.country,
-    industry: companyData?.industry,
-    name: companyData?.name,
+    address: companyData?.address ? companyData?.address : undefined,
+    city: companyData?.city ? companyData?.city : undefined,
+    country: companyData?.country ? companyData?.country : undefined,
+    industry: companyData?.industry ? companyData?.industry : undefined,
+    name: companyData?.name ? companyData?.name : undefined,
   };
 
   const form = useForm<UpdateCompanyFormSchemaType>({
     resolver: zodResolver(UpdateCompanyFormSchema),
-    defaultValues: initialValues,
+    values: initialValues,
   });
-  const { control, handleSubmit } = form;
+  const { control, handleSubmit, reset } = form;
 
   const { mutate } = useUpdateCompany({
     onSuccess(data, variables, context) {
@@ -70,7 +70,7 @@ const CompanyUpdateForm = ({
         duration: 3000,
         variant: "default",
       });
-
+      reset();
       setModalOpen(false);
     },
     onError(error, variables, context) {
@@ -87,7 +87,6 @@ const CompanyUpdateForm = ({
   const onSubmit = (data: UpdateCompanyFormSchemaType) => {
     if (data) {
       const sanitizedResult = sanitizeObject(data);
-
       mutate({ id: companyData.id, ...sanitizedResult });
     }
   };
