@@ -9,7 +9,7 @@ import { ErrorResponseType, SuccessResponseType } from "./types.common";
 import { User } from "@/types/services/auth.types";
 import { currentUser } from "./auth.services";
 import { ProfileImageUploadResponseType } from "./upload.mutations";
-import { getUsers } from "./user.queries";
+import { getUserById, getUsers } from "./user.queries";
 import { CreateUserFormSchemaType } from "@/components/forms/user-create-form";
 
 //types
@@ -30,9 +30,10 @@ export interface CreateUserResponseType {
   data: User;
 }
 
-export interface AssignCreditsInputType {
+export interface AssignOrDeductCreditsInputType {
   id: number;
   credits: number;
+  type: "deduct" | "assign";
 }
 
 export interface DeleteUserInputType {
@@ -170,13 +171,23 @@ export const userToggleActive = async (input: ToggleActiveInputType) => {
   return data;
 };
 
-export const assignCredits = async (input: AssignCreditsInputType) => {
-  const { id, credits } = input;
-  const { data } = await apiAxios.post<SuccessResponseType>(
-    `/users/${id}/credits`,
-    { credits },
-  );
-  return data;
+export const assignOrDeductCredits = async (
+  input: AssignOrDeductCreditsInputType,
+) => {
+  const { id, credits, type } = input;
+  if (type === "assign") {
+    const { data } = await apiAxios.post<SuccessResponseType>(
+      `/users/${id}/credits`,
+      { credits },
+    );
+    return data;
+  } else {
+    const { data } = await apiAxios.post<SuccessResponseType>(
+      `/users/${id}/deduct-credits`,
+      { credits },
+    );
+    return data;
+  }
 };
 
 export const deleteUser = async (input: DeleteUserInputType) => {
@@ -254,7 +265,7 @@ export const useUpdatePermissions = (
     ...options,
     mutationFn: updatePermissions,
     async onSuccess(data, variables, context) {
-      await queryClient.invalidateQueries({ queryKey: [getUsers.name] });
+      await queryClient.invalidateQueries({ queryKey: [getUserById.name] });
       options?.onSuccess?.(data, variables, context);
     },
   });
@@ -278,19 +289,20 @@ export const useUserToggleActive = (
   });
 };
 
-export const useAssignCredits = (
+export const useAssignOrDeductCredits = (
   options?: UseMutationOptions<
     SuccessResponseType,
     ErrorResponseType,
-    AssignCreditsInputType
+    AssignOrDeductCreditsInputType
   >,
 ) => {
   const queryClient = useQueryClient();
   return useMutation({
     ...options,
-    mutationFn: assignCredits,
+    mutationFn: assignOrDeductCredits,
     async onSuccess(data, variables, context) {
       await queryClient.invalidateQueries({ queryKey: [getUsers.name] });
+      await queryClient.invalidateQueries({ queryKey: [currentUser.name] });
       options?.onSuccess?.(data, variables, context);
     },
   });

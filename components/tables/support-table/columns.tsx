@@ -3,6 +3,7 @@ import { SupportType } from "@/services/admin/support.queries";
 import { ColumnDef } from "@tanstack/react-table";
 import { CellAction } from "./cell-action";
 import { Badge } from "@/components/ui/badge";
+import { truncateText } from "@/utils/common.utils";
 
 export const columns: ColumnDef<SupportType>[] = [
   {
@@ -23,12 +24,13 @@ export const columns: ColumnDef<SupportType>[] = [
   },
 
   {
-    accessorKey: "subject",
     header: "Subject",
+    cell: ({ row }) => <p>{truncateText(row.original.subject, 3)}</p>,
   },
   {
-    accessorKey: "message",
+    // accessorKey: "message",
     header: "Message",
+    cell: ({ row }) => <p>{truncateText(row.original.message, 5)}</p>,
   },
   {
     header: "Resolution Status",

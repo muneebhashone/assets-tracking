@@ -2,7 +2,7 @@
 
 import useQueryUpdater from "@/hooks/useQueryUpdater";
 import { TrackWithType } from "@/services/shipment.queries";
-import { EligibleRolesForCreation } from "@/utils/constants";
+import { RoleType } from "@/types/user.types";
 import {
   FilterIcon,
   PlusCircle,
@@ -25,12 +25,6 @@ import {
   SelectValue,
 } from "./ui/select";
 import { Separator } from "./ui/separator";
-import { RoleType } from "@/types/user.types";
-
-type EligibleRolesForCreationType = typeof EligibleRolesForCreation;
-
-type RoleMapping =
-  EligibleRolesForCreationType[keyof EligibleRolesForCreationType];
 
 export type IRecord<TLabel, TValue> = {
   label: TLabel;
@@ -222,10 +216,10 @@ const Filter = <T extends OptionsSelectorType>({
         <Separator />
 
         {Array.from(searchParams)
-          .filter(([key]) => {
+          ?.filter(([key]) => {
             return key !== "page" && key !== "limit" && key !== "search";
           })
-          .map(([key, value], index) => {
+          ?.map(([key, value], index) => {
             return (
               <div
                 className="flex  p-2 h-10 w-100% rounded-lg justify-between border-gray-400 border-[1px]"
@@ -235,7 +229,7 @@ const Filter = <T extends OptionsSelectorType>({
                   <Badge className="bg-blue-600">{key} </Badge>
                   <Badge className="bg-slate-800">Equals</Badge>
                   <Badge className="bg-zinc-900 capitalize">
-                    {value.split("_").join(" ").toLowerCase()}
+                    {value.split("_").join(" ")?.toLowerCase()}
                   </Badge>
                 </div>
                 <XCircle

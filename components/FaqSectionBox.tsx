@@ -10,7 +10,7 @@ interface IFaq {
 const FaqSectionBox = ({ Faqbox }: { Faqbox: IFaq[] }) => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-      {Faqbox.map((item) => (
+      {Faqbox?.map((item) => (
         <div key={item.id} className="col-span-1">
           <div className={`text-center rounded-xl py-12 ${item.bgcolor}`}>
             <div>

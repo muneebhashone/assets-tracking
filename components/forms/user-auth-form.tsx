@@ -37,8 +37,8 @@ export default function UserAuthForm() {
         description: "Logged in successfully",
         variant: "default",
       });
-      router.push("/dashboard");
       router.refresh();
+      router.push("/dashboard");
     },
     onError(error) {
       toast({

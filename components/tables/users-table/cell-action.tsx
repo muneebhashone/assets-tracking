@@ -1,7 +1,7 @@
 "use client";
 
 import AdminUpdateUserForm from "@/components/forms/admin-update-user-form";
-import AssignCreditForm from "@/components/forms/assign-credits-form";
+import AssignOrDeductCreditForm from "@/components/forms/assign-or-deduct-credits-form";
 import { AlertModal } from "@/components/modal/alert-modal";
 import { Button } from "@/components/ui/button";
 import {
@@ -12,14 +12,14 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { toast } from "@/components/ui/use-toast";
-import useQueryUpdater from "@/hooks/useQueryUpdater";
 import { useAdminDeleteUser } from "@/services/admin/user.mutations";
 import { useCurrentUser } from "@/services/auth.mutations";
 import { useDeleteUser } from "@/services/user.mutations";
 import { User } from "@/types/services/auth.types";
 import { PermissionsType } from "@/types/user.types";
 import { checkPermissions } from "@/utils/user.utils";
-import { Edit, Edit2, MoreHorizontal, Package, Trash } from "lucide-react";
+import { Edit, Edit2, Eye, MoreHorizontal, Trash } from "lucide-react";
+import Link from "next/link";
 import { useState } from "react";
 
 interface CellActionProps {
@@ -27,11 +27,14 @@ interface CellActionProps {
 }
 
 export const CellAction: React.FC<CellActionProps> = ({ data }) => {
-  const [openAssignCreditModal, setOpenAssignCreditModal] = useState(false);
+  const [openCreditModal, setOpenCreditModal] = useState(false);
+  const [creditActionType, setCreditActionType] = useState<"assign" | "deduct">(
+    "assign",
+  );
   const [modalWarning, setModalWarning] = useState<boolean>(false);
   const [adminModalState, setAdminModalState] = useState<boolean>(false);
 
-  const { querySetter } = useQueryUpdater();
+  
 
   const { mutate: deleteUser } = useDeleteUser({
     onSuccess(data) {
@@ -78,6 +81,11 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
       : adminDeleteUser({ id: data.id });
   };
 
+  const creditActionSetter = (type: "assign" | "deduct") => {
+    setCreditActionType(type);
+    setOpenCreditModal(true);
+  };
+
   return (
     <>
       <AlertModal
@@ -86,11 +94,13 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
         onClose={() => setModalWarning(false)}
         onConfirm={deleteUserHandler}
       />
-      <AssignCreditForm
-        openAssignCreditModal={openAssignCreditModal}
-        setOpenAssignCreditModal={setOpenAssignCreditModal}
+      <AssignOrDeductCreditForm
+        openAssignCreditModal={openCreditModal}
+        setOpenAssignCreditModal={setOpenCreditModal}
         userData={data}
+        type={creditActionType}
       />
+
       <AdminUpdateUserForm
         modalState={adminModalState}
         setModalState={setAdminModalState}
@@ -105,21 +115,23 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
-          {(user?.user.role === "SUPER_ADMIN" ||
-            checkPermissions(user?.user.permissions as PermissionsType[], [
-              "UPDATE_PERMISSIONS",
-            ])) && (
-            <DropdownMenuItem onClick={() => querySetter("pe", `${data.id}`)}>
-              <Package className="mr-2 h-4 w-4" /> Update Permissions
-            </DropdownMenuItem>
-          )}
+          
 
           {(user?.user.role === "SUPER_ADMIN" ||
             checkPermissions(user?.user.permissions as PermissionsType[], [
               "ASSIGN_CREDITS",
             ])) && (
-            <DropdownMenuItem onClick={() => setOpenAssignCreditModal(true)}>
+            <DropdownMenuItem onClick={() => creditActionSetter("assign")}>
               <Edit className="mr-2 h-4 w-4" /> Assign Credits
+            </DropdownMenuItem>
+          )}
+
+          {(user?.user.role === "SUPER_ADMIN" ||
+            checkPermissions(user?.user.permissions as PermissionsType[], [
+              "DEDUCT_CREDITS",
+            ])) && (
+            <DropdownMenuItem onClick={() => creditActionSetter("deduct")}>
+              <Edit className="mr-2 h-4 w-4" /> Deduct Credits
             </DropdownMenuItem>
           )}
           {user?.user.role === "SUPER_ADMIN" && (
@@ -133,6 +145,20 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
             ])) && (
             <DropdownMenuItem onClick={() => setModalWarning(true)}>
               <Trash className="mr-2 h-4 w-4" /> Delete
+            </DropdownMenuItem>
+          )}
+
+          {(user?.user.role === "SUPER_ADMIN" ||
+            checkPermissions(user?.user.permissions as PermissionsType[], [
+              "VIEW_USER",
+            ])) && (
+            <DropdownMenuItem>
+              <Link
+                href={`/dashboard/users/${data.id}`}
+                className="flex items-center"
+              >
+                <Eye className="mr-2 h-4 w-4" /> View
+              </Link>
             </DropdownMenuItem>
           )}
         </DropdownMenuContent>

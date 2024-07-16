@@ -52,7 +52,7 @@ export const getUsers = async (input: GetAllUserInputType) => {
 export const getUserById = async (input: GetUserByIdInputType) => {
   const { id } = input;
   const { data } = await apiAxios.get<GetUserByIdResponseType>(
-    `/userd/${id}`,
+    `/users/${id}`,
   );
 
   return data;

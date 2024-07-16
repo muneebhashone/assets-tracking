@@ -3,11 +3,12 @@ import { useGetSupportFormById } from "@/services/admin/support.queries";
 import { Badge } from "../ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { Label } from "../ui/label";
+import { Skeleton } from "../ui/skeleton";
 interface SupportDetailPageProps {
   id: string;
 }
 const SupportDetailPage = ({ id }: SupportDetailPageProps) => {
-  const { data: supportForm } = useGetSupportFormById({ id });
+  const { data: supportForm, isLoading } = useGetSupportFormById({ id });
 
   return (
     <div className="w-full">
@@ -31,31 +32,48 @@ const SupportDetailPage = ({ id }: SupportDetailPageProps) => {
                 <CardTitle className="text-xl">Support Details</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="grid gap-4">
-                  <div className="grid md:grid-cols-3 gap-4">
-                    <div className="grid gap-2">
-                      <Label htmlFor="name">Name</Label>
-                      <p>{supportForm?.data.name}</p>
-                    </div>
-                    <div className="grid gap-2">
-                      <Label htmlFor="email">Email</Label>
-                      <p>{supportForm?.data.email}</p>
-                    </div>
-                    <div className="grid gap-2">
-                      <Label htmlFor="email">Phone Number</Label>
-                      <p>{supportForm?.data.phoneNo}</p>
-                    </div>
-                    <div className="grid gap-2">
-                      <Label htmlFor="issue-category">Subject</Label>
-                      <p>{supportForm?.data.subject}</p>
-                    </div>
-                    <div className="grid gap-2">
-                      <Label htmlFor="issue-description">Message</Label>
-                      <p>{supportForm?.data.message}</p>
-                    </div>
-
-                    <div className="grid gap-2 ">
-                      <Label htmlFor="attachment">Resolution Status</Label>
+                <div className="flex flex-row  mb-4">
+                  <div className="flex flex-col basis-1/3 gap-3">
+                    <Label htmlFor="name">Name: </Label>
+                    {isLoading ? (
+                      <Skeleton className="h-4 w-[200px] mb-4 py-2" />
+                    ) : (
+                      <p>{supportForm?.data.name ?? "N/A"}</p>
+                    )}
+                  </div>
+                  <div className="flex flex-col basis-1/3 gap-3">
+                    <Label htmlFor="email">Email: </Label>
+                    {isLoading ? (
+                      <Skeleton className="h-4 w-[200px] mb-4 py-2" />
+                    ) : (
+                      <p>{supportForm?.data.email ?? "N/A"}</p>
+                    )}
+                  </div>
+                  <div className="flex flex-col basis-1/3 gap-3">
+                    {" "}
+                    <Label htmlFor="email">Phone Number: </Label>
+                    {isLoading ? (
+                      <Skeleton className="h-4 w-[200px] mb-4 py-2" />
+                    ) : (
+                      <p>{supportForm?.data.phoneNo ?? "N/A"}</p>
+                    )}
+                  </div>
+                </div>
+                <div className="flex flex-row ">
+                  <div className="flex flex-col basis-1/3 gap-3">
+                    <Label htmlFor="issue-category">Subject: </Label>
+                    {isLoading ? (
+                      <Skeleton className="h-4 w-[200px] mb-4 py-2" />
+                    ) : (
+                      <p>{supportForm?.data.subject ?? "N/A"}</p>
+                    )}
+                  </div>
+                  <div className="flex flex-col basis-1/3 gap-3">
+                    {" "}
+                    <Label htmlFor="attachment">Resolution Status: </Label>
+                    {isLoading ? (
+                      <Skeleton className="h-4 w-[200px] mb-4 py-2" />
+                    ) : (
                       <Badge
                         className={`${
                           supportForm?.data?.resolved
@@ -65,7 +83,16 @@ const SupportDetailPage = ({ id }: SupportDetailPageProps) => {
                       >
                         {supportForm?.data.resolved ? "Resolved" : "Pending"}
                       </Badge>
-                    </div>
+                    )}
+                  </div>
+                  <div className="flex flex-col basis-1/3 gap-3">
+                    {" "}
+                    <Label htmlFor="issue-description">Message: </Label>
+                    {isLoading ? (
+                      <Skeleton className="h-4 w-[200px] mb-4 py-2" />
+                    ) : (
+                      <p>{supportForm?.data.message}</p>
+                    )}
                   </div>
                 </div>
               </CardContent>

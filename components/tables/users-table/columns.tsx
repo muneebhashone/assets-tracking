@@ -2,7 +2,6 @@
 import ProtectedCheckbox from "@/components/ProtectedCheckbox";
 import ProtectedHeader from "@/components/ProtectedHeader";
 import SwitchMutation from "@/components/SwitchMutation";
-import PermissionUpdate from "@/components/forms/permission-update-form";
 import { toast } from "@/components/ui/use-toast";
 import { useCurrentUser } from "@/services/auth.mutations";
 import { useUserToggleActive } from "@/services/user.mutations";
@@ -90,21 +89,21 @@ export const columns: ColumnDef<User>[] = [
   {
     header: "Status",
     cell: ({ row }) => (
-      <div className="capitalize">{row.original.status.toLowerCase()}</div>
+      <div className="capitalize">{row.original.status?.toLowerCase()}</div>
     ),
   },
 
-  {
-    accessorKey: "permissions",
-    header: ({ table }) => (
-      <ProtectedHeader columnName="Permissions" permission="VIEW_PERMISSIONS" />
-    ),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    cell: ({ row }) => <PermissionUpdate row={row} />,
+  // {
+  //   accessorKey: "permissions",
+  //   header: ({ table }) => (
+  //     <ProtectedHeader columnName="Permissions" permission="VIEW_PERMISSIONS" />
+  //   ),
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  //   cell: ({ row }) => <PermissionUpdate row={row} />,
 
-    maxSize: 20,
-    minSize: 30,
-  },
+  //   maxSize: 20,
+  //   minSize: 30,
+  // },
   {
     accessorKey: "credits",
     header: "Credits",

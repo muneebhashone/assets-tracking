@@ -46,7 +46,7 @@ export const columns: ColumnDef<User>[] = [
   {
     header: "Status",
     cell: ({ row }) => (
-      <div className="capitalize">{row.original.status.toLowerCase()}</div>
+      <div className="capitalize">{row.original.status?.toLowerCase()}</div>
     ),
   },
 

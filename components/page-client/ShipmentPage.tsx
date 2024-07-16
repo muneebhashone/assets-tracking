@@ -48,9 +48,10 @@ const ShipmentPage = () => {
             </p>
           </div>
 
-          {checkPermissions(user?.user.permissions as PermissionsType[], [
-            "CREATE_SHIPMENT",
-          ]) && (
+          {(user?.user.role === "SUPER_ADMIN" ||
+            checkPermissions(user?.user.permissions as PermissionsType[], [
+              "CREATE_SHIPMENT",
+            ])) && (
             <div className="flex my-5 justify-between">
               <ShipmentCreationForm />
             </div>

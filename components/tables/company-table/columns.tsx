@@ -26,7 +26,7 @@ export const columns: ColumnDef<Company>[] = [
       <ProtectedHeader columnName="Active" permission="EDIT_COMPANY" />
     ),
     cell: ({ row }) => {
-       /* eslint-disable */
+      /* eslint-disable */
       const { mutate: toggleActive } = useToggleCompanyActive({
         onSuccess(data) {
           toast({
@@ -43,7 +43,7 @@ export const columns: ColumnDef<Company>[] = [
           });
         },
       });
-       /* eslint-disable */
+      /* eslint-disable */
       const { data: currentUser } = useCurrentUser();
       return (
         (currentUser?.user.role === "SUPER_ADMIN" ||
@@ -81,12 +81,7 @@ export const columns: ColumnDef<Company>[] = [
     accessorKey: "createdAt",
     header: "Creation Date",
   },
-  {
-    header: "Status",
-    cell: ({ row }) => (
-      <div className="capitalize">{row.original.status.toLowerCase()}</div>
-    ),
-  },
+
   {
     id: "actions",
     cell: ({ row }) => <CellAction data={row.original} />,

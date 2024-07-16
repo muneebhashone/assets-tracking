@@ -2,6 +2,7 @@
 
 import { useCurrentUser } from "@/services/auth.mutations";
 import { UserRole } from "@/utils/constants";
+import { Skeleton } from "../ui/skeleton";
 
 export default function DashboardPage() {
   const { data, isFetching } = useCurrentUser();
@@ -20,7 +21,7 @@ export default function DashboardPage() {
         {/* {data?.user.role !== ROLE.SUPER_ADMIN && ( */}
         <div className="flex flex-col ">
           <h2 className="text-2xl font-bold tracking-tight ">
-            Credits: {data?.user.credits}
+            {isFetching ?  <Skeleton className="w-10 h-3"/>  : `Credits: ${data?.user.credits }`}
           </h2>
         </div>
         {/* )} */}

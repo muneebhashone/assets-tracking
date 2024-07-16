@@ -122,7 +122,7 @@ export function UsersTable({
 
   const selectedIds = table
     .getSelectedRowModel()
-    .rows.map(({ original }) => original.id);
+    .rows?.map(({ original }) => original.id);
 
   const { mutate: deleteBulkUsers } = useBulkDeleteUser({
     onSuccess(data) {

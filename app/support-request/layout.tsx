@@ -3,7 +3,7 @@ import Sidebar from "@/components/layout/sidebar";
 import { navItems } from "@/constants/data";
 import { cookies } from "next/headers";
 import NextTopLoader from "nextjs-toploader";
-import { ReactNode, Suspense } from "react";
+import { ReactNode } from "react";
 
 const SupportRequestLayout = async ({ children }: { children: ReactNode }) => {
   const cookieValue = cookies().get("accessToken")?.value;

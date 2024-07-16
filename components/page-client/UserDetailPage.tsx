@@ -1,13 +1,26 @@
 "use client";
+import useQueryUpdater from "@/hooks/useQueryUpdater";
+import { useCurrentUser } from "@/services/auth.mutations";
 import { useGetUserById } from "@/services/user.queries";
+import { User } from "@/types/services/auth.types";
+import { PermissionsType } from "@/types/user.types";
+import { checkPermissions } from "@/utils/user.utils";
+import { Edit2Icon } from "lucide-react";
+import PermissionUpdate from "../forms/permission-update-form";
 import { Badge } from "../ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { Label } from "../ui/label";
+import { Skeleton } from "../ui/skeleton";
 interface UserDetailPageProps {
   id: string;
 }
 const UserDetailPage = ({ id }: UserDetailPageProps) => {
-  const { data: user } = useGetUserById({ id }, { enabled: Boolean(id) });
+  const { data: user, isLoading } = useGetUserById(
+    { id },
+    { enabled: Boolean(id) },
+  );
+  const { querySetter } = useQueryUpdater();
+  const { data: currentUser } = useCurrentUser();
 
   return (
     <div className="w-full">
@@ -31,28 +44,105 @@ const UserDetailPage = ({ id }: UserDetailPageProps) => {
                 <CardTitle className="text-xl">User Details</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="grid gap-4">
-                  <div className="grid md:grid-cols-3 gap-4">
-                    <div className="grid gap-2">
-                      <Label htmlFor="name">Name</Label>
-                      <p>{user?.data.name}</p>
+                <div className="flex flex-wrap mb-4">
+                  <div className="flex flex-col basis-1/3 gap-3 mb-4">
+                    <Label htmlFor="name">Name: </Label>
+                    {isLoading ? (
+                      <Skeleton className="h-4 w-[200px] py-2" />
+                    ) : (
+                      <p>{user?.data.name ?? "N/A"}</p>
+                    )}
+                  </div>
+                  <div className="flex flex-col basis-1/3 gap-3 mb-4">
+                    <Label htmlFor="email">Email: </Label>
+                    {isLoading ? (
+                      <Skeleton className="h-4 w-[200px] py-2" />
+                    ) : (
+                      <p>{user?.data.email ?? "N/A"}</p>
+                    )}
+                  </div>
+                  <div className="flex flex-col basis-1/3 gap-3 mb-4">
+                    <Label htmlFor="phone">Phone Number: </Label>
+                    {isLoading ? (
+                      <Skeleton className="h-4 w-[200px] py-2" />
+                    ) : (
+                      <p>{user?.data.phoneNo ?? "N/A"}</p>
+                    )}
+                  </div>
+
+                  {user?.data.companyId && (
+                    <div className="flex flex-col basis-1/3 gap-3 mb-4">
+                      <Label htmlFor="company">Company: </Label>
+                      {isLoading ? (
+                        <Skeleton className="h-4 w-[200px] py-2" />
+                      ) : (
+                        <p>{user?.data.company?.name}</p>
+                      )}
                     </div>
-                    <div className="grid gap-2">
-                      <Label htmlFor="email">Email</Label>
-                      <p>{user?.data.email}</p>
+                  )}
+
+                  {user?.data.clientId && (
+                    <div className="flex flex-col basis-1/3 gap-3 mb-4">
+                      <Label htmlFor="client">Client: </Label>
+                      {isLoading ? (
+                        <Skeleton className="h-4 w-[200px] py-2" />
+                      ) : (
+                        <p>{user?.data.client?.name}</p>
+                      )}
                     </div>
-                    <div className="grid gap-2">
-                      <Label htmlFor="email">Phone Number</Label>
-                      <p>{user?.data.phoneNo}</p>
-                    </div>
-                    <div className="grid gap-2">
-                      <Label htmlFor="issue-category">Subject</Label>
-                      <p>{user?.data.companyId}</p>
-                    </div>
-                    <div className="grid gap-2">
-                      <Label htmlFor="issue-description">Message</Label>
-                      <p>{user?.data.isActive}</p>
-                    </div>
+                  )}
+                  <div className="flex flex-col basis-1/3 gap-3 mb-4">
+                    <Label htmlFor="active">Active : </Label>
+                    {isLoading ? (
+                      <Skeleton className="h-4 w-[200px] py-2" />
+                    ) : (
+                      <Badge
+                        className={`${
+                          user?.data?.isActive ? "bg-green-500" : "bg-red-700"
+                        } w-fit`}
+                      >
+                        {user?.data.isActive ? "Active" : "Inactive"}
+                      </Badge>
+                    )}
+                  </div>
+                  <div className="flex flex-col basis-1/3 gap-3 mb-4">
+                    <Label htmlFor="status">Status: </Label>
+                    {isLoading ? (
+                      <Skeleton className="h-4 w-[200px] py-2" />
+                    ) : (
+                      <p className="capitalize">
+                        {user?.data.status?.toLowerCase() ?? "N/A"}
+                      </p>
+                    )}
+                  </div>
+                  <div className="flex flex-col basis-1/3 gap-3 mb-4">
+                    {(currentUser?.user.role === "SUPER_ADMIN" ||
+                      checkPermissions(
+                        currentUser?.user.permissions as PermissionsType[],
+                        ["VIEW_PERMISSIONS"],
+                      )) && (
+                      <Label htmlFor="status" className="flex justify-between">
+                        Permissions:{" "}
+                        {(currentUser?.user.role === "SUPER_ADMIN" ||
+                          checkPermissions(
+                            currentUser?.user.permissions as PermissionsType[],
+                            ["UPDATE_PERMISSIONS"],
+                          )) && (
+                          <Edit2Icon
+                            onClick={() =>
+                              querySetter("pe", `${user?.data.id}`)
+                            }
+                            className="mr-6 w-5 h-5 cursor-pointer"
+                          />
+                        )}
+                      </Label>
+                    )}
+
+                    {(currentUser?.user.role === "SUPER_ADMIN" ||
+                      checkPermissions(
+                        currentUser?.user.permissions as PermissionsType[],
+                        ["VIEW_PERMISSIONS", "UPDATE_PERMISSIONS"],
+                      )) && <PermissionUpdate row={user?.data as User} />}
                   </div>
                 </div>
               </CardContent>

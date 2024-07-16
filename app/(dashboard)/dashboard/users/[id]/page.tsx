@@ -1,4 +1,5 @@
 import UserDetailPage from "@/components/page-client/UserDetailPage";
+import PermissionWrapper from "@/components/wrapper/permission-wrapper";
 
 interface PageProps {
   params: {
@@ -10,4 +11,4 @@ const UserDetails = ({ params }: PageProps) => {
   return <UserDetailPage id={id as string} />;
 };
 
-export default UserDetails;
+export default PermissionWrapper(UserDetails, "VIEW_USER");

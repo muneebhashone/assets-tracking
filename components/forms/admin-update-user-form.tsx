@@ -435,7 +435,7 @@ const AdminUpdateUserForm = ({
                                   key={index}
                                   className="capitalize"
                                 >
-                                  {status.toLowerCase()}
+                                  {status?.toLowerCase()}
                                 </SelectItem>
                               );
                             })}

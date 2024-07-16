@@ -3,9 +3,9 @@ import { useCurrentUser } from "@/services/auth.mutations";
 import { useUpdatePermissions } from "@/services/user.mutations";
 import { User } from "@/types/services/auth.types";
 import { PermissionsType } from "@/types/user.types";
+import { PermissionsForDisplay } from "@/utils/constants";
 import { checkPermissions } from "@/utils/user.utils";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Row } from "@tanstack/react-table";
 import { useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -19,9 +19,8 @@ import {
 } from "../ui/form";
 import { MultiSelect } from "../ui/multi-select";
 import { toast } from "../ui/use-toast";
-import { PermissionsForDisplay } from "@/utils/constants";
 interface PermissionUpdateProps {
-  row: Row<User>;
+  row: User;
 }
 type UpdatePermissionsInputType = z.infer<typeof permissionUpdateZod>;
 const permissionUpdateZod = z.object({
@@ -38,8 +37,8 @@ const PermissionUpdate = (props: PermissionUpdateProps) => {
   const { querySetter } = useQueryUpdater();
   const form = useForm<UpdatePermissionsInputType>({
     resolver: zodResolver(permissionUpdateZod),
-    defaultValues: {
-      permissions: row.original.permissions,
+    values: {
+      permissions: row?.permissions,
     },
   });
   const { control, handleSubmit } = form;
@@ -51,7 +50,7 @@ const PermissionUpdate = (props: PermissionUpdateProps) => {
         variant: "default",
       });
 
-      querySetter("pe", `${row.original.id}`);
+      querySetter("pe", `${row.id}`);
     },
     onError(error, variables, context) {
       if (error instanceof Error) {
@@ -73,14 +72,17 @@ const PermissionUpdate = (props: PermissionUpdateProps) => {
   );
 
   const onSubmit = (data: UpdatePermissionsInputType) => {
-    mutate({ id: row.original.id, ...data });
+    mutate({ id: row.id, ...data });
   };
 
-  return checkPermissions(currentUser?.user.permissions as PermissionsType[], [
-    "VIEW_PERMISSIONS",
-  ]) ? (
+  const updateCondition =
+    currentUser?.user.role === "SUPER_ADMIN" ||
+    checkPermissions(currentUser?.user.permissions as PermissionsType[], [
+      "UPDATE_PERMISSIONS",
+    ]);
+  return (
     <div className="permission-access">
-      {permissions?.includes(String(row.original.id)) ? (
+      {permissions?.includes(String(row?.id)) && updateCondition ? (
         <Form {...form}>
           <form>
             <FormField
@@ -110,7 +112,7 @@ const PermissionUpdate = (props: PermissionUpdateProps) => {
           </form>
         </Form>
       ) : (
-        row.original.permissions?.map((permission, index) => (
+        row?.permissions.map((permission, index) => (
           <Badge
             key={index}
             className="bg-green-600 text-xs text-white px-2 py-1 m-0.5"
@@ -120,7 +122,7 @@ const PermissionUpdate = (props: PermissionUpdateProps) => {
         ))
       )}
     </div>
-  ) : null;
+  );
 };
 
 export default PermissionUpdate;

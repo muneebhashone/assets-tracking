@@ -25,7 +25,7 @@ export function AdminDashboardNav({ items, setOpen, user }: DashboardNavProps) {
 
   return (
     <nav className="grid items-start gap-2">
-      {items.map((item, index) => {
+      {items?.map((item, index) => {
         const Icon = Icons[item.icon || "arrowRight"];
         return (
           item.href && (

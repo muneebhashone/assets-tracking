@@ -1,6 +1,6 @@
 import {
-  AssignCreditsInputType,
-  useAssignCredits,
+  AssignOrDeductCreditsInputType,
+  useAssignOrDeductCredits,
 } from "@/services/user.mutations";
 import { User } from "@/types/services/auth.types";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -25,28 +25,31 @@ const creditValidationSchema = z.object({
     .min(1, "Value cannot be in negative")
     .transform(Number),
 });
-interface AssignCreditsFormSchema extends Omit<AssignCreditsInputType, "id"> {}
+interface AssignOrDeductCreditsFormSchema
+  extends Omit<AssignOrDeductCreditsInputType, "id"> {}
 
-interface AssignCreditsFormProps {
+interface AssignOrDeductCreditsFormProps {
   setOpenAssignCreditModal: Dispatch<SetStateAction<boolean>>;
   userData: User;
   openAssignCreditModal: boolean;
+  type: "assign" | "deduct";
 }
 
-const AssignCreditForm = ({
+const AssignOrDeductCreditForm = ({
   openAssignCreditModal,
   setOpenAssignCreditModal,
   userData,
-}: AssignCreditsFormProps) => {
-  const handleOnSubmit = (payload: AssignCreditsFormSchema) => {
-    assignCredits({ id: userData.id, credits: Number(payload.credits) });
+  type,
+}: AssignOrDeductCreditsFormProps) => {
+  const handleOnSubmit = (payload: AssignOrDeductCreditsFormSchema) => {
+    assignCredits({ id: userData.id, credits: Number(payload.credits), type });
   };
 
-  const form = useForm<AssignCreditsFormSchema>({
+  const form = useForm<AssignOrDeductCreditsFormSchema>({
     resolver: zodResolver(creditValidationSchema),
   });
   const { control, handleSubmit } = form;
-  const { mutate: assignCredits } = useAssignCredits({
+  const { mutate: assignCredits } = useAssignOrDeductCredits({
     onSuccess(data) {
       toast({
         variant: "default",
@@ -108,4 +111,4 @@ const AssignCreditForm = ({
   );
 };
 
-export default AssignCreditForm;
+export default AssignOrDeductCreditForm;

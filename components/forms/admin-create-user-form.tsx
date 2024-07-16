@@ -135,6 +135,7 @@ const AdminCreateUserForm = ({
         variant: "default",
         description: data.message,
         title: "Success",
+        
       });
       reset();
       setModalState(false);
@@ -424,7 +425,7 @@ const AdminCreateUserForm = ({
                                   className="capitalize"
                                   key={index}
                                 >
-                                  {status.toLowerCase()}
+                                  {status?.toLowerCase()}
                                 </SelectItem>
                               );
                             })}
