@@ -43,6 +43,7 @@ import { useGetUsers } from "@/services/user.queries";
 import "react-phone-input-2/lib/style.css";
 import PhoneInput from "react-phone-input-2";
 import { handlePhoneNumber } from "@/utils/common.utils";
+import PasswordInput from "../PasswordInput";
 
 const adminCreateUserFormSchema = z
   .object({
@@ -207,7 +208,10 @@ const AdminCreateUserForm = ({
                         Password
                       </Label>
                       <FormControl>
-                        <Input placeholder="Enter Password" {...field} />
+                        <PasswordInput
+                          placeholder="Enter Password"
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
