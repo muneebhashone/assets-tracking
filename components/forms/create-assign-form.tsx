@@ -98,7 +98,7 @@ const CreateAssignForm = ({
                           <SelectValue placeholder="Select Sub Admin" />
                         </SelectTrigger>
                         <SelectContent>
-                          {subAdmins?.results?.length &&
+                          {Boolean(subAdmins?.results?.length) &&
                             subAdmins?.results?.map((subadmin, index) => {
                               return (
                                 <SelectItem
@@ -135,7 +135,7 @@ const CreateAssignForm = ({
                           <SelectValue placeholder="Select White Label Admin" />
                         </SelectTrigger>
                         <SelectContent>
-                          {whiteLabel?.results?.length &&
+                          {Boolean(whiteLabel?.results?.length) &&
                             whiteLabel?.results?.map((whiteLabel, index) => {
                               return (
                                 <SelectItem

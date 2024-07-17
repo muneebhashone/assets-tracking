@@ -3,6 +3,7 @@
 import { useCurrentUser } from "@/services/auth.mutations";
 import {
   GetAllShipmentsInputType,
+  Shipment,
   TrackWithType,
   useGetShipments,
 } from "@/services/shipment.queries";
@@ -65,12 +66,12 @@ const ShipmentPage = () => {
             /> */}
           </div>
 
-          {result?.results?.length && (
+          {Boolean(result?.results?.length) && (
             <>
               <ShipmentTable
-                data={result?.results}
+                data={result?.results as Shipment[]}
                 columns={columns}
-                pageCount={result?.paginatorInfo.pages}
+                pageCount={result?.paginatorInfo.pages as number}
               />
             </>
           )}

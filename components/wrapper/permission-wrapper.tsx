@@ -12,12 +12,12 @@ const checkSuperAdminOrPermission = (
   permission?: PermissionsType,
 ) => {
   if (permission) {
-    if (user.role === "SUPER_ADMIN") {
+    if (user?.role === "SUPER_ADMIN") {
       return true;
     }
     return user?.permissions?.includes(permission);
   } else {
-    return user.role === "SUPER_ADMIN";
+    return user?.role === "SUPER_ADMIN";
   }
 };
 const PermissionWrapper =

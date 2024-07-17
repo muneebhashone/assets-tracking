@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 import { Icons } from "@/components/icons";
@@ -29,7 +28,7 @@ export function AdminDashboardNav({ items, setOpen, user }: DashboardNavProps) {
         const Icon = Icons[item.icon || "arrowRight"];
         return (
           item.href && (
-            <Link
+            <a
               key={index}
               href={item.disabled ? "/" : item.href}
               onClick={() => {
@@ -48,7 +47,7 @@ export function AdminDashboardNav({ items, setOpen, user }: DashboardNavProps) {
                 <Icon className="mr-2 h-4 w-4" />
                 <span>{item.title}</span>
               </span>
-            </Link>
+            </a>
           )
         );
       })}

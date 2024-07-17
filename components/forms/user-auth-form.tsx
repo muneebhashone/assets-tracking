@@ -9,14 +9,15 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useLogin } from "@/services/auth.mutations";
+import { passwordValidation } from "@/utils/auth.utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
-import { useToast } from "../ui/use-toast";
+import PasswordInput from "../PasswordInput";
 import { Label } from "../ui/label";
-import { passwordValidation } from "@/utils/auth.utils";
+import { useToast } from "../ui/use-toast";
 
 const formSchema = z.object({
   email: z
@@ -30,6 +31,7 @@ type UserFormValue = z.infer<typeof formSchema>;
 export default function UserAuthForm() {
   const router = useRouter();
   const { toast } = useToast();
+
   const { mutate: loginUser, isPending } = useLogin({
     onSuccess(data) {
       toast({
@@ -38,7 +40,7 @@ export default function UserAuthForm() {
         variant: "default",
       });
       router.refresh();
-      router.push("/dashboard");
+      router.replace("/dashboard");
     },
     onError(error) {
       toast({
@@ -89,12 +91,7 @@ export default function UserAuthForm() {
               <FormItem>
                 <Label>Password</Label>
                 <FormControl>
-                  <Input
-                    type="password"
-                    placeholder="Enter your password..."
-                    disabled={isPending}
-                    {...field}
-                  />
+                  <PasswordInput {...field} disabled={isPending} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

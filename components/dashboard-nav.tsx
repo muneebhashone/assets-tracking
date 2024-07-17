@@ -1,15 +1,14 @@
 "use client";
 
-import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 import { Icons } from "@/components/icons";
 import { cn } from "@/lib/utils";
 import { User } from "@/types/services/auth.types";
 
-import { Dispatch, SetStateAction } from "react";
-import { checkPermissions } from "@/utils/user.utils";
 import { NavItem, PermissionsType } from "@/types/user.types";
+import { checkPermissions } from "@/utils/user.utils";
+import { Dispatch, SetStateAction } from "react";
 
 interface DashboardNavProps {
   items: NavItem[];
@@ -38,7 +37,7 @@ export function DashboardNav({ items, setOpen, user }: DashboardNavProps) {
         const Icon = Icons[item.icon || "arrowRight"];
         return (
           item.href && (
-            <Link
+            <a
               key={index}
               href={item.disabled ? "/" : item.href}
               onClick={() => {
@@ -57,7 +56,7 @@ export function DashboardNav({ items, setOpen, user }: DashboardNavProps) {
                 <Icon className="mr-2 h-4 w-4" />
                 <span>{item.title}</span>
               </span>
-            </Link>
+            </a>
           )
         );
       })}

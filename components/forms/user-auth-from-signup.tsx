@@ -23,6 +23,7 @@ import {
   SelectValue,
 } from "../ui/select";
 import { useToast } from "../ui/use-toast";
+import PasswordInput from "../PasswordInput";
 
 const LIMIT = 100;
 const PAGE = 0;
@@ -97,10 +98,9 @@ export default function UserAuthFormSignUp() {
               <FormItem>
                 <Label>Password</Label>
                 <FormControl>
-                  <Input
-                    type="password"
-                    placeholder="Enter your pass..."
+                  <PasswordInput
                     disabled={isPending}
+                    placeholder="Enter your pass..."
                     {...field}
                   />
                 </FormControl>

@@ -23,7 +23,7 @@ const ProtectedCheckbox: React.FC<
   const userDeletePermission: PermissionsType[] = ["DELETE_USER"];
   const shipmentDeletePermission: PermissionsType[] = ["DELETE_SHIPMENT"];
   return (
-    (user?.user.role === "SUPER_ADMIN" ||
+    (user?.user?.role === "SUPER_ADMIN" ||
       checkPermissions(
         user?.user.permissions as PermissionsType[],
         type === "user" ? userDeletePermission : shipmentDeletePermission,

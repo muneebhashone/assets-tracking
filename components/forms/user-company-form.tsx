@@ -16,6 +16,7 @@ import { useForm } from "react-hook-form";
 import { useToast } from "../ui/use-toast";
 import { RegisterCompanyInputType } from "@/types/services/auth.types";
 import { Label } from "../ui/label";
+import PasswordInput from "../PasswordInput";
 
 export default function CompanyAuthFormSignUp({
   redirect = true,
@@ -160,8 +161,7 @@ export default function CompanyAuthFormSignUp({
               <FormItem>
                 <Label>Password</Label>
                 <FormControl>
-                  <Input
-                    type="password"
+                  <PasswordInput
                     placeholder="Enter your pass..."
                     disabled={isPending}
                     {...field}

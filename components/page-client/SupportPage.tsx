@@ -63,7 +63,7 @@ const SupportPage = () => {
         {allSupportLoading ? (
           <div>Loading ... </div>
         ) : (
-          support?.data?.results?.length && (
+          Boolean(support?.data?.results?.length) && (
             <SupportTable
               columns={columns}
               data={support?.data?.results as SupportType[]}

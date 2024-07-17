@@ -103,7 +103,7 @@ const UploadShipmentFile = ({
           Upload Files
         </DialogHeader>
         <div {...getRootProps({ style })}>
-          <input {...getInputProps()} disabled={true} />
+          <input {...getInputProps()}  />
           {acceptedFiles?.length ? (
             <p className="text-center ">File Uploaded</p>
           ) : (

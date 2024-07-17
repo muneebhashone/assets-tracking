@@ -85,7 +85,7 @@ const AssignsPage = () => {
         {allAssignsLoading ? (
           <div>Loading ... </div>
         ) : (
-          assigns?.data?.results?.length && (
+          Boolean(assigns?.data?.results?.length) && (
             <AssignsTable
               columns={columns}
               data={assigns?.data.results as AssignsType[]}

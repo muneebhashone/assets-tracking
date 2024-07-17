@@ -1,10 +1,12 @@
 "use client";
 
 import { useResetPassword } from "@/services/auth.mutations";
+import { passwordValidation } from "@/utils/auth.utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import PasswordInput from "../PasswordInput";
 import { Button } from "../ui/button";
 import {
   Form,
@@ -13,10 +15,8 @@ import {
   FormItem,
   FormMessage,
 } from "../ui/form";
-import { Input } from "../ui/input";
-import { toast } from "../ui/use-toast";
 import { Label } from "../ui/label";
-import { passwordValidation } from "@/utils/auth.utils";
+import { toast } from "../ui/use-toast";
 
 export type ResetPasswordFormType = z.infer<typeof resetPasswordFormType>;
 export const resetPasswordFormType = z
@@ -81,8 +81,7 @@ const ResetPasswordPage = ({ token }: { token?: string }) => {
                     <FormItem>
                       <Label className="block text-xs mb-1">Password</Label>
                       <FormControl>
-                        <Input
-                          type="password"
+                        <PasswordInput
                           className="w-full border rounded p-2 outline-none focus:shadow-outline"
                           placeholder="Enter your password"
                           {...field}
@@ -103,8 +102,7 @@ const ResetPasswordPage = ({ token }: { token?: string }) => {
                         Confirm Password
                       </Label>
                       <FormControl>
-                        <Input
-                          type="password"
+                        <PasswordInput
                           className="w-full border rounded p-2 outline-none focus:shadow-outline"
                           placeholder="Re-Enter your password"
                           {...field}

@@ -1,8 +1,8 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { useChangePassword, useCurrentUser } from "@/services/auth.mutations";
+import { passwordValidation } from "@/utils/auth.utils";
 import { UserRole } from "@/utils/constants";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Edit } from "lucide-react";
@@ -12,6 +12,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import PersonalInformationForm from "../forms/personal-information-update-form";
 import UploadProfileForm from "../forms/upload-profile-form";
+import PasswordInput from "../PasswordInput";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import {
   Form,
@@ -23,7 +24,6 @@ import {
 import { Label } from "../ui/label";
 import { Separator } from "../ui/separator";
 import { toast } from "../ui/use-toast";
-import { passwordValidation } from "@/utils/auth.utils";
 
 const changePasswordFormSchema = z
   .object({
@@ -123,8 +123,7 @@ const ProfileSettingPage = () => {
                             Current Password
                           </Label>
                           <FormControl>
-                            <Input
-                              type="password"
+                            <PasswordInput
                               placeholder="Enter Current Password"
                               {...field}
                             />
@@ -144,8 +143,7 @@ const ProfileSettingPage = () => {
                             New Password
                           </Label>
                           <FormControl>
-                            <Input
-                              type="password"
+                            <PasswordInput
                               placeholder="Enter New Password"
                               {...field}
                             />
@@ -165,8 +163,7 @@ const ProfileSettingPage = () => {
                             Confirm Password
                           </Label>
                           <FormControl>
-                            <Input
-                              type="password"
+                            <PasswordInput
                               placeholder="Re-enter new Password"
                               {...field}
                             />

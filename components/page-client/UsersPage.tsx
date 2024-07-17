@@ -107,7 +107,7 @@ const UsersPage = () => {
         {allUsersLoading ? (
           <div>Loading ... </div>
         ) : (
-          users?.results?.length && (
+          Boolean(users?.results?.length) && (
             <UsersTable
               columns={columns}
               data={users?.results as User[]}

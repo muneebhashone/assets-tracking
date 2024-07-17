@@ -1,14 +1,14 @@
 "use client";
 import { DashboardNav } from "@/components/dashboard-nav";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { navItems, userNavItems } from "@/constants/data";
+import { navItems } from "@/constants/data";
 import { useCurrentUser } from "@/services/auth.mutations";
 import { MenuIcon } from "lucide-react";
 
-import { useState } from "react";
-import { Skeleton } from "../ui/skeleton";
-import { AdminDashboardNav } from "../admin-dashboard";
 import { User } from "@/types/services/auth.types";
+import { useState } from "react";
+import { AdminDashboardNav } from "../admin-dashboard";
+import { Skeleton } from "../ui/skeleton";
 
 interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {
   // playlists: Playlist[];

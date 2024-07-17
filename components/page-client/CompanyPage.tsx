@@ -70,7 +70,7 @@ const CompanyPage = () => {
               {isLoading ? (
                 <div>Loading...</div>
               ) : (
-                company?.results?.length && (
+                Boolean(company?.results?.length) && (
                   <CompanyTable
                     columns={columns}
                     data={company?.results as Company[]}
