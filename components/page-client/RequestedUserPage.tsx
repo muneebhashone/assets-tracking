@@ -18,7 +18,7 @@ export default function RequestedUserPage() {
   const searchParams = useSearchParams();
   const page = Number(searchParams.get("page")) || 1;
   const pageLimit = Number(searchParams.get("limit")) || 10;
-  const search = String(searchParams.get("search")) || "";
+  const search = searchParams.get("search") || "";
 
   const { data: users, isLoading: allUsersLoading } = useGetUsers({
     limitParam: pageLimit,

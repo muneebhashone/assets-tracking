@@ -2,12 +2,15 @@
 import { Switch } from "@/components/ui/switch";
 import { useAdminCreateUser } from "@/services/admin/user.mutations";
 import { useGetCompanies } from "@/services/companies.queries";
+import { useGetUsers } from "@/services/user.queries";
 import {
   permissionEnums,
   rolesEnums,
   RoleType,
   statusEnums,
 } from "@/types/user.types";
+import { passwordValidation } from "@/utils/auth.utils";
+import { handlePhoneNumber } from "@/utils/common.utils";
 import {
   EligibleRolesForCreation,
   PermissionsForDisplay,
@@ -16,9 +19,12 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Dispatch, SetStateAction } from "react";
 import { useForm } from "react-hook-form";
+import PhoneInput from "react-phone-input-2";
+import "react-phone-input-2/lib/style.css";
 import validator from "validator";
 import { z } from "zod";
 import { ModalCustom } from "../ModalComponent";
+import PasswordInput from "../PasswordInput";
 import { Button } from "../ui/button";
 import {
   Form,
@@ -38,12 +44,6 @@ import {
   SelectValue,
 } from "../ui/select";
 import { toast } from "../ui/use-toast";
-import { passwordValidation } from "@/utils/auth.utils";
-import { useGetUsers } from "@/services/user.queries";
-import "react-phone-input-2/lib/style.css";
-import PhoneInput from "react-phone-input-2";
-import { handlePhoneNumber } from "@/utils/common.utils";
-import PasswordInput from "../PasswordInput";
 
 const adminCreateUserFormSchema = z
   .object({
