@@ -108,6 +108,8 @@ export default function ShipmentCreationForm() {
     };
   });
 
+  console.log({ data });
+
   return (
     <>
       <Button
@@ -170,6 +172,7 @@ export default function ShipmentCreationForm() {
                             </Label>
                             <FormControl>
                               <Combobox
+                                key={data?.data?.length}
                                 options={containerNames as Options[]}
                                 {...field}
                               />
