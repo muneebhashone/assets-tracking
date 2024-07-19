@@ -229,7 +229,7 @@ export const useCreateUser = (
       return functionIdentifierByRole({ role: role, input: rest });
     },
     async onSuccess(data, variables, context) {
-      await queryClient.invalidateQueries({ queryKey: [getUsers.name] });
+      await queryClient.invalidateQueries({ queryKey: ["getUsers"] });
       options?.onSuccess?.(data, variables, context);
     },
   });
@@ -247,7 +247,7 @@ export const useUpdateStatus = (
     ...options,
     mutationFn: updateStatus,
     async onSuccess(data, variables, context) {
-      await queryClient.invalidateQueries({ queryKey: [getUsers.name] });
+      await queryClient.invalidateQueries({ queryKey: ["getUsers"] });
       options?.onSuccess?.(data, variables, context);
     },
   });
@@ -265,7 +265,7 @@ export const useUpdatePermissions = (
     ...options,
     mutationFn: updatePermissions,
     async onSuccess(data, variables, context) {
-      await queryClient.invalidateQueries({ queryKey: [getUserById.name] });
+      await queryClient.invalidateQueries({ queryKey: ["getUserById"] });
       options?.onSuccess?.(data, variables, context);
     },
   });
@@ -283,7 +283,7 @@ export const useUserToggleActive = (
     ...options,
     mutationFn: userToggleActive,
     async onSuccess(data, variables, context) {
-      await queryClient.invalidateQueries({ queryKey: [getUsers.name] });
+      await queryClient.invalidateQueries({ queryKey: ["getUsers"] });
       options?.onSuccess?.(data, variables, context);
     },
   });
@@ -301,8 +301,8 @@ export const useAssignOrDeductCredits = (
     ...options,
     mutationFn: assignOrDeductCredits,
     async onSuccess(data, variables, context) {
-      await queryClient.invalidateQueries({ queryKey: [getUsers.name] });
-      await queryClient.invalidateQueries({ queryKey: [currentUser.name] });
+      await queryClient.invalidateQueries({ queryKey: ["getUsers"] });
+      await queryClient.invalidateQueries({ queryKey: ["currentUser"] });
       options?.onSuccess?.(data, variables, context);
     },
   });
@@ -320,7 +320,7 @@ export const useDeleteUser = (
     ...options,
     mutationFn: deleteUser,
     async onSuccess(data, variables, context) {
-      await queryClient.invalidateQueries({ queryKey: [getUsers.name] });
+      await queryClient.invalidateQueries({ queryKey: ["getUsers"] });
       options?.onSuccess?.(data, variables, context);
     },
   });
@@ -338,7 +338,7 @@ export const useBulkDeleteUser = (
     ...options,
     mutationFn: deleteBulkUsers,
     async onSuccess(data, variables, context) {
-      await queryClient.invalidateQueries({ queryKey: [getUsers.name] });
+      await queryClient.invalidateQueries({ queryKey: ["getUsers"] });
       options?.onSuccess?.(data, variables, context);
     },
   });
@@ -356,7 +356,7 @@ export const useUpdateProfileData = (
     ...options,
     mutationFn: profileUpdateData,
     async onSuccess(data, variables, context) {
-      await queryClient.invalidateQueries({ queryKey: [currentUser.name] });
+      await queryClient.invalidateQueries({ queryKey: ["currentUser"] });
       options?.onSuccess?.(data, variables, context);
     },
   });

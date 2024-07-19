@@ -80,7 +80,7 @@ export const useRegisterCompany = (
     ...options,
     mutationFn: registerCompany,
     onSuccess(data, variables, context) {
-      queryClient.removeQueries({ queryKey: [getAllCompanies.name] });
+      queryClient.removeQueries({ queryKey: ["getAllCompanies"] });
       options?.onSuccess?.(data, variables, context);
     },
   });
@@ -92,7 +92,7 @@ export const useCurrentUser = (
   return useQuery({
     ...options,
     queryFn: () => currentUser(),
-    queryKey: [currentUser.name],
+    queryKey: ["currentUser"],
   });
 };
 
@@ -106,7 +106,7 @@ export const useLogout = (
     mutationFn: logout,
     onSuccess(data, variables, context) {
       localStorage.removeItem(AUTH_KEY);
-      queryClient.removeQueries({ queryKey: [currentUser.name] });
+      queryClient.removeQueries({ queryKey: ["currentUser"] });
       options?.onSuccess?.(data, variables, context);
       router.push("/signin");
       router.refresh();

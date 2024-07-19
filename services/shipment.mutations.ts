@@ -143,7 +143,7 @@ export const useCreateShipment = (
     ...options,
     mutationFn: createShipment,
     async onSuccess(data, variables, context) {
-      await queryClient.invalidateQueries({ queryKey: [getShipments.name] });
+      await queryClient.invalidateQueries({ queryKey: ["getShipments"] });
       options?.onSuccess?.(data, variables, context);
     },
   });
@@ -161,7 +161,7 @@ export const useDeletShipment = (
     ...options,
     mutationFn: deleteShipment,
     async onSuccess(data, variables, context) {
-      await queryClient.invalidateQueries({ queryKey: [getShipments.name] });
+      await queryClient.invalidateQueries({ queryKey: ["getShipments"] });
       options?.onSuccess?.(data, variables, context);
     },
   });
@@ -179,7 +179,7 @@ export const useBuildShipmentShareableLink = (
     ...options,
     mutationFn: buildShipmentShareableLink,
     async onSuccess(data, variables, context) {
-      await queryClient.invalidateQueries({ queryKey: [getShipments.name] });
+      await queryClient.invalidateQueries({ queryKey: ["getShipments"] });
       await options?.onSuccess?.(data, variables, context);
     },
   });
@@ -197,7 +197,7 @@ export const useDiscardShipmentShareableLink = (
     ...options,
     mutationFn: discardShipmentShareableLink,
     async onSuccess(data, variables, context) {
-      await queryClient.invalidateQueries({ queryKey: [getShipments.name] });
+      await queryClient.invalidateQueries({ queryKey: ["getShipments"] });
       options?.onSuccess?.(data, variables, context);
     },
   });
@@ -215,7 +215,7 @@ export const useSetFilesShareable = (
     ...options,
     mutationFn: setFilesShareable,
     async onSuccess(data, variables, context) {
-      await queryClient.invalidateQueries({ queryKey: [getShipments.name] });
+      await queryClient.invalidateQueries({ queryKey: ["getShipments"] });
       options?.onSuccess?.(data, variables, context);
     },
   });
@@ -233,7 +233,7 @@ export const useBulkDeleteShipment = (
     ...options,
     mutationFn: deleteBulkShipments,
     async onSuccess(data, variables, context) {
-      await queryClient.invalidateQueries({ queryKey: [getShipments.name] });
+      await queryClient.invalidateQueries({ queryKey: ["getShipments"] });
       options?.onSuccess?.(data, variables, context);
     },
   });
@@ -253,8 +253,7 @@ export const useUpdateShipment = (
     ...options,
     mutationFn: updateShipment,
     async onSuccess(data, variables, context) {
-     
-      await queryClient.invalidateQueries({ queryKey: [getShipments.name] });
+      await queryClient.invalidateQueries({ queryKey: ["getShipments"] });
       options?.onSuccess?.(data, variables, context);
     },
   });

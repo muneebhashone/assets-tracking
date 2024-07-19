@@ -76,7 +76,7 @@ export const useGetAllSupportForms = (
   return useQuery({
     ...options,
     queryFn: async () => await getAllSupportForms(input),
-    queryKey: [getAllSupportForms.name, JSON.stringify(input)],
+    queryKey: ["getAllSupportForms", JSON.stringify(input)],
   });
 };
 
@@ -91,6 +91,6 @@ export const useGetSupportFormById = (
   return useQuery({
     ...options,
     queryFn: async () => await getSupportFormById(input),
-    queryKey: [getSupportFormById.name, JSON.stringify(input)],
+    queryKey: ["getSupportFormById", JSON.stringify(input)],
   });
 };

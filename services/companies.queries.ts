@@ -70,7 +70,7 @@ export const useGetCompanies = (
   return useQuery({
     ...options,
     queryFn: async () => await getAllCompanies(input),
-    queryKey: [getAllCompanies.name, JSON.stringify(input)],
+    queryKey: ["getAllCompanies", JSON.stringify(input)],
   });
 };
 
@@ -85,6 +85,6 @@ export const useGetCompanyById = (
   return useQuery({
     ...options,
     queryFn: async () => await getCompanyById(input),
-    queryKey: [getCompanyById.name, JSON.stringify(input)],
+    queryKey: ["getCompanyById", JSON.stringify(input)],
   });
 };

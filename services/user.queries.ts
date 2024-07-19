@@ -4,13 +4,11 @@ import { ErrorResponseType, SuccessResponseType } from "./types.common";
 import { User } from "@/types/services/auth.types";
 import { RoleType } from "@/types/user.types";
 
-
 //types
 export type GetAllUserInputType = {
   searchString?: string;
   limitParam?: number;
   pageParam?: number;
-  // isRequestedUser?: boolean;
   filterByActive?: string;
   filterByStatus?: ("APPROVED" | "REQUESTED" | "REJECTED")[];
   filterByRole?: RoleType;
@@ -48,18 +46,14 @@ export const getUsers = async (input: GetAllUserInputType) => {
   return data;
 };
 
-
 export const getUserById = async (input: GetUserByIdInputType) => {
   const { id } = input;
-  const { data } = await apiAxios.get<GetUserByIdResponseType>(
-    `/users/${id}`,
-  );
+  const { data } = await apiAxios.get<GetUserByIdResponseType>(`/users/${id}`);
 
   return data;
 };
 
 //mutations
-
 export const useGetUsers = (
   input: GetAllUserInputType,
   options?: UseQueryOptions<unknown, ErrorResponseType, GetAllUserResponseType>,
@@ -67,34 +61,19 @@ export const useGetUsers = (
   return useQuery({
     ...options,
     queryFn: async () => await getUsers(input),
-    queryKey: [getUsers.name, JSON.stringify(input)],
+    queryKey: ["getUsers", JSON.stringify(input)],
   });
 };
 
 export const useGetUserById = (
   input: GetUserByIdInputType,
-  options?: Partial<UseQueryOptions<
-    unknown,
-    ErrorResponseType,
-    GetUserByIdResponseType
-  >>,
+  options?: Partial<
+    UseQueryOptions<unknown, ErrorResponseType, GetUserByIdResponseType>
+  >,
 ) => {
   return useQuery({
     ...options,
     queryFn: async () => await getUserById(input),
-    queryKey: [getUserById.name, JSON.stringify(input)],
+    queryKey: ["getUserById", JSON.stringify(input)],
   });
 };
-
-
-
-
-
-
-
-
-
-
-
-
-

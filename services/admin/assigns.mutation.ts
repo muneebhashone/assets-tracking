@@ -49,7 +49,7 @@ export const useAssignUsers = (
     ...options,
     mutationFn: assignUsers,
     async onSuccess(data, variables, context) {
-      await queryClient.invalidateQueries({ queryKey: [getAssigns.name] });
+      await queryClient.invalidateQueries({ queryKey: ["getAssigns"] });
       options?.onSuccess?.(data, variables, context);
     },
   });
@@ -67,7 +67,7 @@ export const useDeleteAssignment = (
     ...options,
     mutationFn: deleteAssignment,
     async onSuccess(data, variables, context) {
-      await queryClient.invalidateQueries({ queryKey: [getAssigns.name] });
+      await queryClient.invalidateQueries({ queryKey: ["getAssigns"] });
       options?.onSuccess?.(data, variables, context);
     },
   });

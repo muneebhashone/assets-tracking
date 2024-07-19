@@ -38,7 +38,7 @@ export default async function RootLayout({
   });
 
   await queryClient.prefetchQuery({
-    queryKey: [currentUser.name],
+    queryKey: ["currentUser"],
     queryFn: () => currentUser(cookies().get("accessToken")?.value),
   });
 

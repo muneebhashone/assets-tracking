@@ -67,7 +67,7 @@ export const useCreateSupportForm = (
     mutationFn: createSupportForm,
     async onSuccess(data, variables, context) {
       await queryClient.invalidateQueries({
-        queryKey: [getAllSupportForms.name],
+        queryKey: ["getAllSupportForms"],
       });
       options?.onSuccess?.(data, variables, context);
     },
@@ -87,7 +87,7 @@ export const useDeleteSupportForm = (
     mutationFn: deleteSupportForm,
     async onSuccess(data, variables, context) {
       await queryClient.invalidateQueries({
-        queryKey: [getAllSupportForms.name],
+        queryKey: ["getAllSupportForms"],
       });
       options?.onSuccess?.(data, variables, context);
     },
@@ -107,10 +107,10 @@ export const useResolveSupportForm = (
     mutationFn: resolveSupportForm,
     async onSuccess(data, variables, context) {
       await queryClient.invalidateQueries({
-        queryKey: [getAllSupportForms.name],
+        queryKey: ["getAllSupportForms"],
       });
       await queryClient.invalidateQueries({
-        queryKey: [getSupportFormById.name],
+        queryKey: ["getSupportFormById"],
       });
       options?.onSuccess?.(data, variables, context);
     },

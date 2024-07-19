@@ -47,7 +47,7 @@ export const useAdminUpdateShipment = (
     ...options,
     mutationFn: adminUpdateShipment,
     async onSuccess(data, variables, context) {
-      await queryClient.invalidateQueries({ queryKey: [getShipments.name] });
+      await queryClient.invalidateQueries({ queryKey: ["getShipments"] });
       options?.onSuccess?.(data, variables, context);
     },
   });

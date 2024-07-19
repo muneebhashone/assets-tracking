@@ -74,7 +74,9 @@ export type Shipment = {
 export const getShipments = async (input: GetAllShipmentsInputType) => {
   const { data } = await apiAxios.get<GetAllShipmentsResponseType>(
     "/shipments",
-    { params: { ...input } },
+    {
+      params: { ...input },
+    },
   );
 
   return data;
@@ -112,7 +114,7 @@ export const useGetShipments = (
   return useQuery({
     ...options,
     queryFn: async () => await getShipments(input),
-    queryKey: [getShipments.name, JSON.stringify(input)],
+    queryKey: ["getShipments", JSON.stringify(input)],
     refetchInterval: 900000,
   });
 };
@@ -128,7 +130,7 @@ export const useGetShipmentById = (
   return useQuery({
     ...options,
     queryFn: async () => await getShipmentById(input),
-    queryKey: [getShipmentById.name, JSON.stringify(input)],
+    queryKey: ["getShipmentById", JSON.stringify(input)],
   });
 };
 
@@ -143,6 +145,6 @@ export const useGetSharedShipment = (
   return useQuery({
     ...options,
     queryFn: async () => await viewSharedShipment(input),
-    queryKey: [viewSharedShipment.name, JSON.stringify(input)],
+    queryKey: ["viewSharedShipment", JSON.stringify(input)],
   });
 };

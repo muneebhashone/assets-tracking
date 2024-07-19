@@ -32,7 +32,7 @@ export const useFetchAllSearatesContainers = (
   return useQuery({
     ...options,
     queryFn: fetchAllSearatesContainers,
-    queryKey: [fetchAllSearatesContainers.name],
+    queryKey: ["fetchAllSearatesContainers"],
   });
 };
 
@@ -42,7 +42,7 @@ export const useFetchAllSearatesContainerSetup = (
   return useQuery({
     ...options,
     queryFn: fetchAllSearatesContainerSetup,
-    queryKey: [fetchAllSearatesContainerSetup.name],
+    queryKey: ["fetchAllSearatesContainerSetup"],
     refetchOnMount: true,
     refetchOnWindowFocus: true,
   });

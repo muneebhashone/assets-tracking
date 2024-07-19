@@ -84,7 +84,7 @@ export const useAdminCreateUser = (
     ...options,
     mutationFn: adminCreateUser,
     async onSuccess(data, variables, context) {
-      await queryClient.invalidateQueries({ queryKey: [getUsers.name] });
+      await queryClient.invalidateQueries({ queryKey: ["getUsers"] });
       options?.onSuccess?.(data, variables, context);
     },
   });
@@ -102,7 +102,7 @@ export const useAdminUpdateUser = (
     ...options,
     mutationFn: adminUpdateUser,
     async onSuccess(data, variables, context) {
-      await queryClient.invalidateQueries({ queryKey: [getUsers.name] });
+      await queryClient.invalidateQueries({ queryKey: ["getUsers"] });
       options?.onSuccess?.(data, variables, context);
     },
   });
@@ -120,7 +120,7 @@ export const useAdminDeleteUser = (
     ...options,
     mutationFn: adminDeleteUser,
     async onSuccess(data, variables, context) {
-      await queryClient.invalidateQueries({ queryKey: [getUsers.name] });
+      await queryClient.invalidateQueries({ queryKey: ["getUsers"] });
       options?.onSuccess?.(data, variables, context);
     },
   });

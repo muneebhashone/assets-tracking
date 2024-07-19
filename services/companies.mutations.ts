@@ -73,7 +73,7 @@ export const useDeleteCompany = (
     ...options,
     mutationFn: deleteCompany,
     async onSuccess(data, variables, context) {
-      await queryClient.invalidateQueries({ queryKey: [getAllCompanies.name] });
+      await queryClient.invalidateQueries({ queryKey: ["getAllCompanies"] });
       options?.onSuccess?.(data, variables, context);
     },
   });
@@ -92,7 +92,7 @@ export const useToggleCompanyActive = (
 
     mutationFn: toggleCompanyActive,
     async onSuccess(data, variables, context) {
-      await queryClient.invalidateQueries({ queryKey: [getAllCompanies.name] });
+      await queryClient.invalidateQueries({ queryKey: ["getAllCompanies"] });
       options?.onSuccess?.(data, variables, context);
     },
   });
@@ -112,7 +112,7 @@ export const useUpdateCompany = (
     mutationFn: updateCompany,
     async onSuccess(data, variables, context) {
       await queryClient.invalidateQueries({
-        queryKey: [getAllCompanies.name],
+        queryKey: ["getAllCompanies"],
       });
       options?.onSuccess?.(data, variables, context);
     },

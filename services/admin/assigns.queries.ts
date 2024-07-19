@@ -55,6 +55,6 @@ export const useGetAssigns = (
   return useQuery({
     ...options,
     queryFn: async () => await getAssigns(input),
-    queryKey: [getAssigns.name, JSON.stringify(input)],
+    queryKey: ["getAssigns", JSON.stringify(input)],
   });
 };

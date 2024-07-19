@@ -59,7 +59,7 @@ export const useProfileUpload = (
     ...options,
     mutationFn: profileUpload,
     async onSuccess(data, variables, context) {
-      await queryClient.invalidateQueries({ queryKey: [currentUser.name] });
+      await queryClient.invalidateQueries({ queryKey: ["currentUser"] });
       options?.onSuccess?.(data, variables, context);
     },
   });
@@ -77,7 +77,7 @@ export const useShipmentFileUpload = (
     ...options,
     mutationFn: shipmentFileUpload,
     async onSuccess(data, variables, context) {
-      await queryClient.invalidateQueries({ queryKey: [getShipments.name] });
+      await queryClient.invalidateQueries({ queryKey: ["getShipments"] });
       options?.onSuccess?.(data, variables, context);
     },
   });
