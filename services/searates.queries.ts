@@ -43,5 +43,7 @@ export const useFetchAllSearatesContainerSetup = (
     ...options,
     queryFn: fetchAllSearatesContainerSetup,
     queryKey: [fetchAllSearatesContainerSetup.name],
+    refetchOnMount: true,
+    refetchOnWindowFocus: true,
   });
 };
