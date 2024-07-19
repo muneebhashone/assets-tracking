@@ -41,7 +41,7 @@ export const useFetchAllSearatesContainerSetup = (
 ) => {
   return useQuery({
     ...options,
-    queryFn: fetchAllSearatesContainers,
-    queryKey: [fetchAllSearatesContainers.name],
+    queryFn: fetchAllSearatesContainerSetup,
+    queryKey: [fetchAllSearatesContainerSetup.name],
   });
 };
