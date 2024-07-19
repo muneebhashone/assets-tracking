@@ -1,5 +1,5 @@
 import { SearatesSealineApiResponse } from "@/types/api.types";
-import { searatesApiAxios } from "@/utils/api.utils";
+import { apiAxios, searatesApiAxios } from "@/utils/api.utils";
 import { UseQueryOptions, useQuery } from "@tanstack/react-query";
 
 export type TrackShipmentInput = {
@@ -20,13 +20,11 @@ export const fetchAllSearatesContainers = async () => {
 };
 
 export const fetchAllSearatesContainerSetup = async () => {
-  const res =
-    await searatesApiAxios.get<SearatesSealineApiResponse>(`/setup/sealines`);
+  const res = await apiAxios.get<SearatesSealineApiResponse>(`/setup/sealines`);
   const { data } = res;
 
   return data;
 };
-
 
 export const useFetchAllSearatesContainers = (
   options?: UseQueryOptions<SearatesSealineApiResponse, unknown>,
