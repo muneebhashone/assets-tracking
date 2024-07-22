@@ -108,7 +108,7 @@ export default function ShipmentCreationForm() {
     };
   });
 
-  console.log({ data });
+  
 
   return (
     <>
