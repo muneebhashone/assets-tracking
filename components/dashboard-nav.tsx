@@ -9,6 +9,7 @@ import { User } from "@/types/services/auth.types";
 import { NavItem, PermissionsType } from "@/types/user.types";
 import { checkPermissions } from "@/utils/user.utils";
 import { Dispatch, SetStateAction } from "react";
+import Link from "next/link";
 
 interface DashboardNavProps {
   items: NavItem[];
@@ -37,7 +38,7 @@ export function DashboardNav({ items, setOpen, user }: DashboardNavProps) {
         const Icon = Icons[item.icon || "arrowRight"];
         return (
           item.href && (
-            <a
+            <Link
               key={index}
               href={item.disabled ? "/" : item.href}
               onClick={() => {
@@ -56,7 +57,7 @@ export function DashboardNav({ items, setOpen, user }: DashboardNavProps) {
                 <Icon className="mr-2 h-4 w-4" />
                 <span>{item.title}</span>
               </span>
-            </a>
+            </Link>
           )
         );
       })}
