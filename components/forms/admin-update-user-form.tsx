@@ -43,6 +43,13 @@ import {
   SelectValue,
 } from "../ui/select";
 import { toast } from "../ui/use-toast";
+import { useGetUsers } from "@/services/user.queries";
+const companyIdRequired: RoleType[] = [
+  "WHITE_LABEL_ADMIN",
+  "WHITE_LABEL_SUB_ADMIN",
+  "CLIENT_SUPER_USER",
+];
+const clientIdRequired: RoleType[] = ["CLIENT_USER"];
 
 const adminUserUpdateFormSchema = z
   .object({
@@ -93,13 +100,6 @@ const adminUserUpdateFormSchema = z
       .optional(),
   })
   .superRefine((values, ctx) => {
-    const companyIdRequired: RoleType[] = [
-      "WHITE_LABEL_ADMIN",
-      "WHITE_LABEL_SUB_ADMIN",
-      "CLIENT_SUPER_USER",
-    ];
-    const clientIdRequired: RoleType[] = ["CLIENT_USER"];
-
     if (values?.role) {
       if (companyIdRequired.includes(values.role) && !values.companyId) {
         ctx.addIssue({
@@ -150,7 +150,7 @@ const AdminUpdateUserForm = ({
     resolver: zodResolver(adminUserUpdateFormSchema),
   });
 
-  const { control, handleSubmit, reset } = form;
+  const { control, handleSubmit, reset, watch } = form;
 
   const { mutate, isPending } = useAdminUpdateUser({
     onSuccess(data) {
@@ -180,6 +180,12 @@ const AdminUpdateUserForm = ({
   const { data: companies } = useGetCompanies({
     pageParam: 1,
     limitParam: 999,
+  });
+
+  const { data: clients } = useGetUsers({
+    filterByRole: "CLIENT_SUPER_USER",
+    filterByActive: "true",
+    filterByStatus: ["APPROVED"],
   });
 
   return (
@@ -250,7 +256,7 @@ const AdminUpdateUserForm = ({
                 />
               </div>
 
-              {userData.role === "CLIENT_USER" && (
+              {clientIdRequired.includes(watch("role") as RoleType) && (
                 <div>
                   <FormField
                     name="clientId"
@@ -273,12 +279,16 @@ const AdminUpdateUserForm = ({
                               <SelectValue placeholder="Clients" />
                             </SelectTrigger>
                             <SelectContent>
-                              {/* <SelectItem value="">
-                                      Container Number
-                                    </SelectItem>
-                                    <SelectItem value="MBL_NUMBER">
-                                      MBL / Booking Number
-                                    </SelectItem> */}
+                              {clients?.results?.map((client, index) => {
+                                return (
+                                  <SelectItem
+                                    value={String(client.id)}
+                                    key={index}
+                                  >
+                                    {client.name}
+                                  </SelectItem>
+                                );
+                              })}
                             </SelectContent>
                           </Select>
                         </FormControl>
@@ -289,47 +299,49 @@ const AdminUpdateUserForm = ({
                 </div>
               )}
 
-              <div>
-                <FormField
-                  name="companyId"
-                  control={control}
-                  render={({ field }) => (
-                    <FormItem>
-                      <Label
-                        htmlFor="companyId"
-                        className="font-medium text-xs"
-                      >
-                        Company
-                      </Label>
-                      <FormControl>
-                        <Select
-                          onValueChange={field.onChange}
-                          value={String(field.value)}
-                          defaultValue={field.value}
-                          // disabled={isPending || isFetching}
+              {companyIdRequired.includes(watch("role") as RoleType) && (
+                <div>
+                  <FormField
+                    name="companyId"
+                    control={control}
+                    render={({ field }) => (
+                      <FormItem>
+                        <Label
+                          htmlFor="companyId"
+                          className="font-medium text-xs"
                         >
-                          <SelectTrigger id="companyId">
-                            <SelectValue placeholder="Select a Company" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {companies?.results?.map((company, index) => {
-                              return (
-                                <SelectItem
-                                  value={String(company.id)}
-                                  key={index}
-                                >
-                                  {company.name}
-                                </SelectItem>
-                              );
-                            })}
-                          </SelectContent>
-                        </Select>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
+                          Company
+                        </Label>
+                        <FormControl>
+                          <Select
+                            onValueChange={field.onChange}
+                            value={String(field.value)}
+                            defaultValue={field.value}
+                            // disabled={isPending || isFetching}
+                          >
+                            <SelectTrigger id="companyId">
+                              <SelectValue placeholder="Select a Company" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {companies?.results?.map((company, index) => {
+                                return (
+                                  <SelectItem
+                                    value={String(company.id)}
+                                    key={index}
+                                  >
+                                    {company.name}
+                                  </SelectItem>
+                                );
+                              })}
+                            </SelectContent>
+                          </Select>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              )}
 
               <div>
                 <FormField
@@ -381,11 +393,7 @@ const AdminUpdateUserForm = ({
                         Role
                       </Label>
                       <FormControl>
-                        <Select
-                          onValueChange={field.onChange}
-                          // disabled={isPending || isFetching}
-                          {...field}
-                        >
+                        <Select onValueChange={field.onChange} {...field}>
                           <SelectTrigger id="role">
                             <SelectValue placeholder="Select the Role" />
                           </SelectTrigger>
@@ -418,12 +426,7 @@ const AdminUpdateUserForm = ({
                         Status
                       </Label>
                       <FormControl>
-                        <Select
-                          onValueChange={field.onChange}
-                          // disabled={isPending || isFetching}
-
-                          {...field}
-                        >
+                        <Select onValueChange={field.onChange} {...field}>
                           <SelectTrigger id="status" className="capitalize">
                             <SelectValue placeholder="Select the Status" />
                           </SelectTrigger>
