@@ -15,10 +15,7 @@ interface UserDetailPageProps {
   id: string;
 }
 const UserDetailPage = ({ id }: UserDetailPageProps) => {
-  const { data: user, isLoading } = useGetUserById(
-    { id },
-    { enabled: Boolean(id) },
-  );
+  const { data: user, isLoading } = useGetUserById({ id });
   const { querySetter } = useQueryUpdater();
   const { data: currentUser } = useCurrentUser();
 

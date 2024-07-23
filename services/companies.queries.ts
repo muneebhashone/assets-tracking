@@ -4,6 +4,7 @@ import { UseQueryOptions, useQuery } from "@tanstack/react-query";
 
 import { ErrorResponseType, SuccessResponseType } from "./types.common";
 import { PaginatorInfoType } from "./user.queries";
+import { useCurrentUser } from "./auth.mutations";
 
 //types
 export type GetAllCompaniesInputType = {
@@ -67,10 +68,12 @@ export const useGetCompanies = (
     GetAllCompaniesResponseType
   >,
 ) => {
+  const { data: user } = useCurrentUser();
   return useQuery({
     ...options,
     queryFn: async () => await getAllCompanies(input),
-    queryKey: ["getAllCompanies", JSON.stringify(input)],
+    queryKey: ["getAllCompanies", user?.user.id, JSON.stringify(input)],
+    enabled: Boolean(user?.user.id),
   });
 };
 
@@ -82,9 +85,11 @@ export const useGetCompanyById = (
     GetCompanyByIdResponseType
   >,
 ) => {
+  const { data: user } = useCurrentUser();
   return useQuery({
     ...options,
     queryFn: async () => await getCompanyById(input),
-    queryKey: ["getCompanyById", JSON.stringify(input)],
+    queryKey: ["getCompanyById", user?.user.id, JSON.stringify(input)],
+    enabled: Boolean(user?.user.id),
   });
 };

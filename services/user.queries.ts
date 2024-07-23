@@ -3,6 +3,7 @@ import { UseQueryOptions, useQuery } from "@tanstack/react-query";
 import { ErrorResponseType, SuccessResponseType } from "./types.common";
 import { User } from "@/types/services/auth.types";
 import { RoleType } from "@/types/user.types";
+import { useCurrentUser } from "./auth.mutations";
 
 //types
 export type GetAllUserInputType = {
@@ -53,15 +54,17 @@ export const getUserById = async (input: GetUserByIdInputType) => {
   return data;
 };
 
-//mutations
+//hooks
 export const useGetUsers = (
   input: GetAllUserInputType,
   options?: UseQueryOptions<unknown, ErrorResponseType, GetAllUserResponseType>,
 ) => {
+  const { data: user } = useCurrentUser();
   return useQuery({
     ...options,
     queryFn: async () => await getUsers(input),
-    queryKey: ["getUsers", JSON.stringify(input)],
+    queryKey: ["getUsers", user?.user.id, JSON.stringify(input)],
+    enabled: Boolean(user?.user.id),
   });
 };
 
@@ -71,9 +74,11 @@ export const useGetUserById = (
     UseQueryOptions<unknown, ErrorResponseType, GetUserByIdResponseType>
   >,
 ) => {
+  const { data: user } = useCurrentUser();
   return useQuery({
     ...options,
     queryFn: async () => await getUserById(input),
-    queryKey: ["getUserById", JSON.stringify(input)],
+    queryKey: ["getUserById", user?.user.id, JSON.stringify(input)],
+    enabled: Boolean(user?.user.id),
   });
 };

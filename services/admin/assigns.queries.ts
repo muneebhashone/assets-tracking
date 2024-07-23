@@ -3,6 +3,7 @@ import { PaginatorInfoType } from "../user.queries";
 import { ErrorResponseType, SuccessResponseType } from "../types.common";
 import { useQuery, UseQueryOptions } from "@tanstack/react-query";
 import { User } from "@/types/services/auth.types";
+import { useCurrentUser } from "../auth.mutations";
 
 //types
 export interface AssignsType {
@@ -52,9 +53,11 @@ export const useGetAssigns = (
     GetAllAssignsResponseType
   >,
 ) => {
+  const { data: user } = useCurrentUser();
   return useQuery({
     ...options,
     queryFn: async () => await getAssigns(input),
-    queryKey: ["getAssigns", JSON.stringify(input)],
+    queryKey: ["getAssigns", user?.user.id, JSON.stringify(input)],
+    enabled: Boolean(user?.user.id),
   });
 };

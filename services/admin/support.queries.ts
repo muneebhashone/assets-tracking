@@ -5,6 +5,7 @@ import { ErrorResponseType, SuccessResponseType } from "../types.common";
 import { PaginatorInfoType } from "../user.queries";
 import { useQuery, UseQueryOptions } from "@tanstack/react-query";
 import { User } from "@/types/services/auth.types";
+import { useCurrentUser } from "../auth.mutations";
 
 export interface SupportType {
   id: number;
@@ -73,10 +74,12 @@ export const useGetAllSupportForms = (
     GetAllSupportFormsResponseType
   >,
 ) => {
+  const { data: user } = useCurrentUser();
   return useQuery({
     ...options,
     queryFn: async () => await getAllSupportForms(input),
-    queryKey: ["getAllSupportForms", JSON.stringify(input)],
+    queryKey: ["getAllSupportForms", user?.user.id, JSON.stringify(input)],
+    enabled: Boolean(user?.user.id),
   });
 };
 
@@ -88,9 +91,11 @@ export const useGetSupportFormById = (
     GetSupportFormByIdResponseType
   >,
 ) => {
+  const { data: user } = useCurrentUser();
   return useQuery({
     ...options,
     queryFn: async () => await getSupportFormById(input),
     queryKey: ["getSupportFormById", JSON.stringify(input)],
+    enabled: Boolean(user?.user.id),
   });
 };

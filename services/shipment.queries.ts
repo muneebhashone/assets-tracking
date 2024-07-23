@@ -2,6 +2,7 @@ import { apiAxios } from "@/utils/api.utils";
 import { UseQueryOptions, useQuery } from "@tanstack/react-query";
 import { ErrorResponseType } from "./types.common";
 import { PaginatorInfoType } from "./user.queries";
+import { useCurrentUser } from "./auth.mutations";
 
 //types
 export type GetAllShipmentsInputType = {
@@ -111,11 +112,13 @@ export const useGetShipments = (
     GetAllShipmentsResponseType
   >,
 ) => {
+  const { data: user } = useCurrentUser();
   return useQuery({
     ...options,
     queryFn: async () => await getShipments(input),
-    queryKey: ["getShipments", JSON.stringify(input)],
+    queryKey: ["getShipments", user?.user.id, JSON.stringify(input)],
     refetchInterval: 900000,
+    enabled: Boolean(user?.user.id),
   });
 };
 
@@ -127,10 +130,12 @@ export const useGetShipmentById = (
     GetShipmentByIdResponse
   >,
 ) => {
+  const { data: user } = useCurrentUser();
   return useQuery({
     ...options,
     queryFn: async () => await getShipmentById(input),
-    queryKey: ["getShipmentById", JSON.stringify(input)],
+    queryKey: ["getShipmentById", user?.user.id, JSON.stringify(input)],
+    enabled: Boolean(user?.user.id),
   });
 };
 
@@ -142,9 +147,11 @@ export const useGetSharedShipment = (
     GetSharedShipmentResponseType
   >,
 ) => {
+  const { data: user } = useCurrentUser();
   return useQuery({
     ...options,
     queryFn: async () => await viewSharedShipment(input),
-    queryKey: ["viewSharedShipment", JSON.stringify(input)],
+    queryKey: ["viewSharedShipment", user?.user.id, JSON.stringify(input)],
+    enabled: Boolean(user?.user.id),
   });
 };
