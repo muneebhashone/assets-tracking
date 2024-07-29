@@ -66,7 +66,7 @@ export default function UpdateShipmentForm({
     resolver: zodResolver(UpdateShipmentInputSchema),
     defaultValues: initialValues,
   });
-
+  const { control, formState, handleSubmit } = form;
   const { mutate } = useUpdateShipment({
     onSuccess(data, variables, context) {
       toast({
@@ -87,7 +87,7 @@ export default function UpdateShipmentForm({
       }
     },
   });
-  const { control, formState, handleSubmit } = form;
+  
   const onSubmit = (data: UpdateShipmenFormtInputType) => {
     if (data) {
       const sanitizedResult = sanitizeObject(data);
