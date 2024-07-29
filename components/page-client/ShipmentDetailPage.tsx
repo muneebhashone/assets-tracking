@@ -1,29 +1,36 @@
 "use client";
 
 import { ChevronLeftIcon } from "@/components/Icons/index";
+
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { HamburgerMenuIcon } from "@radix-ui/react-icons";
+import { Shipment, useGetShipmentById } from "@/services/shipment.queries";
 import { MapPin } from "lucide-react";
+import moment from "moment";
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useState } from "react";
 import ShipmentDetailExtraForm from "../forms/shipment-details-extra-form";
-import { Shipment, useGetShipmentById } from "@/services/shipment.queries";
 import { Skeleton } from "../ui/skeleton";
-import Map from "@/components/map";
-import { LatLng } from "leaflet";
+import ShipmentContainer from "./ShipmentContainer";
+import ShipmentMovement from "./ShipmentMovement";
 
+const LazyMap = dynamic(() => import("@/components/map"), {
+  ssr: false,
+  loading: () => <p>Loading...</p>,
+});
 type ShipmentDetailPageProps = {
   id: string;
 };
+
 const ShipmentDetailPage = ({ id }: ShipmentDetailPageProps) => {
   const [tab, setTab] = useState("movements");
-  const DEFAULT_CENTER = new LatLng(38.907132, -77.036546);
   const { data: shipmentData, isFetching } = useGetShipmentById({
     shipmentId: Number(id),
   });
 
+  // const DEFAULT_CENTER = [38.907132, -77.036546];
   return (
     <div className="h-[100%] overflow-y-scroll">
       <div className="flex items-center h-14 border-b px-4 md:h-16 ">
@@ -38,7 +45,7 @@ const ShipmentDetailPage = ({ id }: ShipmentDetailPageProps) => {
           </Button>
         </Link>
         <h1 className="text-lg font-semibold md:text-2xl">
-          Shipment # {"Shipment Number"}
+          Shipment # {shipmentData?.result.id ? shipmentData?.result.id : "NA"}
         </h1>
       </div>
       <main className="flex-1 overflow-y-auto p-4 md:p-6">
@@ -47,27 +54,59 @@ const ShipmentDetailPage = ({ id }: ShipmentDetailPageProps) => {
             <div className="grid gap-4 md:grid-cols-1 lg:grid-cols-2 text-gray-700">
               <div className="flex">
                 <span className="font-semibold">Reference :</span>
-                <span className="ml-2 text-gray-500">-</span>
+                <span className="ml-2 text-gray-500">
+                  {shipmentData?.result.referenceNo
+                    ? shipmentData?.result.referenceNo
+                    : "NA"}
+                </span>
               </div>
               <div className="flex  gap-2">
                 <span className="font-semibold">Status :</span>
-                <Badge className="bg-golden">New</Badge>
+                <Badge className="bg-golden">
+                  {shipmentData?.result.status
+                    ? shipmentData?.result.status
+                    : "New"}
+                </Badge>
               </div>
               <div className="flex">
                 <span className="font-semibold">Booking / MBL :</span>
-                <span className="ml-2 text-gray-500">CMA CGM</span>
+                <span className="ml-2 text-gray-500">
+                  {" "}
+                  {shipmentData?.result.mblNo
+                    ? shipmentData?.result.mblNo
+                    : "NA"}
+                </span>
               </div>
 
               <div className="flex ">
                 <span className="font-semibold text-gray-500">Container :</span>
-                <span className="ml-2 text-gray-500">ASDASDASDVCSADSAD </span>
+                <span className="ml-2 text-gray-500">
+                  {" "}
+                  {shipmentData?.result.containerNo
+                    ? shipmentData?.result.containerNo
+                    : "NA"}{" "}
+                </span>
               </div>
               <div className="flex ">
                 <span className="font-semibold">Creator :</span>
                 <div>
-                  <p className="ml-2 text-gray-500">12/06/2024 18:58:54</p>
                   <p className="ml-2 text-gray-500">
-                    John Doe &lt;Joan.doe@gmail.com&gt;{" "}
+                    {" "}
+                    {shipmentData?.result.createdAt
+                      ? moment(shipmentData?.result.createdAt).format(
+                          "MM/DD/YYYY HH:mm:ss",
+                        )
+                      : "NA"}
+                  </p>
+                  <p className="ml-2 text-gray-500">
+                    {shipmentData?.result.user.name
+                      ? shipmentData?.result.user.name
+                      : "NA"}{" "}
+                    &lt;
+                    {shipmentData?.result.user.email
+                      ? shipmentData?.result.user.email
+                      : "NA"}
+                    &gt;{" "}
                   </p>
                 </div>
               </div>
@@ -85,14 +124,14 @@ const ShipmentDetailPage = ({ id }: ShipmentDetailPageProps) => {
             <MapPin className="w-4 h-4   " />
             Live Position
           </Button>
-          <Button
+          {/* <Button
             className="rounded-full border w-8 h-8"
             size="icon"
             variant="ghost"
           >
             <span className="sr-only">Hamburger</span>
             <HamburgerMenuIcon />
-          </Button>
+          </Button> */}
         </div>
         <div className="flex ">
           <Tabs
@@ -122,10 +161,10 @@ const ShipmentDetailPage = ({ id }: ShipmentDetailPageProps) => {
               </TabsTrigger>
             </TabsList>
             <TabsContent value="movements">
-              <div>movements</div>
+              <ShipmentMovement />
             </TabsContent>
             <TabsContent value="containers">
-              <div>Containers</div>
+              <ShipmentContainer />
             </TabsContent>
             <TabsContent value="extras">
               {!isFetching ? (
@@ -135,7 +174,7 @@ const ShipmentDetailPage = ({ id }: ShipmentDetailPageProps) => {
                   placeHolder="Enter Tags here..."
                 />
               ) : (
-                <Skeleton className="h-6 w-[600px] mb-4 py-2" />
+                <Skeleton className="h-6 w-full mb-4 py-2" />
               )}
               {!isFetching ? (
                 <ShipmentDetailExtraForm
@@ -144,25 +183,11 @@ const ShipmentDetailPage = ({ id }: ShipmentDetailPageProps) => {
                   placeHolder="Enter Followers here..."
                 />
               ) : (
-                <Skeleton className="h-6 w-[600px] mb-4 py-2" />
+                <Skeleton className="h-6 w-full mb-4 py-2" />
               )}
             </TabsContent>
             <TabsContent value="live_location">
-              <Map width={800} height={400} center={DEFAULT_CENTER} zoom={12}>
-                {({ TileLayer, Marker, Popup }) => (
-                  <>
-                    <TileLayer
-                      url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                      attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-                    />
-                    <Marker position={DEFAULT_CENTER}>
-                      <Popup>
-                        A pretty CSS3 popup. <br /> Easily customizable.
-                      </Popup>
-                    </Marker>
-                  </>
-                )}
-              </Map>
+              <LazyMap width={"100%"} height={"600px"} />
             </TabsContent>
           </Tabs>
         </div>

@@ -1,67 +1,34 @@
 "use client";
-import ProtectedCheckbox from "@/components/ProtectedCheckbox";
-import UploadedFilesView from "@/components/UploadedFilesView";
-import { Shipment } from "@/services/shipment.queries";
 import { ColumnDef } from "@tanstack/react-table";
-import { CellAction } from "./cell-action";
-import { TrackWithDisplay } from "@/utils/constants";
+import { CheckCircle2 } from "lucide-react";
+import moment from "moment";
 
-export const columns: ColumnDef<Shipment>[] = [
+export const columns: ColumnDef<any>[] = [
   {
-    id: "select",
-    header: ({ table }) => <ProtectedCheckbox table={table} type="shipment" />,
-    cell: ({ row }) => <ProtectedCheckbox row={row} type="shipment" />,
-    enableSorting: false,
-    enableHiding: false,
+    accessorKey: "location",
+    header: "Location",
+    cell: ({ row }) => <div>{row.original.location}</div>,
   },
   {
-    accessorKey: "type",
-    header: "Type",
+    accessorKey: "moves",
+    header: "Moves",
+    cell: ({ row }) => <div>{row.original.moves}</div>,
   },
   {
-    header: "Track With",
-    cell: ({ row }) => <div> {TrackWithDisplay[row.original.trackWith]}</div>,
+    accessorKey: "date",
+    header: "Date",
+    cell: ({ row }) => (
+      <div>{moment(row.original.date).format("MM/DD/YYYY")}</div>
+    ),
   },
   {
-    accessorKey: "containerNo",
-    header: "Container No.",
+    accessorKey: "vessel",
+    header: "Vessel",
+    cell: ({ row }) => <div>{row.original.vessel}</div>,
   },
-  {
-    accessorKey: "mblNo",
-    header: "MBL No.",
-  },
-  {
-    accessorKey: "carrier",
-    header: "Carrier",
-  },
-  {
-    accessorKey: "status",
-    header: "Status",
-  },
-  {
-    accessorKey: "progress",
-    header: "Progress",
-  },
-  {
-    accessorKey: "arrivalTime",
-    header: "ESTD. Time",
-  },
-  {
-    accessorKey: "isTracking",
-    header: "In Tracking",
-  },
-  {
-    header: "Files",
 
-    cell: ({ row }) =>
-      row?.original?.files?.length && <UploadedFilesView data={row.original} />,
-
-    maxSize: 20,
-    minSize: 30,
-  },
   {
     id: "actions",
-    header: "Action",
-    cell: ({ row }) => <CellAction data={row.original} />,
+    cell: () => <CheckCircle2 className="w-6 h-6 text-white " fill="#50C878" />,
   },
 ];

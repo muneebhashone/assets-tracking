@@ -3,6 +3,7 @@ import { UseQueryOptions, useQuery } from "@tanstack/react-query";
 import { ErrorResponseType } from "./types.common";
 import { PaginatorInfoType } from "./user.queries";
 import { useCurrentUser } from "./auth.mutations";
+import { User } from "@/types/services/auth.types";
 
 //types
 export type GetAllShipmentsInputType = {
@@ -57,6 +58,7 @@ export type Shipment = {
   sealine: string | null;
   containerNo: string;
   mblNo: string;
+  user: User;
   trackWith: TrackWithType;
   type: string | null;
   companyId: string | null;

@@ -1,16 +1,15 @@
 "use client";
 
-import React from "react";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { Label } from "@/components/ui/label";
-import { TagsInput } from "react-tag-input-component";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Shipment } from "@/services/shipment.queries";
-import { z } from "zod";
 import { useUpdateShipment } from "@/services/shipment.mutations";
-import { toast } from "../ui/use-toast";
+import { Shipment } from "@/services/shipment.queries";
 import { sanitizeObject } from "@/utils/common.utils";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { TagsInput } from "react-tag-input-component";
+import { z } from "zod";
+import { toast } from "../ui/use-toast";
 
 interface ShipmentDetailExtraFormProps {
   shipmentData: Shipment;
@@ -48,7 +47,6 @@ const ShipmentDetailExtraForm = ({
         duration: 3000,
         variant: "default",
       });
-      form.reset();
     },
     onError(error, variables, context) {
       if (error instanceof Error) {
@@ -67,6 +65,8 @@ const ShipmentDetailExtraForm = ({
     }
   };
   const { control, formState, handleSubmit } = form;
+
+  console.log(formState?.errors);
   return (
     <Form {...form}>
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -92,11 +92,17 @@ const ShipmentDetailExtraForm = ({
                     {...field}
                   />
                 </FormControl>
-                {formState.errors.followers?.length && (
-                  <div className="text-[0.8rem] font-medium text-destructive">
-                    {formState?.errors?.[shipmentField]?.[0]?.message}
-                  </div>
-                )}
+                {Array.isArray(formState?.errors?.followers) &&
+                  formState?.errors?.followers?.map((error, index) => {
+                    return (
+                      <div
+                        key={index}
+                        className="text-[0.8rem] font-medium text-destructive"
+                      >
+                        {error?.message + `. Entry Field #  ${index + 1}`}
+                      </div>
+                    );
+                  })}
               </FormItem>
             )}
           />

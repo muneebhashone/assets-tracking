@@ -290,3 +290,88 @@ export const info = [
     link: "/",
   },
 ];
+
+export const movementDemoData = [
+  {
+    id: 1,
+    location: "Port of Los Angeles",
+    moves: "Loaded on Board",
+    date: "2024-07-15T08:30:00",
+    vessel: "Pacific Explorer",
+    destination: true,
+  },
+  {
+    id: 2,
+    location: "Port of Shanghai",
+    moves: "Departed",
+    date: "2024-07-18T14:45:00",
+    vessel: "Asian Star",
+    destination: false,
+  },
+  {
+    id: 3,
+    location: "Port of Rotterdam",
+    moves: "Vessel Arrived",
+    date: "2024-07-20T11:15:00",
+    vessel: "European Voyager",
+    destination: true,
+  },
+  {
+    id: 4,
+    location: "Port of Singapore",
+    moves: "Discharge",
+    date: "2024-07-22T09:00:00",
+    vessel: "Orient Express",
+    destination: true,
+  },
+  {
+    id: 5,
+    location: "Port of New York",
+    moves: "Departed",
+    date: "2024-07-25T16:20:00",
+    vessel: "Atlantic Courier",
+    destination: false,
+  },
+];
+
+export const containerDemoData = [
+  {
+    id: 1,
+    container: "MSKU1234567",
+    emptyToShipper: "XYZ Logistics",
+    gateIn: "2024-07-15T09:30:00",
+    gateOut: "2024-07-16T14:45:00",
+    emptyReturn: "2024-07-20T11:20:00",
+  },
+  {
+    container: "TEMU7654321",
+    emptyToShipper: "ABC Freight",
+    gateIn: "2024-07-17T10:15:00",
+    gateOut: "2024-07-18T16:30:00",
+    emptyReturn: "2024-07-22T13:45:00",
+  },
+  {
+    id: 3,
+    container: "CMAU2468135",
+    emptyToShipper: "Global Shipping Co.",
+    gateIn: "2024-07-19T08:45:00",
+    gateOut: "2024-07-20T12:00:00",
+    emptyReturn: "2024-07-24T10:30:00",
+  },
+  {
+    id: 4,
+    container: "OOLU9876543",
+    emptyToShipper: "SeaWay Transport",
+    gateIn: "2024-07-21T11:00:00",
+    gateOut: "2024-07-22T17:15:00",
+    emptyReturn: "2024-07-26T09:00:00",
+  },
+  {
+    id: 5,
+    container: "MAEU5432109",
+    emptyToShipper: "FastTrack Logistics",
+    gateIn: "2024-07-23T07:30:00",
+    gateOut: "2024-07-24T13:45:00",
+    emptyReturn: "2024-07-28T14:20:00",
+  },
+];

@@ -12,7 +12,6 @@ import React, { useState } from "react";
 
 import { Button } from "@/components/ui/button";
 
-import { AlertModal } from "@/components/modal/alert-modal";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import {
   Select,
@@ -29,9 +28,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { toast } from "@/components/ui/use-toast";
-import { useBulkDeleteShipment } from "@/services/shipment.mutations";
-import { Shipment } from "@/services/shipment.queries";
 import {
   DoubleArrowLeftIcon,
   DoubleArrowRightIcon,
@@ -46,12 +42,12 @@ interface DataTableProps<TData, TValue> {
   pageCount: number;
 }
 
-export function ShipmentTable({
+export function ShipmentContainerTable({
   columns,
   data,
   pageCount,
   pageSizeOptions = [10, 20, 30, 40, 50],
-}: DataTableProps<Shipment, any>) {
+}: DataTableProps<any, any>) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -116,49 +112,9 @@ export function ShipmentTable({
     manualFiltering: true,
   });
 
-  const selectedIds = table
-    .getSelectedRowModel()
-    .rows?.map(({ original }) => original.id as number);
-
-  const { mutate: deleteBulkShipment } = useBulkDeleteShipment({
-    onSuccess(data) {
-      toast({
-        variant: "default",
-        description: data.message,
-        title: "Success",
-      });
-      table.toggleAllPageRowsSelected(false);
-      setOpenWarning(false);
-    },
-    onError(error) {
-      toast({
-        variant: "destructive",
-        description: error.response?.data.message,
-        title: "Error",
-      });
-    },
-  });
   return (
     <>
-      <AlertModal
-        isOpen={openWarning}
-        loading={false}
-        onClose={() => setOpenWarning(false)}
-        onConfirm={() => {
-          deleteBulkShipment({ ids: selectedIds });
-        }}
-      />
-      <div className="flex justify-start mb-2">
-        {Boolean(selectedIds?.length) && (
-          <Button
-            className="border rounded-md px-4 py-2 bg-red-700 text-white hover:bg-red-600"
-            onClick={() => setOpenWarning(true)}
-          >
-            Delete
-          </Button>
-        )}
-      </div>
-      <ScrollArea className="rounded-md border h-[calc(80vh-220px)]">
+      <ScrollArea className="rounded-md border ">
         <Table className="relative">
           <TableHeader>
             {table.getHeaderGroups()?.map((headerGroup) => (
@@ -185,14 +141,16 @@ export function ShipmentTable({
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
                 >
-                  {row.getVisibleCells()?.map((cell) => (
-                    <TableCell key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext(),
-                      )}
-                    </TableCell>
-                  ))}
+                  {row
+                    .getVisibleCells()
+                    ?.map((cell) => (
+                      <TableCell key={cell.id}>
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext(),
+                        )}
+                      </TableCell>
+                    ))}
                 </TableRow>
               ))
             ) : (
@@ -212,10 +170,7 @@ export function ShipmentTable({
 
       <div className="flex flex-col gap-2 sm:flex-row items-center justify-end space-x-2 py-4">
         <div className="flex items-center justify-between w-full">
-          <div className="flex-1 text-sm text-muted-foreground">
-            {table.getFilteredSelectedRowModel().rows?.length} of{" "}
-            {table.getFilteredRowModel().rows?.length || 0} row(s) selected.
-          </div>
+          
           <div className="flex flex-col items-center gap-4 sm:flex-row sm:gap-6 lg:gap-8">
             <div className="flex items-center space-x-2">
               <p className="whitespace-nowrap text-sm font-medium">
