@@ -26,6 +26,8 @@ const CompanyPage = () => {
     searchString: search,
   });
 
+
+
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   return (
     <>

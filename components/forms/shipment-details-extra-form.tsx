@@ -35,7 +35,7 @@ const ShipmentDetailExtraForm = ({
   const initialValues: ShipmentDetailExtraInputType = {
     [shipmentField]: shipmentData?.[shipmentField],
   };
-  console.log({ shipmentData }, "form");
+
   const form = useForm({
     resolver: zodResolver(ShipmentDetailExtraFormSchema),
     defaultValues: initialValues,
@@ -66,7 +66,7 @@ const ShipmentDetailExtraForm = ({
   };
   const { control, formState, handleSubmit } = form;
 
-  console.log(formState?.errors);
+ 
   return (
     <Form {...form}>
       <form onSubmit={handleSubmit(onSubmit)}>

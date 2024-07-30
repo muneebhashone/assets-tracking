@@ -34,6 +34,10 @@ export const columns: ColumnDef<User>[] = [
     header: "Name",
   },
   {
+    accessorKey: "company.name",
+    header: "Company",
+  },
+  {
     accessorKey: "email",
     header: "Email",
   },
@@ -106,7 +110,23 @@ export const columns: ColumnDef<User>[] = [
   // },
   {
     accessorKey: "credits",
-    header: "Credits",
+
+    header: () => (
+      <ProtectedHeader columnName="Credits" permission="CREATE_SHIPMENT" />
+    ),
+    cell: ({ row }) => {
+      const { data: currentUser } = useCurrentUser();
+      return (
+        (currentUser?.user.role === "SUPER_ADMIN" ||
+          checkPermissions(currentUser?.user.permissions as PermissionsType[], [
+            "CREATE_SHIPMENT",
+          ])) && (
+          <>
+            <p>{row.original.credits}</p>
+          </>
+        )
+      );
+    },
   },
   {
     id: "actions",

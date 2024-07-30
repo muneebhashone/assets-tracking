@@ -5,6 +5,7 @@ import { UseQueryOptions, useQuery } from "@tanstack/react-query";
 import { ErrorResponseType, SuccessResponseType } from "./types.common";
 import { PaginatorInfoType } from "./user.queries";
 import { useCurrentUser } from "./auth.mutations";
+import { User } from "@/types/services/auth.types";
 
 //types
 export type GetAllCompaniesInputType = {
@@ -33,6 +34,7 @@ export type Company = {
   status: CompanyStatus;
   id: number;
   name?: string;
+  users:User[];
   address?: string;
   industry?: string;
   createdAt?: string;

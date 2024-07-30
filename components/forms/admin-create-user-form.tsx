@@ -10,7 +10,7 @@ import {
   statusEnums,
 } from "@/types/user.types";
 import { passwordValidation } from "@/utils/auth.utils";
-import { handlePhoneNumber } from "@/utils/common.utils";
+import { handlePhoneNumber, sanitizeObject } from "@/utils/common.utils";
 import {
   EligibleRolesForCreation,
   PermissionsForDisplay,
@@ -61,7 +61,27 @@ const adminCreateUserFormSchema = z
       )
       .optional(),
     role: z.enum(rolesEnums, { required_error: "Role must be defined" }),
-    password: passwordValidation("password").optional(),
+    password: z
+      .string()
+      .optional()
+      .refine(
+        (value) => {
+          if (value === "") {
+            return true;
+          }
+          return validator.isStrongPassword(value || " ", {
+            minLength: 8,
+            minLowercase: 1,
+            minUppercase: 1,
+            minSymbols: 1,
+            minNumbers: 1,
+          });
+        },
+        {
+          message:
+            "Password must be strong, containing at least 1 lowercase letter, 1 uppercase letter, 1 special character, and 1 number, 8 length minimum.",
+        },
+      ),
     permissions: z
       .enum(permissionEnums, { required_error: "Permissions must be defined" })
       .array()
@@ -97,6 +117,7 @@ const adminCreateUserFormSchema = z
         ctx.addIssue({
           message: "companyId field is required",
           code: "custom",
+          path: ["companyId"],
         });
       }
 
@@ -104,6 +125,7 @@ const adminCreateUserFormSchema = z
         ctx.addIssue({
           message: "clientId field is required",
           code: "custom",
+          path: ["clientId"],
         });
       }
     }
@@ -150,7 +172,12 @@ const AdminCreateUserForm = ({
   });
 
   const adminUpdateFormHandler = (data: AdminCreateUserFormSchemaType) => {
-    mutate(data);
+    if (data.password) {
+      mutate(data);
+    } else {
+      const { password, ...rest } = data;
+      mutate(rest);
+    }
   };
 
   const { data: companies } = useGetCompanies({
@@ -343,7 +370,7 @@ const AdminCreateUserForm = ({
                         credits
                       </Label>
                       <FormControl>
-                        <Input {...field} />
+                        <Input type="number" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>

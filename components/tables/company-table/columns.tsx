@@ -16,8 +16,8 @@ export const columns: ColumnDef<Company>[] = [
     header: "ID ",
   },
   {
+    header: "Name",
     accessorKey: "name",
-    header: "Name ",
   },
   {
     accessorKey: "isActive",
@@ -76,7 +76,25 @@ export const columns: ColumnDef<Company>[] = [
     accessorKey: "industry",
     header: "Industry",
   },
-
+  {
+    accessorKey: "[users].credits",
+    header: () => (
+      <ProtectedHeader columnName="Credits" permission="CREATE_SHIPMENT" />
+    ),
+    cell: ({ row }) => {
+      const { data: currentUser } = useCurrentUser();
+      return (
+        (currentUser?.user.role === "SUPER_ADMIN" ||
+          checkPermissions(currentUser?.user.permissions as PermissionsType[], [
+            "CREATE_SHIPMENT",
+          ])) && (
+          <>
+            <p>{row.original.users?.[0].credits}</p>
+          </>
+        )
+      );
+    },
+  },
   {
     accessorKey: "createdAt",
     header: "Creation Date",

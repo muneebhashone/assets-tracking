@@ -8,7 +8,7 @@ export function sanitizeObject<T extends Record<string, any>>(
   return Object.keys(obj).reduce((acc, key) => {
     const value = obj[key];
 
-    if (value !== null && value !== undefined) {
+    if (value !== null && value !== undefined && value !== "") {
       if (typeof value === "object" && !Array.isArray(value)) {
         //@ts-ignore
         acc[key] = sanitizeObject(value);
