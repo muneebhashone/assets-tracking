@@ -12,6 +12,7 @@ import React from "react";
 
 import { Button } from "@/components/ui/button";
 
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import {
   Select,
   SelectContent,
@@ -33,7 +34,6 @@ import {
 } from "@radix-ui/react-icons";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 
 import { User } from "@/types/services/auth.types";
 
@@ -183,10 +183,7 @@ export function RequestedUserTable<User>({
 
       <div className="flex flex-col gap-2 sm:flex-row items-center justify-end space-x-2 py-4">
         <div className="flex items-center justify-between w-full">
-          <div className="flex-1 text-sm text-muted-foreground">
-            {table.getFilteredSelectedRowModel().rows?.length || 0} of{" "}
-            {table.getFilteredRowModel().rows?.length || 0} row(s) selected.
-          </div>
+       
           <div className="flex flex-col items-center gap-4 sm:flex-row sm:gap-6 lg:gap-8">
             <div className="flex items-center space-x-2">
               <p className="whitespace-nowrap text-sm font-medium">

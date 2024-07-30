@@ -9,8 +9,7 @@ import {
   RoleType,
   statusEnums,
 } from "@/types/user.types";
-import { passwordValidation } from "@/utils/auth.utils";
-import { handlePhoneNumber, sanitizeObject } from "@/utils/common.utils";
+import { handlePhoneNumber } from "@/utils/common.utils";
 import {
   EligibleRolesForCreation,
   PermissionsForDisplay,
@@ -175,6 +174,7 @@ const AdminCreateUserForm = ({
     if (data.password) {
       mutate(data);
     } else {
+      //eslint-disable-next-line
       const { password, ...rest } = data;
       mutate(rest);
     }

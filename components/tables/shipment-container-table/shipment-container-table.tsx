@@ -8,7 +8,7 @@ import {
   getPaginationRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import React, { useState } from "react";
+import React from "react";
 
 import { Button } from "@/components/ui/button";
 
@@ -59,7 +59,7 @@ export function ShipmentContainerTable({
   const perPageAsNumber = Number(per_page);
   const fallbackPerPage = isNaN(perPageAsNumber) ? 10 : perPageAsNumber;
   const tableData = data;
-  const [openWarning, setOpenWarning] = useState<boolean>(false);
+
   const createQueryString = React.useCallback(
     (params: Record<string, string | number | null>) => {
       const newSearchParams = new URLSearchParams(window.location.search);
