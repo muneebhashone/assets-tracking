@@ -26,8 +26,6 @@ const CompanyPage = () => {
     searchString: search,
   });
 
-
-
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   return (
     <>
@@ -72,13 +70,11 @@ const CompanyPage = () => {
               {isLoading ? (
                 <div>Loading...</div>
               ) : (
-                Boolean(company?.results?.length) && (
-                  <CompanyTable
-                    columns={columns}
-                    data={company?.results as Company[]}
-                    pageCount={company?.paginatorInfo?.pages || 0}
-                  />
-                )
+                <CompanyTable
+                  columns={columns}
+                  data={(company?.results || []) as Company[]}
+                  pageCount={company?.paginatorInfo?.pages || 0}
+                />
               )}
             </ScrollArea>
           </div>

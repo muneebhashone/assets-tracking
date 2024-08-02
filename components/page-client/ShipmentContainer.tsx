@@ -16,7 +16,7 @@ const ShipmentContainer = ({ shipmentId }: ShipmentContainerProps) => {
   ) : (
     <ShipmentContainerTable
       columns={columns}
-      data={data?.results as Container[]}
+      data={(data?.results || []) as Container[]}
       pageCount={1}
     />
   );

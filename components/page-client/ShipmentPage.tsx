@@ -31,7 +31,7 @@ const ShipmentPage = () => {
       : undefined,
   };
 
-  const { data: result } = useGetShipments(params);
+  const { data: result, isLoading } = useGetShipments(params);
   const { data: user } = useCurrentUser();
   // const optionsMapper: OptionsMapperType["Shipment"] = {
   //   tags: null,
@@ -66,10 +66,12 @@ const ShipmentPage = () => {
             /> */}
           </div>
 
-          {Boolean(result?.results?.length) && (
+          {isLoading ? (
+            <>Loading...</>
+          ) : (
             <>
               <ShipmentTable
-                data={result?.results as Shipment[]}
+                data={(result?.results || []) as Shipment[]}
                 columns={columns}
                 pageCount={result?.paginatorInfo.pages as number}
               />

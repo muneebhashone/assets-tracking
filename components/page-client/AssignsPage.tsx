@@ -85,13 +85,11 @@ const AssignsPage = () => {
         {allAssignsLoading ? (
           <div>Loading ... </div>
         ) : (
-          Boolean(assigns?.data?.results?.length) && (
-            <AssignsTable
-              columns={columns}
-              data={assigns?.data.results as AssignsType[]}
-              pageCount={assigns?.data?.paginatorInfo.pages || 0}
-            />
-          )
+          <AssignsTable
+            columns={columns}
+            data={assigns?.data.results as AssignsType[]}
+            pageCount={assigns?.data?.paginatorInfo.pages || 0}
+          />
         )}
         <CreateAssignForm
           setModalState={setAssignOpen}

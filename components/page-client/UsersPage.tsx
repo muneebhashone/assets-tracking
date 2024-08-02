@@ -107,13 +107,11 @@ const UsersPage = () => {
         {allUsersLoading ? (
           <div>Loading ... </div>
         ) : (
-          Boolean(users?.results?.length) && (
-            <UsersTable
-              columns={columns}
-              data={users?.results as User[]}
-              pageCount={users?.paginatorInfo.pages || 0}
-            />
-          )
+          <UsersTable
+            columns={columns}
+            data={(users?.results || []) as User[]}
+            pageCount={users?.paginatorInfo.pages || 0}
+          />
         )}
         <UserCreateForm modalState={modalOpen} setModalState={setModalOpen} />
         <AdminCreateUserForm

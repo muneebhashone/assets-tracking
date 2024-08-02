@@ -40,9 +40,10 @@ export const columns: ColumnDef<Shipment>[] = [
     header: "Status",
   },
   {
-    header: "Pol",
+    accessorKey: "pol.date",
+    header: () => <p className="text-center">{"POD"}</p>,
     cell: ({ row }) => (
-      <div className="flex   flex-col">
+      <div className="flex  items-center flex-col">
         <p className="font-bold text-center">
           {row.original?.pol?.location ? row.original.pol.location.name : "NA"}
         </p>
@@ -55,7 +56,8 @@ export const columns: ColumnDef<Shipment>[] = [
     ),
   },
   {
-    header: "Pod",
+    accessorKey: "pod.date",
+    header: () => <p className="text-center">{"POL"}</p>,
     cell: ({ row }) => (
       <div className="flex items-center flex-col">
         <p className="font-bold text-center">

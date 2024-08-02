@@ -63,13 +63,11 @@ const SupportPage = () => {
         {allSupportLoading ? (
           <div>Loading ... </div>
         ) : (
-          Boolean(support?.data?.results?.length) && (
-            <SupportTable
-              columns={columns}
-              data={support?.data?.results as SupportType[]}
-              pageCount={support?.data?.paginatorInfo.pages || 0}
-            />
-          )
+          <SupportTable
+            columns={columns}
+            data={(support?.data?.results || []) as SupportType[]}
+            pageCount={support?.data?.paginatorInfo.pages || 0}
+          />
         )}
       </div>
     </>

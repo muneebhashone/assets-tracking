@@ -13,28 +13,44 @@ export const columns: ColumnDef<Container>[] = [
     accessorKey: "emptyToShipper",
     header: "Emtpy To Shipper",
     cell: ({ row }) => (
-      <div>{moment(row.original.emptyToShipper).format("MM/DD/YYYY")}</div>
+      <div>
+        {row.original?.emptyToShipper
+          ? moment(row.original?.emptyToShipper).format("MM/DD/YYYY")
+          : "N/A"}
+      </div>
     ),
   },
   {
     accessorKey: "gateIn",
     header: "Gate In",
     cell: ({ row }) => (
-      <div>{moment(row.original.gateIn).format("MM/DD/YYYY")}</div>
+      <div>
+        {row.original?.gateIn
+          ? moment(row.original?.gateIn).format("MM/DD/YYYY")
+          : "N/A"}
+      </div>
     ),
   },
   {
     accessorKey: "gateOut",
     header: "Gate Out",
     cell: ({ row }) => (
-      <div>{moment(row.original.gateOut).format("MM/DD/YYYY")}</div>
+      <div>
+        {row.original?.gateOut
+          ? moment(row.original?.gateOut).format("MM/DD/YYYY")
+          : "N/A"}
+      </div>
     ),
   },
   {
     accessorKey: "emptyReturn",
     header: "Empty Return",
     cell: ({ row }) => (
-      <div>{moment(row.original.emptyReturn).format("MM/DD/YYYY")}</div>
+      <div>
+        {row.original?.emptyReturn
+          ? moment(row.original?.emptyReturn).format("MM/DD/YYYY")
+          : "N/A"}
+      </div>
     ),
   },
 ];
