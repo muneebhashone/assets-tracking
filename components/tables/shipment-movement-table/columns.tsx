@@ -1,34 +1,42 @@
 "use client";
+import { Movement } from "@/types/services/shipment.types";
 import { ColumnDef } from "@tanstack/react-table";
 import { CheckCircle2 } from "lucide-react";
 import moment from "moment";
 
-export const columns: ColumnDef<any>[] = [
+export const columns: ColumnDef<Movement>[] = [
   {
-    accessorKey: "location",
     header: "Location",
-    cell: ({ row }) => <div>{row.original.location}</div>,
+    cell: ({ row }) => (
+      <div>
+        {row.original?.location?.name ? row.original?.location?.name : "NA"}
+      </div>
+    ),
   },
   {
-    accessorKey: "moves",
     header: "Moves",
-    cell: ({ row }) => <div>{row.original.moves}</div>,
+    cell: ({ row }) => <div>{row.original.description}</div>,
   },
   {
-    accessorKey: "date",
     header: "Date",
     cell: ({ row }) => (
       <div>{moment(row.original.date).format("MM/DD/YYYY")}</div>
     ),
   },
   {
-    accessorKey: "vessel",
     header: "Vessel",
-    cell: ({ row }) => <div>{row.original.vessel}</div>,
+    cell: ({ row }) => <div>{row.original.vessel.name}</div>,
   },
 
   {
     id: "actions",
-    cell: () => <CheckCircle2 className="w-6 h-6 text-white " fill="#50C878" />,
+    cell: ({ row }) => {
+     
+      return (
+        Boolean(row.original?.actual) && (
+          <CheckCircle2 className="w-6 h-6 text-white " fill="#50C878" />
+        )
+      );
+    },
   },
 ];

@@ -2,9 +2,10 @@
 import ProtectedCheckbox from "@/components/ProtectedCheckbox";
 import UploadedFilesView from "@/components/UploadedFilesView";
 import { Shipment } from "@/services/shipment.queries";
-import { ColumnDef } from "@tanstack/react-table";
-import { CellAction } from "./cell-action";
 import { TrackWithDisplay } from "@/utils/constants";
+import { ColumnDef } from "@tanstack/react-table";
+import moment from "moment";
+import { CellAction } from "./cell-action";
 
 export const columns: ColumnDef<Shipment>[] = [
   {
@@ -39,13 +40,40 @@ export const columns: ColumnDef<Shipment>[] = [
     header: "Status",
   },
   {
+    header: "Pol",
+    cell: ({ row }) => (
+      <div className="flex   flex-col">
+        <p className="font-bold text-center">
+          {row.original?.pol?.location ? row.original.pol.location.name : "NA"}
+        </p>
+        <p>
+          {row.original?.pol?.date
+            ? moment(row.original.pol.date).format("DD/MM/YYYY")
+            : "NA"}
+        </p>
+      </div>
+    ),
+  },
+  {
+    header: "Pod",
+    cell: ({ row }) => (
+      <div className="flex items-center flex-col">
+        <p className="font-bold text-center">
+          {row.original?.pod?.location ? row.original.pod.location.name : "NA"}
+        </p>
+        <p>
+          {row.original?.pod?.date
+            ? moment(row.original.pod.date).format("DD/MM/YYYY")
+            : "NA"}
+        </p>
+      </div>
+    ),
+  },
+  {
     accessorKey: "progress",
     header: "Progress",
   },
-  {
-    accessorKey: "arrivalTime",
-    header: "ESTD. Time",
-  },
+
   {
     accessorKey: "isTracking",
     header: "In Tracking",

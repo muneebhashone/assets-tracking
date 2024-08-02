@@ -4,6 +4,7 @@ import { ErrorResponseType } from "./types.common";
 import { PaginatorInfoType } from "./user.queries";
 import { useCurrentUser } from "./auth.mutations";
 import { User } from "@/types/services/auth.types";
+import { Container, Movement, POD, POL } from "@/types/services/shipment.types";
 
 //types
 export type GetAllShipmentsInputType = {
@@ -22,12 +23,24 @@ export type GetAllShipmentsResponseType = {
   results: Shipment[];
   paginatorInfo: PaginatorInfoType;
 };
+export type GetMovementsByShipmentIdResponseType = {
+  results: Movement[];
+};
+
+export type GetContainersByShipmentIdResponseType = {
+  results: Container[];
+};
 
 export type GetShipmentByIdInput = {
   shipmentId: number;
 };
+
+export interface ShipmentWithContainerAndMovements extends Shipment {
+  containers: Container[];
+  movements: Movement[];
+}
 export type GetShipmentByIdResponse = {
-  result: Shipment;
+  result: ShipmentWithContainerAndMovements;
 };
 
 export type GetSharedShipmentResponseType = {
@@ -66,6 +79,8 @@ export type Shipment = {
   referenceNo: string;
   followers: string[];
   tags: string[];
+  pol: POL;
+  pod: POD;
   progress: ShipmentProgressStatusType;
   shareFiles: boolean;
   isTracking: boolean;
@@ -101,6 +116,23 @@ export const viewSharedShipment = async (input: GetSharedShipmentInputType) => {
     {
       params: { token },
     },
+  );
+  return data;
+};
+
+export const getMovementsByShipmentId = async (input: GetShipmentByIdInput) => {
+  const { shipmentId } = input;
+  const { data } = await apiAxios.get<GetMovementsByShipmentIdResponseType>(
+    `/shipments/${shipmentId}/movement`,
+  );
+  return data;
+};
+export const getContainersByShipmentId = async (
+  input: GetShipmentByIdInput,
+) => {
+  const { shipmentId } = input;
+  const { data } = await apiAxios.get<GetContainersByShipmentIdResponseType>(
+    `/shipments/${shipmentId}/container`,
   );
   return data;
 };
@@ -154,6 +186,48 @@ export const useGetSharedShipment = (
     ...options,
     queryFn: async () => await viewSharedShipment(input),
     queryKey: ["viewSharedShipment", user?.user.id, JSON.stringify(input)],
+    enabled: Boolean(user?.user.id),
+  });
+};
+
+export const useGetMovementsByShipmentId = (
+  input: GetShipmentByIdInput,
+  options?: UseQueryOptions<
+    unknown,
+    ErrorResponseType,
+    GetMovementsByShipmentIdResponseType
+  >,
+) => {
+  const { data: user } = useCurrentUser();
+  return useQuery({
+    ...options,
+    queryFn: async () => await getMovementsByShipmentId(input),
+    queryKey: [
+      "getMovementsByShipmentId",
+      user?.user.id,
+      JSON.stringify(input),
+    ],
+    enabled: Boolean(user?.user.id),
+  });
+};
+
+export const useGetContainersByShipmentId = (
+  input: GetShipmentByIdInput,
+  options?: UseQueryOptions<
+    unknown,
+    ErrorResponseType,
+    GetContainersByShipmentIdResponseType
+  >,
+) => {
+  const { data: user } = useCurrentUser();
+  return useQuery({
+    ...options,
+    queryFn: async () => await getContainersByShipmentId(input),
+    queryKey: [
+      "getContainersByShipmentId",
+      user?.user.id,
+      JSON.stringify(input),
+    ],
     enabled: Boolean(user?.user.id),
   });
 };

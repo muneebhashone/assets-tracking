@@ -161,10 +161,10 @@ const ShipmentDetailPage = ({ id }: ShipmentDetailPageProps) => {
               </TabsTrigger>
             </TabsList>
             <TabsContent value="movements">
-              <ShipmentMovement />
+              <ShipmentMovement shipmentId={Number(id)} />
             </TabsContent>
             <TabsContent value="containers">
-              <ShipmentContainer />
+              <ShipmentContainer shipmentId={Number(id)} />
             </TabsContent>
             <TabsContent value="extras">
               {!isFetching ? (

@@ -1,17 +1,20 @@
 "use client";
+import { Container } from "@/types/services/shipment.types";
 import { ColumnDef } from "@tanstack/react-table";
 import moment from "moment";
 
-export const columns: ColumnDef<any>[] = [
+export const columns: ColumnDef<Container>[] = [
   {
     accessorKey: "container",
     header: "Container",
-    cell: ({ row }) => <div>{row.original.container}</div>,
+    cell: ({ row }) => <div>{row.original.containerNumber}</div>,
   },
   {
     accessorKey: "emptyToShipper",
     header: "Emtpy To Shipper",
-    cell: ({ row }) => <div>{row.original.emptyToShipper}</div>,
+    cell: ({ row }) => (
+      <div>{moment(row.original.emptyToShipper).format("MM/DD/YYYY")}</div>
+    ),
   },
   {
     accessorKey: "gateIn",

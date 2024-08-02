@@ -1,14 +1,22 @@
 "use client";
 
-import { containerDemoData } from "@/constants/data";
+import { useGetContainersByShipmentId } from "@/services/shipment.queries";
 import { columns } from "../tables/shipment-container-table/columns";
 import { ShipmentContainerTable } from "../tables/shipment-container-table/shipment-container-table";
+import { Container } from "@/types/services/shipment.types";
 
-const ShipmentContainer = () => {
-  return (
+interface ShipmentContainerProps {
+  shipmentId: number;
+}
+
+const ShipmentContainer = ({ shipmentId }: ShipmentContainerProps) => {
+  const { data, isLoading } = useGetContainersByShipmentId({ shipmentId });
+  return isLoading ? (
+    <p>Loading...</p>
+  ) : (
     <ShipmentContainerTable
       columns={columns}
-      data={containerDemoData}
+      data={data?.results as Container[]}
       pageCount={1}
     />
   );
