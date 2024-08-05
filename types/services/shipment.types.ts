@@ -12,7 +12,7 @@ export type Movement = {
   date: Date | null;
   id: number;
   shipmentId: number | null;
-  location: TLocation  ;
+  location: TLocation;
   description: string | null;
   actual: boolean | null;
   vessel: Vessel;
@@ -46,4 +46,3 @@ export type TLocation = {
   timezone: string;
   country_code: string;
 };
-export type ShipmentLocation = {};

@@ -5,10 +5,7 @@ import {
   useQueryClient,
 } from "@tanstack/react-query";
 import { useSearchParams } from "next/navigation";
-import {
-  Shipment,
-  TrackWithType
-} from "./shipment.queries";
+import { Shipment, TrackWithType } from "./shipment.queries";
 import { ErrorResponseType, SuccessResponseType } from "./types.common";
 
 // export type Email = `${string}@${string}.${string}`;
@@ -250,13 +247,13 @@ export const useUpdateShipment = (
   >,
 ) => {
   const queryClient = useQueryClient();
-  const searchParams = useSearchParams();
 
   return useMutation({
     ...options,
     mutationFn: updateShipment,
     async onSuccess(data, variables, context) {
       await queryClient.invalidateQueries({ queryKey: ["getShipments"] });
+      await queryClient.invalidateQueries({ queryKey: ["getShipmentById"] });
       options?.onSuccess?.(data, variables, context);
     },
   });

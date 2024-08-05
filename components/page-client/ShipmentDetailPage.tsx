@@ -30,7 +30,6 @@ const ShipmentDetailPage = ({ id }: ShipmentDetailPageProps) => {
     shipmentId: Number(id),
   });
 
-  // const DEFAULT_CENTER = [38.907132, -77.036546];
   return (
     <div className="h-[100%] overflow-y-scroll">
       <div className="flex items-center h-14 border-b px-4 md:h-16 ">
@@ -142,20 +141,20 @@ const ShipmentDetailPage = ({ id }: ShipmentDetailPageProps) => {
             <TabsList className="grid w-full grid-cols-3   bg-transparent">
               <TabsTrigger
                 value="movements"
-                className=" w-full border-b-2  rounded-none data-[state=active]:border-[#3491fe] text-black font-semibold text-sm "
+                className=" w-full border-b-2  rounded-none data-[state=active]:border-[#3491fe] data-[state=active]:shadow-none text-black font-semibold text-sm "
               >
                 {" "}
                 Movements
               </TabsTrigger>
               <TabsTrigger
                 value="containers"
-                className=" w-full border-b-2  rounded-none data-[state=active]:border-[#3491fe] text-black font-semibold text-sm "
+                className=" w-full border-b-2  rounded-none data-[state=active]:border-[#3491fe] data-[state=active]:shadow-none text-black font-semibold text-sm "
               >
                 Containers
               </TabsTrigger>
               <TabsTrigger
                 value="extras"
-                className=" w-full border-b-2  rounded-none data-[state=active]:border-[#3491fe] text-black font-semibold text-sm "
+                className=" w-full border-b-2  rounded-none data-[state=active]:border-[#3491fe] data-[state=active]:shadow-none text-black font-semibold text-sm "
               >
                 Extras
               </TabsTrigger>
@@ -187,7 +186,17 @@ const ShipmentDetailPage = ({ id }: ShipmentDetailPageProps) => {
               )}
             </TabsContent>
             <TabsContent value="live_location">
-              <LazyMap width={"100%"} height={"600px"} />
+              <LazyMap
+                width={"100%"}
+                height={"600px"}
+                center={shipmentData?.result.currentLocation}
+                positions={shipmentData?.result.routeData?.map(
+                  (data) => data.path,
+                )}
+                checkpoints={shipmentData?.result.routeData?.map(
+                  (data) => data.path?.[0],
+                )}
+              />
             </TabsContent>
           </Tabs>
         </div>

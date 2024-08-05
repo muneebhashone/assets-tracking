@@ -11,7 +11,7 @@ export const columns: ColumnDef<Container>[] = [
   },
   {
     accessorKey: "emptyToShipper",
-    header: "Emtpy To Shipper",
+    header: "Empty To Shipper",
     cell: ({ row }) => (
       <div>
         {row.original?.emptyToShipper

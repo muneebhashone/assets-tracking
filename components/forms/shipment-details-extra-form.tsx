@@ -10,6 +10,7 @@ import { useForm } from "react-hook-form";
 import { TagsInput } from "react-tag-input-component";
 import { z } from "zod";
 import { toast } from "../ui/use-toast";
+import { Button } from "../ui/button";
 
 interface ShipmentDetailExtraFormProps {
   shipmentData: Shipment;
@@ -66,7 +67,6 @@ const ShipmentDetailExtraForm = ({
   };
   const { control, formState, handleSubmit } = form;
 
- 
   return (
     <Form {...form}>
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -107,6 +107,7 @@ const ShipmentDetailExtraForm = ({
             )}
           />
         </div>
+        <Button className="mt-4 mb-4 bg-golden">Submit</Button>
       </form>
     </Form>
   );
