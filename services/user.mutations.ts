@@ -19,9 +19,8 @@ export interface CreateUserInputType {
 }
 
 export interface ProfileDataUpdateInputType {
-  name: string;
+  name?: string;
   phoneNo?: string;
-  phoneCountryCode?: string;
 }
 
 export interface CreateUserResponseType {

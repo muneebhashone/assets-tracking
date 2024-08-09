@@ -20,13 +20,13 @@ import {
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { toast } from "../ui/use-toast";
-import { handlePhoneNumber } from "@/utils/common.utils";
+import { handlePhoneNumber, sanitizeObject } from "@/utils/common.utils";
 
 const profileUpdateFormSchema = z.object({
-  name: z.string().min(1),
+  name: z.string().optional(),
   phoneNo: z
     .string()
-    .min(1)
+
     .refine(
       (value) => validator.isMobilePhone(value, "any", { strictMode: true }),
       "Phone no. must be valid",
@@ -41,10 +41,13 @@ const PersonalInformationForm = () => {
   const { data: user, isLoading: userLoading } = useCurrentUser();
 
   const { name, phoneNo, email } = (user?.user as User) ?? {};
+  const initialValues = {
+    name: name ? name : undefined,
+    phoneNo: phoneNo ? phoneNo : undefined,
+    email: email,
+  };
   const form = useForm<ProfileUpdateFormType>({
-    values: !userLoading
-      ? { name, phoneNo: phoneNo?.replace("+", ""), email }
-      : {},
+    values: initialValues,
     resolver: zodResolver(profileUpdateFormSchema),
   });
   const { control, handleSubmit, register } = form;
@@ -67,7 +70,7 @@ const PersonalInformationForm = () => {
   });
   const handleUpdateProfile = (data: ProfileUpdateFormType) => {
     /* eslint-disable */
-    const { email, ...rest } = data;
+    const { email, ...rest } = sanitizeObject(data);
 
     updateProfile(rest);
   };

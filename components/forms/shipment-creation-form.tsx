@@ -108,7 +108,6 @@ export default function ShipmentCreationForm() {
     };
   });
 
-  
   return (
     <>
       <Button
