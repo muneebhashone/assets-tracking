@@ -7,20 +7,14 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Shipment, useGetShipmentById } from "@/services/shipment.queries";
 import { MapPin } from "lucide-react";
 import moment from "moment";
-import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useState } from "react";
 import ShipmentDetailExtraForm from "../forms/shipment-details-extra-form";
+import { GoogleMap } from "../google-map/map";
 import { Skeleton } from "../ui/skeleton";
 import ShipmentContainer from "./ShipmentContainer";
 import ShipmentMovement from "./ShipmentMovement";
-import { LatLngExpression } from "leaflet";
-import { GoogleMap } from "../google-map/map";
 
-const LazyMap = dynamic(() => import("@/components/map"), {
-  ssr: false,
-  loading: () => <p>Loading...</p>,
-});
 type ShipmentDetailPageProps = {
   id: string;
 };
@@ -31,25 +25,24 @@ const ShipmentDetailPage = ({ id }: ShipmentDetailPageProps) => {
     shipmentId: Number(id),
   });
 
-  const positions = shipmentData?.result.routeData.flatMap(
+  const positions = shipmentData?.result?.routeData?.flatMap(
     (position) =>
       position?.path.map((red) => {
         return { lat: red[0], lng: red[1] };
       }),
   );
 
-  let checkpoints = shipmentData?.result?.routeData.map((position) => ({
+  let checkpoints = shipmentData?.result?.routeData?.map((position) => ({
     lat: position.path[0][0],
     lng: position.path[0][1],
   }));
+
+  const currentLocation = {
+    lat: Number(shipmentData?.result?.currentLocation?.[0]),
+    lng: Number(shipmentData?.result?.currentLocation?.[1]),
+  };
   if (checkpoints) {
-    checkpoints = [
-      ...checkpoints,
-      {
-        lat: shipmentData?.result.currentLocation[0],
-        lng: shipmentData?.result.currentLocation[1],
-      },
-    ];
+    checkpoints = [...checkpoints, currentLocation];
   }
   return (
     <div className="h-[100%] overflow-y-scroll">
@@ -227,7 +220,11 @@ const ShipmentDetailPage = ({ id }: ShipmentDetailPageProps) => {
                 )}
               /> */}
 
-              <GoogleMap positions={positions}  checkpoints={checkpoints}/>
+              <GoogleMap
+                positions={positions}
+                checkpoints={checkpoints}
+                currentLocation={currentLocation}
+              />
             </TabsContent>
           </Tabs>
         </div>

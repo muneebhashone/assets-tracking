@@ -42,7 +42,7 @@ const PersonalInformationForm = () => {
 
   const { name, phoneNo, email } = (user?.user as User) ?? {};
   const form = useForm<ProfileUpdateFormType>({
-    defaultValues: !userLoading
+    values: !userLoading
       ? { name, phoneNo: phoneNo?.replace("+", ""), email }
       : {},
     resolver: zodResolver(profileUpdateFormSchema),
@@ -120,7 +120,6 @@ const PersonalInformationForm = () => {
                       }}
                       inputClass="!w-full"
                     />
-                    
                   </FormControl>
                   <FormMessage />
                 </FormItem>

@@ -9,17 +9,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { TagsInput } from "react-tag-input-component";
 import { z } from "zod";
-import { toast } from "../ui/use-toast";
 import { Button } from "../ui/button";
-import {
-  Menubar,
-  MenubarContent,
-  MenubarItem,
-  MenubarMenu,
-  MenubarSeparator,
-  MenubarTrigger,
-} from "../ui/menubar";
-import { HamburgerMenuIcon } from "@radix-ui/react-icons";
+import { toast } from "../ui/use-toast";
 
 interface ShipmentDetailExtraFormProps {
   shipmentData: Shipment;
@@ -50,7 +41,7 @@ const ShipmentDetailExtraForm = ({
 
   const form = useForm({
     resolver: zodResolver(ShipmentDetailExtraFormSchema),
-    defaultValues: initialValues,
+    values: initialValues,
   });
   const { mutate } = useUpdateShipment({
     onSuccess(data, variables, context) {
@@ -94,7 +85,7 @@ const ShipmentDetailExtraForm = ({
                   >
                     {shipmentField.toLowerCase()}
                   </Label>
-                  {showBar && (
+                  {/* {showBar && (
                     <Menubar>
                       <MenubarMenu>
                         <MenubarTrigger type="button">
@@ -108,7 +99,7 @@ const ShipmentDetailExtraForm = ({
                         </MenubarContent>
                       </MenubarMenu>
                     </Menubar>
-                  )}
+                  )} */}
                 </div>
                 <FormControl>
                   <TagsInput

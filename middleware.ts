@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { NextRequest } from "next/server";
 import { AUTH_KEY } from "./utils/constants";
 import { currentUser } from "./services/auth.services";
+import { cookies } from "next/headers";
 
 export async function middleware(request: NextRequest) {
   try {
@@ -11,7 +12,7 @@ export async function middleware(request: NextRequest) {
       return NextResponse.redirect(new URL("/signin", request.url));
     }
 
-    await currentUser(accessToken);
+    const user = await currentUser(accessToken);
   } catch {
     return NextResponse.redirect(new URL("/signin", request.url));
   }

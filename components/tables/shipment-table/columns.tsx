@@ -1,12 +1,11 @@
 "use client";
 import ProtectedCheckbox from "@/components/ProtectedCheckbox";
+import { Badge } from "@/components/ui/badge";
 import UploadedFilesView from "@/components/UploadedFilesView";
 import { Shipment } from "@/services/shipment.queries";
-import { TrackWithDisplay } from "@/utils/constants";
 import { ColumnDef } from "@tanstack/react-table";
 import moment from "moment";
 import { CellAction } from "./cell-action";
-import { Badge } from "@/components/ui/badge";
 
 export const columns: ColumnDef<Shipment>[] = [
   {
@@ -48,6 +47,16 @@ export const columns: ColumnDef<Shipment>[] = [
   {
     accessorKey: "carrier",
     header: "Carrier",
+    cell: ({ row }) => (
+      <div className="flex  items-center flex-col">
+        {row.original?.carrier && (
+          <p className="text-center tracking-tighter">{row.original.carrier}</p>
+        )}
+        {row.original?.sealine && (
+          <p className="text-center tracking-tighter">{row.original.sealine}</p>
+        )}
+      </div>
+    ),
   },
 
   {

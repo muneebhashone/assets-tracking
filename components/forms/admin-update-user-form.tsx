@@ -55,13 +55,12 @@ const adminUserUpdateFormSchema = z
   .object({
     email: z
       .string({ required_error: "Email is required" })
-      .min(1)
+
       .email("Email must be valid")
       .optional(),
     name: z.string({ required_error: "Name is required" }).min(1).optional(),
     phoneNo: z
       .string()
-      .min(1)
       .refine(
         (value) => validator.isMobilePhone(value, "any", { strictMode: true }),
         "Phone no. must be valid",
@@ -136,17 +135,17 @@ const AdminUpdateUserForm = ({
 
     credits: userData.credits,
     companyId: userData.companyId ? String(userData.companyId) : undefined,
-    email: userData.email,
-    isActive: userData.isActive,
+    email: userData.email ? userData.email : undefined,
+    isActive: userData.isActive ? userData.isActive : undefined,
 
-    name: userData.name,
-    permissions: userData.permissions,
-    phoneNo: userData.phoneNo,
-    role: userData.role,
-    status: userData.status,
+    name: userData.name ? userData.name : undefined,
+    permissions: userData.permissions ? userData.permissions : undefined,
+    phoneNo: userData.phoneNo ? userData.phoneNo : undefined,
+    role: userData.role ? userData.role : undefined,
+    status: userData.status ? userData.status : undefined,
   };
   const form = useForm<AdminUserUpdateFormSchemaType>({
-    defaultValues: initialData,
+    values: initialData,
     resolver: zodResolver(adminUserUpdateFormSchema),
   });
 

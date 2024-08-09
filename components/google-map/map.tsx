@@ -1,22 +1,30 @@
-import { useEffect, useRef } from "react";
 import { Loader } from "@googlemaps/js-api-loader";
+import { useEffect, useRef } from "react";
 type GoogleMapProps = {
   positions?: {
     lat: number;
     lng: number;
   }[];
 
-  checkpoints: {
+  checkpoints?: {
     lat: number;
     lng: number;
   }[];
+  currentLocation?: {
+    lat: number;
+    lng: number;
+  };
 };
-export function GoogleMap({ positions, checkpoints }: GoogleMapProps) {
+export function GoogleMap({
+  positions,
+  checkpoints,
+  currentLocation,
+}: GoogleMapProps) {
   const mapRef = useRef(null);
 
   useEffect(() => {
     const loader = new Loader({
-      apiKey: "AIzaSyDe_fLxQFXdTRd7JsWf2MiHzwjMhIupJ0A",
+      apiKey: process.env.NEXT_PUBLIC_GOOGLE_MAP_API_KEY || "",
       version: "weekly",
     });
 
@@ -24,7 +32,8 @@ export function GoogleMap({ positions, checkpoints }: GoogleMapProps) {
       if (mapRef.current) {
         const map = new google.maps.Map(mapRef.current, {
           zoom: 3,
-          center: { lat: 0, lng: -180 },
+          minZoom: 3,
+          center: currentLocation ?? { lat: 0, lng: -180 },
           mapTypeId: "terrain",
         });
         if (positions) {
@@ -51,17 +60,26 @@ export function GoogleMap({ positions, checkpoints }: GoogleMapProps) {
             });
           };
 
-          checkpoints.map((checkpoint, index) =>
+          if (currentLocation) {
             addMarker(
-              checkpoint,
-              `Checkpoint ${index}`,
-              "https://maps.google.com/mapfiles/kml/shapes/shaded_dot.png",
-            ),
-          );
+              currentLocation,
+              `Pin Location`,
+              "https://maps.google.com/mapfiles/kml/paddle/red-circle.png",
+            );
+          }
+          if (checkpoints && checkpoints?.length) {
+            checkpoints?.map((checkpoint, index) =>
+              addMarker(
+                checkpoint,
+                `Checkpoint ${index + 1}`,
+                `https://maps.google.com/mapfiles/kml/pal3/icon${index}.png`,
+              ),
+            );
+          }
         }
       }
     });
-  }, []);
+  }, [checkpoints, currentLocation, positions]);
 
   return <div ref={mapRef} style={{ height: "400px", width: "100%" }} />;
 }

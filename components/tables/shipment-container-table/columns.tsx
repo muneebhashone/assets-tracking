@@ -16,7 +16,7 @@ export const columns: ColumnDef<Container>[] = [
       <div>
         {row.original?.emptyToShipper
           ? moment(row.original?.emptyToShipper).format("DD/MM/YYYY")
-          : "N/A"}
+          : "-"}
       </div>
     ),
   },
@@ -27,7 +27,7 @@ export const columns: ColumnDef<Container>[] = [
       <div>
         {row.original?.gateIn
           ? moment(row.original?.gateIn).format("DD/MM/YYYY")
-          : "N/A"}
+          : "-"}
       </div>
     ),
   },
@@ -38,7 +38,7 @@ export const columns: ColumnDef<Container>[] = [
       <div>
         {row.original?.gateOut
           ? moment(row.original?.gateOut).format("DD/MM/YYYY")
-          : "N/A"}
+          : "-"}
       </div>
     ),
   },
@@ -49,7 +49,7 @@ export const columns: ColumnDef<Container>[] = [
       <div>
         {row.original?.emptyReturn
           ? moment(row.original?.emptyReturn).format("DD/MM/YYYY")
-          : "N/A"}
+          : "-"}
       </div>
     ),
   },

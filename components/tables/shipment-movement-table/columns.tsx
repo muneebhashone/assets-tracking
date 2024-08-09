@@ -25,16 +25,16 @@ export const columns: ColumnDef<Movement>[] = [
   },
   {
     header: "Vessel",
-    cell: ({ row }) => <div>{row.original.vessel?.name || "N/A"}</div>,
+    cell: ({ row }) => <div>{row.original.vessel?.name || "-"}</div>,
   },
 
   {
     id: "actions",
     cell: ({ row }) => {
       return (
-        Boolean(row.original?.actual) && (
+        Boolean(row.original?.actual) ? (
           <CheckCircle2 className="w-6 h-6 text-white " fill="#50C878" />
-        )
+        ):<p className="text-center w-6 h-6">-</p>
       );
     },
   },
