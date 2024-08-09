@@ -20,18 +20,17 @@ export const columns: ColumnDef<Movement>[] = [
   {
     header: "Date",
     cell: ({ row }) => (
-      <div>{moment(row.original.date).format("MM/DD/YYYY")}</div>
+      <div>{moment(row.original.date).format("DD/MM/YYYY")}</div>
     ),
   },
   {
     header: "Vessel",
-    cell: ({ row }) => <div>{row.original.vessel.name}</div>,
+    cell: ({ row }) => <div>{row.original.vessel?.name || "N/A"}</div>,
   },
 
   {
     id: "actions",
     cell: ({ row }) => {
-     
       return (
         Boolean(row.original?.actual) && (
           <CheckCircle2 className="w-6 h-6 text-white " fill="#50C878" />

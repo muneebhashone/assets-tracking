@@ -58,7 +58,9 @@ const ShipmentPage = () => {
             </div>
           )}
           <div className="flex justify-between mb-2">
-            <SearchBar />
+            <SearchBar
+              placeholder="TYPE MBL, CTNR or BOOKING NO."
+            />
             {/* <Filter
               optionsMapper={optionsMapper}
               type="Shipment"

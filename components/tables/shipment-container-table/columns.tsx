@@ -15,7 +15,7 @@ export const columns: ColumnDef<Container>[] = [
     cell: ({ row }) => (
       <div>
         {row.original?.emptyToShipper
-          ? moment(row.original?.emptyToShipper).format("MM/DD/YYYY")
+          ? moment(row.original?.emptyToShipper).format("DD/MM/YYYY")
           : "N/A"}
       </div>
     ),
@@ -26,7 +26,7 @@ export const columns: ColumnDef<Container>[] = [
     cell: ({ row }) => (
       <div>
         {row.original?.gateIn
-          ? moment(row.original?.gateIn).format("MM/DD/YYYY")
+          ? moment(row.original?.gateIn).format("DD/MM/YYYY")
           : "N/A"}
       </div>
     ),
@@ -37,7 +37,7 @@ export const columns: ColumnDef<Container>[] = [
     cell: ({ row }) => (
       <div>
         {row.original?.gateOut
-          ? moment(row.original?.gateOut).format("MM/DD/YYYY")
+          ? moment(row.original?.gateOut).format("DD/MM/YYYY")
           : "N/A"}
       </div>
     ),
@@ -48,7 +48,7 @@ export const columns: ColumnDef<Container>[] = [
     cell: ({ row }) => (
       <div>
         {row.original?.emptyReturn
-          ? moment(row.original?.emptyReturn).format("MM/DD/YYYY")
+          ? moment(row.original?.emptyReturn).format("DD/MM/YYYY")
           : "N/A"}
       </div>
     ),

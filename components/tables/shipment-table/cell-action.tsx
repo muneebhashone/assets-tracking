@@ -154,17 +154,22 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
 
-          <DropdownMenuItem>
-            <Link
-              href={`/dashboard/shipment/${data.id}`}
-              className="hover:text-blue-400"
-            >
-              <div className="flex">
-                <ExternalLink className="mr-2 h-4 w-4" />
-                View Details
-              </div>
-            </Link>
-          </DropdownMenuItem>
+          {(user?.user.role === "SUPER_ADMIN" ||
+            checkPermissions(user?.user.permissions as PermissionsType[], [
+              "VIEW_SHIPMENT",
+            ])) && (
+            <DropdownMenuItem>
+              <Link
+                href={`/dashboard/shipment/${data.id}`}
+                className="hover:text-blue-400"
+              >
+                <div className="flex">
+                  <ExternalLink className="mr-2 h-4 w-4" />
+                  View Details
+                </div>
+              </Link>
+            </DropdownMenuItem>
+          )}
 
           <DropdownMenuItem onClick={() => setWarningOpen(true)}>
             <Trash className="mr-2 h-4 w-4" /> Delete

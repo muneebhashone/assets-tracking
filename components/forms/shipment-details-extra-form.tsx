@@ -11,11 +11,21 @@ import { TagsInput } from "react-tag-input-component";
 import { z } from "zod";
 import { toast } from "../ui/use-toast";
 import { Button } from "../ui/button";
+import {
+  Menubar,
+  MenubarContent,
+  MenubarItem,
+  MenubarMenu,
+  MenubarSeparator,
+  MenubarTrigger,
+} from "../ui/menubar";
+import { HamburgerMenuIcon } from "@radix-ui/react-icons";
 
 interface ShipmentDetailExtraFormProps {
   shipmentData: Shipment;
   shipmentField: "tags" | "followers";
   placeHolder?: string;
+  showBar?: boolean;
 }
 type ShipmentDetailExtraInputType = z.infer<
   typeof ShipmentDetailExtraFormSchema
@@ -32,6 +42,7 @@ const ShipmentDetailExtraForm = ({
   shipmentData,
   shipmentField,
   placeHolder = "Enter your Details",
+  showBar = false,
 }: ShipmentDetailExtraFormProps) => {
   const initialValues: ShipmentDetailExtraInputType = {
     [shipmentField]: shipmentData?.[shipmentField],
@@ -76,12 +87,29 @@ const ShipmentDetailExtraForm = ({
             control={control}
             render={({ field }) => (
               <FormItem>
-                <Label
-                  htmlFor={shipmentField}
-                  className="text-neutral-500 font-medium capitalize"
-                >
-                  {shipmentField.toLowerCase()}
-                </Label>
+                <div className="flex justify-between  items-center">
+                  <Label
+                    htmlFor={shipmentField}
+                    className="text-neutral-500 font-medium capitalize"
+                  >
+                    {shipmentField.toLowerCase()}
+                  </Label>
+                  {showBar && (
+                    <Menubar>
+                      <MenubarMenu>
+                        <MenubarTrigger type="button">
+                          <HamburgerMenuIcon />
+                        </MenubarTrigger>
+                        <MenubarContent>
+                          <MenubarItem>Generate Tracking Email</MenubarItem>
+                          <MenubarSeparator />
+                          <MenubarItem>Share</MenubarItem>
+                       
+                        </MenubarContent>
+                      </MenubarMenu>
+                    </Menubar>
+                  )}
+                </div>
                 <FormControl>
                   <TagsInput
                     placeHolder={placeHolder}
@@ -107,7 +135,10 @@ const ShipmentDetailExtraForm = ({
             )}
           />
         </div>
-        <Button className="mt-4 mb-4 bg-golden">Submit</Button>
+
+        <Button className="mt-4 mb-4 bg-golden" type="submit">
+          Submit
+        </Button>
       </form>
     </Form>
   );

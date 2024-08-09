@@ -77,7 +77,7 @@ export const columns: ColumnDef<Company>[] = [
     header: "Industry",
   },
   {
-    accessorKey: "[users].credits",
+    accessorKey: "[users]?.credits",
     header: () => (
       <ProtectedHeader columnName="Credits" permission="CREATE_SHIPMENT" />
     ),
@@ -89,7 +89,7 @@ export const columns: ColumnDef<Company>[] = [
             "CREATE_SHIPMENT",
           ])) && (
           <>
-            <p>{row.original.users?.[0].credits}</p>
+            <p>{row.original.users?.[0]?.credits || 0}</p>
           </>
         )
       );

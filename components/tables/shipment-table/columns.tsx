@@ -6,6 +6,7 @@ import { TrackWithDisplay } from "@/utils/constants";
 import { ColumnDef } from "@tanstack/react-table";
 import moment from "moment";
 import { CellAction } from "./cell-action";
+import { Badge } from "@/components/ui/badge";
 
 export const columns: ColumnDef<Shipment>[] = [
   {
@@ -16,25 +17,39 @@ export const columns: ColumnDef<Shipment>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "type",
-    header: "Type",
+    accessorKey: "referenceNo",
+    header: () => <p className="text-center">{"Reference"}</p>,
+    cell: ({ row }) => (
+      <div className="flex  items-center flex-col ">
+        <p className="text-center tracking-tighter">
+          {row.original?.referenceNo ? row.original?.referenceNo : "-"}
+        </p>
+      </div>
+    ),
   },
+
   {
-    header: "Track With",
-    cell: ({ row }) => <div> {TrackWithDisplay[row.original.trackWith]}</div>,
+    accessorKey: "shipment",
+    header: () => <p className="text-center">{"Shipment"}</p>,
+    cell: ({ row }) => (
+      <div className="flex  items-center flex-col">
+        {row.original?.mblNo && (
+          <p className="text-center tracking-tighter">{row.original.mblNo}</p>
+        )}
+        {row.original?.containerNo && (
+          <p className="text-center tracking-tighter">
+            {row.original.containerNo}
+          </p>
+        )}
+      </div>
+    ),
   },
-  {
-    accessorKey: "containerNo",
-    header: "Container No.",
-  },
-  {
-    accessorKey: "mblNo",
-    header: "MBL No.",
-  },
+
   {
     accessorKey: "carrier",
     header: "Carrier",
   },
+
   {
     accessorKey: "status",
     header: "Status",
@@ -72,13 +87,19 @@ export const columns: ColumnDef<Shipment>[] = [
     ),
   },
   {
-    accessorKey: "progress",
-    header: "Progress",
-  },
-
-  {
-    accessorKey: "isTracking",
-    header: "In Tracking",
+    accessorKey: "tags",
+    header: "Tags",
+    cell: ({ row }) =>
+      row.original?.tags &&
+      row.original?.tags.map((tag, index) => {
+        return (
+          <div className="flex flex-row mb-2" key={index}>
+            <p className="font-bold">
+              <Badge className="bg-slate-500 cursor-pointer">{tag}</Badge>
+            </p>
+          </div>
+        );
+      }),
   },
   {
     header: "Files",

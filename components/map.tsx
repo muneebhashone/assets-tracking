@@ -13,7 +13,7 @@ import {
   Marker,
   Polyline,
   Popup,
-  TileLayer
+  TileLayer,
 } from "react-leaflet";
 
 interface MapProps {
@@ -27,6 +27,7 @@ interface MapProps {
 const DEFAULT_WIDTH = "600px";
 const DEFAULT_HEIGHT = "400px";
 const DEFAULT_CENTER = [51.505, -0.09];
+const mapTilesKey = process.env.NEXT_PUBLIC_MAP_TILES_API_KEY || "";
 
 export default function Map({
   width = DEFAULT_WIDTH,
@@ -46,8 +47,8 @@ export default function Map({
       style={{ height: height, width: width }}
     >
       <TileLayer
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        attribution='<a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>'
+        url={`https://api.maptiler.com/maps/bright-v2/256/{z}/{x}/{y}.png?key=${mapTilesKey}`}
       />
       <LayerGroup>
         {positions && Boolean(positions?.length) && (

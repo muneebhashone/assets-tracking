@@ -46,12 +46,10 @@ const AdminpdateShipmentFormSchema = z
     trackWith: z.enum(trackWithEnums).optional(),
     containerNo: z
       .string()
-      .min(1)
       .transform((value) => value.toUpperCase())
       .optional(),
     mblNo: z
       .string()
-      .min(1)
       .transform((value) => value.toUpperCase())
       .optional(),
     carrier: z.string().optional(),
@@ -71,17 +69,18 @@ const AdminUpdateShipmentForm = ({
   shipmentData,
 }: AdminUpdateShipmentFormProps) => {
   const initialValues: AdminpdateShipmentFormSchemaType = {
-    followers: shipmentData?.followers,
-    referenceNo: shipmentData?.referenceNo,
-    tags: shipmentData?.tags,
-    trackWith: shipmentData?.trackWith,
-    carrier: shipmentData?.carrier,
-    containerNo: shipmentData?.containerNo,
+    followers: shipmentData?.followers || undefined,
+    referenceNo: shipmentData?.referenceNo  || undefined,
+    tags: shipmentData?.tags  || undefined,
+    trackWith: shipmentData?.trackWith   || undefined,
+    carrier: shipmentData?.carrier  || undefined,
+    containerNo: shipmentData?.containerNo  || undefined,
+    mblNo: shipmentData?.mblNo || undefined,
   };
-
+  console.log(initialValues);
   const form = useForm<AdminpdateShipmentFormSchemaType>({
     resolver: zodResolver(AdminpdateShipmentFormSchema),
-    defaultValues: initialValues,
+    values: initialValues,
   });
   const { control, formState, handleSubmit, watch } = form;
 
@@ -135,30 +134,6 @@ const AdminUpdateShipmentForm = ({
                   <CardTitle className="text-lg font-medium text-zinc-700">
                     Update Single Shipment
                   </CardTitle>
-                  {/* <CardDescription className="mt-2 mb-6">
-                    <p className="text-neutral-600 text-sm mb-6">
-                      You can update Shi by Container Number or MBL /
-                      Booking Number.
-                    </p>
-                    <div className="flex items-center space-x-2 mb-2">
-                      <CheckCircledIcon className="text-[#348cd4]" />
-                      <span className="text-neutral-500 font-medium">
-                        Choose the carrier.
-                      </span>
-                    </div>
-                    <div className="flex items-center space-x-2 mb-2">
-                      <CheckCircledIcon className="text-[#348cd4]" />
-                      <span className="text-neutral-500 font-medium">
-                        Enter your Container, Booking or BL Number.
-                      </span>
-                    </div>
-                    <div className="flex items-center space-x-2 mb-2">
-                      <CheckCircledIcon className="text-[#348cd4]" />
-                      <span className="text-neutral-500 font-medium">
-                        Click to the &quot;Create&quot; button.
-                      </span>
-                    </div>
-                  </CardDescription> */}
                 </CardHeader>
                 <CardContent className="space-y-4 ">
                   <div className="flex justify-between gap-4">

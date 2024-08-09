@@ -48,7 +48,7 @@ const UpdateShipmentInputSchema = z.object({
     .array()
     .optional(),
 
-  referenceNo: z.string().nullable(),
+  referenceNo: z.string().optional(),
 });
 
 export default function UpdateShipmentForm({
@@ -57,14 +57,14 @@ export default function UpdateShipmentForm({
   setModalOpen,
 }: UpdateFormProps) {
   const initialValues: UpdateShipmenFormtInputType = {
-    followers: shipmentData?.followers,
-    referenceNo: shipmentData?.referenceNo,
-    tags: shipmentData?.tags,
+    followers: shipmentData?.followers || undefined,
+    referenceNo: shipmentData?.referenceNo || undefined,
+    tags: shipmentData?.tags || undefined,
   };
 
   const form = useForm<UpdateShipmenFormtInputType>({
     resolver: zodResolver(UpdateShipmentInputSchema),
-    defaultValues: initialValues,
+    values: initialValues,
   });
   const { control, formState, handleSubmit } = form;
   const { mutate } = useUpdateShipment({
@@ -87,7 +87,7 @@ export default function UpdateShipmentForm({
       }
     },
   });
-  
+
   const onSubmit = (data: UpdateShipmenFormtInputType) => {
     if (data) {
       const sanitizedResult = sanitizeObject(data);
