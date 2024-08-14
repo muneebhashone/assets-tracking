@@ -186,7 +186,10 @@ export function ShipmentTable({
                   data-state={row.getIsSelected() && "selected"}
                 >
                   {row.getVisibleCells()?.map((cell) => (
-                    <TableCell key={cell.id} className="w-[20%]">
+                    <TableCell
+                      key={cell.id}
+                      className={cell.column.id === "select" ? "w-[5%]" : "w-[20%]"}
+                    >
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext(),
