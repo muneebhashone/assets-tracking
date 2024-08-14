@@ -65,7 +65,7 @@ export const columns: ColumnDef<Shipment>[] = [
   },
   {
     accessorKey: "pol.date",
-    header: () => <p className="text-center">{"POD"}</p>,
+    header: () => <p className="text-center">{"Port of Loading"}</p>,
     cell: ({ row }) => (
       <div className="flex  items-center flex-col">
         <p className="font-bold text-center">
@@ -81,7 +81,7 @@ export const columns: ColumnDef<Shipment>[] = [
   },
   {
     accessorKey: "pod.date",
-    header: () => <p className="text-center">{"POL"}</p>,
+    header: () => <p className="text-center">{"Port of Destination"}</p>,
     cell: ({ row }) => (
       <div className="flex items-center flex-col">
         <p className="font-bold text-center">

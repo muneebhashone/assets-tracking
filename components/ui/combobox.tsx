@@ -77,7 +77,7 @@ export function Combobox({
             if (
               options
                 .find((option) => option.value === value)
-                ?.name?.includes(search)
+                ?.name.toLowerCase()?.includes(search.toLowerCase())
             )
               return 1;
             return 0;

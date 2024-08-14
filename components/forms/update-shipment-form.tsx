@@ -3,14 +3,12 @@ import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
-  CardTitle,
+  CardTitle
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { useUpdateShipment } from "@/services/shipment.mutations";
-import { CheckCircledIcon } from "@radix-ui/react-icons";
 import { useForm } from "react-hook-form";
 //@ts-ignore
 import {
@@ -24,13 +22,12 @@ import { toast } from "@/components/ui/use-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Dispatch, SetStateAction } from "react";
 //@ts-ignore
-import { TagsInput } from "react-tag-input-component";
 import { z } from "zod";
 import { ModalCustom } from "../ModalComponent";
 
 import { Shipment } from "@/services/shipment.queries";
-import { Label } from "../ui/label";
 import { sanitizeObject } from "@/utils/common.utils";
+import { Label } from "../ui/label";
 
 interface UpdateFormProps {
   shipmentData: Shipment;
@@ -66,7 +63,7 @@ export default function UpdateShipmentForm({
     resolver: zodResolver(UpdateShipmentInputSchema),
     values: initialValues,
   });
-  const { control, formState, handleSubmit } = form;
+  const { control, handleSubmit } = form;
   const { mutate } = useUpdateShipment({
     onSuccess(data, variables, context) {
       toast({
@@ -108,94 +105,12 @@ export default function UpdateShipmentForm({
               <Card className="w-full max-w-xl border-0 shadow-none">
                 <CardHeader>
                   <CardTitle className="text-lg font-medium text-zinc-700">
-                    Single Shipment
+                    Update Single Shipment
                   </CardTitle>
-                  <CardDescription className="mt-2 mb-6">
-                    <p className="text-neutral-600 text-sm mb-6">
-                      You can track shipment by Container Number or MBL /
-                      Booking Number.
-                    </p>
-                    <div className="flex items-center space-x-2 mb-2">
-                      <CheckCircledIcon className="text-[#348cd4]" />
-                      <span className="text-neutral-500 font-medium">
-                        Choose the carrier.
-                      </span>
-                    </div>
-                    <div className="flex items-center space-x-2 mb-2">
-                      <CheckCircledIcon className="text-[#348cd4]" />
-                      <span className="text-neutral-500 font-medium">
-                        Enter your Container, Booking or BL Number.
-                      </span>
-                    </div>
-                    <div className="flex items-center space-x-2 mb-2">
-                      <CheckCircledIcon className="text-[#348cd4]" />
-                      <span className="text-neutral-500 font-medium">
-                        Click to the &quot;Create&quot; button.
-                      </span>
-                    </div>
-                  </CardDescription>
+                  
                 </CardHeader>
                 <CardContent className="space-y-4 ">
-                  <div className="space-y-2">
-                    <FormField
-                      name="tags"
-                      control={control}
-                      render={({ field }) => (
-                        <FormItem>
-                          <Label
-                            htmlFor="tags"
-                            className="text-neutral-500 font-medium"
-                          >
-                            Tags
-                          </Label>
-                          <FormControl>
-                            <TagsInput
-                              classNames={{
-                                input:
-                                  "bg-white !w-full !text-sm placeholder:!text-muted-foreground",
-                                // tag: "!w-full",
-                              }}
-                              placeHolder="Enter Tags"
-                              {...field}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <FormField
-                      name="followers"
-                      control={control}
-                      render={({ field }) => (
-                        <FormItem>
-                          <Label
-                            htmlFor="followers"
-                            className="text-neutral-500 font-medium"
-                          >
-                            Followers
-                          </Label>
-                          <FormControl>
-                            <TagsInput
-                              placeHolder="Enter Followers Email"
-                              classNames={{
-                                input:
-                                  "bg-white !w-full !text-sm placeholder:!text-muted-foreground",
-                                // tag: "!w-full",
-                              }}
-                              {...field}
-                            />
-                          </FormControl>
-                          {formState.errors.followers?.length && (
-                            <div className="text-[0.8rem] font-medium text-destructive">
-                              {formState?.errors.followers?.[0]?.message}
-                            </div>
-                          )}
-                        </FormItem>
-                      )}
-                    />
-                  </div>
+               
                   <div className="space-y-2">
                     <FormField
                       name="referenceNo"
