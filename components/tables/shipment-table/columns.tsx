@@ -46,7 +46,7 @@ export const columns: ColumnDef<Shipment>[] = [
 
   {
     accessorKey: "carrier",
-    header: "Carrier",
+    header: () => <p className="text-center">{"Carrier"}</p>,
     cell: ({ row }) => (
       <div className="flex  items-center flex-col">
         {row.original?.carrier && (
@@ -61,7 +61,7 @@ export const columns: ColumnDef<Shipment>[] = [
 
   {
     accessorKey: "status",
-    header: "Status",
+    header: () => <p className="text-center">{"Status"}</p>,
   },
   {
     accessorKey: "pol.date",
