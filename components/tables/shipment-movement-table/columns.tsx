@@ -9,7 +9,7 @@ export const columns: ColumnDef<Movement>[] = [
     header: "Location",
     cell: ({ row }) => (
       <div>
-        {row.original?.location?.name ? row.original?.location?.name : "NA"}
+        {row.original?.location?.name ? row.original?.location?.name : "-"}
       </div>
     ),
   },

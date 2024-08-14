@@ -69,12 +69,12 @@ export const columns: ColumnDef<Shipment>[] = [
     cell: ({ row }) => (
       <div className="flex  items-center flex-col">
         <p className="font-bold text-center">
-          {row.original?.pol?.location ? row.original.pol.location.name : "NA"}
+          {row.original?.pol?.location ? row.original.pol.location.name : "-"}
         </p>
         <p>
           {row.original?.pol?.date
             ? moment(row.original.pol.date).format("DD/MM/YYYY")
-            : "NA"}
+            : "-"}
         </p>
       </div>
     ),
@@ -85,12 +85,12 @@ export const columns: ColumnDef<Shipment>[] = [
     cell: ({ row }) => (
       <div className="flex items-center flex-col">
         <p className="font-bold text-center">
-          {row.original?.pod?.location ? row.original.pod.location.name : "NA"}
+          {row.original?.pod?.location ? row.original.pod.location.name : "-"}
         </p>
         <p>
           {row.original?.pod?.date
             ? moment(row.original.pod.date).format("DD/MM/YYYY")
-            : "NA"}
+            : "-"}
         </p>
       </div>
     ),

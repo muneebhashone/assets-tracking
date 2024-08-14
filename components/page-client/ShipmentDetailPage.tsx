@@ -58,7 +58,7 @@ const ShipmentDetailPage = ({ id }: ShipmentDetailPageProps) => {
           </Button>
         </Link>
         <h1 className="text-lg font-semibold md:text-2xl">
-          Shipment # {shipmentData?.result.id ? shipmentData?.result.id : "NA"}
+          Shipment # {shipmentData?.result.id ? shipmentData?.result.id : "-"}
         </h1>
       </div>
       <main className="flex-1 overflow-y-auto p-4 md:p-6">
@@ -70,7 +70,7 @@ const ShipmentDetailPage = ({ id }: ShipmentDetailPageProps) => {
                 <span className="ml-2 text-gray-500">
                   {shipmentData?.result.referenceNo
                     ? shipmentData?.result.referenceNo
-                    : "NA"}
+                    : "-"}
                 </span>
               </div>
               <div className="flex  gap-2">
@@ -88,7 +88,7 @@ const ShipmentDetailPage = ({ id }: ShipmentDetailPageProps) => {
                     {" "}
                     {shipmentData?.result.mblNo
                       ? shipmentData?.result.mblNo
-                      : "NA"}
+                      : "-"}
                   </span>
                 </div>
               )}
@@ -98,7 +98,7 @@ const ShipmentDetailPage = ({ id }: ShipmentDetailPageProps) => {
                   {" "}
                   {shipmentData?.result.carrier
                     ? shipmentData?.result.carrier
-                    : "NA"}
+                    : "-"}
                 </span>
               </div>
 
@@ -109,7 +109,7 @@ const ShipmentDetailPage = ({ id }: ShipmentDetailPageProps) => {
                     {" "}
                     {shipmentData?.result.containerNo
                       ? shipmentData?.result.containerNo
-                      : "NA"}{" "}
+                      : "-"}{" "}
                   </span>
                 </div>
               )}
@@ -122,16 +122,16 @@ const ShipmentDetailPage = ({ id }: ShipmentDetailPageProps) => {
                       ? moment(shipmentData?.result.createdAt).format(
                           "DD/MM/YYYY HH:mm:ss",
                         )
-                      : "NA"}
+                      : "-"}
                   </p>
                   <p className="ml-2 text-gray-500">
                     {shipmentData?.result.user.name
                       ? shipmentData?.result.user.name
-                      : "NA"}{" "}
+                      : "-"}{" "}
                     &lt;
                     {shipmentData?.result.user.email
                       ? shipmentData?.result.user.email
-                      : "NA"}
+                      : "-"}
                     &gt;{" "}
                   </p>
                 </div>

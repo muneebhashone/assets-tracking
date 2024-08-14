@@ -11,29 +11,12 @@ export type ShipmentFetchContainerType = {
   name: string;
   code: string;
 };
-export const fetchAllSearatesContainers = async () => {
-  const res =
-    await searatesApiAxios.get<SearatesSealineApiResponse>(`/info/sealines`);
-  const { data } = res;
-
-  return data;
-};
 
 export const fetchAllSearatesContainerSetup = async () => {
   const res = await apiAxios.get<SearatesSealineApiResponse>(`/setup/sealines`);
   const { data } = res;
 
   return data;
-};
-
-export const useFetchAllSearatesContainers = (
-  options?: UseQueryOptions<SearatesSealineApiResponse, unknown>,
-) => {
-  return useQuery({
-    ...options,
-    queryFn: fetchAllSearatesContainers,
-    queryKey: ["fetchAllSearatesContainers"],
-  });
 };
 
 export const useFetchAllSearatesContainerSetup = (

@@ -1,14 +1,12 @@
 "use client";
 
 import { useAdminUpdateShipment } from "@/services/admin/shipment.mutations";
-import { useFetchAllSearatesContainerSetup } from "@/services/searates.queries";
 import { Shipment, trackWithEnums } from "@/services/shipment.queries";
 import { sanitizeObject } from "@/utils/common.utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { PlusCircledIcon } from "@radix-ui/react-icons";
 import { Dispatch, SetStateAction } from "react";
 import { useForm } from "react-hook-form";
-import { TagsInput } from "react-tag-input-component";
 import { z } from "zod";
 import { ModalCustom } from "../ModalComponent";
 import { Button } from "../ui/button";
@@ -19,7 +17,6 @@ import {
   CardHeader,
   CardTitle,
 } from "../ui/card";
-import { Combobox, Options } from "../ui/combobox";
 import {
   Form,
   FormControl,
@@ -29,13 +26,6 @@ import {
 } from "../ui/form";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../ui/select";
 import { toast } from "../ui/use-toast";
 type AdminpdateShipmentFormSchemaType = z.infer<
   typeof AdminpdateShipmentFormSchema
@@ -70,19 +60,19 @@ const AdminUpdateShipmentForm = ({
 }: AdminUpdateShipmentFormProps) => {
   const initialValues: AdminpdateShipmentFormSchemaType = {
     followers: shipmentData?.followers || undefined,
-    referenceNo: shipmentData?.referenceNo  || undefined,
-    tags: shipmentData?.tags  || undefined,
-    trackWith: shipmentData?.trackWith   || undefined,
-    carrier: shipmentData?.carrier  || undefined,
-    containerNo: shipmentData?.containerNo  || undefined,
+    referenceNo: shipmentData?.referenceNo || undefined,
+    tags: shipmentData?.tags || undefined,
+    trackWith: shipmentData?.trackWith || undefined,
+    carrier: shipmentData?.carrier || undefined,
+    containerNo: shipmentData?.containerNo || undefined,
     mblNo: shipmentData?.mblNo || undefined,
   };
- 
+
   const form = useForm<AdminpdateShipmentFormSchemaType>({
     resolver: zodResolver(AdminpdateShipmentFormSchema),
     values: initialValues,
   });
-  const { control, formState, handleSubmit, watch } = form;
+  const { control, handleSubmit } = form;
 
   const { mutate } = useAdminUpdateShipment({
     onSuccess(data, variables, context) {
@@ -103,13 +93,6 @@ const AdminUpdateShipmentForm = ({
         });
       }
     },
-  });
-  const { data: containers } = useFetchAllSearatesContainerSetup();
-  const containerNames = containers?.data?.map((value) => {
-    return {
-      name: value.name,
-      value: value.scac_codes?.[0],
-    };
   });
 
   const onSubmit = (data: AdminpdateShipmentFormSchemaType) => {
@@ -136,180 +119,6 @@ const AdminUpdateShipmentForm = ({
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4 ">
-                  <div className="flex justify-between gap-4">
-                    <div className="space-y-2 w-[100%] contents ">
-                      <FormField
-                        name="carrier"
-                        control={control}
-                        render={({ field: { value, ...rest } }) => (
-                          <FormItem>
-                            <Label
-                              htmlFor="carrier"
-                              className="text-neutral-500 font-medium"
-                            >
-                              Carrier
-                            </Label>
-                            <FormControl>
-                              <Combobox
-                                options={containerNames as Options[]}
-                                value={value as string}
-                                {...rest}
-                              />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    </div>
-                    <div className="space-y-2 w-[100%]">
-                      <FormField
-                        name="trackWith"
-                        control={control}
-                        render={({ field }) => (
-                          <FormItem>
-                            <Label
-                              htmlFor="trackWith"
-                              className="text-neutral-500 font-medium"
-                            >
-                              Track with
-                            </Label>
-                            <FormControl>
-                              <Select
-                                onValueChange={field.onChange}
-                                // disabled={isPending || isFetching}
-                                {...field}
-                              >
-                                <SelectTrigger id="trackWith">
-                                  <SelectValue placeholder="Container Number" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                  <SelectItem value="CONTAINER_NUMBER">
-                                    Container Number
-                                  </SelectItem>
-                                  <SelectItem value="MBL_NUMBER">
-                                    MBL / Booking Number
-                                  </SelectItem>
-                                </SelectContent>
-                              </Select>
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    </div>
-                  </div>
-
-                  <div className="space-y-2">
-                    <FormField
-                      name="containerNo"
-                      control={control}
-                      render={({ field }) => (
-                        <FormItem>
-                          <Label
-                            htmlFor="containerNo"
-                            className="text-neutral-500 font-medium"
-                          >
-                            Container Number
-                          </Label>
-                          <FormControl>
-                            <Input
-                              id="containerNo"
-                              placeholder="Enter Container Number"
-                              {...field}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                  {watch("trackWith") === "MBL_NUMBER" && (
-                    <div className="space-y-2">
-                      <FormField
-                        name="mblNo"
-                        control={control}
-                        render={({ field: { value, ...rest } }) => (
-                          <FormItem>
-                            <Label
-                              htmlFor="mblNo"
-                              className="text-neutral-500 font-medium "
-                            >
-                              MBL / Booking Number
-                            </Label>
-                            <FormControl>
-                              <Input
-                                id="mblNo"
-                                placeholder="Enter Mobile or Lading Number"
-                                value={value?.toString()}
-                                {...rest}
-                              />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    </div>
-                  )}
-                  <div className="space-y-2">
-                    <FormField
-                      name="tags"
-                      control={control}
-                      render={({ field }) => (
-                        <FormItem>
-                          <Label
-                            htmlFor="tags"
-                            className="text-neutral-500 font-medium"
-                          >
-                            Tags
-                          </Label>
-                          <FormControl>
-                            <TagsInput
-                              classNames={{
-                                input:
-                                  "bg-white !w-full !text-sm placeholder:!text-muted-foreground",
-                                // tag: "!w-full",
-                              }}
-                              placeHolder="Enter Tags"
-                              {...field}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <FormField
-                      name="followers"
-                      control={control}
-                      render={({ field }) => (
-                        <FormItem>
-                          <Label
-                            htmlFor="followers"
-                            className="text-neutral-500 font-medium"
-                          >
-                            Followers
-                          </Label>
-                          <FormControl>
-                            <TagsInput
-                              placeHolder="Enter Followers Email"
-                              classNames={{
-                                input:
-                                  "bg-white !w-full !text-sm placeholder:!text-muted-foreground",
-                                // tag: "!w-full",
-                              }}
-                              {...field}
-                            />
-                          </FormControl>
-                          {formState.errors.followers?.length && (
-                            <div className="text-[0.8rem] font-medium text-destructive">
-                              {formState?.errors.followers?.[0]?.message}
-                            </div>
-                          )}
-                        </FormItem>
-                      )}
-                    />
-                  </div>
                   <div className="space-y-2">
                     <FormField
                       name="referenceNo"

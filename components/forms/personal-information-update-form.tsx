@@ -3,6 +3,7 @@
 import { useCurrentUser } from "@/services/auth.mutations";
 import { useUpdateProfileData } from "@/services/user.mutations";
 import { User } from "@/types/services/auth.types";
+import { handlePhoneNumber, sanitizeObject } from "@/utils/common.utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import PhoneInput from "react-phone-input-2";
@@ -20,7 +21,6 @@ import {
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { toast } from "../ui/use-toast";
-import { handlePhoneNumber, sanitizeObject } from "@/utils/common.utils";
 
 const profileUpdateFormSchema = z.object({
   name: z.string().optional(),
@@ -38,7 +38,7 @@ const profileUpdateFormSchema = z.object({
 export type ProfileUpdateFormType = z.infer<typeof profileUpdateFormSchema>;
 
 const PersonalInformationForm = () => {
-  const { data: user, isLoading: userLoading } = useCurrentUser();
+  const { data: user } = useCurrentUser();
 
   const { name, phoneNo, email } = (user?.user as User) ?? {};
   const initialValues = {
