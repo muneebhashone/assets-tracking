@@ -122,9 +122,6 @@ export const columns: ColumnDef<Shipment>[] = [
 
     cell: ({ row }) =>
       row?.original?.files?.length && <UploadedFilesView data={row.original} />,
-
-    maxSize: 20,
-    minSize: 30,
   },
   {
     id: "actions",
