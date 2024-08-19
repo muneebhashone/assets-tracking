@@ -11,6 +11,16 @@ import { TagsInput } from "react-tag-input-component";
 import { z } from "zod";
 import { Button } from "../ui/button";
 import { toast } from "../ui/use-toast";
+import {
+  Menubar,
+  MenubarContent,
+  MenubarItem,
+  MenubarMenu,
+  MenubarSeparator,
+  MenubarTrigger,
+} from "../ui/menubar";
+import { HamburgerMenuIcon } from "@radix-ui/react-icons";
+import { Mail, Ship, Truck } from "lucide-react";
 
 interface ShipmentDetailExtraFormProps {
   shipmentData: Shipment;
@@ -88,14 +98,22 @@ const ShipmentDetailExtraForm = ({
                   {/* {showBar && (
                     <Menubar>
                       <MenubarMenu>
-                        <MenubarTrigger type="button">
-                          <HamburgerMenuIcon />
+                        <MenubarTrigger
+                          type="button"
+                          className="cursor-pointer"
+                        >
+                          <Mail /> <span className="ml-2"> Send Email </span>
                         </MenubarTrigger>
-                        <MenubarContent>
-                          <MenubarItem>Generate Tracking Email</MenubarItem>
+                        <MenubarContent className="absolute right-[-140px] w-[200px]">
+                          <MenubarItem className="text-sm">
+                            <Ship className="w-6 h-6 mr-1" />{" "}
+                            <p>Send Tracking Email</p>{" "}
+                          </MenubarItem>
                           <MenubarSeparator />
-                          <MenubarItem>Share</MenubarItem>
-                       
+                          <MenubarItem>
+                            <Truck className="w-6 h-6 mr-1" />{" "}
+                            <p>Send Gate Out Email</p>
+                          </MenubarItem>
                         </MenubarContent>
                       </MenubarMenu>
                     </Menubar>

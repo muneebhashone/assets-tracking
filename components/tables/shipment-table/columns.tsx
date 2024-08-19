@@ -17,7 +17,7 @@ export const columns: ColumnDef<Shipment>[] = [
   },
   {
     accessorKey: "referenceNo",
-    header: () => <p className="text-center">{"Reference"}</p>,
+    header: () => <p className="text-center text-zinc-500">{"Reference"}</p>,
     cell: ({ row }) => (
       <div className="flex  items-center flex-col ">
         <p className="text-center tracking-tighter">
@@ -33,11 +33,22 @@ export const columns: ColumnDef<Shipment>[] = [
     cell: ({ row }) => (
       <div className="flex  items-center flex-col">
         {row.original?.mblNo && (
-          <p className="text-center tracking-tighter">{row.original.mblNo}</p>
+          <p className="text-center tracking-tighter font-bold text-zinc-500 ">
+            {row.original.mblNo}
+          </p>
         )}
-        {row.original?.containerNo && (
-          <p className="text-center tracking-tighter">
-            {row.original.containerNo}
+        {row.original?.containers?.length > 0 && (
+          <p className="text-center tracking-tighter text-gray-400 relative">
+            {row.original?.containers.length === 1 ? (
+              <span>{row.original?.containers[0].containerNumber}</span>
+            ) : (
+              <>
+                <span>{row.original?.containers[0].containerNumber}</span>
+                <span className="w-[20px] h-[18px] bg-gray-500 absolute top-[1px] left-[90px] text-[10px] font-normal rounded-md text-white text-center">
+                  +{row.original?.containers.length - 1}
+                </span>
+              </>
+            )}
           </p>
         )}
       </div>
@@ -50,10 +61,12 @@ export const columns: ColumnDef<Shipment>[] = [
     cell: ({ row }) => (
       <div className="flex  items-center flex-col">
         {row.original?.carrier && (
-          <p className="text-center tracking-tighter">{row.original.carrier}</p>
+          <p className="text-center tracking-tighter text-zinc-500 font-bold">{row.original.carrier}</p>
         )}
         {row.original?.sealine && (
-          <p className="text-center tracking-tighter">{row.original.sealine}</p>
+          <p className="text-center tracking-tighter text-gray-400 ">
+            {row.original.sealine}
+          </p>
         )}
       </div>
     ),
@@ -64,7 +77,7 @@ export const columns: ColumnDef<Shipment>[] = [
     header: () => <p className="text-center">{"Status"}</p>,
     cell: ({ row }) => (
       <div className="flex  items-center flex-col ">
-        <p className="text-center tracking-tighter">
+        <p className="text-center tracking-tighter text-gray-400">
           {row.original?.status ? row.original?.status : "-"}
         </p>
       </div>
@@ -75,10 +88,10 @@ export const columns: ColumnDef<Shipment>[] = [
     header: () => <p className="text-center">{"Port of Loading"}</p>,
     cell: ({ row }) => (
       <div className="flex  items-center flex-col">
-        <p className="font-bold text-center">
+        <p className="font-bold text-center text-zinc-500">
           {row.original?.pol?.location ? row.original.pol.location.name : "-"}
         </p>
-        <p>
+        <p className="text-gray-400">
           {row.original?.pol?.date
             ? moment(row.original.pol.date).format("DD/MM/YYYY")
             : "-"}
@@ -91,12 +104,14 @@ export const columns: ColumnDef<Shipment>[] = [
     header: () => <p className="text-center">{"Port of Destination"}</p>,
     cell: ({ row }) => (
       <div className="flex items-center flex-col">
-        <p className="font-bold text-center">
+        <p className="font-bold text-center text-zinc-500">
           {row.original?.pod?.location ? row.original.pod.location.name : "-"}
         </p>
-        <p>
+        <p className="text-gray-400">
           {row.original?.pod?.date
-            ? moment(row.original.pod.date).format("DD/MM/YYYY")
+            ? moment(row.original?.pod?.date).format("DD/MM/YYYY")
+            : row.original.pod?.predictive_eta
+            ? moment(row.original.pod?.predictive_eta).format("DD/MM/YYYY")
             : "-"}
         </p>
       </div>

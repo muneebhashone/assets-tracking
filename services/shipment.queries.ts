@@ -4,7 +4,13 @@ import { ErrorResponseType } from "./types.common";
 import { PaginatorInfoType } from "./user.queries";
 import { useCurrentUser } from "./auth.mutations";
 import { User } from "@/types/services/auth.types";
-import { Container, Movement, POD, POL } from "@/types/services/shipment.types";
+import {
+  Container,
+  Movement,
+  POD,
+  POL,
+  Vessel,
+} from "@/types/services/shipment.types";
 
 //types
 export type GetAllShipmentsInputType = {
@@ -64,6 +70,40 @@ export interface RoutePath {
   path: [number, number][];
 }
 
+export type AISStatusType = "OK" | "NOT_ON_BOARD" | "NO_AIS_DATA";
+
+export interface AISPortType {
+  name: string | null;
+  country_code: string | null;
+  code: string | null;
+  date: string | null;
+  date_label: "ETA" | "ATA" | null;
+}
+
+export interface AISEvent {
+  description: string;
+  date: string;
+  voyage: string;
+}
+
+export interface AISData {
+  last_event: AISEvent;
+  discharge_port: AISPortType;
+  vessel: Vessel;
+  last_vessel_position: {
+    lat: number | null;
+    lng: number | null;
+    updated_at: string;
+  };
+  departure_port: AISPortType;
+  arrival_port: AISPortType;
+  updated_at: string;
+}
+export interface AISType {
+  data: AISData;
+  status: AISStatusType;
+}
+
 export type Shipment = {
   id: number;
   status: ShipmentStatus | null;
@@ -86,11 +126,13 @@ export type Shipment = {
   pod: POD;
   routeData: RoutePath[];
   currentLocation: number[];
+  ais: AISType;
   progress: ShipmentProgressStatusType;
   shareFiles: boolean;
   isTracking: boolean;
   files: string[];
   shareToken?: string;
+  containers: Pick<Container, "containerNumber">[];
 };
 
 //services

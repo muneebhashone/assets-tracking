@@ -27,23 +27,30 @@ const ShipmentDetailPage = ({ id }: ShipmentDetailPageProps) => {
 
   const positions = shipmentData?.result?.routeData?.flatMap(
     (position) =>
-      position?.path.map((red) => {
-        return { lat: red[0], lng: red[1] };
+      position?.path.map((one) => {
+        return { lat: one[0], lng: one[1] };
       }),
   );
 
-  let checkpoints = shipmentData?.result?.routeData?.map((position) => ({
-    lat: position.path[0][0],
-    lng: position.path[0][1],
-  }));
+  const checkpoints = shipmentData?.result?.routeData.flatMap((item, index) => {
+    const first = item.path[0];
+    if (index === shipmentData?.result?.routeData.length - 1) {
+      const last = item.path[item.path.length - 1];
+      return [
+        { lat: first[0], lng: first[1] },
+        { lat: last[0], lng: last[1] },
+      ];
+    } else {
+      return { lat: first[0], lng: first[1] };
+    }
+  });
 
   const currentLocation = {
     lat: Number(shipmentData?.result?.currentLocation?.[0]),
     lng: Number(shipmentData?.result?.currentLocation?.[1]),
   };
-  if (checkpoints) {
-    checkpoints = [...checkpoints, currentLocation];
-  }
+
+  const aisData = shipmentData?.result?.ais;
   return (
     <div className="h-[100%] overflow-y-scroll">
       <div className="flex items-center h-14 border-b px-4 md:h-16 ">
@@ -208,22 +215,11 @@ const ShipmentDetailPage = ({ id }: ShipmentDetailPageProps) => {
               )}
             </TabsContent>
             <TabsContent value="live_location">
-              {/* <LazyMap
-                width={"100%"}
-                height={"600px"}
-                center={shipmentData?.result.currentLocation}
-                positions={
-                  shipmentData?.result.routeData?.map((data) => data.path)
-                }
-                checkpoints={shipmentData?.result.routeData?.map(
-                  (data) => data.path?.[0],
-                )}
-              /> */}
-
               <GoogleMap
                 positions={positions}
                 checkpoints={checkpoints}
                 currentLocation={currentLocation}
+                ais={aisData}
               />
             </TabsContent>
           </Tabs>

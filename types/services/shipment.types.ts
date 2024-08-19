@@ -21,11 +21,14 @@ export type Movement = {
 export type POL = {
   date: string;
   location: TLocation;
+  actual: boolean;
 };
 
 export type POD = {
   date: string;
   location: TLocation;
+  predictive_eta: string;
+  actual: boolean;
 };
 export type Vessel = {
   id: string;
