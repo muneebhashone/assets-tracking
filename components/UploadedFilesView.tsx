@@ -1,6 +1,6 @@
 "use client";
 import { Shipment } from "@/services/shipment.queries";
-import { File, FileText } from "lucide-react";
+import { File, FileText, X } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import { ModalCustom } from "./ModalComponent";
@@ -25,15 +25,23 @@ const UploadedFilesView = ({ data }: { data: Shipment }) => {
               data?.files?.map((file, index) => {
                 const fileName = decodeURIComponent(file).split("/").pop();
                 return (
-                  <Link
-                    href={file}
-                    target="_blank"
-                    className="flex justify-center items-center flex-col bg-white rounded-md p-4 transition-all hover:bg-slate-100 cursor-pointer"
-                    key={index}
-                  >
-                    <FileText className="w-20 h-20 text-blue-500" />
-                    <p className="text-xs text-center">{fileName}</p>
-                  </Link>
+                  <>
+                    <div
+                      className="flex justify-center items-center flex-col bg-white p-4 rounded-md  transition-all hover:bg-slate-100 cursor-pointer relative"
+                      key={index}
+                    >
+                      <X className="absolute right-0 top-0 z-[999] text-red-600  transition-colors duration-300 transform hover:text-black" />
+                      <FileText className="w-20 h-20 text-blue-500" />
+
+                      <Link
+                        href={file}
+                        target="_blank"
+                        className="text-xs text-center font-semibold text-blue-950 transition-colors duration-300 transform hover:text-black"
+                      >
+                        {fileName}
+                      </Link>
+                    </div>
+                  </>
                 );
               })
             ) : (
