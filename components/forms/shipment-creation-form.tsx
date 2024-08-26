@@ -22,7 +22,7 @@ import {
 } from "@/services/shipment.mutations";
 import { CheckCircledIcon, PlusCircledIcon } from "@radix-ui/react-icons";
 import { useForm } from "react-hook-form";
-//@ts-ignore
+
 import {
   Form,
   FormControl,
@@ -34,7 +34,6 @@ import { toast } from "@/components/ui/use-toast";
 import { useFetchAllSearatesContainerSetup } from "@/services/searates.queries";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
-//@ts-ignore
 import { TagsInput } from "react-tag-input-component";
 import { z } from "zod";
 import { ModalCustom } from "../ModalComponent";

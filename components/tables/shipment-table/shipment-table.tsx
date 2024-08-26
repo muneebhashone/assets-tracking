@@ -188,7 +188,13 @@ export function ShipmentTable({
                   {row.getVisibleCells()?.map((cell) => (
                     <TableCell
                       key={cell.id}
-                      className={cell.column.id === "select" ? "w-[5%]" : "w-[20%]"}
+                      className={
+                        cell.column.id === "select"
+                          ? "w-[1%] text-start"
+                          : cell.column.id === "actions"
+                          ? "w-[2%] text-center "
+                          : "w-[2%]"
+                      }
                     >
                       {flexRender(
                         cell.column.columnDef.cell,

@@ -43,7 +43,7 @@ const ShipmentPage = () => {
     <ScrollArea className="h-full ">
       <div className="flex-1 space-y-4 p-4 md:p-8 pt-6">
         <div className="flex flex-col ">
-          <h1 className="text-lg font-bold tracking-tight">List of shipment</h1>
+          <h1 className="text-lg font-bold tracking-tight">Shipment List</h1>
           <div className="  flex justify-between">
             <p className="text-sm tracking-tight">
               You can create, view and edit all shipments from the table below.

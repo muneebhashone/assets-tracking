@@ -5,9 +5,31 @@ import Link from "next/link";
 import { useState } from "react";
 import { ModalCustom } from "./ModalComponent";
 import { DialogHeader } from "./ui/dialog";
+import { useDeletShipmentFile } from "@/services/shipment.mutations";
+import { toast } from "./ui/use-toast";
+import { AlertModal } from "./modal/alert-modal";
 
 const UploadedFilesView = ({ data }: { data: Shipment }) => {
   const [modalState, setModalState] = useState<boolean>(false);
+  const [warningOpen, setWarningOpen] = useState<boolean>(false);
+  const { mutate: deleteFile } = useDeletShipmentFile({
+    onSuccess(data) {
+      toast({
+        variant: "default",
+        description: data.message,
+        title: "Success",
+      });
+
+      setWarningOpen(false);
+    },
+    onError(error) {
+      toast({
+        variant: "destructive",
+        description: error.response?.data.message,
+        title: "Error",
+      });
+    },
+  });
 
   return (
     <>
@@ -25,23 +47,34 @@ const UploadedFilesView = ({ data }: { data: Shipment }) => {
               data?.files?.map((file, index) => {
                 const fileName = decodeURIComponent(file).split("/").pop();
                 return (
-                  <>
+                  <div key={index}>
+                    <AlertModal
+                      isOpen={warningOpen}
+                      onClose={() => setWarningOpen(false)}
+                      onConfirm={() =>
+                        deleteFile({ id: data.id, fileName: String(fileName) })
+                      }
+                      loading={false}
+                    />
                     <div
-                      className="flex justify-center items-center flex-col bg-white p-4 rounded-md  transition-all hover:bg-slate-100 cursor-pointer relative"
+                      className="flex justify-center items-center flex-col bg-white p-4 rounded-md transition-all hover:bg-slate-100 cursor-pointer relative w-full max-w-xs"
                       key={index}
                     >
-                      <X className="absolute right-0 top-0 z-[999] text-red-600  transition-colors duration-300 transform hover:text-black" />
+                      <X
+                        onClick={() => setWarningOpen(true)}
+                        className="absolute right-0 top-0 z-[999] text-red-600 transition-colors duration-300 transform hover:text-black"
+                      />
                       <FileText className="w-20 h-20 text-blue-500" />
 
                       <Link
                         href={file}
                         target="_blank"
-                        className="text-xs text-center font-semibold text-blue-950 transition-colors duration-300 transform hover:text-black"
+                        className="text-xs text-center font-semibold text-blue-950 transition-colors duration-300 transform hover:text-black break-words w-full"
                       >
                         {fileName}
                       </Link>
                     </div>
-                  </>
+                  </div>
                 );
               })
             ) : (

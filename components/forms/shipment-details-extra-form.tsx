@@ -3,14 +3,14 @@
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { Label } from "@/components/ui/label";
 import { useUpdateShipment } from "@/services/shipment.mutations";
-import { Shipment } from "@/services/shipment.queries";
+import { ShipmentWithContainerAndMovements } from "@/services/shipment.queries";
 import { sanitizeObject } from "@/utils/common.utils";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Mail, Ship, Truck } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { TagsInput } from "react-tag-input-component";
 import { z } from "zod";
 import { Button } from "../ui/button";
-import { toast } from "../ui/use-toast";
 import {
   Menubar,
   MenubarContent,
@@ -19,11 +19,11 @@ import {
   MenubarSeparator,
   MenubarTrigger,
 } from "../ui/menubar";
-import { HamburgerMenuIcon } from "@radix-ui/react-icons";
-import { Mail, Ship, Truck } from "lucide-react";
+import { toast } from "../ui/use-toast";
+import { useSendTrackingEmail } from "@/services/tracking.mutations";
 
 interface ShipmentDetailExtraFormProps {
-  shipmentData: Shipment;
+  shipmentData: ShipmentWithContainerAndMovements;
   shipmentField: "tags" | "followers";
   placeHolder?: string;
   showBar?: boolean;
@@ -77,8 +77,28 @@ const ShipmentDetailExtraForm = ({
       mutate({ id: shipmentData.id, ...sanitizedResult });
     }
   };
+  const { mutate: sendEmail } = useSendTrackingEmail({
+    onSuccess(data, variables, context) {
+      toast({
+        title: data.message,
+        duration: 3000,
+        variant: "default",
+      });
+    },
+    onError(error, variables, context) {
+      if (error instanceof Error) {
+        toast({
+          title: error?.response?.data.message,
+          duration: 2000,
+          variant: "destructive",
+        });
+      }
+    },
+  });
   const { control, formState, handleSubmit } = form;
-
+  const isGateOut = shipmentData?.containers?.some((container) =>
+    Boolean(container.gateOut),
+  );
   return (
     <Form {...form}>
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -95,7 +115,7 @@ const ShipmentDetailExtraForm = ({
                   >
                     {shipmentField.toLowerCase()}
                   </Label>
-                  {/* {showBar && (
+                  {showBar && (
                     <Menubar>
                       <MenubarMenu>
                         <MenubarTrigger
@@ -105,19 +125,26 @@ const ShipmentDetailExtraForm = ({
                           <Mail /> <span className="ml-2"> Send Email </span>
                         </MenubarTrigger>
                         <MenubarContent className="absolute right-[-140px] w-[200px]">
-                          <MenubarItem className="text-sm">
+                          <MenubarItem
+                            className={`text-sm cursor-pointer`}
+                            onClick={() =>
+                              sendEmail({ shipmentId: shipmentData.id })
+                            }
+                          >
                             <Ship className="w-6 h-6 mr-1" />{" "}
                             <p>Send Tracking Email</p>{" "}
                           </MenubarItem>
                           <MenubarSeparator />
-                          <MenubarItem>
+                          <MenubarItem disabled={!isGateOut}>
                             <Truck className="w-6 h-6 mr-1" />{" "}
-                            <p>Send Gate Out Email</p>
+                            <p className={`${!isGateOut && "line-through"}`}>
+                              Send Gate Out Email
+                            </p>
                           </MenubarItem>
                         </MenubarContent>
                       </MenubarMenu>
                     </Menubar>
-                  )} */}
+                  )}
                 </div>
                 <FormControl>
                   <TagsInput

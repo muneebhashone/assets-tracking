@@ -4,7 +4,10 @@ import { ChevronLeftIcon } from "@/components/Icons/index";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Shipment, useGetShipmentById } from "@/services/shipment.queries";
+import {
+  ShipmentWithContainerAndMovements,
+  useGetShipmentById,
+} from "@/services/shipment.queries";
 import { MapPin } from "lucide-react";
 import moment from "moment";
 import Link from "next/link";
@@ -25,25 +28,37 @@ const ShipmentDetailPage = ({ id }: ShipmentDetailPageProps) => {
     shipmentId: Number(id),
   });
 
-  const positions = shipmentData?.result?.routeData?.flatMap(
-    (position) =>
-      position?.path.map((one) => {
-        return { lat: one[0], lng: one[1] };
-      }),
-  );
-
-  const checkpoints = shipmentData?.result?.routeData.flatMap((item, index) => {
-    const first = item.path[0];
-    if (index === shipmentData?.result?.routeData.length - 1) {
-      const last = item.path[item.path.length - 1];
+  const positions = shipmentData?.result?.routeData?.flatMap((position) => {
+    if (position.transport_type !== "VESSEL") {
+      const first = position.path[0];
+      const last = position.path[position.path.length - 1];
       return [
-        { lat: first[0], lng: first[1] },
-        { lat: last[0], lng: last[1] },
+        { lat: first[0], lng: first[1], transport_type: position.transport_type },
+        { lat: last[0], lng: last[1], transport_type: position.transport_type },
       ];
     } else {
-      return { lat: first[0], lng: first[1] };
+      return position.path.map((one) => ({ 
+        lat: one[0], 
+        lng: one[1], 
+        transport_type: position.transport_type 
+      }));
     }
   });
+
+  const checkpoints = shipmentData?.result?.routeData?.flatMap(
+    (item, index) => {
+      const first = item.path[0];
+      if (index === shipmentData?.result?.routeData.length - 1) {
+        const last = item.path[item.path.length - 1];
+        return [
+          { lat: first[0], lng: first[1] },
+          { lat: last[0], lng: last[1] },
+        ];
+      } else {
+        return { lat: first[0], lng: first[1] };
+      }
+    },
+  );
 
   const currentLocation = {
     lat: Number(shipmentData?.result?.currentLocation?.[0]),
@@ -112,7 +127,7 @@ const ShipmentDetailPage = ({ id }: ShipmentDetailPageProps) => {
               {shipmentData?.result.containerNo && (
                 <div className="flex ">
                   <span className="font-semibold ">Container :</span>
-                  <span className="ml-2 text-gray-500">
+                  <span className="ml-2 text-gray-500 ">
                     {" "}
                     {shipmentData?.result.containerNo
                       ? shipmentData?.result.containerNo
@@ -196,7 +211,9 @@ const ShipmentDetailPage = ({ id }: ShipmentDetailPageProps) => {
             <TabsContent value="extras">
               {!isFetching ? (
                 <ShipmentDetailExtraForm
-                  shipmentData={shipmentData?.result as Shipment}
+                  shipmentData={
+                    shipmentData?.result as ShipmentWithContainerAndMovements
+                  }
                   shipmentField="followers"
                   showBar={true}
                   placeHolder="Enter Followers here..."
@@ -206,7 +223,9 @@ const ShipmentDetailPage = ({ id }: ShipmentDetailPageProps) => {
               )}
               {!isFetching ? (
                 <ShipmentDetailExtraForm
-                  shipmentData={shipmentData?.result as Shipment}
+                  shipmentData={
+                    shipmentData?.result as ShipmentWithContainerAndMovements
+                  }
                   shipmentField="tags"
                   placeHolder="Enter Tags here..."
                 />
@@ -230,3 +249,4 @@ const ShipmentDetailPage = ({ id }: ShipmentDetailPageProps) => {
 };
 
 export default ShipmentDetailPage;
+

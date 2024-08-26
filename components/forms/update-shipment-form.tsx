@@ -10,7 +10,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { useUpdateShipment } from "@/services/shipment.mutations";
 import { useForm } from "react-hook-form";
-//@ts-ignore
+
 import {
   Form,
   FormControl,
@@ -21,7 +21,7 @@ import {
 import { toast } from "@/components/ui/use-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Dispatch, SetStateAction } from "react";
-//@ts-ignore
+
 import { z } from "zod";
 import { ModalCustom } from "../ModalComponent";
 

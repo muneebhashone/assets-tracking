@@ -41,7 +41,8 @@ export type GetShipmentByIdInput = {
   shipmentId: number;
 };
 
-export interface ShipmentWithContainerAndMovements extends Shipment {
+export interface ShipmentWithContainerAndMovements
+  extends Omit<Shipment, "containers"> {
   containers: Container[];
   movements: Movement[];
 }
@@ -68,6 +69,8 @@ export type ShipmentProgressStatusType =
 export type ShipmentStatus = "PLANNED" | "IN_TRANSIT" | "DELIVERED" | "UNKNOWN";
 export interface RoutePath {
   path: [number, number][];
+  type: string;
+  transport_type: string;
 }
 
 export type AISStatusType = "OK" | "NOT_ON_BOARD" | "NO_AIS_DATA";

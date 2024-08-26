@@ -36,6 +36,10 @@ export interface CreateUpdateShipmentResponseType {
 export interface DeleteShipmentInputType {
   id: number;
 }
+export interface DeleteShipmentFileInputType {
+  id: number;
+  fileName: string;
+}
 export interface DeleteBulkShipmentInputType {
   ids: number[];
 }
@@ -75,6 +79,16 @@ export const deleteShipment = async (input: DeleteShipmentInputType) => {
   const { id } = input;
   const { data } = await apiAxios.delete<SuccessResponseType>(
     `/shipments/${id}`,
+  );
+  return data;
+};
+
+export const deleteShipmentFile = async (
+  input: DeleteShipmentFileInputType,
+) => {
+  const { id, fileName } = input;
+  const { data } = await apiAxios.delete<SuccessResponseType>(
+    `/shipments/${id}/file/${fileName}`,
   );
   return data;
 };
@@ -160,6 +174,24 @@ export const useDeletShipment = (
   return useMutation({
     ...options,
     mutationFn: deleteShipment,
+    async onSuccess(data, variables, context) {
+      await queryClient.invalidateQueries({ queryKey: ["getShipments"] });
+      options?.onSuccess?.(data, variables, context);
+    },
+  });
+};
+
+export const useDeletShipmentFile = (
+  options?: UseMutationOptions<
+    SuccessResponseType,
+    ErrorResponseType,
+    DeleteShipmentFileInputType
+  >,
+) => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    ...options,
+    mutationFn: deleteShipmentFile,
     async onSuccess(data, variables, context) {
       await queryClient.invalidateQueries({ queryKey: ["getShipments"] });
       options?.onSuccess?.(data, variables, context);

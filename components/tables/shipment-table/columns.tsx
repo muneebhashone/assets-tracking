@@ -61,7 +61,9 @@ export const columns: ColumnDef<Shipment>[] = [
     cell: ({ row }) => (
       <div className="flex  items-center flex-col">
         {row.original?.carrier && (
-          <p className="text-center tracking-tighter text-zinc-500 font-bold">{row.original.carrier}</p>
+          <p className="text-center tracking-tighter text-zinc-500 font-bold">
+            {row.original.carrier}
+          </p>
         )}
         {row.original?.sealine && (
           <p className="text-center tracking-tighter text-gray-400 ">
@@ -138,9 +140,23 @@ export const columns: ColumnDef<Shipment>[] = [
     cell: ({ row }) =>
       row?.original?.files?.length && <UploadedFilesView data={row.original} />,
   },
+
+  {
+    accessorKey: "createdAt",
+    header: () => <p className="text-center">{"Created At"}</p>,
+    cell: ({ row }) => (
+      <div className="flex items-center flex-col">
+        <p className=" text-center text-gray-400">
+          {row.original?.createdAt
+            ? moment(row.original.createdAt).format("DD/MM/YYYY HH:mm:SS")
+            : "-"}
+        </p>
+      </div>
+    ),
+  },
   {
     id: "actions",
-    header: "Action",
+    header: () => <p className="text-center">{"Actions"}</p>,
     cell: ({ row }) => <CellAction data={row.original} />,
   },
 ];
