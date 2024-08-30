@@ -2,12 +2,40 @@
 import { Container } from "@/types/services/shipment.types";
 import { ColumnDef } from "@tanstack/react-table";
 import moment from "moment";
+import { Badge } from "@/components/ui/badge";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { shortenContainerSizeType } from "@/utils/shipment.utils";
+
+// Function to shorten sizeType
 
 export const columns: ColumnDef<Container>[] = [
   {
     accessorKey: "container",
     header: "Container",
     cell: ({ row }) => <div>{row.original.containerNumber}</div>,
+  },
+  {
+    accessorKey: "sizeType",
+    header: "",
+    cell: ({ row }) => (
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger>
+            <Badge variant="outline" className="bg-gray-500 text-white font-bold">
+              {shortenContainerSizeType(row.original.sizeType || "")}
+            </Badge>
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>{row.original.sizeType || "-"}</p>
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
+    ),
   },
   {
     accessorKey: "emptyToShipper",

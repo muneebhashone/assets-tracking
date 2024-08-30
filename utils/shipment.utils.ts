@@ -61,3 +61,13 @@ export const handleExportProduct = async (
     console.error("#==================Export Error", (error as Error).message);
   }
 };
+
+export const shortenContainerSizeType = (sizeType: string): string => {
+  const parts = sizeType.split(' ');
+  if (parts.length < 2) return sizeType;
+
+  const number = parts[0];
+  const initials = parts.slice(1).map(word => word[0].toUpperCase()).join('');
+
+  return `${number} ${initials}`;
+};

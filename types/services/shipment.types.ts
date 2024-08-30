@@ -6,6 +6,7 @@ export type Container = {
   gateIn: Date | null;
   gateOut: Date | null;
   emptyReturn: Date | null;
+  sizeType: string | null;
 };
 
 export type Movement = {
