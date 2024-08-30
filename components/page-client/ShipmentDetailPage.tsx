@@ -28,44 +28,17 @@ const ShipmentDetailPage = ({ id }: ShipmentDetailPageProps) => {
     shipmentId: Number(id),
   });
 
-  const positions = shipmentData?.result?.routeData?.flatMap((position) => {
-    if (position.transport_type !== "VESSEL") {
-      const first = position.path[0];
-      const last = position.path[position.path.length - 1];
-      return [
-        { lat: first[0], lng: first[1], transport_type: position.transport_type },
-        { lat: last[0], lng: last[1], transport_type: position.transport_type },
-      ];
-    } else {
-      return position.path.map((one) => ({ 
-        lat: one[0], 
-        lng: one[1], 
-        transport_type: position.transport_type 
-      }));
-    }
-  });
+  const routeData = shipmentData?.result?.routeData;
 
-  const checkpoints = shipmentData?.result?.routeData?.flatMap(
-    (item, index) => {
-      const first = item.path[0];
-      if (index === shipmentData?.result?.routeData.length - 1) {
-        const last = item.path[item.path.length - 1];
-        return [
-          { lat: first[0], lng: first[1] },
-          { lat: last[0], lng: last[1] },
-        ];
-      } else {
-        return { lat: first[0], lng: first[1] };
+  const currentLocation = shipmentData?.result?.currentLocation
+    ? {
+        lat: Number(shipmentData.result.currentLocation[0]),
+        lng: Number(shipmentData.result.currentLocation[1]),
       }
-    },
-  );
-
-  const currentLocation = {
-    lat: Number(shipmentData?.result?.currentLocation?.[0]),
-    lng: Number(shipmentData?.result?.currentLocation?.[1]),
-  };
+    : undefined;
 
   const aisData = shipmentData?.result?.ais;
+
   return (
     <div className="h-[100%] overflow-y-scroll">
       <div className="flex items-center h-14 border-b px-4 md:h-16 ">
@@ -235,8 +208,7 @@ const ShipmentDetailPage = ({ id }: ShipmentDetailPageProps) => {
             </TabsContent>
             <TabsContent value="live_location">
               <GoogleMap
-                positions={positions}
-                checkpoints={checkpoints}
+                routeData={routeData}
                 currentLocation={currentLocation}
                 ais={aisData}
               />
@@ -249,4 +221,3 @@ const ShipmentDetailPage = ({ id }: ShipmentDetailPageProps) => {
 };
 
 export default ShipmentDetailPage;
-

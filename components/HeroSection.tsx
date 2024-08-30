@@ -74,7 +74,7 @@ const HeroSection = () => {
                 </div>
               </div>
               <div className="text-end mt-5">
-                <Button className="bg-[#D3991F] text-white text-lg py-5">
+                <Button className="bg-[#D3991F] hover:bg-[#bf8c1e] text-white text-lg py-5">
                   Track shipment
                 </Button>
               </div>

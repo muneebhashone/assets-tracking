@@ -38,7 +38,6 @@ const ShipmentPage = () => {
   //   trackWith: ["CONTAINER_NUMBER", "MBL_NUMBER"],
   // };
 
-
   return (
     <ScrollArea className="h-full ">
       <div className="flex-1 space-y-4 p-4 md:p-8 pt-6">
@@ -49,19 +48,25 @@ const ShipmentPage = () => {
               You can create, view and edit all shipments from the table below.
             </p>
           </div>
-
-          {(user?.user.role === "SUPER_ADMIN" ||
-            checkPermissions(user?.user.permissions as PermissionsType[], [
-              "CREATE_SHIPMENT",
-            ])) && (
-            <div className="flex my-5 justify-between">
-              <ShipmentCreationForm />
-            </div>
-          )}
-          <div className="flex justify-between mb-2">
-            <SearchBar
-              placeholder="TYPE MBL, CTNR or BOOKING NO."
-            />
+          <div className="mt-4">
+            <SearchBar placeholder="TYPE MBL, CTNR or BOOKING NO." />
+          </div>
+          <div className="flex justify-between mb-4 mt-4">
+            {(user?.user.role === "SUPER_ADMIN" ||
+              checkPermissions(user?.user.permissions as PermissionsType[], [
+                "CREATE_SHIPMENT",
+              ])) && <ShipmentCreationForm />}
+            {/* <Button
+              onClick={async () =>
+                await handleExportProduct((result?.results || []) as Shipment[])
+              }
+              className="flex gap-3 border rounded-md px-4 py-2 bg-[#78c350] text-white hover:bg-[#69ab46]"
+            >
+              <File className="w-4 h-4" /> Export to Excel{" "}
+              <span className="rounded-md bg-white text-black w-4 h-4 text-xs font-bold">
+                {result?.results.length}
+              </span>
+            </Button> */}
             {/* <Filter
               optionsMapper={optionsMapper}
               type="Shipment"

@@ -20,7 +20,10 @@ import {
   MenubarTrigger,
 } from "../ui/menubar";
 import { toast } from "../ui/use-toast";
-import { useSendTrackingEmail } from "@/services/tracking.mutations";
+import {
+  useSendGateOutEmail,
+  useSendTrackingEmail,
+} from "@/services/tracking.mutations";
 
 interface ShipmentDetailExtraFormProps {
   shipmentData: ShipmentWithContainerAndMovements;
@@ -99,6 +102,24 @@ const ShipmentDetailExtraForm = ({
   const isGateOut = shipmentData?.containers?.some((container) =>
     Boolean(container.gateOut),
   );
+  const { mutate: sendGateOutEmail } = useSendGateOutEmail({
+    onSuccess(data, variables, context) {
+      toast({
+        title: data.message,
+        duration: 3000,
+        variant: "default",
+      });
+    },
+    onError(error, variables, context) {
+      if (error instanceof Error) {
+        toast({
+          title: error?.response?.data.message,
+          duration: 2000,
+          variant: "destructive",
+        });
+      }
+    },
+  });
   return (
     <Form {...form}>
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -135,7 +156,13 @@ const ShipmentDetailExtraForm = ({
                             <p>Send Tracking Email</p>{" "}
                           </MenubarItem>
                           <MenubarSeparator />
-                          <MenubarItem disabled={!isGateOut}>
+                          <MenubarItem
+                            disabled={!isGateOut}
+                            className={`text-sm cursor-pointer`}
+                            onClick={() =>
+                              sendGateOutEmail({ shipmentId: shipmentData.id })
+                            }
+                          >
                             <Truck className="w-6 h-6 mr-1" />{" "}
                             <p className={`${!isGateOut && "line-through"}`}>
                               Send Gate Out Email

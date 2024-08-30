@@ -100,7 +100,7 @@ export default function UserAuthForm() {
 
           <Button
             disabled={isPending}
-            className="ml-auto w-full bg-[#D3991F]"
+            className="ml-auto w-full bg-[#D3991F] hover:bg-[#bf8c1e]"
             type="submit"
           >
             Login

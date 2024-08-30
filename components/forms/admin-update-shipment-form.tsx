@@ -148,7 +148,7 @@ const AdminUpdateShipmentForm = ({
                 <CardFooter className="w-full justify-end ">
                   <Button
                     type="submit"
-                    className="w-[25%] border-r-4 bg-[#D3991F]"
+                    className="w-[25%] border-r-4 bg-[#D3991F] hover:bg-[#bf8c1e]"
                   >
                     <span className="mr-2">Update</span>
                     <PlusCircledIcon />

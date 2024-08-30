@@ -88,7 +88,7 @@ const ForgetPasswordPage = ({ token }: { token?: string }) => {
 
               <Button
                 type="submit"
-                className="bg-[#D3991F] hover:bg-[#f8cd71] text-white uppercase text-sm font-semibold px-4 py-2 rounded"
+                className="bg-[#D3991F] hover:bg-[#bf8c1e] text-white uppercase text-sm font-semibold px-4 py-2 rounded"
               >
                 Submit
               </Button>

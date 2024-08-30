@@ -138,7 +138,9 @@ export const columns: ColumnDef<Shipment>[] = [
     header: "Files",
 
     cell: ({ row }) =>
-      row?.original?.files?.length && <UploadedFilesView data={row.original} />,
+      Boolean(row?.original?.files?.length) && (
+        <UploadedFilesView data={row.original} />
+      ),
   },
 
   {

@@ -1,8 +1,6 @@
-import { NextResponse } from "next/server";
-import { NextRequest } from "next/server";
-import { AUTH_KEY } from "./utils/constants";
+import { NextRequest, NextResponse } from "next/server";
 import { currentUser } from "./services/auth.services";
-import { cookies } from "next/headers";
+import { AUTH_KEY } from "./utils/constants";
 
 export async function middleware(request: NextRequest) {
   try {

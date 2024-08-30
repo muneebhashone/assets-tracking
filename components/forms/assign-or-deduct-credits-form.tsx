@@ -99,7 +99,7 @@ const AssignOrDeductCreditForm = ({
               )}
             />
             <Button
-              className="border rounded-md px-4 py-2 bg-[#D3991F] text-white hover:bg-zinc-900"
+              className="border rounded-md px-4 py-2 bg-[#D3991F] text-white hover:bg-[#bf8c1e]"
               type="submit"
             >
               Save

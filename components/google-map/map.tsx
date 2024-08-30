@@ -2,29 +2,22 @@ import { AISType } from "@/services/shipment.queries";
 import { Loader } from "@googlemaps/js-api-loader";
 import { useEffect, useRef } from "react";
 
+type RouteSegment = {
+  path: [number, number][];
+  type: string;
+  transport_type: string;
+};
+
 type GoogleMapProps = {
   ais?: AISType;
-  positions?: {
-    lat: number;
-    lng: number;
-    transport_type: string;
-  }[];
-  checkpoints?: {
-    lat: number;
-    lng: number;
-  }[];
+  routeData?: RouteSegment[];
   currentLocation?: {
     lat: number;
     lng: number;
   };
 };
 
-export function GoogleMap({
-  positions,
-  checkpoints,
-  currentLocation,
-  ais,
-}: GoogleMapProps) {
+export function GoogleMap({ routeData, currentLocation, ais }: GoogleMapProps) {
   const mapRef = useRef(null);
 
   useEffect(() => {
@@ -35,7 +28,7 @@ export function GoogleMap({
     });
 
     loader.load().then(async () => {
-      if (mapRef.current && positions) {
+      if (mapRef.current && routeData) {
         const map = new google.maps.Map(mapRef.current, {
           zoom: 3,
           minZoom: 3,
@@ -49,8 +42,8 @@ export function GoogleMap({
           position: google.maps.LatLng | google.maps.LatLngLiteral,
           title: string,
           label?: google.maps.MarkerLabel | string,
-          icon?: google.maps.Icon | string,
-          zIndex?: number
+          icon?: google.maps.Icon | string | google.maps.Symbol,
+          zIndex?: number,
         ) => {
           new google.maps.Marker({
             position,
@@ -58,115 +51,140 @@ export function GoogleMap({
             title,
             label: label,
             icon: icon,
-            zIndex: zIndex || 99
+            zIndex: zIndex || 99,
           });
         };
 
-        // Find the index of current location
-        const currentIndex = positions.findIndex(
-          (p) => p.lat === currentLocation?.lat && p.lng === currentLocation?.lng
-        );
+        const DISTANCE_THRESHOLD = 0.1;
 
-        // Plot routes
-        const plotRoute = (routePositions: typeof positions, isSolid: boolean) => {
+        let currentSegmentIndex = -1;
+        let currentPointIndex = -1;
+
+        routeData.forEach((segment, segIndex) => {
+          const pointIndex = segment.path.findIndex((point) => {
+            if (!currentLocation) return false;
+            const latDiff = Math.abs(point[0] - currentLocation.lat);
+            const lngDiff = Math.abs(point[1] - currentLocation.lng);
+            return latDiff < DISTANCE_THRESHOLD && lngDiff < DISTANCE_THRESHOLD;
+          });
+
+          if (pointIndex !== -1) {
+            currentSegmentIndex = segIndex;
+            currentPointIndex = pointIndex;
+          }
+        });
+
+        const plotRoute = (path: [number, number][], isSolid: boolean) => {
           const polyline = new google.maps.Polyline({
-            path: routePositions,
+            path: path.map((point) => ({ lat: point[0], lng: point[1] })),
             geodesic: false,
             strokeColor: "#000066",
             strokeOpacity: isSolid ? 0.6 : 0,
             strokeWeight: 2,
-            icons: isSolid ? undefined : [{
-              icon: {
-                path: "M 0,-1 0,1",
-                strokeOpacity: 0.6,
-                scale: 3,
-              },
-              offset: "0",
-              repeat: "20px",
-            }],
+            icons: isSolid
+              ? undefined
+              : [
+                  {
+                    icon: {
+                      path: "M 0,-1 0,1",
+                      strokeOpacity: 0.6,
+                      scale: 3,
+                    },
+                    offset: "0",
+                    repeat: "20px",
+                  },
+                ],
           });
           polyline.setMap(map);
         };
 
-        // Plot VESSEL routes
-        const vesselPositions = positions.filter(p => p.transport_type === "VESSEL");
-        if (vesselPositions.length > 0) {
-          const coveredVesselPositions = vesselPositions.slice(0, currentIndex + 1);
-          const uncoveredVesselPositions = vesselPositions.slice(currentIndex);
-          
-          plotRoute(coveredVesselPositions, true);
-          plotRoute(uncoveredVesselPositions, false);
-        }
+        routeData.forEach((segment, segIndex) => {
+          if (segment.transport_type === "VESSEL") {
+            if (segIndex === currentSegmentIndex) {
+              const coveredPath = segment.path.slice(0, currentPointIndex + 1);
+              const uncoveredPath = segment.path.slice(currentPointIndex);
+              plotRoute(coveredPath, true);
+              plotRoute(uncoveredPath, false);
+            } else {
+              plotRoute(segment.path, segIndex < currentSegmentIndex);
+            }
+          } else {
+            const start = segment.path[0];
+            const end = segment.path[segment.path.length - 1];
 
-        // Plot non-VESSEL routes using Directions API
-        const nonVesselSegments = positions.reduce((acc, curr, index, arr) => {
-          if (curr.transport_type !== "VESSEL" && index < arr.length - 1 && arr[index + 1].transport_type !== "VESSEL") {
-            acc.push({
-              start: curr,
-              end: arr[index + 1],
-              isCovered: index <= currentIndex
+            const isSolid =
+              segIndex < currentSegmentIndex ||
+              (segIndex === currentSegmentIndex &&
+                segment.path.length - 1 <= currentPointIndex);
+
+            const request = {
+              origin: { lat: start[0], lng: start[1] },
+              destination: { lat: end[0], lng: end[1] },
+              travelMode: google.maps.TravelMode.DRIVING,
+            };
+
+            directionsService.route(request, (result, status) => {
+              if (status === google.maps.DirectionsStatus.OK) {
+                const polyline = new google.maps.Polyline({
+                  path: result?.routes[0].overview_path,
+                  geodesic: false,
+                  strokeColor: "green",
+                  strokeOpacity: isSolid ? 0.6 : 0,
+                  strokeWeight: 2,
+                  icons: isSolid
+                    ? undefined
+                    : [
+                        {
+                          icon: {
+                            path: "M 0,-1 0,1",
+                            strokeOpacity: 0.8,
+                            scale: 3,
+                          },
+                          offset: "0",
+                          repeat: "20px",
+                        },
+                      ],
+                });
+                polyline.setMap(map);
+              }
             });
           }
-          return acc;
-        }, [] as { start: typeof positions[0], end: typeof positions[0], isCovered: boolean }[]);
+        });
 
-        for (const segment of nonVesselSegments) {
-          const request = {
-            origin: { lat: segment.start.lat, lng: segment.start.lng },
-            destination: { lat: segment.end.lat, lng: segment.end.lng },
-            travelMode: google.maps.TravelMode.DRIVING,
-          };
-
-          directionsService.route(request, (result, status) => {
-            if (status === google.maps.DirectionsStatus.OK) {
-              const polyline = new google.maps.Polyline({
-                path: result?.routes[0].overview_path,
-                geodesic: false,
-                strokeColor: "#000066",
-                strokeOpacity: segment.isCovered ? 0.6 : 0,
-                strokeWeight: 2,
-                icons: segment.isCovered ? undefined : [{
-                  icon: {
-                    path: "M 0,-1 0,1",
-                    strokeOpacity: 0.8,
-                    scale: 3,
-                  },
-                  offset: "0",
-                  repeat: "20px",
-                }],
-              });
-              polyline.setMap(map);
-            }
-          });
-        }
-
-        // Add markers and other existing functionality
-        addMarker(
-          positions.at(-1) as google.maps.LatLng | google.maps.LatLngLiteral,
-          `Pin Location`,
-          undefined, undefined, 999
-        );
-
-        if (checkpoints && checkpoints?.length) {
-          const svgUrl = {
-            url: "data:image/svg+xml;base64," + btoa(`
-              <svg width="100" height="100" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="50" cy="50" r="10" stroke="#000000" stroke-width="2" fill="#ffffff"/>
-              </svg>
-            `),
-            anchor: new google.maps.Point(50, 50),
-          };
-          checkpoints?.forEach((checkpoint, index) =>
-            addMarker(
-              checkpoint,
-              `Checkpoint ${index + 1}`,
-              `${index + 1}`,
-              svgUrl,
-            ),
+        routeData.forEach((segment, index) => {
+          const first = segment.path[0];
+          addMarker(
+            { lat: first[0], lng: first[1] },
+            `Checkpoint ${index + 1}`,
+            `${index + 1}`,
+            {
+              path: google.maps.SymbolPath.CIRCLE,
+              scale: 7,
+              fillColor: "#ffffff",
+              fillOpacity: 1,
+              strokeWeight: 2,
+              strokeColor: "#000000",
+            },
           );
-        }
 
-        // Add current location marker
+          if (index === routeData.length - 1) {
+            const last = segment.path[segment.path.length - 1];
+            addMarker(
+              { lat: last[0], lng: last[1] },
+              `Checkpoint ${index + 2}`,
+              `${index + 2}`,
+              {
+                path: google.maps.SymbolPath.CIRCLE,
+                scale: 7,
+                fillColor: "#ffffff",
+                fillOpacity: 1,
+                strokeWeight: 2,
+                strokeColor: "#000000",
+              },
+            );
+          }
+        });
+
         if (currentLocation && ais?.status === "OK") {
           addMarker(currentLocation, ais.data.vessel.name, undefined, {
             url: "/images/animated-loc.svg",
@@ -174,9 +192,17 @@ export function GoogleMap({
             anchor: new google.maps.Point(25, 25),
           });
         }
+
+        const bounds = new google.maps.LatLngBounds();
+        routeData.forEach((segment) => {   
+          segment.path.forEach((point) => {
+            bounds.extend({ lat: point[0], lng: point[1] });
+          });
+        });
+        map.fitBounds(bounds);
       }
     });
-  }, [checkpoints, currentLocation, positions, ais]);
+  }, [routeData, currentLocation, ais]);
 
   return <div ref={mapRef} style={{ height: "400px", width: "100%" }} />;
 }

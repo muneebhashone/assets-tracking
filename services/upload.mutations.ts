@@ -1,13 +1,12 @@
+import { User } from "@/types/services/auth.types";
+import { apiAxios } from "@/utils/api.utils";
 import {
   UseMutationOptions,
   useMutation,
   useQueryClient,
 } from "@tanstack/react-query";
+import { Shipment } from "./shipment.queries";
 import { ErrorResponseType, SuccessResponseType } from "./types.common";
-import { apiAxios } from "@/utils/api.utils";
-import { User } from "@/types/services/auth.types";
-import { currentUser } from "./auth.services";
-import { Shipment, getShipments } from "./shipment.queries";
 
 // types
 export interface ShipmentFileUploadInputType {
@@ -23,6 +22,10 @@ export interface ProfileImageUploadResponseType
 export interface ShipmentUploadResponseType
   extends Omit<SuccessResponseType, "payload"> {
   data: Shipment;
+}
+
+export interface CreateBulkShipmentInputType {
+  file: FormData;
 }
 
 // services
@@ -42,6 +45,17 @@ export const shipmentFileUpload = async (
     `/upload/shipment/${shipmentId}`,
     files,
   );
+  return data;
+};
+
+export const createBulkShipment = async (
+  input: FormData,
+): Promise<SuccessResponseType> => {
+  const { data } = await apiAxios.post<SuccessResponseType>(
+    "/upload/shipment/excel",
+    input,
+  );
+
   return data;
 };
 
@@ -80,5 +94,18 @@ export const useShipmentFileUpload = (
       await queryClient.invalidateQueries({ queryKey: ["getShipments"] });
       options?.onSuccess?.(data, variables, context);
     },
+  });
+};
+
+export const useCreateBulkShipment = (
+  options?: UseMutationOptions<
+    SuccessResponseType,
+    ErrorResponseType,
+    FormData
+  >,
+) => {
+  return useMutation({
+    ...options,
+    mutationFn: createBulkShipment,
   });
 };

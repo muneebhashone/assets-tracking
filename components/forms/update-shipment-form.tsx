@@ -5,7 +5,7 @@ import {
   CardContent,
   CardFooter,
   CardHeader,
-  CardTitle
+  CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { useUpdateShipment } from "@/services/shipment.mutations";
@@ -107,10 +107,8 @@ export default function UpdateShipmentForm({
                   <CardTitle className="text-lg font-medium text-zinc-700">
                     Update Single Shipment
                   </CardTitle>
-                  
                 </CardHeader>
                 <CardContent className="space-y-4 ">
-               
                   <div className="space-y-2">
                     <FormField
                       name="referenceNo"
