@@ -1,7 +1,7 @@
 "use client";
 
 import useQueryUpdater from "@/hooks/useQueryUpdater";
-import { TrackWithType } from "@/services/shipment.queries";
+import { ShipmentStatus, TrackWithType } from "@/services/shipment.queries";
 import { RoleType } from "@/types/user.types";
 import {
   FilterIcon,
@@ -33,8 +33,8 @@ export type IRecord<TLabel, TValue> = {
 
 export interface OptionsMapperType {
   Shipment: {
-    trackWith: TrackWithType[];
-    tags: null;
+    trackWith: IRecord<string, TrackWithType>[];
+    status: IRecord<string, ShipmentStatus>[];
   };
   User: {
     filterByActive: IRecord<string, boolean>[];

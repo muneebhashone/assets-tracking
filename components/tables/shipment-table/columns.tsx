@@ -2,10 +2,11 @@
 import ProtectedCheckbox from "@/components/ProtectedCheckbox";
 import { Badge } from "@/components/ui/badge";
 import UploadedFilesView from "@/components/UploadedFilesView";
-import { Shipment } from "@/services/shipment.queries";
+import { Shipment, ShipmentStatus } from "@/services/shipment.queries";
 import { ColumnDef } from "@tanstack/react-table";
 import moment from "moment";
 import { CellAction } from "./cell-action";
+import { StatusBadgeColor } from "@/utils/constants";
 
 export const columns: ColumnDef<Shipment>[] = [
   {
@@ -79,9 +80,16 @@ export const columns: ColumnDef<Shipment>[] = [
     header: () => <p className="text-center">{"Status"}</p>,
     cell: ({ row }) => (
       <div className="flex  items-center flex-col ">
-        <p className="text-center tracking-tighter text-gray-400">
-          {row.original?.status ? row.original?.status : "-"}
-        </p>
+        <Badge
+          className={`text-center tracking-tighter text-white  bg-${
+            StatusBadgeColor[row.original?.status as ShipmentStatus]?.color ??
+            "gray-400"
+          }`}
+        >
+          {row.original?.status
+            ? StatusBadgeColor[row.original?.status]?.value
+            : "-"}
+        </Badge>
       </div>
     ),
   },

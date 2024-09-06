@@ -96,6 +96,7 @@ const UploadShipmentFile = ({
     <ModalCustom
       isOpen={modalOpen}
       onClose={() => setModalOpen(false)}
+      aria-disabled={true}
       className="border-r-[20%] bg-slate-200 h-[300px]"
     >
       <div className="container h-[70%]">
@@ -103,7 +104,7 @@ const UploadShipmentFile = ({
           Upload Files
         </DialogHeader>
         <div {...getRootProps({ style })}>
-          <input {...getInputProps()}  />
+          <input {...getInputProps()} />
           {acceptedFiles?.length ? (
             <p className="text-center ">File Uploaded</p>
           ) : (

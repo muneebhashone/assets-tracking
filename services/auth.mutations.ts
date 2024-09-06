@@ -31,7 +31,6 @@ import {
   setPassword,
 } from "./auth.services";
 import { ErrorResponseType, SuccessResponseType } from "./types.common";
-import { getAllCompanies } from "./companies.queries";
 
 export const useLogin = (
   options?: UseMutationOptions<

@@ -4,12 +4,14 @@ import { useCurrentUser } from "@/services/auth.mutations";
 import {
   GetAllShipmentsInputType,
   Shipment,
+  ShipmentStatus,
   TrackWithType,
   useGetShipments,
 } from "@/services/shipment.queries";
 import { PermissionsType } from "@/types/user.types";
 import { checkPermissions } from "@/utils/user.utils";
 import { useSearchParams } from "next/navigation";
+import Filter, { OptionsMapperType } from "../Filter";
 import SearchBar from "../SearchBar";
 import ShipmentCreationForm from "../forms/shipment-creation-form";
 import { columns } from "../tables/shipment-table/columns";
@@ -29,14 +31,25 @@ const ShipmentPage = () => {
     trackWith: searchParams.get("trackWith")
       ? (String(searchParams.get("trackWith")) as TrackWithType)
       : undefined,
+    status: searchParams.get("status")
+      ? (String(searchParams.get("status")) as ShipmentStatus)
+      : undefined,
   };
 
   const { data: result, isLoading } = useGetShipments(params);
   const { data: user } = useCurrentUser();
-  // const optionsMapper: OptionsMapperType["Shipment"] = {
-  //   tags: null,
-  //   trackWith: ["CONTAINER_NUMBER", "MBL_NUMBER"],
-  // };
+  const optionsMapper: OptionsMapperType["Shipment"] = {
+    status: [
+      { label: "Delivered", value: "DELIVERED" },
+      { label: "In Transit", value: "IN_TRANSIT" },
+      { label: "Planned", value: "PLANNED" },
+      { label: "Unknown", value: "UNKNOWN" },
+    ],
+    trackWith: [
+      { label: "Container Number", value: "CONTAINER_NUMBER" },
+      { label: "Booking or Lading Number", value: "MBL_NUMBER" },
+    ],
+  };
 
   return (
     <ScrollArea className="h-full ">
@@ -49,7 +62,7 @@ const ShipmentPage = () => {
             </p>
           </div>
           <div className="mt-4">
-            <SearchBar placeholder="TYPE MBL, CTNR or BOOKING NO." />
+            <SearchBar placeholder="type anything to search ..." />
           </div>
           <div className="flex justify-between mb-4 mt-4">
             {(user?.user.role === "SUPER_ADMIN" ||
@@ -67,11 +80,11 @@ const ShipmentPage = () => {
                 {result?.results.length}
               </span>
             </Button> */}
-            {/* <Filter
+            <Filter
               optionsMapper={optionsMapper}
               type="Shipment"
               defaultValue={"trackWith"}
-            /> */}
+            />
           </div>
 
           {isLoading ? (

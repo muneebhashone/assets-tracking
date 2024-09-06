@@ -5,6 +5,7 @@ import { Company } from "@/services/companies.queries";
 export type LoginInputType = {
   email: string;
   password: string;
+  rememberMe?:boolean  
 };
 
 export type RegisterUserInputType = {

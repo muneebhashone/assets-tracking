@@ -24,6 +24,7 @@ const formSchema = z.object({
     .string({ required_error: "Email is required" })
     .email({ message: "Enter a valid email address" }),
   password: passwordValidation("password"),
+  rememberMe: z.boolean().optional().default(false),
 });
 
 type UserFormValue = z.infer<typeof formSchema>;
@@ -94,6 +95,25 @@ export default function UserAuthForm() {
                   <PasswordInput {...field} disabled={isPending} />
                 </FormControl>
                 <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="rememberMe"
+            render={({ field }) => (
+              <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                <FormControl>
+                  <Input
+                    type="checkbox"
+                    className="w-4 h-4 mt-1"
+                    {...field}
+                    value={field.value ? "true" : "false"}
+                  />
+                </FormControl>
+                <div className="space-y-1 leading-none">
+                  <Label>Remember me</Label>
+                </div>
               </FormItem>
             )}
           />

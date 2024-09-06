@@ -1,5 +1,10 @@
+import { ShipmentStatus } from "@/services/shipment.queries";
 import { RoleType } from "@/types/user.types";
 
+export type StatusBadgeRecord = {
+  color: string;
+  value: "Delivered" | "In Transit" | "Planned" | "Unknown";
+};
 export const AUTH_KEY = "accessToken";
 
 export const UserRole = {
@@ -59,4 +64,11 @@ export const PermissionsForDisplay = {
   DEDUCT_CREDITS: "Deduct Credits",
   VIEW_PERMISSIONS: "View Permissions",
   UPDATE_PERMISSIONS: "Update Permissions",
+};
+
+export const StatusBadgeColor: Record<ShipmentStatus, StatusBadgeRecord> = {
+  DELIVERED: { color: "green-600", value: "Delivered" },
+  IN_TRANSIT: { color: "black", value: "In Transit" },
+  PLANNED: { color: "blue-500", value: "Planned" },
+  UNKNOWN: { color: "gray-500", value: "Unknown" },
 };

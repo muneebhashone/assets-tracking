@@ -19,6 +19,7 @@ export type GetAllShipmentsInputType = {
   pageParam: number;
   tags?: string[];
   trackWith?: TrackWithType;
+  status?: ShipmentStatus;
 };
 
 export type GetSharedShipmentInputType = {
