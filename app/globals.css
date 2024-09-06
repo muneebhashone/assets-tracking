@@ -108,3 +108,46 @@ body,
 html {
   scroll-behavior: smooth;
 }
+
+.mild-scrollbar::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* Track */
+.mild-scrollbar::-webkit-scrollbar-track {
+  background: #ffffff;
+  border-radius: 5px;
+}
+
+/* Handle */
+.mild-scrollbar::-webkit-scrollbar-thumb {
+  background: #8b8b8b;
+  border-radius: 5px;
+}
+
+.align-middle:has(.permission-access) {
+  width: 30%;
+}
+
+span.filter-cross-button button {
+  display: none;
+}
+/* Handle on hover */
+/* .mild-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #ffffff;
+} */
+
+
+.map-wrap {
+  position: relative;
+  width: 100%;
+  height: calc(
+    100vh - 77px
+  ); /* calculate height of the screen minus the heading */
+}
+
+.map {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}

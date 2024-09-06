@@ -1,27 +1,24 @@
-// Protecting routes with next-auth
-// https://next-auth.js.org/configuration/nextjs#middleware
-// https://nextjs.org/docs/app/building-your-application/routing/middleware
+import { NextRequest, NextResponse } from "next/server";
+import { currentUser } from "./services/auth.services";
+import { AUTH_KEY } from "./utils/constants";
 
-export { default } from "next-auth/middleware";
-export const config = { matcher: ["/dashboard/:path*"] };
+export async function middleware(request: NextRequest) {
+  try {
+    const accessToken = request.cookies.get(AUTH_KEY)?.value;
 
+    if (!accessToken) {
+      return NextResponse.redirect(new URL("/signin", request.url));
+    }
 
-// import { withAuth } from "next-auth/middleware";
-// import { NextRequest, NextResponse } from "next/server";
+    const user = await currentUser(accessToken);
+  } catch {
+    return NextResponse.redirect(new URL("/signin", request.url));
+  }
 
-// export default withAuth(
-//   function middleware(req: NextRequest) {
-//     // return NextResponse
-//     return NextResponse.rewrite(new URL("/dashboard", req.url));
-//   },
-//   {
-//     callbacks: {
-//       authorized({ token }) {
-//         console.log(token)
-//         return token?.status === "true";
-//       },
-//     },
-//   }
-// );
+  return;
+}
 
-// export const config = { matcher: ["/", "/dashboard"] };
+// See "Matching Paths" below to learn more
+export const config = {
+  matcher: ["/dashboard/:path*"],
+};

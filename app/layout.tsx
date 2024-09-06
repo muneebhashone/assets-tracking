@@ -1,12 +1,16 @@
 import Providers from "@/components/layout/providers";
-import { Toaster } from "@/components/ui/toaster";
-import "@uploadthing/react/styles.css";
+import { ReactQueryClientProvider } from "@/components/layout/react-query-provider";
+import { currentUser } from "@/services/auth.services";
+import {
+  HydrationBoundary,
+  QueryClient,
+  dehydrate,
+} from "@tanstack/react-query";
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
+import { cookies } from "next/headers";
 import "./globals.css";
-import { ReactQueryClientProvider } from "@/components/ReactQueryClientProvider";
-import { InitializeSocket } from "@/stores/useSocketStore";
-import { auth } from "@/lib/auth-options";
+import { Suspense } from "react";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -25,17 +29,29 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const session = await auth();
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        staleTime: 60 * 1000,
+      },
+    },
+  });
+
+  await queryClient.prefetchQuery({
+    queryKey: ["currentUser"],
+    queryFn: () => currentUser(cookies().get("accessToken")?.value),
+  });
+
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${poppins.className} `}>
-        <Providers session={session}>
+        <Suspense>
           <ReactQueryClientProvider>
-            <Toaster />
-            <InitializeSocket />
-            {children}
+            <HydrationBoundary state={dehydrate(queryClient)}>
+              <Providers>{children}</Providers>
+            </HydrationBoundary>
           </ReactQueryClientProvider>
-        </Providers>
+        </Suspense>
       </body>
     </html>
   );

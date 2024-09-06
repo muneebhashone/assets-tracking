@@ -5,75 +5,59 @@ import {
   FormControl,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { ICreateShipment } from "@/types";
+import { useLogin } from "@/services/auth.mutations";
+import { passwordValidation } from "@/utils/auth.utils";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { signIn } from "next-auth/react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
+import PasswordInput from "../PasswordInput";
+import { Label } from "../ui/label";
 import { useToast } from "../ui/use-toast";
 
 const formSchema = z.object({
-  email: z.string().email({ message: "Enter a valid email address" }),
-  password: z.string({ required_error: "password is required" }),
+  email: z
+    .string({ required_error: "Email is required" })
+    .email({ message: "Enter a valid email address" }),
+  password: passwordValidation("password"),
+  rememberMe: z.boolean().optional().default(false),
 });
 
 type UserFormValue = z.infer<typeof formSchema>;
 
-export default function UserAuthForm({
-  shipmentData,
-}: {
-  shipmentData: ICreateShipment;
-}) {
+export default function UserAuthForm() {
   const router = useRouter();
   const { toast } = useToast();
-  const [loading, setLoading] = useState(false);
-  const defaultValues = {
-    email: "",
-    password: "",
-  };
+
+  const { mutate: loginUser, isPending } = useLogin({
+    onSuccess(data) {
+      toast({
+        title: "Success",
+        description: "Logged in successfully",
+        variant: "default",
+      });
+      router.refresh();
+      router.replace("/dashboard");
+    },
+    onError(error) {
+      toast({
+        title: "Error",
+        description: error.response?.data.message,
+        variant: "destructive",
+      });
+    },
+  });
+
   const form = useForm<UserFormValue>({
     resolver: zodResolver(formSchema),
-    defaultValues,
   });
 
   const onSubmit = async (data: UserFormValue) => {
-    try {
-      setLoading(true);
-
-      const signInUser = await signIn("credentials", {
-        email: data.email,
-        password: data.password,
-        redirect: false,
-      });
-      if (signInUser?.error) {
-        toast({
-          title: signInUser.error,
-          variant: "destructive",
-          duration: 2000,
-        });
-        setLoading(false);
-        return;
-      }
-
-      if (signInUser?.ok) {
-        if (shipmentData) {
-          router.push(
-            `/dashboard/shipment/?carrier=${shipmentData.carrier}&tracking_number=${shipmentData.tracking_number}`,
-          );
-        } else {
-          router.push("/dashboard");
-        }
-        setLoading(false);
-      }
-    } catch (error) {
-      console.log(error);
-    }
+    loginUser(data);
   };
 
   return (
@@ -88,12 +72,12 @@ export default function UserAuthForm({
             name="email"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Email</FormLabel>
+                <Label>Email</Label>
                 <FormControl>
                   <Input
                     type="email"
                     placeholder="Enter your email..."
-                    disabled={loading}
+                    disabled={isPending}
                     {...field}
                   />
                 </FormControl>
@@ -106,40 +90,51 @@ export default function UserAuthForm({
             name="password"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Password</FormLabel>
+                <Label>Password</Label>
                 <FormControl>
-                  <Input
-                    type="password"
-                    placeholder="Enter your password..."
-                    disabled={loading}
-                    {...field}
-                  />
+                  <PasswordInput {...field} disabled={isPending} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
+          <FormField
+            control={form.control}
+            name="rememberMe"
+            render={({ field }) => (
+              <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                <FormControl>
+                  <Input
+                    type="checkbox"
+                    className="w-4 h-4 mt-1"
+                    {...field}
+                    value={field.value ? "true" : "false"}
+                  />
+                </FormControl>
+                <div className="space-y-1 leading-none">
+                  <Label>Remember me</Label>
+                </div>
+              </FormItem>
+            )}
+          />
 
           <Button
-            disabled={loading}
-            className="ml-auto w-full bg-[#D3991F]"
+            disabled={isPending}
+            className="ml-auto w-full bg-[#D3991F] hover:bg-[#bf8c1e]"
             type="submit"
           >
-            Continue With Email
+            Login
           </Button>
         </form>
       </Form>
+      <Link href="/forget-password" className="text-[#3491FE]">
+        Forgot Password?
+      </Link>
       <div className="relative">
         <div className="absolute inset-0 flex items-center">
           <span className="w-full border-t" />
         </div>
-        {/* <div className="relative flex justify-center text-xs uppercase">
-          <span className="bg-background px-2 text-muted-foreground">
-            Or continue with
-          </span>
-        </div> */}
       </div>
-      {/* <GoogleSignInButton /> */}
     </>
   );
 }

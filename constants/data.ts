@@ -1,104 +1,4 @@
-import { Icons } from "@/components/icons";
-import { NavItem, SidebarNavItem } from "@/types";
-
-export type User = {
-  id: number;
-  name: string;
-  company: string;
-  role: string;
-  verified: boolean;
-  status: string;
-};
-export const users: User[] = [
-  {
-    id: 1,
-    name: "Candice Schiner",
-    company: "Dell",
-    role: "Frontend Developer",
-    verified: false,
-    status: "Active",
-  },
-  {
-    id: 2,
-    name: "John Doe",
-    company: "TechCorp",
-    role: "Backend Developer",
-    verified: true,
-    status: "Active",
-  },
-  {
-    id: 3,
-    name: "Alice Johnson",
-    company: "WebTech",
-    role: "UI Designer",
-    verified: true,
-    status: "Active",
-  },
-  {
-    id: 4,
-    name: "David Smith",
-    company: "Innovate Inc.",
-    role: "Fullstack Developer",
-    verified: false,
-    status: "Inactive",
-  },
-  {
-    id: 5,
-    name: "Emma Wilson",
-    company: "TechGuru",
-    role: "Product Manager",
-    verified: true,
-    status: "Active",
-  },
-  {
-    id: 6,
-    name: "James Brown",
-    company: "CodeGenius",
-    role: "QA Engineer",
-    verified: false,
-    status: "Active",
-  },
-  {
-    id: 7,
-    name: "Laura White",
-    company: "SoftWorks",
-    role: "UX Designer",
-    verified: true,
-    status: "Active",
-  },
-  {
-    id: 8,
-    name: "Michael Lee",
-    company: "DevCraft",
-    role: "DevOps Engineer",
-    verified: false,
-    status: "Active",
-  },
-  {
-    id: 9,
-    name: "Olivia Green",
-    company: "WebSolutions",
-    role: "Frontend Developer",
-    verified: true,
-    status: "Active",
-  },
-  {
-    id: 10,
-    name: "Robert Taylor",
-    company: "DataTech",
-    role: "Data Analyst",
-    verified: false,
-    status: "Active",
-  },
-];
-
-export type Employee = {
-  id: number;
-  email: string;
-  name: string;
-  status: boolean;
-  role: string;
-};
+import { NavItem } from "@/types/user.types";
 
 export const navItems: NavItem[] = [
   {
@@ -115,34 +15,22 @@ export const navItems: NavItem[] = [
     label: "Shipment",
     permissions: ["VIEW_SHIPMENT"],
   },
-  {
-    title: "Track New Shipment",
-    href: "/dashboard/shipment",
-    icon: "moon",
-    label: "Shipment",
-    permissions: ["CREATE_SHIPMENT"],
-  },
+
   {
     title: "Acitve User",
-    href: "/dashboard/activeUsers",
+    href: "/dashboard/users",
     icon: "user",
     label: "user",
     permissions: ["VIEW_USER"],
   },
   {
     title: "Requested User",
-    href: "/dashboard/registerUsers",
+    href: "/dashboard/requested-users",
     icon: "employee",
     label: "employee",
     permissions: ["VIEW_USER"],
   },
-  {
-    title: "Rejected User",
-    href: "/dashboard/rejectedUsers",
-    icon: "employee",
-    label: "employee",
-    permissions: ["VIEW_USER"],
-  },
+
   {
     title: "Company",
     href: "/dashboard/company",
@@ -150,7 +38,22 @@ export const navItems: NavItem[] = [
     label: "company",
     permissions: ["VIEW_COMPANY"],
   },
+  {
+    title: "Assigns",
+    href: "/dashboard/assigns",
+    icon: "laptop",
+    label: "assigns",
+    permissions: ["SUPER_ADMIN"],
+  },
+  {
+    title: "Support",
+    href: "/dashboard/support",
+    icon: "help",
+    label: "support",
+    permissions: ["SUPER_ADMIN"],
+  },
 ];
+
 export const userNavItems: NavItem[] = [
   {
     title: "Dashboard",
@@ -385,5 +288,90 @@ export const info = [
     id: 3,
     text: "+90 (123) 456 7894",
     link: "/",
+  },
+];
+
+export const movementDemoData = [
+  {
+    id: 1,
+    location: "Port of Los Angeles",
+    moves: "Loaded on Board",
+    date: "2024-07-15T08:30:00",
+    vessel: "Pacific Explorer",
+    destination: true,
+  },
+  {
+    id: 2,
+    location: "Port of Shanghai",
+    moves: "Departed",
+    date: "2024-07-18T14:45:00",
+    vessel: "Asian Star",
+    destination: false,
+  },
+  {
+    id: 3,
+    location: "Port of Rotterdam",
+    moves: "Vessel Arrived",
+    date: "2024-07-20T11:15:00",
+    vessel: "European Voyager",
+    destination: true,
+  },
+  {
+    id: 4,
+    location: "Port of Singapore",
+    moves: "Discharge",
+    date: "2024-07-22T09:00:00",
+    vessel: "Orient Express",
+    destination: true,
+  },
+  {
+    id: 5,
+    location: "Port of New York",
+    moves: "Departed",
+    date: "2024-07-25T16:20:00",
+    vessel: "Atlantic Courier",
+    destination: false,
+  },
+];
+
+export const containerDemoData = [
+  {
+    id: 1,
+    container: "MSKU1234567",
+    emptyToShipper: "XYZ Logistics",
+    gateIn: "2024-07-15T09:30:00",
+    gateOut: "2024-07-16T14:45:00",
+    emptyReturn: "2024-07-20T11:20:00",
+  },
+  {
+    container: "TEMU7654321",
+    emptyToShipper: "ABC Freight",
+    gateIn: "2024-07-17T10:15:00",
+    gateOut: "2024-07-18T16:30:00",
+    emptyReturn: "2024-07-22T13:45:00",
+  },
+  {
+    id: 3,
+    container: "CMAU2468135",
+    emptyToShipper: "Global Shipping Co.",
+    gateIn: "2024-07-19T08:45:00",
+    gateOut: "2024-07-20T12:00:00",
+    emptyReturn: "2024-07-24T10:30:00",
+  },
+  {
+    id: 4,
+    container: "OOLU9876543",
+    emptyToShipper: "SeaWay Transport",
+    gateIn: "2024-07-21T11:00:00",
+    gateOut: "2024-07-22T17:15:00",
+    emptyReturn: "2024-07-26T09:00:00",
+  },
+  {
+    id: 5,
+    container: "MAEU5432109",
+    emptyToShipper: "FastTrack Logistics",
+    gateIn: "2024-07-23T07:30:00",
+    gateOut: "2024-07-24T13:45:00",
+    emptyReturn: "2024-07-28T14:20:00",
   },
 ];

@@ -99,7 +99,7 @@ export default function CardViewPagination({
               }
             />
           </PaginationItem>
-          {paginationPageArray.map((_, index) => {
+          {paginationPageArray?.map((_, index) => {
             return (
               <PaginationItem key={index}>
                 <PaginationLink onClick={() => setPage(index + 1)}>

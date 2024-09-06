@@ -16,7 +16,7 @@ const NotificationCard = ({cardlist, title, description}: {cardlist: Icard[], ti
       <p className="text-[#424D5F] text-xl mt-6">
        {description}
       </p>
-      {cardlist.map((item) => (
+      {cardlist?.map((item) => (
           
       <div key={item.id} className="flex items-center gap-5 mt-10 shadow-xl rounded-xl bg-white border border-gray-300 px-6 py-6">
         <div>

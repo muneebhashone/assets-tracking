@@ -5,52 +5,56 @@ import {
   FormControl,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { createCompanySchema } from "@/lib/form-schema";
-import { CreateCompanySchemaType } from "@/types";
+import { useRegisterCompany } from "@/services/auth.mutations";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation } from "@tanstack/react-query";
-import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { useToast } from "../ui/use-toast";
+import { RegisterCompanyInputType } from "@/types/services/auth.types";
+import { Label } from "../ui/label";
+import PasswordInput from "../PasswordInput";
 
-export default function CompanyAuthFormSignUp() {
+export default function CompanyAuthFormSignUp({
+  redirect = true,
+  closeModal,
+}: {
+  redirect?: boolean;
+  closeModal?: () => void;
+}) {
   const { toast } = useToast();
-  // const searchParams = useSearchParams();
+
   const router = useRouter();
-  const { mutate, isPending } = useMutation({
-    mutationFn: async (data: CreateCompanySchemaType) => {
-      const { data: responseData } = await axios.post("/api/company", data);
-      return responseData;
-    },
+
+  const { mutate, isPending } = useRegisterCompany({
     onSuccess(data, variables, context) {
       toast({
         title: data.message,
         duration: 3000,
         variant: "default",
       });
-      router.push("/signin");
+      closeModal?.();
+      redirect && router.push("/signin");
     },
     onError(error, variables, context) {
-      toast({
-        //@ts-expect-error
-        title: error.response.data.message,
-        duration: 2000,
-        variant: "destructive",
-      });
+      if (error instanceof Error) {
+        toast({
+          title: error?.response?.data.message,
+          duration: 2000,
+          variant: "destructive",
+        });
+      }
     },
   });
-  const defaultValues = {};
-  const form = useForm<CreateCompanySchemaType>({
+
+  const form = useForm<RegisterCompanyInputType>({
     resolver: zodResolver(createCompanySchema),
-    defaultValues,
   });
 
-  const onSubmit = async (data: CreateCompanySchemaType) => {
+  const onSubmit = async (data: RegisterCompanyInputType) => {
     mutate(data);
   };
   return (
@@ -62,10 +66,10 @@ export default function CompanyAuthFormSignUp() {
         >
           <FormField
             control={form.control}
-            name="company_name"
+            name="companyName"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Company Name</FormLabel>
+                <Label>Company Name</Label>
                 <FormControl>
                   <Input
                     type="text"
@@ -83,7 +87,7 @@ export default function CompanyAuthFormSignUp() {
             name="country"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Country</FormLabel>
+                <Label>Country</Label>
                 <FormControl>
                   <Input
                     type="text"
@@ -101,7 +105,7 @@ export default function CompanyAuthFormSignUp() {
             name="city"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>City</FormLabel>
+                <Label>City</Label>
                 <FormControl>
                   <Input
                     type="text"
@@ -119,7 +123,7 @@ export default function CompanyAuthFormSignUp() {
             name="name"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Admin Name</FormLabel>
+                <Label>Admin Name</Label>
                 <FormControl>
                   <Input
                     type="text"
@@ -137,7 +141,7 @@ export default function CompanyAuthFormSignUp() {
             name="email"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Email</FormLabel>
+                <Label>Email</Label>
                 <FormControl>
                   <Input
                     type="email"
@@ -155,11 +159,10 @@ export default function CompanyAuthFormSignUp() {
             name="password"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Password</FormLabel>
+                <Label>Password</Label>
                 <FormControl>
-                  <Input
-                    type="password"
-                    placeholder="Enter your pass..."
+                  <PasswordInput
+                    placeholder="Enter your password..."
                     disabled={isPending}
                     {...field}
                   />
@@ -170,7 +173,7 @@ export default function CompanyAuthFormSignUp() {
           />
           <Button
             disabled={isPending}
-            className="ml-auto w-full bg-[#D3991F]"
+            className="ml-auto w-full bg-[#D3991F] hover:bg-[#bf8c1e]"
             type="submit"
           >
             submit
@@ -181,13 +184,7 @@ export default function CompanyAuthFormSignUp() {
         <div className="absolute inset-0 flex items-center">
           <span className="w-full border-t" />
         </div>
-        {/* <div className="relative flex justify-center text-xs uppercase">
-          <span className="bg-background px-2 text-muted-foreground">
-            Or continue with
-          </span>
-        </div> */}
       </div>
-      {/* <GoogleSignInButton /> */}
     </>
   );
 }

@@ -8,10 +8,12 @@ import {
   getPaginationRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import React from "react";
+import React, { useState } from "react";
 
 import { Button } from "@/components/ui/button";
 
+import { AlertModal } from "@/components/modal/alert-modal";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import {
   Select,
   SelectContent,
@@ -27,54 +29,44 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { toast } from "@/components/ui/use-toast";
+import { useBulkDeleteShipment } from "@/services/shipment.mutations";
+import { Shipment } from "@/services/shipment.queries";
 import {
   DoubleArrowLeftIcon,
   DoubleArrowRightIcon,
 } from "@radix-ui/react-icons";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
-import {  ROLE, ShipmenAdminData } from "@/types";
-import { Shipment } from "@prisma/client";
-import { useSession } from "next-auth/react";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
-  data: ShipmenAdminData[] | Shipment[];
+  data: TData[];
   pageSizeOptions?: number[];
   pageCount: number;
-  searchParams?: {
-    [key: string]: string | string[] | undefined;
-  };
 }
 
-export function ShipmentTable<TData, TValue>({
+export function ShipmentTable({
   columns,
   data,
   pageCount,
   pageSizeOptions = [10, 20, 30, 40, 50],
-}: DataTableProps<TData, TValue>) {
+}: DataTableProps<Shipment, any>) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const page = searchParams?.get("page") ?? "1";
+  const page = Number(searchParams?.get("page") ?? "1");
   const pageAsNumber = Number(page);
   const fallbackPage =
     isNaN(pageAsNumber) || pageAsNumber < 1 ? 1 : pageAsNumber;
   const per_page = searchParams?.get("limit") ?? "10";
   const perPageAsNumber = Number(per_page);
   const fallbackPerPage = isNaN(perPageAsNumber) ? 10 : perPageAsNumber;
-  const session = useSession();
-  const tableData = data.map((entry) => {
-    return {
-      ...entry,
-      user: entry?.user?.name,
-    };
-  });
-
+  const tableData = data;
+  const [openWarning, setOpenWarning] = useState<boolean>(false);
   const createQueryString = React.useCallback(
     (params: Record<string, string | number | null>) => {
-      const newSearchParams = new URLSearchParams(searchParams?.toString());
+      const newSearchParams = new URLSearchParams(window.location.search);
 
       for (const [key, value] of Object.entries(params)) {
         if (value === null) {
@@ -86,10 +78,9 @@ export function ShipmentTable<TData, TValue>({
 
       return newSearchParams.toString();
     },
-    [searchParams],
+    [],
   );
 
-  // Handle server-side pagination
   const [{ pageIndex, pageSize }, setPagination] =
     React.useState<PaginationState>({
       pageIndex: fallbackPage - 1,
@@ -112,18 +103,7 @@ export function ShipmentTable<TData, TValue>({
 
   const table = useReactTable({
     data: tableData,
-    columns:
-      session.data?.user.role === ROLE.SUPER_ADMIN
-        ? [
-            ...columns.slice(0, 2),
-            {
-              accessorKey: "user",
-              header: "User",
-            },
-            ,
-            ...columns.slice(2),
-          ]
-        : columns,
+    columns: columns,
     pageCount: pageCount ?? -1,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
@@ -136,14 +116,54 @@ export function ShipmentTable<TData, TValue>({
     manualFiltering: true,
   });
 
+  const selectedIds = table
+    .getSelectedRowModel()
+    .rows?.map(({ original }) => original.id as number);
+
+  const { mutate: deleteBulkShipment } = useBulkDeleteShipment({
+    onSuccess(data) {
+      toast({
+        variant: "default",
+        description: data.message,
+        title: "Success",
+      });
+      table.toggleAllPageRowsSelected(false);
+      setOpenWarning(false);
+    },
+    onError(error) {
+      toast({
+        variant: "destructive",
+        description: error.response?.data.message,
+        title: "Error",
+      });
+    },
+  });
   return (
     <>
+      <AlertModal
+        isOpen={openWarning}
+        loading={false}
+        onClose={() => setOpenWarning(false)}
+        onConfirm={() => {
+          deleteBulkShipment({ ids: selectedIds });
+        }}
+      />
+      <div className="flex justify-start mb-2">
+        {Boolean(selectedIds?.length) && (
+          <Button
+            className="border rounded-md px-4 py-2 bg-red-700 text-white hover:bg-red-600"
+            onClick={() => setOpenWarning(true)}
+          >
+            Delete
+          </Button>
+        )}
+      </div>
       <ScrollArea className="rounded-md border h-[calc(80vh-220px)]">
         <Table className="relative">
           <TableHeader>
-            {table.getHeaderGroups().map((headerGroup) => (
+            {table.getHeaderGroups()?.map((headerGroup) => (
               <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => {
+                {headerGroup.headers?.map((header) => {
                   return (
                     <TableHead key={header.id}>
                       {header.isPlaceholder
@@ -159,14 +179,23 @@ export function ShipmentTable<TData, TValue>({
             ))}
           </TableHeader>
           <TableBody>
-            {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
+            {table?.getRowModel().rows?.length ? (
+              table?.getRowModel().rows?.map((row) => (
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
                 >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
+                  {row.getVisibleCells()?.map((cell) => (
+                    <TableCell
+                      key={cell.id}
+                      className={
+                        cell.column.id === "select"
+                          ? "w-[1%] text-start"
+                          : cell.column.id === "actions"
+                          ? "w-[2%] text-center "
+                          : "w-[2%]"
+                      }
+                    >
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext(),
@@ -178,7 +207,7 @@ export function ShipmentTable<TData, TValue>({
             ) : (
               <TableRow>
                 <TableCell
-                  colSpan={columns.length}
+                  colSpan={columns?.length}
                   className="h-24 text-center"
                 >
                   No results.
@@ -193,8 +222,8 @@ export function ShipmentTable<TData, TValue>({
       <div className="flex flex-col gap-2 sm:flex-row items-center justify-end space-x-2 py-4">
         <div className="flex items-center justify-between w-full">
           <div className="flex-1 text-sm text-muted-foreground">
-            {table.getFilteredSelectedRowModel().rows.length} of{" "}
-            {table.getFilteredRowModel().rows.length} row(s) selected.
+            {table.getFilteredSelectedRowModel().rows?.length} of{" "}
+            {table.getFilteredRowModel().rows?.length || 0} row(s) selected.
           </div>
           <div className="flex flex-col items-center gap-4 sm:flex-row sm:gap-6 lg:gap-8">
             <div className="flex items-center space-x-2">
@@ -213,7 +242,7 @@ export function ShipmentTable<TData, TValue>({
                   />
                 </SelectTrigger>
                 <SelectContent side="top">
-                  {pageSizeOptions.map((pageSize) => (
+                  {pageSizeOptions?.map((pageSize) => (
                     <SelectItem key={pageSize} value={`${pageSize}`}>
                       {pageSize}
                     </SelectItem>

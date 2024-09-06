@@ -5,18 +5,16 @@ import {
   FormControl,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useGetAllCompanies } from "@/hooks/useQuery";
-import { createUserFormSchema } from "@/lib/form-schema";
-import { CreateUserSchemaType } from "@/types";
+import { CreateUserFormSchema, createUserFormSchema } from "@/lib/form-schema";
+import { useRegisterUser } from "@/services/auth.mutations";
+import { useGetCompanies } from "@/services/companies.queries";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation } from "@tanstack/react-query";
-import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
+import { Label } from "../ui/label";
 import {
   Select,
   SelectContent,
@@ -25,20 +23,16 @@ import {
   SelectValue,
 } from "../ui/select";
 import { useToast } from "../ui/use-toast";
+import PasswordInput from "../PasswordInput";
+
+const LIMIT = 100;
+const PAGE = 0;
 
 export default function UserAuthFormSignUp() {
   const { toast } = useToast();
-  // const searchParams = useSearchParams();
   const router = useRouter();
-  const { data: companiesResponse, isFetching } = useGetAllCompanies();
-  const { mutate, isPending } = useMutation({
-    mutationFn: async (data: CreateUserSchemaType) => {
-      const { data: responseData } = await axios.post(
-        "/api/user/create_user",
-        data,
-      );
-      return responseData;
-    },
+
+  const { mutate, isPending } = useRegisterUser({
     onSuccess(data, variables, context) {
       toast({
         title: data.message,
@@ -48,29 +42,30 @@ export default function UserAuthFormSignUp() {
       router.push("/signin");
     },
     onError(error, variables, context) {
-      toast({
-        //@ts-expect-error
-        title: error.response.data.message,
-        duration: 2000,
-        variant: "destructive",
-      });
+      if (error instanceof Error) {
+        toast({
+          title: error?.response?.data.message,
+          duration: 2000,
+          variant: "destructive",
+        });
+      }
     },
   });
-  const defaultValues = {
-    email: "",
-    password: "",
-    name: "",
-    company: "",
-  };
-  const form = useForm<CreateUserSchemaType>({
+
+  const form = useForm<CreateUserFormSchema>({
     resolver: zodResolver(createUserFormSchema),
-    defaultValues,
   });
 
-  const onSubmit = async (data: CreateUserSchemaType) => {
-    // console.log({ data });
-    mutate(data);
+  const onSubmit = async (data: CreateUserFormSchema) => {
+    const { companyId } = data;
+    mutate({ ...data, companyId: String(companyId) });
   };
+
+  const { data, isFetching } = useGetCompanies({
+    limitParam: LIMIT,
+    pageParam: PAGE,
+    searchString: "",
+  });
   return (
     <>
       <Form {...form}>
@@ -83,7 +78,7 @@ export default function UserAuthFormSignUp() {
             name="email"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Email</FormLabel>
+                <Label>Email</Label>
                 <FormControl>
                   <Input
                     type="email"
@@ -101,12 +96,11 @@ export default function UserAuthFormSignUp() {
             name="password"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Password</FormLabel>
+                <Label>Password</Label>
                 <FormControl>
-                  <Input
-                    type="password"
-                    placeholder="Enter your pass..."
+                  <PasswordInput
                     disabled={isPending}
+                    placeholder="Enter your pass..."
                     {...field}
                   />
                 </FormControl>
@@ -119,7 +113,7 @@ export default function UserAuthFormSignUp() {
             name="name"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Name</FormLabel>
+                <Label>Name</Label>
                 <FormControl>
                   <Input
                     type="text"
@@ -134,21 +128,22 @@ export default function UserAuthFormSignUp() {
           />
           <FormField
             control={form.control}
-            name="company"
+            name="companyId"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Company</FormLabel>
+                <Label>Company</Label>
                 <FormControl>
                   <Select
                     onValueChange={field.onChange}
                     disabled={isPending || isFetching}
                     {...field}
+                    value={String(field.value)}
                   >
                     <SelectTrigger>
                       <SelectValue placeholder="Select your company" />
                     </SelectTrigger>
                     <SelectContent>
-                      {companiesResponse?.data?.map((company) => (
+                      {data?.results?.map((company) => (
                         <SelectItem
                           key={company?.id}
                           value={String(company?.id)}
@@ -166,7 +161,7 @@ export default function UserAuthFormSignUp() {
 
           <Button
             disabled={isPending}
-            className="ml-auto w-full bg-[#D3991F]"
+            className="ml-auto w-full bg-[#D3991F] hover:bg-[#bf8c1e]"
             type="submit"
           >
             submit
