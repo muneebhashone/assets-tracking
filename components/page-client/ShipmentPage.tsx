@@ -23,7 +23,7 @@ const ShipmentPage = () => {
 
   const params: GetAllShipmentsInputType = {
     searchString: (searchParams.get("search") as string) || "",
-    limitParam: 9,
+    limitParam: Number(searchParams.get("limit")) || 10,
     pageParam: Number(searchParams.get("page")) || 1,
     tags: Array.isArray(searchParams.getAll("tags"))
       ? searchParams.getAll("tags")
