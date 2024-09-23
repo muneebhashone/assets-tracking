@@ -1,6 +1,7 @@
 import { currentUser } from "@/services/auth.services";
 import { User } from "@/types/services/auth.types";
 import { PermissionsType } from "@/types/user.types";
+import { AUTH_KEY } from "@/utils/constants";
 import { cookies } from "next/headers";
 
 import { redirect } from "next/navigation";
@@ -23,7 +24,7 @@ const checkSuperAdminOrPermission = (
 const PermissionWrapper =
   (Component: ComponentType<any>, permission?: PermissionsType) =>
   async (props: any) => {
-    const user = (await currentUser(cookies().get("accessToken")?.value))?.user;
+    const user = (await currentUser(cookies().get(AUTH_KEY)?.value))?.user;
 
     if (!checkSuperAdminOrPermission(user, permission)) {
       redirect("./");

@@ -1,5 +1,5 @@
 import { SearatesSealineApiResponse } from "@/types/api.types";
-import { searatesApiAxios, apiAxios } from "@/utils/api.utils";
+import { apiAxios } from "@/utils/api.utils";
 import { UseQueryOptions, useQuery } from "@tanstack/react-query";
 
 export type TrackShipmentInput = {

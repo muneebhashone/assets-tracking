@@ -41,9 +41,3 @@ apiAxios.interceptors.response.use(
   },
 );
 
-export const searatesApiAxios = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_SEARATES_URL,
-  params: {
-    api_key: process.env.NEXT_PUBLIC_SEARATES_API_KEY,
-  },
-});

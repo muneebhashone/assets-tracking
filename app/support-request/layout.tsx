@@ -1,11 +1,12 @@
 import Header from "@/components/layout/header";
 import Sidebar from "@/components/layout/sidebar";
 import { navItems } from "@/constants/data";
+import { AUTH_KEY } from "@/utils/constants";
 import { cookies } from "next/headers";
 import { ReactNode, Suspense } from "react";
 
 const SupportRequestLayout = async ({ children }: { children: ReactNode }) => {
-  const cookieValue = cookies().get("accessToken")?.value;
+  const cookieValue = cookies().get(AUTH_KEY)?.value;
   const accessToken = Boolean(cookieValue && cookieValue !== "undefined");
 
   return (

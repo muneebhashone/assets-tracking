@@ -102,7 +102,7 @@ export default function UserAuthForm() {
             control={form.control}
             name="rememberMe"
             render={({ field }) => (
-              <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+              <FormItem className="flex flex-row items-center space-x-3 space-y-1">
                 <FormControl>
                   <Input
                     type="checkbox"

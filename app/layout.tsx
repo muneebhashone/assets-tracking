@@ -11,6 +11,7 @@ import { Poppins } from "next/font/google";
 import { cookies } from "next/headers";
 import "./globals.css";
 import { Suspense } from "react";
+import { AUTH_KEY } from "@/utils/constants";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -39,7 +40,7 @@ export default async function RootLayout({
 
   await queryClient.prefetchQuery({
     queryKey: ["currentUser"],
-    queryFn: () => currentUser(cookies().get("accessToken")?.value),
+    queryFn: () => currentUser(cookies().get(AUTH_KEY)?.value),
   });
 
   return (

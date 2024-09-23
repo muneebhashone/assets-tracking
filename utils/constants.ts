@@ -5,7 +5,7 @@ export type StatusBadgeRecord = {
   color: string;
   value: "Delivered" | "In Transit" | "Planned" | "Unknown";
 };
-export const AUTH_KEY = "accessToken";
+export const AUTH_KEY = "FrateZoneAccessToken";
 
 export const UserRole = {
   WHITE_LABEL_ADMIN: "White Label Admin",
