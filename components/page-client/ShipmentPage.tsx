@@ -13,7 +13,7 @@ import { checkPermissions } from "@/utils/user.utils";
 import { useSearchParams } from "next/navigation";
 import Filter, { OptionsMapperType } from "../Filter";
 import SearchBar from "../SearchBar";
-import ShipmentCreationForm from "../forms/shipment-creation-form";
+import AllShipmentCreationDropDown from "../all-shipment-creation-dropdown";
 import { columns } from "../tables/shipment-table/columns";
 import { ShipmentTable } from "../tables/shipment-table/shipment-table";
 import { ScrollArea } from "../ui/scroll-area";
@@ -68,7 +68,7 @@ const ShipmentPage = () => {
             {(user?.user.role === "SUPER_ADMIN" ||
               checkPermissions(user?.user.permissions as PermissionsType[], [
                 "CREATE_SHIPMENT",
-              ])) && <ShipmentCreationForm />}
+              ])) && <AllShipmentCreationDropDown />}
             {/* <Button
               onClick={async () =>
                 await handleExportProduct((result?.results || []) as Shipment[])

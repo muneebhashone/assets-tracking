@@ -12,7 +12,9 @@ type FormData = {
   file: File | null;
 };
 
-const BulkShipmentUploader: React.FC = () => {
+const BulkShipmentUploader: React.FC<{
+  setIsBulkUpload: React.Dispatch<React.SetStateAction<boolean>>;
+}> = ({ setIsBulkUpload }) => {
   const { register, handleSubmit, setValue, watch, reset } = useForm<FormData>({
     defaultValues: { file: null },
   });
@@ -24,6 +26,7 @@ const BulkShipmentUploader: React.FC = () => {
         description: data.message,
         title: "Success",
       });
+      setIsBulkUpload(false);
       reset();
     },
     onError(error) {
@@ -48,6 +51,7 @@ const BulkShipmentUploader: React.FC = () => {
     accept: {
       "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": [
         ".xlsx",
+        ".csv",
       ],
     },
     multiple: false,
@@ -55,7 +59,7 @@ const BulkShipmentUploader: React.FC = () => {
 
   const handleUpload = async (data: FormData) => {
     if (!data.file) return;
-  
+
     const { file } = data;
     const formData = new FormData();
     formData.append("file", file as Blob);

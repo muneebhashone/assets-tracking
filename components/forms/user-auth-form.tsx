@@ -12,7 +12,7 @@ import { useLogin } from "@/services/auth.mutations";
 import { passwordValidation } from "@/utils/auth.utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import PasswordInput from "../PasswordInput";
@@ -32,7 +32,7 @@ type UserFormValue = z.infer<typeof formSchema>;
 export default function UserAuthForm() {
   const router = useRouter();
   const { toast } = useToast();
-
+  const searchParams = useSearchParams();
   const { mutate: loginUser, isPending } = useLogin({
     onSuccess(data) {
       toast({
@@ -40,8 +40,24 @@ export default function UserAuthForm() {
         description: "Logged in successfully",
         variant: "default",
       });
-      router.refresh();
-      router.replace("/dashboard");
+      const tracksWith = searchParams.get("tracks-with");
+      const containerNumber = searchParams.get("container-number");
+      const mblNumber = searchParams.get("mbl-number");
+      const carrier = searchParams.get("carrier");
+
+      if (tracksWith && carrier && (containerNumber || mblNumber)) {
+        const redirectUrl = new URL("/dashboard/shipment", window.location.origin);
+        redirectUrl.searchParams.set("tracks-with", tracksWith);
+        if (tracksWith === "CONTAINER_NUMBER" && containerNumber) {
+          redirectUrl.searchParams.set("container-number", containerNumber);
+        } else if (tracksWith === "MBL_NUMBER" && mblNumber) {
+          redirectUrl.searchParams.set("mbl-number", mblNumber);
+        }
+        redirectUrl.searchParams.set("carrier", carrier);
+        router.replace(redirectUrl.toString());
+      } else {
+        router.replace("/dashboard");
+      }
     },
     onError(error) {
       toast({

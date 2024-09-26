@@ -35,7 +35,9 @@ type FormProps = ControllerRenderProps<
   },
   "carrier"
 >;
-interface ComboboxProps extends FormProps {
+interface ComboboxProps
+  extends Partial<FormProps>,
+    Partial<Omit<React.HTMLAttributes<HTMLButtonElement>, keyof FormProps>> {
   options: Options[];
   placeholder?: string;
 }
@@ -47,11 +49,10 @@ export function Combobox({
 }: ComboboxProps) {
   const [open, setOpen] = React.useState(false);
 
-
-  const { onChange, value, ...props } = rest;
+  const { onChange, value, className, ...props } = rest;
 
   const handleSelect = (currentValue: string) => {
-    onChange(currentValue === value ? "" : currentValue);
+    onChange?.(currentValue === value ? "" : currentValue);
     setOpen(false);
   };
 
@@ -63,21 +64,26 @@ export function Combobox({
           role="combobox"
           aria-expanded={open}
           id="carrier"
-          className="w-[15rem] justify-between "
+          className={cn("w-full justify-between", className)}
         >
           {value
-            ? options.find((option) => option.value === value)?.name
+            ? options?.find((option) => option.value === value)?.name
             : placeholder}
           <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[200px] p-0 ">
+      <PopoverContent
+        className="w-[--radix-popover-trigger-width] p-0"
+        align="start"
+      >
+        {/* @ts-ignore */}
         <Command
           filter={(value, search) => {
             if (
               options
-                .find((option) => option.value === value)
-                ?.name.toLowerCase()?.includes(search.toLowerCase())
+                ?.find((option) => option.value === value)
+                ?.name.toLowerCase()
+                ?.includes(search.toLowerCase())
             )
               return 1;
             return 0;
@@ -86,24 +92,26 @@ export function Combobox({
         >
           <CommandInput placeholder={placeholder} className="h-9" />
           <CommandList className="max-h-[250px]">
-            <CommandEmpty>No Options found.</CommandEmpty>
-            <CommandGroup>
-              {options?.map((option) => (
-                <CommandItem
-                  key={option.value}
-                  value={option.value}
-                  onSelect={() => handleSelect(option.value)}
-                >
-                  {option.name}
-                  <CheckIcon
-                    className={cn(
-                      "ml-auto h-4 w-4",
-                      value === option.value ? "opacity-100" : "opacity-0",
-                    )}
-                  />
-                </CommandItem>
-              ))}
-            </CommandGroup>
+            <>
+              <CommandEmpty>No Options found.</CommandEmpty>
+              <CommandGroup>
+                {options?.map((option) => (
+                  <CommandItem
+                    key={option.value}
+                    value={option.value}
+                    onSelect={() => handleSelect(option.value)}
+                  >
+                    {option.name}
+                    <CheckIcon
+                      className={cn(
+                        "ml-auto h-4 w-4",
+                        value === option.value ? "opacity-100" : "opacity-0",
+                      )}
+                    />
+                  </CommandItem>
+                ))}
+              </CommandGroup>
+            </>
           </CommandList>
         </Command>
       </PopoverContent>
