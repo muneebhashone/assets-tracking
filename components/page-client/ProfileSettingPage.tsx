@@ -47,23 +47,24 @@ type ChangePasswordFormType = z.infer<typeof changePasswordFormSchema>;
 const ProfileSettingPage = () => {
   const { push } = useRouter();
   const { data: user, isLoading: userLoading } = useCurrentUser();
-  const { mutate: changePassword } = useChangePassword({
-    onSuccess(data) {
-      toast({
-        title: data.message,
-        duration: 3000,
-        variant: "default",
-      });
-      push("/signin");
-    },
-    onError(error) {
-      toast({
-        title: error.response?.data.message,
-        duration: 3000,
-        variant: "destructive",
-      });
-    },
-  });
+  const { mutate: changePassword, isPending: isChangingPassword } =
+    useChangePassword({
+      onSuccess(data) {
+        toast({
+          title: data.message,
+          duration: 3000,
+          variant: "default",
+        });
+        push("/signin");
+      },
+      onError(error) {
+        toast({
+          title: error.response?.data.message,
+          duration: 3000,
+          variant: "destructive",
+        });
+      },
+    });
   const form = useForm<ChangePasswordFormType>({
     resolver: zodResolver(changePasswordFormSchema),
   });
@@ -175,8 +176,13 @@ const ProfileSettingPage = () => {
                   </div>
                 </div>
                 <div className="mt-8">
-                  <Button size="lg" className="bg-golden" type="submit">
-                    Submit
+                  <Button
+                    disabled={isChangingPassword}
+                    size="lg"
+                    className="bg-golden"
+                    type="submit"
+                  >
+                    {isChangingPassword ? "Loading..." : "Submit"}
                   </Button>
                 </div>
               </form>

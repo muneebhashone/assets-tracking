@@ -34,9 +34,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
   const [modalWarning, setModalWarning] = useState<boolean>(false);
   const [adminModalState, setAdminModalState] = useState<boolean>(false);
 
-  
-
-  const { mutate: deleteUser } = useDeleteUser({
+  const { mutate: deleteUser, isPending: isDeletingUser } = useDeleteUser({
     onSuccess(data) {
       toast({
         variant: "default",
@@ -54,24 +52,25 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
       });
     },
   });
-  const { mutate: adminDeleteUser } = useAdminDeleteUser({
-    onSuccess(data) {
-      toast({
-        variant: "default",
-        description: data.message,
-        title: "Success",
-      });
+  const { mutate: adminDeleteUser, isPending: isAdminDeletingUser } =
+    useAdminDeleteUser({
+      onSuccess(data) {
+        toast({
+          variant: "default",
+          description: data.message,
+          title: "Success",
+        });
 
-      setModalWarning(false);
-    },
-    onError(error) {
-      toast({
-        variant: "destructive",
-        description: error.response?.data.message,
-        title: "Error",
-      });
-    },
-  });
+        setModalWarning(false);
+      },
+      onError(error) {
+        toast({
+          variant: "destructive",
+          description: error.response?.data.message,
+          title: "Error",
+        });
+      },
+    });
 
   const { data: user } = useCurrentUser();
 
@@ -90,7 +89,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
     <>
       <AlertModal
         isOpen={modalWarning}
-        loading={false}
+        loading={isDeletingUser || isAdminDeletingUser}
         onClose={() => setModalWarning(false)}
         onConfirm={deleteUserHandler}
       />
@@ -115,7 +114,6 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
-          
 
           {(user?.user.role === "SUPER_ADMIN" ||
             checkPermissions(user?.user.permissions as PermissionsType[], [

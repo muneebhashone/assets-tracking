@@ -32,53 +32,55 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
   const [open, setOpen] = useState<boolean>(false);
   const [resolveAlertOpen, setResolveAlertOpen] = useState<boolean>(false);
 
-  const { mutate: deleteSupportForm } = useDeleteSupportForm({
-    onSuccess(data) {
-      toast({
-        variant: "default",
-        description: data.message,
-        title: "Success",
-      });
+  const { mutate: deleteSupportForm, isPending: isDeletingSupportForm } =
+    useDeleteSupportForm({
+      onSuccess(data) {
+        toast({
+          variant: "default",
+          description: data.message,
+          title: "Success",
+        });
 
-      setOpen(false);
-    },
-    onError(error) {
-      toast({
-        variant: "destructive",
-        description: error.response?.data.message,
-        title: "Error",
-      });
-    },
-  });
-  const { mutate: resolveForm } = useResolveSupportForm({
-    onSuccess(data) {
-      toast({
-        variant: "default",
-        description: data.message,
-        title: "Success",
-      });
-      setResolveAlertOpen(false);
-    },
-    onError(error) {
-      toast({
-        variant: "destructive",
-        description: error.response?.data.message,
-        title: "Error",
-      });
-    },
-  });
+        setOpen(false);
+      },
+      onError(error) {
+        toast({
+          variant: "destructive",
+          description: error.response?.data.message,
+          title: "Error",
+        });
+      },
+    });
+  const { mutate: resolveForm, isPending: isResolvingForm } =
+    useResolveSupportForm({
+      onSuccess(data) {
+        toast({
+          variant: "default",
+          description: data.message,
+          title: "Success",
+        });
+        setResolveAlertOpen(false);
+      },
+      onError(error) {
+        toast({
+          variant: "destructive",
+          description: error.response?.data.message,
+          title: "Error",
+        });
+      },
+    });
 
   return (
     <>
       <AlertModal
         isOpen={open}
-        loading={false}
+        loading={isDeletingSupportForm}
         onClose={() => setOpen(false)}
         onConfirm={() => deleteSupportForm({ id: data.id })}
       />
       <AlertModal
         isOpen={resolveAlertOpen}
-        loading={false}
+        loading={isResolvingForm}
         onClose={() => setResolveAlertOpen(false)}
         onConfirm={() => resolveForm({ id: data.id })}
       />

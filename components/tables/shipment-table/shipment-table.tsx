@@ -120,29 +120,30 @@ export function ShipmentTable({
     .getSelectedRowModel()
     .rows?.map(({ original }) => original.id as number);
 
-  const { mutate: deleteBulkShipment } = useBulkDeleteShipment({
-    onSuccess(data) {
-      toast({
-        variant: "default",
-        description: data.message,
-        title: "Success",
-      });
-      table.toggleAllPageRowsSelected(false);
-      setOpenWarning(false);
-    },
-    onError(error) {
-      toast({
-        variant: "destructive",
-        description: error.response?.data.message,
-        title: "Error",
-      });
-    },
-  });
+  const { mutate: deleteBulkShipment, isPending: isDeletingBulkShipment } =
+    useBulkDeleteShipment({
+      onSuccess(data) {
+        toast({
+          variant: "default",
+          description: data.message,
+          title: "Success",
+        });
+        table.toggleAllPageRowsSelected(false);
+        setOpenWarning(false);
+      },
+      onError(error) {
+        toast({
+          variant: "destructive",
+          description: error.response?.data.message,
+          title: "Error",
+        });
+      },
+    });
   return (
     <>
       <AlertModal
         isOpen={openWarning}
-        loading={false}
+        loading={isDeletingBulkShipment}
         onClose={() => setOpenWarning(false)}
         onConfirm={() => {
           deleteBulkShipment({ ids: selectedIds });

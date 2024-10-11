@@ -22,23 +22,25 @@ interface CellActionProps {
 export const CellAction: React.FC<CellActionProps> = ({ data }) => {
   const [open, setOpen] = useState(false);
 
-  const { mutate: statusChange } = useUpdateStatus({
-    onSuccess(data) {
-      toast({
-        variant: "default",
-        description: data.message,
-        title: "Success",
-      });
-      setOpen(false);
+  const { mutate: statusChange, isPending: isUpdatingStatus } = useUpdateStatus(
+    {
+      onSuccess(data) {
+        toast({
+          variant: "default",
+          description: data.message,
+          title: "Success",
+        });
+        setOpen(false);
+      },
+      onError(error) {
+        toast({
+          variant: "destructive",
+          description: error.response?.data.message,
+          title: "Error",
+        });
+      },
     },
-    onError(error) {
-      toast({
-        variant: "destructive",
-        description: error.response?.data.message,
-        title: "Error",
-      });
-    },
-  });
+  );
 
   // };
   return (
@@ -61,6 +63,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
 
           {(data.status === "REJECTED" || data.status === "REQUESTED") && (
             <DropdownMenuItem
+              disabled={isUpdatingStatus}
               onClick={() => statusChange({ id: data.id, status: "APPROVED" })}
             >
               <Edit className="mr-2 h-4 w-4" /> Approve

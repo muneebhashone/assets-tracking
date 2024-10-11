@@ -22,16 +22,16 @@ import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 
 const multiSelectVariants = cva(
-  "m-1 transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 duration-300",
+  "m-1 transition ease-in-out delay-150 hover:-translate-y-[1px]   duration-300 ",
   {
     variants: {
       variant: {
         default:
-          "border-foreground/10 text-foreground bg-card hover:bg-card/80",
+          "border-foreground/10 text-foreground bg-card hover:bg-green-500",
         secondary:
-          "border-foreground/10 bg-secondary text-secondary-foreground hover:bg-secondary/80",
+          "border-foreground/10 bg-secondary text-secondary-foreground hover:bg-green-500",
         destructive:
-          "border-transparent bg-destructive text-destructive-foreground hover:bg-destructive/80",
+          "border-transparent bg-destructive text-destructive-foreground hover:bg-red-400",
         inverted: "inverted",
       },
     },
@@ -145,7 +145,7 @@ export const MultiSelect = React.forwardRef<
             )}
           >
             {selectedValues?.length > 0 ? (
-              <div className="flex justify-between items-center w-full">
+              <div className="flex justify-between items-center w-full ">
                 <div className="flex flex-wrap items-center">
                   {selectedValues?.slice(0, maxCount)?.map((value) => {
                     const option = options.find((o) => o.value === value);

@@ -13,7 +13,7 @@ import { useCurrentUser } from "@/services/auth.mutations";
 import { useGetUsers } from "@/services/user.queries";
 import { User } from "@/types/services/auth.types";
 import { PermissionsType, RoleType } from "@/types/user.types";
-import { EligibleRolesForCreation } from "@/utils/constants";
+import { EligibleRolesForFilter } from "@/utils/constants";
 import { checkPermissions } from "@/utils/user.utils";
 import { useSearchParams } from "next/navigation";
 import { useState } from "react";
@@ -49,7 +49,7 @@ const UsersPage = () => {
       { label: "false", value: false },
     ] as IRecord<string, boolean>[],
 
-    filterByRole: EligibleRolesForCreation[
+    filterByRole: EligibleRolesForFilter[
       currentUser?.user.role as RoleType
     ]?.map((role) => {
       return {

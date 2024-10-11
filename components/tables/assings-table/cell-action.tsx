@@ -14,24 +14,25 @@ interface CellActionProps {
 
 export const CellAction: React.FC<CellActionProps> = ({ data }) => {
   const [open, setOpen] = useState(false);
-  const { mutate: deleteAssignment } = useDeleteAssignment({
-    onSuccess(data) {
-      toast({
-        variant: "default",
-        description: data.message,
-        title: "Success",
-      });
+  const { mutate: deleteAssignment, isPending: isDeletingAssignment } =
+    useDeleteAssignment({
+      onSuccess(data) {
+        toast({
+          variant: "default",
+          description: data.message,
+          title: "Success",
+        });
 
-      setOpen(false);
-    },
-    onError(error) {
-      toast({
-        variant: "destructive",
-        description: error.response?.data.message,
-        title: "Error",
-      });
-    },
-  });
+        setOpen(false);
+      },
+      onError(error) {
+        toast({
+          variant: "destructive",
+          description: error.response?.data.message,
+          title: "Error",
+        });
+      },
+    });
 
   return (
     <>
@@ -43,10 +44,18 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
       />
       <div className="w-full flex justify-center">
         <Button
+          disabled={isDeletingAssignment}
           onClick={() => setOpen(true)}
           className="bg-transparent text-red-700 hover:bg-transparent hover:text-red-600"
         >
-          <Trash className="mr-2 h-4 w-4" /> Delete
+          {isDeletingAssignment ? (
+            "Loading..."
+          ) : (
+            <>
+              <Trash className="mr-2 h-4 w-4" />
+              Delete
+            </>
+          )}
         </Button>
       </div>
 

@@ -36,7 +36,7 @@ const SetPasswordPage = ({ token }: { token?: string }) => {
     resolver: zodResolver(setPasswordFormSchema),
   });
 
-  const { mutate: setPassword } = useSetPassword({
+  const { mutate: setPassword, isPending: isSettingPassword } = useSetPassword({
     onSuccess(data) {
       toast({
         title: data.message,
@@ -113,8 +113,9 @@ const SetPasswordPage = ({ token }: { token?: string }) => {
               <Button
                 type="submit"
                 className="bg-[#D3991F] hover:bg-[#bf8c1e] text-white uppercase text-sm font-semibold px-4 py-2 rounded"
+                disabled={isSettingPassword}
               >
-                Submit
+                {isSettingPassword ? "Loading..." : "Submit"}
               </Button>
             </form>
           </Form>

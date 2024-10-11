@@ -31,23 +31,24 @@ const ForgetPasswordPage = ({ token }: { token?: string }) => {
     resolver: zodResolver(forgetPasswordSchema),
   });
 
-  const { mutate: forgetPassword } = useForgetPassword({
-    onSuccess(data) {
-      toast({
-        title: data.message,
-        duration: 3000,
-        variant: "default",
-      });
-      push("/signin");
-    },
-    onError(error) {
-      toast({
-        title: error.response?.data.message,
-        duration: 3000,
-        variant: "destructive",
-      });
-    },
-  });
+  const { mutate: forgetPassword, isPending: isForgettingPassword } =
+    useForgetPassword({
+      onSuccess(data) {
+        toast({
+          title: data.message,
+          duration: 3000,
+          variant: "default",
+        });
+        push("/signin");
+      },
+      onError(error) {
+        toast({
+          title: error.response?.data.message,
+          duration: 3000,
+          variant: "destructive",
+        });
+      },
+    });
   const { control, handleSubmit } = form;
 
   const forgetPasswordHandler = (data: forgetPasswordFormType) => {
@@ -88,9 +89,10 @@ const ForgetPasswordPage = ({ token }: { token?: string }) => {
 
               <Button
                 type="submit"
+                disabled={isForgettingPassword}
                 className="bg-[#D3991F] hover:bg-[#bf8c1e] text-white uppercase text-sm font-semibold px-4 py-2 rounded"
               >
-                Submit
+                {isForgettingPassword ? "Loading..." : "Submit"}
               </Button>
             </form>
           </Form>

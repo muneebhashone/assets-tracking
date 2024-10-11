@@ -46,77 +46,81 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
   const [updateModalOpen, setUpdateModalOpen] = useState<boolean>(false);
   const [adminUpdateModalOpen, setAdminUpdateModalOpen] =
     useState<boolean>(false);
-  const { mutate: deleteShipment } = useDeletShipment({
-    onSuccess(data) {
-      toast({
-        variant: "default",
-        description: data.message,
-        title: "Success",
-      });
+  const { mutate: deleteShipment, isPending: isDeletingShipment } =
+    useDeletShipment({
+      onSuccess(data) {
+        toast({
+          variant: "default",
+          description: data.message,
+          title: "Success",
+        });
 
-      setWarningOpen(false);
-    },
-    onError(error) {
-      toast({
-        variant: "destructive",
-        description: error.response?.data.message,
-        title: "Error",
-      });
-    },
-  });
-  const { mutate: toggleFileShare } = useSetFilesShareable({
-    onSuccess() {
-      toast({
-        variant: "default",
-        description: `Sharing ${data.shareFiles ? "Disabled" : "Enabled"} `,
-        title: "Success",
-      });
-    },
-    onError(error) {
-      toast({
-        variant: "destructive",
-        description: error.response?.data.message,
-        title: "Error",
-      });
-    },
-  });
-  const { mutate: createLink } = useBuildShipmentShareableLink({
-    async onSuccess(data) {
-      toast({
-        variant: "default",
-        description: "Link generated and copied to clipboard",
-        title: "Success",
-      });
+        setWarningOpen(false);
+      },
+      onError(error) {
+        toast({
+          variant: "destructive",
+          description: error.response?.data.message,
+          title: "Error",
+        });
+      },
+    });
+  const { mutate: toggleFileShare, isPending: isTogglingFileShare } =
+    useSetFilesShareable({
+      onSuccess() {
+        toast({
+          variant: "default",
+          description: `Sharing ${data.shareFiles ? "Disabled" : "Enabled"} `,
+          title: "Success",
+        });
+      },
+      onError(error) {
+        toast({
+          variant: "destructive",
+          description: error.response?.data.message,
+          title: "Error",
+        });
+      },
+    });
+  const { mutate: createLink, isPending: isCreatingLink } =
+    useBuildShipmentShareableLink({
+      async onSuccess(data) {
+        toast({
+          variant: "default",
+          description: "Link generated and copied to clipboard",
+          title: "Success",
+        });
 
-      await navigator.clipboard.writeText(data.data.shareableLink);
-      setWarningOpen(false);
-    },
-    onError(error) {
-      toast({
-        variant: "destructive",
-        description: error.response?.data.message,
-        title: "Error",
-      });
-    },
-  });
+        await navigator.clipboard.writeText(data.data.shareableLink);
+        setWarningOpen(false);
+      },
+      onError(error) {
+        toast({
+          variant: "destructive",
+          description: error.response?.data.message,
+          title: "Error",
+        });
+      },
+    });
 
-  const { mutate: discardLink } = useDiscardShipmentShareableLink({
-    onSuccess(data) {
-      toast({
-        variant: "default",
-        description: "Share link discarded",
-        title: "Success",
-      });
-      // setShareableLink(null);
-    },
-    onError(error) {
-      toast({
-        variant: "destructive",
-        description: error.response?.data.message,
-        title: "Error",
-      });
-    },
-  });
+  const { mutate: discardLink, isPending: isDiscardingLink } =
+    useDiscardShipmentShareableLink({
+      onSuccess(data) {
+        toast({
+          variant: "default",
+          description: "Share link discarded",
+          title: "Success",
+        });
+        // setShareableLink(null);
+      },
+      onError(error) {
+        toast({
+          variant: "destructive",
+          description: error.response?.data.message,
+          title: "Error",
+        });
+      },
+    });
   const { data: user } = useCurrentUser();
 
   return (
@@ -125,7 +129,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
         isOpen={warningOpen}
         onClose={() => setWarningOpen(false)}
         onConfirm={() => deleteShipment({ id: data.id })}
-        loading={false}
+        loading={isDeletingShipment}
       />
       <UploadShipmentFile
         modalOpen={modalOpen}
@@ -145,7 +149,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
       />
 
       <DropdownMenu modal={false}>
-        <DropdownMenuTrigger asChild >
+        <DropdownMenuTrigger asChild>
           <Button variant="ghost" className="h-8 w-8 p-0">
             <span className="sr-only">Open menu</span>
             <MoreHorizontal className="h-4 w-4" />
@@ -188,6 +192,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
                   shipmentId: data.id,
                 })
               }
+              disabled={isTogglingFileShare}
             >
               {data.shareFiles ? (
                 <>
@@ -227,12 +232,14 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
             (data.shareToken ? (
               <DropdownMenuItem
                 onClick={() => discardLink({ shipmentId: String(data.id) })}
+                disabled={isDiscardingLink}
               >
                 <ClipboardX className="mr-2 h-4 w-4" /> Discard Shareable Link
               </DropdownMenuItem>
             ) : (
               <DropdownMenuItem
                 onClick={() => createLink({ shipmentId: String(data.id) })}
+                disabled={isCreatingLink}
               >
                 <LinkIcon className="mr-2 h-4 w-4" /> Generate Sharable Link
               </DropdownMenuItem>

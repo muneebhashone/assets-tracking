@@ -57,22 +57,23 @@ export const columns: ColumnDef<User>[] = [
     ),
     cell: ({ row }) => {
       /* eslint-disable */
-      const { mutate: toggleActive } = useUserToggleActive({
-        onSuccess(data) {
-          toast({
-            variant: "default",
-            description: data.message,
-            title: "Success",
-          });
-        },
-        onError(error) {
-          toast({
-            variant: "destructive",
-            description: error.response?.data.message,
-            title: "Error",
-          });
-        },
-      });
+      const { mutate: toggleActive, isPending: isTogglingActive } =
+        useUserToggleActive({
+          onSuccess(data) {
+            toast({
+              variant: "default",
+              description: data.message,
+              title: "Success",
+            });
+          },
+          onError(error) {
+            toast({
+              variant: "destructive",
+              description: error.response?.data.message,
+              title: "Error",
+            });
+          },
+        });
       /* eslint-disable */
       const { data: currentUser } = useCurrentUser();
       return (
@@ -84,6 +85,7 @@ export const columns: ColumnDef<User>[] = [
             <SwitchMutation
               switchState={row.original.isActive}
               mutationFn={() => toggleActive({ id: row.original.id })}
+              disabled={isTogglingActive}
             />
           </>
         )

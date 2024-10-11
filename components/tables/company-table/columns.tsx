@@ -27,22 +27,23 @@ export const columns: ColumnDef<Company>[] = [
     ),
     cell: ({ row }) => {
       /* eslint-disable */
-      const { mutate: toggleActive } = useToggleCompanyActive({
-        onSuccess(data) {
-          toast({
-            variant: "default",
-            description: data.message,
-            title: "Success",
-          });
-        },
-        onError(error) {
-          toast({
-            variant: "destructive",
-            description: error.response?.data.message,
-            title: "Error",
-          });
-        },
-      });
+      const { mutate: toggleActive, isPending: isTogglingActive } =
+        useToggleCompanyActive({
+          onSuccess(data) {
+            toast({
+              variant: "default",
+              description: data.message,
+              title: "Success",
+            });
+          },
+          onError(error) {
+            toast({
+              variant: "destructive",
+              description: error.response?.data.message,
+              title: "Error",
+            });
+          },
+        });
       /* eslint-disable */
       const { data: currentUser } = useCurrentUser();
       return (
@@ -54,6 +55,7 @@ export const columns: ColumnDef<Company>[] = [
             <SwitchMutation
               switchState={row.original.isActive}
               mutationFn={() => toggleActive({ id: row.original.id })}
+              disabled={isTogglingActive}
             />
           </>
         )

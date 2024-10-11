@@ -25,6 +25,7 @@ import {
   SelectValue,
 } from "./ui/select";
 import { Separator } from "./ui/separator";
+import { filterViewOptions } from "@/utils/constants";
 
 export type IRecord<TLabel, TValue> = {
   label: TLabel;
@@ -137,7 +138,11 @@ const Filter = <T extends OptionsSelectorType>({
                   {objectKeys?.map((option, index) => {
                     return (
                       <SelectItem value={option as string} key={index}>
-                        {option as string}
+                        {
+                          filterViewOptions[
+                            option as keyof typeof filterViewOptions
+                          ]
+                        }
                       </SelectItem>
                     );
                   })}
@@ -226,7 +231,9 @@ const Filter = <T extends OptionsSelectorType>({
                 key={index}
               >
                 <div className="flex gap-3">
-                  <Badge className="bg-blue-600">{key} </Badge>
+                  <Badge className="bg-blue-600">
+                    {filterViewOptions[key as keyof typeof filterViewOptions]}
+                  </Badge>
                   <Badge className="bg-slate-800">Equals</Badge>
                   <Badge className="bg-zinc-900 capitalize">
                     {value.split("_").join(" ")?.toLowerCase()}

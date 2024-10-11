@@ -16,7 +16,7 @@ import Link from "next/link";
 export function UserNav() {
   const { data: currentUser } = useCurrentUser();
 
-  const { mutate: logout } = useLogout();
+  const { mutate: logout, isPending: isLoggingOut } = useLogout();
 
   if (currentUser?.user) {
     return (
@@ -57,8 +57,8 @@ export function UserNav() {
             </Link>
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={() => logout({})}>
-            Log out
+          <DropdownMenuItem disabled={isLoggingOut} onClick={() => logout({})}>
+            {isLoggingOut ? "Logging out..." : "Log out"}
             {/* <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut> */}
           </DropdownMenuItem>
         </DropdownMenuContent>

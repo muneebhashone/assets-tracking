@@ -27,24 +27,25 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
   const [open, setOpen] = useState<boolean>(false);
   const [editModal, setEditModal] = useState<boolean>(false);
 
-  const { mutate: deleteCompany } = useDeleteCompany({
-    onSuccess(data) {
-      toast({
-        variant: "default",
-        description: data.message,
-        title: "Success",
-      });
+  const { mutate: deleteCompany, isPending: isDeletingCompany } =
+    useDeleteCompany({
+      onSuccess(data) {
+        toast({
+          variant: "default",
+          description: data.message,
+          title: "Success",
+        });
 
-      setOpen(false);
-    },
-    onError(error) {
-      toast({
-        variant: "destructive",
-        description: error.response?.data.message,
-        title: "Error",
-      });
-    },
-  });
+        setOpen(false);
+      },
+      onError(error) {
+        toast({
+          variant: "destructive",
+          description: error.response?.data.message,
+          title: "Error",
+        });
+      },
+    });
   const { data: currentUser } = useCurrentUser();
 
   return (
@@ -85,8 +86,16 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
               currentUser?.user.permissions as PermissionsType[],
               ["DELETE_COMPANY"],
             )) && (
-            <DropdownMenuItem onClick={() => setOpen(true)}>
-              <Trash className="mr-2 h-4 w-4" /> Delete
+            <DropdownMenuItem
+              disabled={isDeletingCompany}
+              onClick={() => setOpen(true)}
+            >
+              {isDeletingCompany ? (
+                "Loading..."
+              ) : (
+                <Trash className="mr-2 h-4 w-4" />
+              )}
+              Delete
             </DropdownMenuItem>
           )}
           {/* <DropdownMenuItem >

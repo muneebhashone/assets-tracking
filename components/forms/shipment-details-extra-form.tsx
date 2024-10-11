@@ -80,46 +80,49 @@ const ShipmentDetailExtraForm = ({
       mutate({ id: shipmentData.id, ...sanitizedResult });
     }
   };
-  const { mutate: sendEmail } = useSendTrackingEmail({
-    onSuccess(data, variables, context) {
-      toast({
-        title: data.message,
-        duration: 3000,
-        variant: "default",
-      });
-    },
-    onError(error, variables, context) {
-      if (error instanceof Error) {
+  const { mutate: sendEmail, isPending: isSendingEmail } = useSendTrackingEmail(
+    {
+      onSuccess(data, variables, context) {
         toast({
-          title: error?.response?.data.message,
-          duration: 2000,
-          variant: "destructive",
+          title: data.message,
+          duration: 3000,
+          variant: "default",
         });
-      }
+      },
+      onError(error, variables, context) {
+        if (error instanceof Error) {
+          toast({
+            title: error?.response?.data.message,
+            duration: 2000,
+            variant: "destructive",
+          });
+        }
+      },
     },
-  });
+  );
   const { control, formState, handleSubmit } = form;
   const isGateOut = shipmentData?.containers?.some((container) =>
     Boolean(container.gateOut),
   );
-  const { mutate: sendGateOutEmail } = useSendGateOutEmail({
-    onSuccess(data, variables, context) {
-      toast({
-        title: data.message,
-        duration: 3000,
-        variant: "default",
-      });
-    },
-    onError(error, variables, context) {
-      if (error instanceof Error) {
+  const { mutate: sendGateOutEmail, isPending: isSendingGateOutEmail } =
+    useSendGateOutEmail({
+      onSuccess(data, variables, context) {
         toast({
-          title: error?.response?.data.message,
-          duration: 2000,
-          variant: "destructive",
+          title: data.message,
+          duration: 3000,
+          variant: "default",
         });
-      }
-    },
-  });
+      },
+      onError(error, variables, context) {
+        if (error instanceof Error) {
+          toast({
+            title: error?.response?.data.message,
+            duration: 2000,
+            variant: "destructive",
+          });
+        }
+      },
+    });
   return (
     <Form {...form}>
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -151,13 +154,14 @@ const ShipmentDetailExtraForm = ({
                             onClick={() =>
                               sendEmail({ shipmentId: shipmentData.id })
                             }
+                            disabled={isSendingEmail}
                           >
                             <Ship className="w-6 h-6 mr-1" />{" "}
                             <p>Send Tracking Email</p>{" "}
                           </MenubarItem>
                           <MenubarSeparator />
                           <MenubarItem
-                            disabled={!isGateOut}
+                            disabled={!isGateOut || isSendingGateOutEmail}
                             className={`text-sm cursor-pointer`}
                             onClick={() =>
                               sendGateOutEmail({ shipmentId: shipmentData.id })

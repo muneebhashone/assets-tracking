@@ -124,29 +124,30 @@ export function UsersTable({
     .getSelectedRowModel()
     .rows?.map(({ original }) => original.id);
 
-  const { mutate: deleteBulkUsers } = useBulkDeleteUser({
-    onSuccess(data) {
-      toast({
-        variant: "default",
-        description: data.message,
-        title: "Success",
-      });
-      table.toggleAllPageRowsSelected(false);
-      setOpenWarning(false);
-    },
-    onError(error) {
-      toast({
-        variant: "destructive",
-        description: error.response?.data.message,
-        title: "Error",
-      });
-    },
-  });
+  const { mutate: deleteBulkUsers, isPending: isDeletingBulkUsers } =
+    useBulkDeleteUser({
+      onSuccess(data) {
+        toast({
+          variant: "default",
+          description: data.message,
+          title: "Success",
+        });
+        table.toggleAllPageRowsSelected(false);
+        setOpenWarning(false);
+      },
+      onError(error) {
+        toast({
+          variant: "destructive",
+          description: error.response?.data.message,
+          title: "Error",
+        });
+      },
+    });
   return (
     <>
       <AlertModal
         isOpen={openWarning}
-        loading={false}
+        loading={isDeletingBulkUsers}
         onClose={() => setOpenWarning(false)}
         onConfirm={() => {
           deleteBulkUsers({ ids: selectedIds });
@@ -188,14 +189,16 @@ export function UsersTable({
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
                 >
-                  {row.getVisibleCells()?.map((cell) => (
-                    <TableCell key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext(),
-                      )}
-                    </TableCell>
-                  ))}
+                  {row
+                    .getVisibleCells()
+                    ?.map((cell) => (
+                      <TableCell key={cell.id}>
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext(),
+                        )}
+                      </TableCell>
+                    ))}
                 </TableRow>
               ))
             ) : (

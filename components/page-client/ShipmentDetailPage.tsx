@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
+  ShipmentStatus,
   ShipmentWithContainerAndMovements,
   useGetShipmentById,
 } from "@/services/shipment.queries";
@@ -17,6 +18,7 @@ import { GoogleMap } from "../google-map/map";
 import { Skeleton } from "../ui/skeleton";
 import ShipmentContainer from "./ShipmentContainer";
 import ShipmentMovement from "./ShipmentMovement";
+import { StatusBadgeColor } from "@/utils/constants";
 
 type ShipmentDetailPageProps = {
   id: string;
@@ -70,10 +72,16 @@ const ShipmentDetailPage = ({ id }: ShipmentDetailPageProps) => {
               </div>
               <div className="flex  gap-2">
                 <span className="font-semibold">Status :</span>
-                <Badge className="bg-golden">
+                <Badge
+                  className={`text-center tracking-tighter text-white  bg-${
+                    StatusBadgeColor[
+                      shipmentData?.result.status as ShipmentStatus
+                    ]?.color ?? "gray-400"
+                  }`}
+                >
                   {shipmentData?.result.status
-                    ? shipmentData?.result.status
-                    : "New"}
+                    ? StatusBadgeColor[shipmentData?.result.status]?.value
+                    : "-"}
                 </Badge>
               </div>
               {shipmentData?.result.mblNo && (

@@ -52,7 +52,7 @@ const PersonalInformationForm = () => {
   });
   const { control, handleSubmit, register } = form;
 
-  const { mutate: updateProfile } = useUpdateProfileData({
+  const { mutate: updateProfile, isPending } = useUpdateProfileData({
     onSuccess(data) {
       toast({
         title: data.message,
@@ -130,8 +130,8 @@ const PersonalInformationForm = () => {
             />
           </div>
         </div>
-        <Button size="lg" className="mt-10 bg-golden">
-          Save
+        <Button disabled={isPending} size="lg" className="mt-10 bg-golden">
+          {isPending ? "Loading..." : "Save"}
         </Button>
       </form>
     </Form>

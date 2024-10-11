@@ -49,7 +49,7 @@ const AssignOrDeductCreditForm = ({
     resolver: zodResolver(creditValidationSchema),
   });
   const { control, handleSubmit } = form;
-  const { mutate: assignCredits } = useAssignOrDeductCredits({
+  const { mutate: assignCredits, isPending } = useAssignOrDeductCredits({
     onSuccess(data) {
       toast({
         variant: "default",
@@ -101,8 +101,9 @@ const AssignOrDeductCreditForm = ({
             <Button
               className="border rounded-md px-4 py-2 bg-[#D3991F] text-white hover:bg-[#bf8c1e]"
               type="submit"
+              disabled={isPending}
             >
-              Save
+              {isPending ? "Loading..." : "Save"}
             </Button>
           </div>
         </form>

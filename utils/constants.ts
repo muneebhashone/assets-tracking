@@ -35,6 +35,25 @@ export const EligibleRolesForCreation: Record<RoleType, RoleType[]> = {
   CLIENT_USER: [],
 } as const;
 
+export const EligibleRolesForFilter: Record<RoleType, RoleType[]> = {
+  SUPER_ADMIN: [
+    "WHITE_LABEL_SUB_ADMIN",
+    "CLIENT_SUPER_USER",
+    "CLIENT_USER",
+    "SUB_ADMIN",
+  ],
+  SUB_ADMIN: [
+    "WHITE_LABEL_ADMIN",
+    "WHITE_LABEL_SUB_ADMIN",
+    "CLIENT_SUPER_USER",
+    "CLIENT_USER",
+  ],
+  WHITE_LABEL_ADMIN: ["CLIENT_SUPER_USER", "WHITE_LABEL_SUB_ADMIN"],
+  WHITE_LABEL_SUB_ADMIN: ["CLIENT_SUPER_USER"],
+  CLIENT_SUPER_USER: ["CLIENT_USER"],
+  CLIENT_USER: [],
+} as const;
+
 export const ShipmentStatusDisplay = {
   IN_TRANSIT: "In Transit",
   PLANNED: "Planned",
@@ -71,4 +90,13 @@ export const StatusBadgeColor: Record<ShipmentStatus, StatusBadgeRecord> = {
   IN_TRANSIT: { color: "black", value: "In Transit" },
   PLANNED: { color: "blue-500", value: "Planned" },
   UNKNOWN: { color: "gray-500", value: "Unknown" },
+};
+
+export const filterViewOptions = {
+  filterByRole: "Role",
+  filterByActive: "Is Active",
+  trackWith: "Track With",
+  status: "Status",
+  childId: "White Label Admin",
+  parentId: "Sub Admin",
 };
