@@ -30,17 +30,6 @@ const ShipmentDetailPage = ({ id }: ShipmentDetailPageProps) => {
     shipmentId: Number(id),
   });
 
-  const routeData = shipmentData?.result?.routeData;
-
-  const currentLocation = shipmentData?.result?.currentLocation
-    ? {
-        lat: Number(shipmentData.result.currentLocation[0]),
-        lng: Number(shipmentData.result.currentLocation[1]),
-      }
-    : undefined;
-
-  const aisData = shipmentData?.result?.ais;
-
   return (
     <div className="h-[100%] overflow-y-scroll">
       <div className="flex items-center h-14 border-b px-4 md:h-16 ">
@@ -215,11 +204,7 @@ const ShipmentDetailPage = ({ id }: ShipmentDetailPageProps) => {
               )}
             </TabsContent>
             <TabsContent value="live_location">
-              <GoogleMap
-                routeData={routeData}
-                currentLocation={currentLocation}
-                ais={aisData}
-              />
+              <GoogleMap shipmentId={Number(id)} className="h-[500px] w-full" />
             </TabsContent>
           </Tabs>
         </div>

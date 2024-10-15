@@ -40,9 +40,7 @@
     "@types/node": "20.5.7",
     "@types/react": "18.2.21",
     "@types/react-dom": "18.2.7",
-    
     "autoprefixer": "10.4.15",
-    
     "axios": "^1.7.7",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
@@ -52,6 +50,7 @@
     "eslint": "8.48.0",
     "eslint-config-next": "^14.2.13",
     "exceljs": "^4.4.0",
+    "html-to-image": "^1.11.11",
     "lodash": "^4.17.21",
     "lucide-react": "^0.291.0",
     "moment": "^2.30.1",
@@ -78,7 +77,6 @@
   },
   "devDependencies": {
     "@types/google.maps": "^3.58.1",
-    
     "@types/lodash": "^4.17.9",
     "@types/validator": "^13.12.2",
     "@typescript-eslint/eslint-plugin": "^6.21.0",

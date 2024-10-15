@@ -1,23 +1,40 @@
-import { AISType } from "@/services/shipment.queries";
+"use client";
+
+import { useGetShipmentById } from "@/services/shipment.queries";
 import { Loader } from "@googlemaps/js-api-loader";
-import { useEffect, useRef } from "react";
+import { HTMLAttributes, useEffect, useRef, useMemo } from "react";
 
-type RouteSegment = {
-  path: [number, number][];
-  type: string;
-  transport_type: string;
-};
+// type RouteSegment = {
+//   path: [number, number][];
+//   type: string;
+//   transport_type: string;
+// };
 
-type GoogleMapProps = {
-  ais?: AISType;
-  routeData?: RouteSegment[];
-  currentLocation?: {
-    lat: number;
-    lng: number;
-  };
-};
+// type GoogleMapProps = {
+//   shipmentId: number;
 
-export function GoogleMap({ routeData, currentLocation, ais }: GoogleMapProps) {
+// };
+
+interface GoogleMapProps extends HTMLAttributes<HTMLDivElement> {
+  shipmentId: number;
+}
+export function GoogleMap({ shipmentId, ...otherProps }: GoogleMapProps) {
+  const { data: shipmentData } = useGetShipmentById({
+    shipmentId: Number(shipmentId),
+  });
+
+  const routeData = shipmentData?.result?.routeData;
+
+  const currentLocation = useMemo(() => {
+    return shipmentData?.result?.currentLocation
+      ? {
+          lat: Number(shipmentData.result.currentLocation[0]),
+          lng: Number(shipmentData.result.currentLocation[1]),
+        }
+      : undefined;
+  }, [shipmentData?.result?.currentLocation]);
+
+  const ais = shipmentData?.result?.ais;
   const mapRef = useRef(null);
 
   useEffect(() => {
@@ -194,7 +211,7 @@ export function GoogleMap({ routeData, currentLocation, ais }: GoogleMapProps) {
         }
 
         const bounds = new google.maps.LatLngBounds();
-        routeData.forEach((segment) => {   
+        routeData.forEach((segment) => {
           segment.path.forEach((point) => {
             bounds.extend({ lat: point[0], lng: point[1] });
           });
@@ -204,5 +221,5 @@ export function GoogleMap({ routeData, currentLocation, ais }: GoogleMapProps) {
     });
   }, [routeData, currentLocation, ais]);
 
-  return <div ref={mapRef} style={{ height: "400px", width: "100%" }} />;
+  return <div ref={mapRef} {...otherProps} />;
 }
