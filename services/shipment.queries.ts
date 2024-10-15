@@ -215,12 +215,10 @@ export const useGetShipmentById = (
     GetShipmentByIdResponse
   >,
 ) => {
-  const { data: user } = useCurrentUser();
   return useQuery({
     ...options,
     queryFn: async () => await getShipmentById(input),
-    queryKey: ["getShipmentById", user?.user.id, JSON.stringify(input)],
-    enabled: Boolean(user?.user.id),
+    queryKey: ["getShipmentById", JSON.stringify(input)],
   });
 };
 
