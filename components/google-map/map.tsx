@@ -19,10 +19,11 @@ interface GoogleMapProps extends HTMLAttributes<HTMLDivElement> {
   shipmentId: number;
 }
 export function GoogleMap({ shipmentId, ...otherProps }: GoogleMapProps) {
-  const { data: shipmentData } = useGetShipmentById({
+  console.log({ shipmentId });
+  const { data: shipmentData, isLoading } = useGetShipmentById({
     shipmentId: Number(shipmentId),
   });
-
+  console.log({ shipmentData, isLoading });
   const routeData = shipmentData?.result?.routeData;
 
   const currentLocation = useMemo(() => {
@@ -221,5 +222,5 @@ export function GoogleMap({ shipmentId, ...otherProps }: GoogleMapProps) {
     });
   }, [routeData, currentLocation, ais]);
 
-  return <div ref={mapRef} {...otherProps} />;
+  return <div ref={mapRef} id="map-tracking" {...otherProps} />;
 }
