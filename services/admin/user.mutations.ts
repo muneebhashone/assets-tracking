@@ -63,8 +63,8 @@ const adminUpdateUser = async (
 const adminDeleteUser = async (
   input: AdminDeleteUserInputType,
 ): Promise<SuccessResponseType> => {
-  const { id, ...rest } = input;
-  const { data } = await apiAxios.patch<SuccessResponseType>(
+  const { id } = input;
+  const { data } = await apiAxios.delete<SuccessResponseType>(
     `/admin/users/${id}`,
   );
   return data;
