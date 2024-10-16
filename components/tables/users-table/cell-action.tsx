@@ -76,8 +76,8 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
 
   const deleteUserHandler = () => {
     user?.user.role === "SUPER_ADMIN"
-      ? deleteUser({ id: data.id })
-      : adminDeleteUser({ id: data.id });
+      ? adminDeleteUser({ id: data.id })
+      : deleteUser({ id: data.id });
   };
 
   const creditActionSetter = (type: "assign" | "deduct") => {
