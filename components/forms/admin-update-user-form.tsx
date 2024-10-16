@@ -406,6 +406,9 @@ const AdminUpdateUserForm = ({
                                 );
                               },
                             )}
+                            <SelectItem value={String("WHITE_LABEL_ADMIN")}>
+                              White Label Admin
+                            </SelectItem>
                           </SelectContent>
                         </Select>
                       </FormControl>
