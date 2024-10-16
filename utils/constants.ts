@@ -38,6 +38,7 @@ export const EligibleRolesForCreation: Record<RoleType, RoleType[]> = {
 export const EligibleRolesForFilter: Record<RoleType, RoleType[]> = {
   SUPER_ADMIN: [
     "WHITE_LABEL_SUB_ADMIN",
+    "WHITE_LABEL_ADMIN",
     "CLIENT_SUPER_USER",
     "CLIENT_USER",
     "SUB_ADMIN",
