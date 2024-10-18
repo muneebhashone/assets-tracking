@@ -8,9 +8,12 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import React from "react";
 
+import { CheckCircledIcon, PlusCircledIcon } from "@radix-ui/react-icons";
+import { useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { TagsInput } from "react-tag-input-component";
 import { z } from "zod";
+import { Button } from "../ui/button";
 import {
   Card,
   CardContent,
@@ -29,8 +32,6 @@ import {
 } from "../ui/form";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
-import { toast } from "../ui/use-toast";
-import { CheckCircledIcon, PlusCircledIcon } from "@radix-ui/react-icons";
 import {
   Select,
   SelectContent,
@@ -38,26 +39,42 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
-import { Button } from "../ui/button";
-import { useSearchParams } from "next/navigation";
+import { toast } from "../ui/use-toast";
 
 const TrackWithEnum = z.enum(["CONTAINER_NUMBER", "MBL_NUMBER"]);
 
-const CreateShipmentInputSchema = z.object({
-  trackWith: TrackWithEnum,
-  containerNo: z.string(),
-  mblNo: z.string().nullable(),
-  carrier: z
-    .string()
-    .nonempty({ message: "Carrier is required and cannot be empty" }),
-  tags: z.string().array(),
-  followers: z
-    .string()
-    .email({ message: "Each follower must be a valid email address" })
-    .array(),
+const CreateShipmentInputSchema = z
+  .object({
+    trackWith: TrackWithEnum,
+    containerNo: z.string(),
+    mblNo: z.string().nullable(),
+    carrier: z
+      .string()
+      .nonempty({ message: "Carrier is required and cannot be empty" }),
+    tags: z.string().array(),
+    followers: z
+      .string()
+      .email({ message: "Each follower must be a valid email address" })
+      .array(),
 
-  referenceNo: z.string().nullable(),
-});
+    referenceNo: z.string().nullable(),
+  })
+  .superRefine((data, ctx) => {
+    if (data.trackWith === "CONTAINER_NUMBER" && !data.containerNo) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Container Number is required",
+        path: ["containerNo"],
+      });
+    }
+    if (data.trackWith === "MBL_NUMBER" && !data.mblNo) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "MBL / Booking Number is required",
+        path: ["mblNo"],
+      });
+    }
+  });
 
 const ShipmentCreationForm = ({
   setModalOpen,
@@ -102,7 +119,10 @@ const ShipmentCreationForm = ({
       }
     },
   });
-  const { control, formState, handleSubmit, watch } = form;
+  const { control, formState, handleSubmit, watch, setValue } = form;
+
+  // Watch for changes in the trackWith field
+
   const onSubmit = (data: CreateShipmentInputType) => {
     mutate(data);
   };
@@ -182,7 +202,15 @@ const ShipmentCreationForm = ({
                         Track with
                       </Label>
                       <FormControl>
-                        <Select onValueChange={field.onChange} {...field}>
+                        <Select
+                          onValueChange={(e) => {
+                            field.onChange(e);
+                            if (e === "CONTAINER_NUMBER") {
+                              setValue("mblNo", null);
+                            }
+                          }}
+                          {...field}
+                        >
                           <SelectTrigger id="trackWith">
                             <SelectValue placeholder="Container Number" />
                           </SelectTrigger>

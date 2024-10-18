@@ -38,7 +38,7 @@ export const columns: ColumnDef<Shipment>[] = [
             {row.original.mblNo}
           </p>
         )}
-        {row.original?.containers?.length > 0 && (
+        {row.original?.containers?.length > 0 ? (
           <p className="text-center tracking-tighter text-gray-400 relative">
             {row.original?.containers.length === 1 ? (
               <span>{row.original?.containers[0].containerNumber}</span>
@@ -51,6 +51,10 @@ export const columns: ColumnDef<Shipment>[] = [
               </>
             )}
           </p>
+        ) : (
+          <span className="text-center tracking-tighter text-gray-400 ">
+            {row.original?.containerNo}
+          </span>
         )}
       </div>
     ),
@@ -80,16 +84,24 @@ export const columns: ColumnDef<Shipment>[] = [
     header: () => <p className="text-center">{"Status"}</p>,
     cell: ({ row }) => (
       <div className="flex  items-center flex-col ">
-        <Badge
-          className={`text-center tracking-tighter text-white  bg-${
-            StatusBadgeColor[row.original?.status as ShipmentStatus]?.color ??
-            "gray-400"
-          }`}
-        >
-          {row.original?.status
-            ? StatusBadgeColor[row.original?.status]?.value
-            : "-"}
-        </Badge>
+        {row.original?.status ? (
+          <Badge
+            className={`text-center tracking-tighter text-white  bg-${
+              StatusBadgeColor[row.original?.status as ShipmentStatus]?.color ??
+              "gray-500"
+            }`}
+          >
+            {row.original?.status
+              ? StatusBadgeColor[row.original?.status]?.value
+              : "-"}
+          </Badge>
+        ) : (
+          <Badge
+            className={`text-center tracking-tighter text-white capitalize bg-gray-500`}
+          >
+            {row.original?.progress.split("_").join(" ").toLowerCase()}
+          </Badge>
+        )}
       </div>
     ),
   },
