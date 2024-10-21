@@ -19,6 +19,7 @@ import { Skeleton } from "../ui/skeleton";
 import ShipmentContainer from "./ShipmentContainer";
 import ShipmentMovement from "./ShipmentMovement";
 import { StatusBadgeColor } from "@/utils/constants";
+import { LabeledButton } from "../labelled-button";
 
 type ShipmentDetailPageProps = {
   id: string;
@@ -133,16 +134,26 @@ const ShipmentDetailPage = ({ id }: ShipmentDetailPageProps) => {
         </div>
         <div className="flex justify-end gap-2 mt-4 items-center mb-4">
           {Boolean(shipmentData?.result?.currentLocation) && (
-            <Button
+            <LabeledButton
+              label={
+                !shipmentData?.result?.movements?.length ||
+                !shipmentData.result.containers.length
+                  ? "The Shipment Data is not Available therefore the Live Location cannot be shown"
+                  : "Live Location"
+              }
               size="lg"
               variant={"outline"}
               className=" border-golden rounded-none hover:bg-golden hover:text-white  text-golden gap-2"
               onClick={() => setTab("live_location")}
+              disabled={
+                !shipmentData?.result?.movements?.length ||
+                !shipmentData.result.containers.length
+              }
             >
               {" "}
               <MapPin className="w-4 h-4   " />
               Live Position
-            </Button>
+            </LabeledButton>
           )}
         </div>
         <div className="flex ">
