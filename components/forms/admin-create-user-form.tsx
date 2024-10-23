@@ -87,11 +87,11 @@ const adminCreateUserFormSchema = z
       .min(1),
     isActive: z.boolean().default(false),
     status: z.enum(statusEnums, { required_error: "Status must be defined" }),
-    credits: z
-      .string()
-      .min(1)
-      .refine((value) => validator.isNumeric(value))
-      .transform(Number),
+    // credits: z
+    //   .string()
+    //   .min(1)
+    //   .refine((value) => validator.isNumeric(value))
+    //   .transform(Number),
     companyId: z
       .string()
       .min(1)
@@ -284,7 +284,19 @@ const AdminCreateUserForm = ({
                         </Label>
                         <FormControl>
                           <Select
-                            onValueChange={field?.onChange}
+                            onValueChange={(e) => {
+                              field?.onChange(e);
+                              const selectedUser =
+                                clientSuperUsers?.results?.find(
+                                  (user) => String(user.id) === e,
+                                );
+                              if (selectedUser?.companyId) {
+                                form.setValue(
+                                  "companyId",
+                                  String(selectedUser.companyId),
+                                );
+                              }
+                            }}
                             value={String(field?.value)}
                             defaultValue={field.value}
                           >
@@ -360,7 +372,7 @@ const AdminCreateUserForm = ({
                 </div>
               )}
 
-              <div>
+              {/* <div>
                 <FormField
                   control={control}
                   name="credits"
@@ -376,7 +388,7 @@ const AdminCreateUserForm = ({
                     </FormItem>
                   )}
                 />
-              </div>
+              </div> */}
 
               <div>
                 <FormField

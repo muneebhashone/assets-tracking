@@ -21,7 +21,11 @@ export default function DashboardPage() {
         {/* {data?.user.role !== ROLE.SUPER_ADMIN && ( */}
         <div className="flex flex-col ">
           <h2 className="text-2xl font-bold tracking-tight ">
-            {isFetching ?  <Skeleton className="w-10 h-3"/>  : `Credits: ${data?.user.credits }`}
+            {isFetching ? (
+              <Skeleton className="w-10 h-3" />
+            ) : (
+              `Credits: ${data?.user.wallet.credits}`
+            )}
           </h2>
         </div>
         {/* )} */}

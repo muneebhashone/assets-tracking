@@ -11,12 +11,14 @@ const SwitchMutation = ({
   disabled,
 }: SwitchMutationProps) => {
   return (
-    <Switch
-      className="data-[state=checked]:bg-green-500"
-      onCheckedChange={mutationFn}
-      checked={switchState}
-      disabled={disabled}
-    />
+    <div className="flex justify-center">
+      <Switch
+        className="data-[state=checked]:bg-green-500 "
+        onCheckedChange={mutationFn}
+        checked={switchState}
+        disabled={disabled}
+      />
+    </div>
   );
 };
 

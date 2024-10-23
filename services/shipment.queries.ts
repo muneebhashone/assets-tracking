@@ -11,6 +11,7 @@ import {
   POL,
   Vessel,
 } from "@/types/services/shipment.types";
+import { Company } from "./companies.queries";
 
 //types
 export type GetAllShipmentsInputType = {
@@ -20,6 +21,7 @@ export type GetAllShipmentsInputType = {
   tags?: string[];
   trackWith?: TrackWithType;
   status?: ShipmentStatus;
+  companyId?: number;
 };
 
 export type GetSharedShipmentInputType = {
@@ -67,7 +69,12 @@ export type TrackWithType = (typeof trackWithEnums)[number];
 export type ShipmentProgressStatusType =
   keyof typeof SHIPMENT_PROGRESS_STATUSES;
 
-export type ShipmentStatus = "PLANNED" | "IN_TRANSIT" | "DELIVERED" | "UNKNOWN";
+export type ShipmentStatus =
+  | "PLANNED"
+  | "IN_TRANSIT"
+  | "DELIVERED"
+  | "UNKNOWN"
+  | "DISCHARGED";
 
 export interface RoutePath {
   path: [number, number][];
@@ -138,6 +145,7 @@ export type Shipment = {
   files: string[];
   shareToken?: string;
   containers: Pick<Container, "containerNumber">[];
+  company: Company;
 };
 
 //services

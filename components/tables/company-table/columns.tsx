@@ -54,6 +54,7 @@ export const columns: ColumnDef<Company>[] = [
           <>
             <SwitchMutation
               switchState={row.original.isActive}
+              
               mutationFn={() => toggleActive({ id: row.original.id })}
               disabled={isTogglingActive}
             />
@@ -79,7 +80,7 @@ export const columns: ColumnDef<Company>[] = [
     header: "Industry",
   },
   {
-    accessorKey: "[users]?.credits",
+    accessorKey: "[users]?.wallet?.credits",
     header: () => (
       <ProtectedHeader columnName="Credits" permission="CREATE_SHIPMENT" />
     ),
@@ -91,7 +92,9 @@ export const columns: ColumnDef<Company>[] = [
             "CREATE_SHIPMENT",
           ])) && (
           <>
-            <p>{row.original.users?.[0]?.credits || 0}</p>
+            <p className="text-center">
+              {row.original.users?.[0]?.wallet?.credits || 0}
+            </p>
           </>
         )
       );

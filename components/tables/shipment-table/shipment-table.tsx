@@ -38,6 +38,8 @@ import {
 } from "@radix-ui/react-icons";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useCurrentUser } from "@/services/auth.mutations";
+import { RowData } from "@tanstack/react-table";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -46,12 +48,25 @@ interface DataTableProps<TData, TValue> {
   pageCount: number;
 }
 
+declare module "@tanstack/react-table" {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  interface ColumnMeta<TData extends RowData, TValue> {
+    requiresSuperAdmin?: boolean;
+  }
+}
+
 export function ShipmentTable({
   columns,
   data,
   pageCount,
   pageSizeOptions = [10, 20, 30, 40, 50],
 }: DataTableProps<Shipment, any>) {
+  const { data: currentUser } = useCurrentUser();
+  const filteredColumns = columns.filter(
+    (column) =>
+      !column.meta?.requiresSuperAdmin ||
+      currentUser?.user.role === "SUPER_ADMIN",
+  );
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -103,7 +118,7 @@ export function ShipmentTable({
 
   const table = useReactTable({
     data: tableData,
-    columns: columns,
+    columns: filteredColumns,
     pageCount: pageCount ?? -1,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
@@ -139,6 +154,7 @@ export function ShipmentTable({
         });
       },
     });
+
   return (
     <>
       <AlertModal
@@ -208,7 +224,7 @@ export function ShipmentTable({
             ) : (
               <TableRow>
                 <TableCell
-                  colSpan={columns?.length}
+                  colSpan={filteredColumns?.length}
                   className="h-24 text-center"
                 >
                   No results.

@@ -15,15 +15,15 @@ import { toast } from "@/components/ui/use-toast";
 import { useAdminDeleteUser } from "@/services/admin/user.mutations";
 import { useCurrentUser } from "@/services/auth.mutations";
 import { useDeleteUser } from "@/services/user.mutations";
-import { User } from "@/types/services/auth.types";
-import { PermissionsType } from "@/types/user.types";
-import { checkPermissions } from "@/utils/user.utils";
+import { UserWithWallet } from "@/types/services/auth.types";
+import { PermissionsType, RoleType } from "@/types/user.types";
+import { checkPermissions, checkRoles } from "@/utils/user.utils";
 import { Edit, Edit2, Eye, MoreHorizontal, Trash } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 
 interface CellActionProps {
-  data: User;
+  data: UserWithWallet;
 }
 
 export const CellAction: React.FC<CellActionProps> = ({ data }) => {
@@ -116,18 +116,21 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
 
           {(user?.user.role === "SUPER_ADMIN" ||
-            checkPermissions(user?.user.permissions as PermissionsType[], [
-              "ASSIGN_CREDITS",
+            checkRoles(user?.user.role as RoleType, [
+              "SUPER_ADMIN",
+              "WHITE_LABEL_ADMIN",
+              "CLIENT_SUPER_USER",
             ])) && (
             <DropdownMenuItem onClick={() => creditActionSetter("assign")}>
               <Edit className="mr-2 h-4 w-4" /> Assign Credits
             </DropdownMenuItem>
           )}
 
-          {(user?.user.role === "SUPER_ADMIN" ||
-            checkPermissions(user?.user.permissions as PermissionsType[], [
-              "DEDUCT_CREDITS",
-            ])) && (
+          {checkRoles(user?.user.role as RoleType, [
+            "SUPER_ADMIN",
+            "WHITE_LABEL_ADMIN",
+            "CLIENT_SUPER_USER",
+          ]) && (
             <DropdownMenuItem onClick={() => creditActionSetter("deduct")}>
               <Edit className="mr-2 h-4 w-4" /> Deduct Credits
             </DropdownMenuItem>

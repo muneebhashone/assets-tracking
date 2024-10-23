@@ -1,11 +1,11 @@
 import { UserRole } from "@/utils/constants";
-import { PermissionsType, StatusType } from "../user.types";
+import { PermissionsType, RoleType, StatusType } from "../user.types";
 import { Company } from "@/services/companies.queries";
 
 export type LoginInputType = {
   email: string;
   password: string;
-  rememberMe?:boolean  
+  rememberMe?: boolean;
 };
 
 export type RegisterUserInputType = {
@@ -48,7 +48,7 @@ export type LoginResponseType = {
 };
 
 export interface CurrentUserResponseType {
-  user: User;
+  user: UserWithWallet;
 }
 
 export interface User {
@@ -57,11 +57,10 @@ export interface User {
   name: string;
   phoneNo?: string;
   avatar?: string;
-  role: keyof typeof UserRole;
+  role: RoleType;
   isActive: boolean;
   password: string;
   status: StatusType;
-  credits: number;
   companyId: number | null;
   company: Company | null;
   clientId: number | null;
@@ -71,3 +70,12 @@ export interface User {
   passwordResetToken?: string;
   updatedAt?: string;
 }
+export interface UserWithWallet extends User {
+  wallet: WalletType;
+}
+export type WalletType = {
+  id: number;
+  createdAt: string | null;
+  updatedAt: string | null;
+  credits: number | null;
+};

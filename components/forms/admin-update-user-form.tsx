@@ -17,7 +17,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Dispatch, SetStateAction } from "react";
 import { useForm } from "react-hook-form";
 
-import { User } from "@/types/services/auth.types";
+import { useGetUsers } from "@/services/user.queries";
+import { UserWithWallet } from "@/types/services/auth.types";
 import { handlePhoneNumber, sanitizeObject } from "@/utils/common.utils";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
@@ -43,7 +44,6 @@ import {
   SelectValue,
 } from "../ui/select";
 import { toast } from "../ui/use-toast";
-import { useGetUsers } from "@/services/user.queries";
 const companyIdRequired: RoleType[] = [
   "WHITE_LABEL_ADMIN",
   "WHITE_LABEL_SUB_ADMIN",
@@ -78,14 +78,14 @@ const adminUserUpdateFormSchema = z
     status: z
       .enum(statusEnums, { required_error: "Status must be defined" })
       .optional(),
-    credits: z.union([
-      z
-        .string()
-        .min(1)
-        .refine((value) => validator.isNumeric(value))
-        .transform(Number),
-      z.number(),
-    ]),
+    // credits: z.union([
+    //   z
+    //     .string()
+    //     .min(1)
+    //     .refine((value) => validator.isNumeric(value))
+    //     .transform(Number),
+    //   z.number(),
+    // ]),
 
     companyId: z
       .string()
@@ -121,7 +121,7 @@ type AdminUserUpdateFormSchemaType = z.infer<typeof adminUserUpdateFormSchema>;
 interface AdminUpdateUserFormProps {
   setModalState: Dispatch<SetStateAction<boolean>>;
   modalState: boolean;
-  userData: User;
+  userData: UserWithWallet;
 }
 
 const AdminUpdateUserForm = ({
@@ -132,8 +132,6 @@ const AdminUpdateUserForm = ({
   const initialData: AdminUserUpdateFormSchemaType = {
     clientId:
       userData.role === "CLIENT_USER" ? String(userData.clientId) : undefined,
-
-    credits: userData.credits,
     companyId: userData.companyId ? String(userData.companyId) : undefined,
     email: userData.email ? userData.email : undefined,
     isActive: userData.isActive ? userData.isActive : undefined,
@@ -341,24 +339,6 @@ const AdminUpdateUserForm = ({
                   />
                 </div>
               )}
-
-              <div>
-                <FormField
-                  control={control}
-                  name="credits"
-                  render={({ field }) => (
-                    <FormItem>
-                      <Label className="font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70 block text-xs mb-1">
-                        credits
-                      </Label>
-                      <FormControl>
-                        <Input {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
 
               <div>
                 <FormField

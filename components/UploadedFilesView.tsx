@@ -12,7 +12,7 @@ import { AlertModal } from "./modal/alert-modal";
 const UploadedFilesView = ({ data }: { data: Shipment }) => {
   const [modalState, setModalState] = useState<boolean>(false);
   const [warningOpen, setWarningOpen] = useState<boolean>(false);
-  const { mutate: deleteFile } = useDeletShipmentFile({
+  const { mutate: deleteFile, isPending } = useDeletShipmentFile({
     onSuccess(data) {
       toast({
         variant: "default",
@@ -54,7 +54,7 @@ const UploadedFilesView = ({ data }: { data: Shipment }) => {
                       onConfirm={() =>
                         deleteFile({ id: data.id, fileName: String(fileName) })
                       }
-                      loading={false}
+                      loading={isPending}
                     />
                     <div
                       className="flex justify-center items-center flex-col bg-white p-4 rounded-md transition-all hover:bg-slate-100 cursor-pointer relative w-full max-w-xs"

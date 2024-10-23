@@ -5,14 +5,14 @@ import SwitchMutation from "@/components/SwitchMutation";
 import { toast } from "@/components/ui/use-toast";
 import { useCurrentUser } from "@/services/auth.mutations";
 import { useUserToggleActive } from "@/services/user.mutations";
-import { User } from "@/types/services/auth.types";
+import { UserWithWallet } from "@/types/services/auth.types";
 import { PermissionsType } from "@/types/user.types";
 import { UserRole } from "@/utils/constants";
 import { checkPermissions } from "@/utils/user.utils";
 import { ColumnDef } from "@tanstack/react-table";
 import { CellAction } from "./cell-action";
 
-export const columns: ColumnDef<User>[] = [
+export const columns: ColumnDef<UserWithWallet>[] = [
   {
     id: "select",
     header: ({ table }) => <ProtectedCheckbox table={table} type="user" />,
@@ -124,7 +124,7 @@ export const columns: ColumnDef<User>[] = [
             "CREATE_SHIPMENT",
           ])) && (
           <>
-            <p>{row.original.credits}</p>
+            <p>{row.original?.wallet?.credits}</p>
           </>
         )
       );

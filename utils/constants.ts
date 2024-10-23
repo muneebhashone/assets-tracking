@@ -3,7 +3,7 @@ import { RoleType } from "@/types/user.types";
 
 export type StatusBadgeRecord = {
   color: string;
-  value: "Delivered" | "In Transit" | "Planned" | "Unknown";
+  value: "Delivered" | "In Transit" | "Planned" | "Unknown" | "Discharged";
 };
 export const AUTH_KEY = "FrateZoneAccessToken";
 
@@ -80,8 +80,8 @@ export const PermissionsForDisplay = {
   VIEW_COMPANY: "View Company",
   DELETE_COMPANY: "Delete Company",
   EDIT_COMPANY: "Edit Company",
-  ASSIGN_CREDITS: "Assign Credits",
-  DEDUCT_CREDITS: "Deduct Credits",
+  // ASSIGN_CREDITS: "Assign Credits",
+  // DEDUCT_CREDITS: "Deduct Credits",
   VIEW_PERMISSIONS: "View Permissions",
   UPDATE_PERMISSIONS: "Update Permissions",
 };
@@ -91,6 +91,7 @@ export const StatusBadgeColor: Record<ShipmentStatus, StatusBadgeRecord> = {
   IN_TRANSIT: { color: "black", value: "In Transit" },
   PLANNED: { color: "blue-500", value: "Planned" },
   UNKNOWN: { color: "gray-500", value: "Unknown" },
+  DISCHARGED: { color: "blue-600", value: "Discharged" },
 };
 
 export const filterViewOptions = {
@@ -98,6 +99,7 @@ export const filterViewOptions = {
   filterByActive: "Is Active",
   trackWith: "Track With",
   status: "Status",
+  companyId: "Company",
   childId: "White Label Admin",
   parentId: "Sub Admin",
 };

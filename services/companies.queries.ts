@@ -5,7 +5,7 @@ import { UseQueryOptions, useQuery } from "@tanstack/react-query";
 import { ErrorResponseType, SuccessResponseType } from "./types.common";
 import { PaginatorInfoType } from "./user.queries";
 import { useCurrentUser } from "./auth.mutations";
-import { User } from "@/types/services/auth.types";
+import { User, UserWithWallet } from "@/types/services/auth.types";
 
 //types
 export type GetAllCompaniesInputType = {
@@ -34,7 +34,7 @@ export type Company = {
   status: CompanyStatus;
   id: number;
   name?: string;
-  users:User[];
+  users: UserWithWallet[];
   address?: string;
   industry?: string;
   createdAt?: string;
@@ -64,11 +64,16 @@ export const getCompanyById = async (input: GetCompanyByIdInputType) => {
 //hooks
 export const useGetCompanies = (
   input: GetAllCompaniesInputType,
-  options?: UseQueryOptions<
-    unknown,
-    ErrorResponseType,
-    GetAllCompaniesResponseType
-  >,
+  options?: Omit<
+    UseQueryOptions<unknown, ErrorResponseType, GetAllCompaniesResponseType>,
+    "queryKey"
+  > & {
+    queryKey?: UseQueryOptions<
+      unknown,
+      ErrorResponseType,
+      GetAllCompaniesResponseType
+    >["queryKey"];
+  },
 ) => {
   const { data: user } = useCurrentUser();
   return useQuery({

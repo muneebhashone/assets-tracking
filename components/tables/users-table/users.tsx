@@ -31,7 +31,7 @@ import {
 } from "@/components/ui/table";
 import { toast } from "@/components/ui/use-toast";
 import { useBulkDeleteUser } from "@/services/user.mutations";
-import { User } from "@/types/services/auth.types";
+import { UserWithWallet } from "@/types/services/auth.types";
 import {
   DoubleArrowLeftIcon,
   DoubleArrowRightIcon,
@@ -41,7 +41,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
-  data: User[];
+  data: UserWithWallet[];
   pageSizeOptions?: number[];
   pageCount: number;
   searchParams?: {
@@ -54,7 +54,7 @@ export function UsersTable({
   data,
   pageCount,
   pageSizeOptions = [10, 20, 30, 40, 50],
-}: DataTableProps<User, any>) {
+}: DataTableProps<UserWithWallet, any>) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();

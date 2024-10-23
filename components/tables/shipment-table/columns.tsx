@@ -3,10 +3,10 @@ import ProtectedCheckbox from "@/components/ProtectedCheckbox";
 import { Badge } from "@/components/ui/badge";
 import UploadedFilesView from "@/components/UploadedFilesView";
 import { Shipment, ShipmentStatus } from "@/services/shipment.queries";
+import { StatusBadgeColor } from "@/utils/constants";
 import { ColumnDef } from "@tanstack/react-table";
 import moment from "moment";
 import { CellAction } from "./cell-action";
-import { StatusBadgeColor } from "@/utils/constants";
 
 export const columns: ColumnDef<Shipment>[] = [
   {
@@ -27,7 +27,21 @@ export const columns: ColumnDef<Shipment>[] = [
       </div>
     ),
   },
-
+  {
+    accessorKey: "company.name",
+    header: () => <p className="text-center">{"Company"}</p>,
+    cell: ({ row }) => (
+      <div className="flex items-center flex-col">
+        <p className="text-center tracking-tighter font-bold text-zinc-500 ">
+          {row.original?.company?.name ?? "Admin"}
+        </p>
+      </div>
+    ),
+    enableHiding: true,
+    meta: {
+      requiresSuperAdmin: true,
+    },
+  },
   {
     accessorKey: "shipment",
     header: () => <p className="text-center">{"Shipment"}</p>,

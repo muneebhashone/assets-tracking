@@ -17,6 +17,7 @@ import AllShipmentCreationDropDown from "../all-shipment-creation-dropdown";
 import { columns } from "../tables/shipment-table/columns";
 import { ShipmentTable } from "../tables/shipment-table/shipment-table";
 import { ScrollArea } from "../ui/scroll-area";
+import { useGetCompanies } from "@/services/companies.queries";
 
 const ShipmentPage = () => {
   const searchParams = useSearchParams();
@@ -34,10 +35,18 @@ const ShipmentPage = () => {
     status: searchParams.get("status")
       ? (String(searchParams.get("status")) as ShipmentStatus)
       : undefined,
+    companyId: searchParams.get("companyId")
+      ? Number(searchParams.get("companyId"))
+      : undefined,
   };
 
   const { data: result, isLoading } = useGetShipments(params);
   const { data: user } = useCurrentUser();
+  const { data: companies } = useGetCompanies(
+    {},
+    { enabled: user?.user.role === "SUPER_ADMIN" },
+  );
+
   const optionsMapper: OptionsMapperType["Shipment"] = {
     status: [
       { label: "Delivered", value: "DELIVERED" },
@@ -49,6 +58,12 @@ const ShipmentPage = () => {
       { label: "Container Number", value: "CONTAINER_NUMBER" },
       { label: "Booking or Lading Number", value: "MBL_NUMBER" },
     ],
+    companyId: companies?.results
+      ? companies.results.map((company) => ({
+          label: String(company.name),
+          value: company.id,
+        }))
+      : undefined,
   };
 
   return (

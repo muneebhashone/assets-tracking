@@ -51,39 +51,12 @@ export default function AuthenticationPage() {
               Enter your details below to register
             </p>
           </div>
-          {/* <Tabs defaultValue="user" className="w-[400px]"> */}
-          {/* <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="company">Company</TabsTrigger>
-              <TabsTrigger value="user">User</TabsTrigger>
-            </TabsList> */}
-          {/* <TabsContent value="user">
-              <UserAuthFormSignUp />
-            </TabsContent>
-            <TabsContent value="company"> */}
+
           <CompanyAuthFormSignUp />
-          {/* </TabsContent> */}
-          {/* </Tabs> */}
 
           <Link href="/signin" className="text-[#3491FE]">
             already have an account?
           </Link>
-          {/* <p className="px-8 text-center text-sm text-muted-foreground">
-            By clicking continue, you agree to our{" "}
-            <Link
-              href="/terms"
-              className="underline underline-offset-4 hover:text-primary"
-            >
-              Terms of Service
-            </Link>{" "}
-            and{" "}
-            <Link
-              href="/privacy"
-              className="underline underline-offset-4 hover:text-primary"
-            >
-              Privacy Policy
-            </Link>
-            .
-          </p> */}
         </div>
       </div>
     </div>

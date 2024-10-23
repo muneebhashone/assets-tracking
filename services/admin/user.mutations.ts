@@ -5,10 +5,9 @@ import {
   useQueryClient,
 } from "@tanstack/react-query";
 
-import { User } from "@/types/services/auth.types";
+import { UserWithWallet } from "@/types/services/auth.types";
 import { PermissionsType, StatusType } from "@/types/user.types";
 import { ErrorResponseType, SuccessResponseType } from "../types.common";
-import { getUsers } from "../user.queries";
 
 //types
 export interface AdminCreateUserInputType {
@@ -20,7 +19,6 @@ export interface AdminCreateUserInputType {
   password?: string;
   isActive: boolean;
   status: StatusType;
-  credits: number;
   companyId?: string;
   clientId?: string;
 }
@@ -34,7 +32,7 @@ export interface AdminDeleteUserInputType {
 }
 export interface AdminCreateOrUpdateUserResponseType
   extends Omit<SuccessResponseType, "data"> {
-  data: User;
+  data: UserWithWallet;
 }
 
 //services

@@ -36,6 +36,7 @@ export interface OptionsMapperType {
   Shipment: {
     trackWith: IRecord<string, TrackWithType>[];
     status: IRecord<string, ShipmentStatus>[];
+    companyId?: IRecord<string, number>[];
   };
   User: {
     filterByActive: IRecord<string, boolean>[];
