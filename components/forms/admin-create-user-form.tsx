@@ -107,7 +107,6 @@ const adminCreateUserFormSchema = z
     const companyIdRequired: RoleType[] = [
       "WHITE_LABEL_ADMIN",
       "WHITE_LABEL_SUB_ADMIN",
-      "CLIENT_SUPER_USER",
     ];
     const clientIdRequired: RoleType[] = ["CLIENT_USER"];
 
@@ -326,8 +325,7 @@ const AdminCreateUserForm = ({
                 </div>
               )}
 
-              {(watch("role") === "CLIENT_SUPER_USER" ||
-                watch("role") === "WHITE_LABEL_ADMIN" ||
+              {(watch("role") === "WHITE_LABEL_ADMIN" ||
                 watch("role") === "WHITE_LABEL_SUB_ADMIN") && (
                 <div>
                   <FormField
