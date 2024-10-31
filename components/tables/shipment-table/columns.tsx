@@ -39,7 +39,7 @@ export const columns: ColumnDef<Shipment>[] = [
     ),
     enableHiding: true,
     meta: {
-      requiresSuperAdmin: true,
+      isVisible: true,
     },
   },
   {

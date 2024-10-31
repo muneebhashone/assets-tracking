@@ -8,18 +8,27 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { createCompanySchema } from "@/lib/form-schema";
-import { useCurrentUser, useRegisterCompany } from "@/services/auth.mutations";
+import { createAdminCompanySchema } from "@/lib/form-schema";
 import { useCreateAdminCompany } from "@/services/companies.mutations";
-import { createCompanyInputType } from "@/services/companies.queries";
+import {
+  createCompanyInputType,
+  useGetParentCompanies,
+} from "@/services/companies.queries";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import PasswordInput from "../PasswordInput";
 import { Label } from "../ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
 import { useToast } from "../ui/use-toast";
 
-export default function CompanyAuthFormSignUp({
+export default function AdminCompanyCreateForm({
   redirect = true,
   closeModal,
 }: {
@@ -29,28 +38,8 @@ export default function CompanyAuthFormSignUp({
   const { toast } = useToast();
 
   const router = useRouter();
-  const { data: currentUser } = useCurrentUser();
-  const { mutate: createAdminCompany, isPending: isCreatingAdminCompany } =
-    useCreateAdminCompany({
-      onSuccess(data, variables, context) {
-        toast({
-          title: data.message,
-          duration: 3000,
-          variant: "default",
-        });
-        closeModal?.();
-      },
-      onError(error, variables, context) {
-        if (error instanceof Error) {
-          toast({
-            title: error?.response?.data.message,
-            duration: 2000,
-            variant: "destructive",
-          });
-        }
-      },
-    });
-  const { mutate: registerCompany, isPending } = useRegisterCompany({
+
+  const { mutate, isPending } = useCreateAdminCompany({
     onSuccess(data, variables, context) {
       toast({
         title: data.message,
@@ -72,18 +61,19 @@ export default function CompanyAuthFormSignUp({
   });
 
   const form = useForm<createCompanyInputType>({
-    resolver: zodResolver(createCompanySchema),
+    resolver: zodResolver(createAdminCompanySchema),
   });
 
+  const { data: parentCompanies } = useGetParentCompanies();
+
   const onSubmit = async (data: createCompanyInputType) => {
-    if (!redirect) {
-      data.parentCompany = Number(currentUser?.user.companyId);
-      data.type = "CLIENT";
-      createAdminCompany({ ...data });
-    } else {
-      registerCompany({ ...data });
+    if (data.type === "WHITE_LABEL") {
+      data.parentCompany = undefined;
     }
+
+    mutate(data);
   };
+
   return (
     <>
       <Form {...form}>
@@ -109,6 +99,62 @@ export default function CompanyAuthFormSignUp({
               </FormItem>
             )}
           />
+          <FormField
+            control={form.control}
+            name="type"
+            render={({ field }) => (
+              <FormItem>
+                <Label>Company Type</Label>
+                <FormControl>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select a company type" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="CLIENT">Client</SelectItem>
+                      <SelectItem value="WHITE_LABEL">White Label</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          {form.watch("type") === "CLIENT" && (
+            <FormField
+              control={form.control}
+              name="parentCompany"
+              render={({ field }) => (
+                <FormItem>
+                  <Label>Parent Company</Label>
+                  <FormControl>
+                    <Select
+                      onValueChange={(value) => field.onChange(Number(value))}
+                      defaultValue={field.value?.toString()}
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select a parent company" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {parentCompanies?.data?.map((company) => (
+                          <SelectItem
+                            key={company.id}
+                            value={company.id.toString()}
+                          >
+                            {company.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          )}
           <FormField
             control={form.control}
             name="country"
@@ -199,7 +245,7 @@ export default function CompanyAuthFormSignUp({
             )}
           />
           <Button
-            disabled={isPending || isCreatingAdminCompany}
+            disabled={isPending}
             className="ml-auto w-full bg-[#D3991F] hover:bg-[#bf8c1e]"
             type="submit"
           >

@@ -51,7 +51,7 @@ interface DataTableProps<TData, TValue> {
 declare module "@tanstack/react-table" {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   interface ColumnMeta<TData extends RowData, TValue> {
-    requiresSuperAdmin?: boolean;
+    isVisible?: boolean;
   }
 }
 
@@ -64,8 +64,9 @@ export function ShipmentTable({
   const { data: currentUser } = useCurrentUser();
   const filteredColumns = columns.filter(
     (column) =>
-      !column.meta?.requiresSuperAdmin ||
-      currentUser?.user.role === "SUPER_ADMIN",
+      !column.meta?.isVisible ||
+      currentUser?.user.role === "SUPER_ADMIN" ||
+      currentUser?.user.role === "WHITE_LABEL_ADMIN",
   );
   const router = useRouter();
   const pathname = usePathname();

@@ -20,6 +20,28 @@ export const columns: ColumnDef<Company>[] = [
     accessorKey: "name",
   },
   {
+    header: () => {
+      /* eslint-disable */
+      const { data: currentUser } = useCurrentUser();
+      return (
+        currentUser?.user.role === "SUPER_ADMIN" && (
+          <div className="text-center">Parent Company</div>
+        )
+      );
+    },
+    cell: ({ row }) => {
+      /* eslint-disable */
+      const { data: currentUser } = useCurrentUser();
+      return (
+        currentUser?.user.role === "SUPER_ADMIN" && (
+          <div className="text-center">{row.original.parent?.name}</div>
+        )
+      );
+    },
+    accessorKey: "parent.name",
+  },
+
+  {
     accessorKey: "isActive",
 
     header: () => (
@@ -54,7 +76,6 @@ export const columns: ColumnDef<Company>[] = [
           <>
             <SwitchMutation
               switchState={row.original.isActive}
-              
               mutationFn={() => toggleActive({ id: row.original.id })}
               disabled={isTogglingActive}
             />
@@ -92,9 +113,7 @@ export const columns: ColumnDef<Company>[] = [
             "CREATE_SHIPMENT",
           ])) && (
           <>
-            <p className="text-center">
-              {row.original.users?.[0]?.wallet?.credits || 0}
-            </p>
+            <p className="text-center">{row.original.wallet?.credits || 0}</p>
           </>
         )
       );

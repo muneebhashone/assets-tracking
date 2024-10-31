@@ -53,7 +53,7 @@ export const columns: ColumnDef<UserWithWallet>[] = [
     accessorKey: "isActive",
 
     header: () => (
-      <ProtectedHeader columnName="Active" permission="EDIT_COMPANY" />
+      <ProtectedHeader columnName="Active" permission="EDIT_USER" />
     ),
     cell: ({ row }) => {
       /* eslint-disable */
@@ -118,13 +118,14 @@ export const columns: ColumnDef<UserWithWallet>[] = [
     ),
     cell: ({ row }) => {
       const { data: currentUser } = useCurrentUser();
+      console.log({ row: row.original?.company });
       return (
         (currentUser?.user.role === "SUPER_ADMIN" ||
           checkPermissions(currentUser?.user.permissions as PermissionsType[], [
             "CREATE_SHIPMENT",
           ])) && (
           <>
-            <p>{row.original?.wallet?.credits}</p>
+            <p>{row.original?.company?.wallet?.credits}</p>
           </>
         )
       );

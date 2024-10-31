@@ -24,7 +24,8 @@ export default function DashboardPage() {
             {isFetching ? (
               <Skeleton className="w-10 h-3" />
             ) : (
-              `Credits: ${data?.user.wallet.credits}`
+              data?.user.role !== "SUPER_ADMIN" &&
+              `Credits: ${data?.user.company?.wallet.credits}`
             )}
           </h2>
         </div>

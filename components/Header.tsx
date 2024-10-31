@@ -1,74 +1,105 @@
 "use client";
 
 import { useCurrentUser } from "@/services/auth.mutations";
-import { HamburgerMenuIcon } from "@radix-ui/react-icons";
-import { HelpCircleIcon } from "lucide-react";
+import { Menu as MenuIcon } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { menuitems } from "../constants/data";
-import LoginButton from "./LoginButton";
-import Menu from "./Menu";
 import NavLogo from "./NavLogo";
 import { UserNav } from "./layout/user-nav";
+import { Button } from "./ui/button";
+import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
 
 const Header = () => {
   const [open, setOpen] = useState(false);
   const router = useRouter();
-  const handleOpen = () => {
-    setOpen(!open);
-  };
   const { data: currentUser } = useCurrentUser();
+
   return (
-    <>
-      <div className="flex-row md:flex items-center justify-between bg-[#FFFFFF] fixed w-full px-5 md:px-20 lg:px-60 z-[9999] shadow-lg">
-        <div className="flex items-center justify-between">
+    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <div className="container flex h-16 items-center justify-between">
+        <div className="flex items-center gap-2">
           <NavLogo
-            height={60}
+            height={50}
             link={"/"}
             src="/images/logo.png"
-            width={60}
+            width={50}
             alt="logo"
           />
-          <button onClick={handleOpen}>
-            <HamburgerMenuIcon className="md:hidden w-8 h-8" />
-          </button>
         </div>
-        <div className="flex-row md:flex items-center gap-28">
-          <Menu
-            className={`${open ? "block" : "hidden"}`}
-            listitem={menuitems}
-          />
-          <div className="flex items-center gap-10 justify-center">
-            {currentUser?.user ? (
-              <UserNav />
-            ) : (
-              <>
-                <Link href="/signin">
-                  <LoginButton
-                    title="Login"
-                    classname={`bg-transparent text-[#3491FE] font-medium md:block ${
-                      open ? "block" : "hidden"
-                    }`}
-                  />
-                </Link>
-                <LoginButton
-                  onclick={() => router.push("/signup")}
-                  title="Sign Up"
-                  classname={`bg-[#3491FE] text-white font-medium md:block ${
-                    open ? "block" : "hidden"
-                  }`}
-                />
-              </>
-            )}
-            <Link href={"/support-request"}>
-              <HelpCircleIcon />
+
+        {/* Desktop Navigation */}
+        <nav className="hidden md:flex items-center gap-6">
+          {menuitems.map((item) => (
+            <Link
+              key={item.id}
+              href={item.link}
+              className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
+            >
+              {item.title}
             </Link>
-          </div>
+          ))}
+        </nav>
+
+        <div className="flex items-center gap-4">
+          {currentUser?.user ? (
+            <UserNav />
+          ) : (
+            <div className="hidden md:flex items-center gap-4">
+              <Button variant="ghost" onClick={() => router.push("/signin")}>
+                Login
+              </Button>
+              <Button
+                className="bg-blue-500"
+                onClick={() => router.push("/signup")}
+              >
+                Sign Up
+              </Button>
+            </div>
+          )}
+
+          {/* Mobile Navigation */}
+          <Sheet open={open} onOpenChange={setOpen}>
+            <SheetTrigger asChild className="md:hidden">
+              <Button variant="ghost" size="icon">
+                <MenuIcon className="h-5 w-5" />
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="right" className="w-[300px] sm:w-[400px]">
+              <nav className="flex flex-col gap-4 mt-8">
+                {menuitems.map((item) => (
+                  <Link
+                    key={item.id}
+                    href={item.link}
+                    className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
+                    onClick={() => setOpen(false)}
+                  >
+                    {item.title}
+                  </Link>
+                ))}
+                {!currentUser?.user && (
+                  <div className="flex flex-col gap-2 mt-4">
+                    <Button
+                      variant="ghost"
+                      onClick={() => router.push("/signin")}
+                    >
+                      Login
+                    </Button>
+                    <Button
+                      className="bg-blue-600"
+                      onClick={() => router.push("/signup")}
+                    >
+                      Sign Up
+                    </Button>
+                  </div>
+                )}
+              </nav>
+            </SheetContent>
+          </Sheet>
         </div>
       </div>
-      ;
-    </>
+    </header>
   );
 };
 

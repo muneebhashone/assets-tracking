@@ -8,6 +8,7 @@ import { useSearchParams } from "next/navigation";
 import { Company, getAllCompanies } from "./companies.queries";
 
 import { ErrorResponseType, SuccessResponseType } from "./types.common";
+import { RegisterCompanyInputType } from "@/types/services/auth.types";
 
 //types
 
@@ -36,6 +37,14 @@ export const deleteCompany = async (input: DeleteOrToggleCompanyInputType) => {
   const { id } = input;
   const { data } = await apiAxios.delete<SuccessResponseType>(
     `/companies/${id}`,
+  );
+  return data;
+};
+
+export const createAdminCompany = async (input: RegisterCompanyInputType) => {
+  const { data } = await apiAxios.post<SuccessResponseType>(
+    `/companies`,
+    input,
   );
   return data;
 };
@@ -114,6 +123,24 @@ export const useUpdateCompany = (
       await queryClient.invalidateQueries({
         queryKey: ["getAllCompanies"],
       });
+      options?.onSuccess?.(data, variables, context);
+    },
+  });
+};
+
+export const useCreateAdminCompany = (
+  options?: UseMutationOptions<
+    SuccessResponseType,
+    ErrorResponseType,
+    RegisterCompanyInputType
+  >,
+) => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    ...options,
+    mutationFn: createAdminCompany,
+    async onSuccess(data, variables, context) {
+      await queryClient.invalidateQueries({ queryKey: ["getAllCompanies"] });
       options?.onSuccess?.(data, variables, context);
     },
   });

@@ -12,13 +12,7 @@ interface Props {
 const NavLogo = ({ link, src, width, height, alt }: Props) => {
   return (
     <Link href={link}>
-      <Image
-        src={src}
-        width={width}
-        height={height}
-        alt={alt}
-        className="md:w-[90px] md:h-[90px]"
-      ></Image>
+      <Image src={src} width={width} height={height} alt={alt}></Image>
     </Link>
   );
 };

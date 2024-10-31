@@ -1,17 +1,18 @@
 "use client";
+import { useCurrentUser } from "@/services/auth.mutations";
 import { Company, useGetCompanies } from "@/services/companies.queries";
+import { PermissionsType } from "@/types/user.types";
+import { checkPermissions } from "@/utils/user.utils";
 import { useSearchParams } from "next/navigation";
-import React, { useState } from "react";
-import { ScrollArea } from "../ui/scroll-area";
-import { columns } from "../tables/company-table/columns";
-import { CompanyTable } from "../tables/company-table/company-table";
-import SearchBar from "../SearchBar";
-import { Button } from "../ui/button";
+import { useState } from "react";
+import AdminCompanyCreateForm from "../forms/admin-company-form";
 import CompanyAuthFormSignUp from "../forms/user-company-form";
 import { ModalCustom } from "../ModalComponent";
-import { checkPermissions } from "@/utils/user.utils";
-import { useCurrentUser } from "@/services/auth.mutations";
-import { PermissionsType } from "@/types/user.types";
+import SearchBar from "../SearchBar";
+import { columns } from "../tables/company-table/columns";
+import { CompanyTable } from "../tables/company-table/company-table";
+import { Button } from "../ui/button";
+import { ScrollArea } from "../ui/scroll-area";
 
 const CompanyPage = () => {
   const searchParams = useSearchParams();
@@ -34,10 +35,17 @@ const CompanyPage = () => {
         onClose={() => setModalOpen(false)}
         className=" overflow-auto min-w-[40rem]  backdrop-opacity-50"
       >
-        <CompanyAuthFormSignUp
-          redirect={false}
-          closeModal={() => setModalOpen(false)}
-        />
+        {currentUser?.user?.role === "SUPER_ADMIN" ? (
+          <AdminCompanyCreateForm
+            closeModal={() => setModalOpen(false)}
+            redirect={false}
+          />
+        ) : (
+          <CompanyAuthFormSignUp
+            redirect={false}
+            closeModal={() => setModalOpen(false)}
+          />
+        )}
       </ModalCustom>
       <ScrollArea className="h-full ">
         <div className="flex-1 space-y-4 p-4 md:p-8 pt-6">
