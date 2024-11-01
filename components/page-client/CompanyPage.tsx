@@ -63,7 +63,7 @@ const CompanyPage = () => {
             {(currentUser?.user.role === "SUPER_ADMIN" ||
               checkPermissions(
                 currentUser?.user.permissions as PermissionsType[],
-                ["CREATE_USER"],
+                ["CREATE_COMPANY", "CREATE_USER"],
               )) && (
               <div className="flex mb-4">
                 <Button

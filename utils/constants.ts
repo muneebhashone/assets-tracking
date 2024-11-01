@@ -20,7 +20,7 @@ export const EligibleRolesForCreation: Record<RoleType, RoleType[]> = {
   SUPER_ADMIN: ["WHITE_LABEL_SUB_ADMIN", "CLIENT_USER", "SUB_ADMIN"],
   SUB_ADMIN: ["WHITE_LABEL_SUB_ADMIN", "CLIENT_USER"],
   WHITE_LABEL_ADMIN: ["WHITE_LABEL_SUB_ADMIN"],
-  WHITE_LABEL_SUB_ADMIN: ["CLIENT_SUPER_USER"],
+  WHITE_LABEL_SUB_ADMIN: [],
   CLIENT_SUPER_USER: ["CLIENT_USER"],
   CLIENT_USER: [],
 } as const;
@@ -68,10 +68,9 @@ export const PermissionsForDisplay = {
   DELETE_USER: "Delete User",
   VIEW_DASHBOARD: "View Dashboard",
   VIEW_COMPANY: "View Company",
+  CREATE_COMPANY: "Create Company",
   DELETE_COMPANY: "Delete Company",
   EDIT_COMPANY: "Edit Company",
-  // ASSIGN_CREDITS: "Assign Credits",
-  // DEDUCT_CREDITS: "Deduct Credits",
   VIEW_PERMISSIONS: "View Permissions",
   UPDATE_PERMISSIONS: "Update Permissions",
 };
