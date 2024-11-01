@@ -33,7 +33,7 @@ export const columns: ColumnDef<Shipment>[] = [
     cell: ({ row }) => (
       <div className="flex items-center flex-col">
         <p className="text-center tracking-tighter font-bold text-zinc-500 ">
-          {row.original?.company?.name ?? "Admin"}
+          {row.original?.company?.name ?? "FrateZone"}
         </p>
       </div>
     ),
