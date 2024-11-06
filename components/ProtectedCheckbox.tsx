@@ -5,9 +5,10 @@ import { checkPermissions } from "@/utils/user.utils";
 import { Row, Table } from "@tanstack/react-table";
 import React from "react";
 
-import { UserWithWallet } from "@/types/services/auth.types";
+
 import { PermissionsType } from "@/types/user.types";
 import { Checkbox } from "./ui/checkbox";
+import { User } from "@/types/services/auth.types";
 
 interface ProtectedProps<T> {
   table?: Table<T>;
@@ -16,7 +17,7 @@ interface ProtectedProps<T> {
 }
 
 const ProtectedCheckbox: React.FC<
-  ProtectedProps<Shipment> | ProtectedProps<UserWithWallet>
+  ProtectedProps<Shipment> | ProtectedProps<User>
 > = ({ table, row, type }) => {
   const { data: user } = useCurrentUser();
 

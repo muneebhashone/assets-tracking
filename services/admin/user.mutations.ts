@@ -5,7 +5,7 @@ import {
   useQueryClient,
 } from "@tanstack/react-query";
 
-import { UserWithWallet } from "@/types/services/auth.types";
+import { User } from "@/types/services/auth.types";
 import { PermissionsType, StatusType } from "@/types/user.types";
 import { ErrorResponseType, SuccessResponseType } from "../types.common";
 
@@ -32,7 +32,7 @@ export interface AdminDeleteUserInputType {
 }
 export interface AdminCreateOrUpdateUserResponseType
   extends Omit<SuccessResponseType, "data"> {
-  data: UserWithWallet;
+  data: User;
 }
 
 //services

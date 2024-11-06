@@ -15,7 +15,7 @@ import { toast } from "@/components/ui/use-toast";
 import { useAdminDeleteUser } from "@/services/admin/user.mutations";
 import { useCurrentUser } from "@/services/auth.mutations";
 import { useDeleteUser } from "@/services/user.mutations";
-import { UserWithWallet } from "@/types/services/auth.types";
+import { User } from "@/types/services/auth.types";
 import { PermissionsType, RoleType } from "@/types/user.types";
 import { checkPermissions, checkRoles } from "@/utils/user.utils";
 import { Edit, Edit2, Eye, MoreHorizontal, Trash } from "lucide-react";
@@ -23,7 +23,7 @@ import Link from "next/link";
 import { useState } from "react";
 
 interface CellActionProps {
-  data: UserWithWallet;
+  data: User;
 }
 
 export const CellAction: React.FC<CellActionProps> = ({ data }) => {

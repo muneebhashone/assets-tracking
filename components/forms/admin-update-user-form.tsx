@@ -18,7 +18,7 @@ import { Dispatch, SetStateAction } from "react";
 import { useForm } from "react-hook-form";
 
 import { useGetUsers } from "@/services/user.queries";
-import { UserWithWallet } from "@/types/services/auth.types";
+import { User } from "@/types/services/auth.types";
 import { handlePhoneNumber, sanitizeObject } from "@/utils/common.utils";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
@@ -121,7 +121,7 @@ type AdminUserUpdateFormSchemaType = z.infer<typeof adminUserUpdateFormSchema>;
 interface AdminUpdateUserFormProps {
   setModalState: Dispatch<SetStateAction<boolean>>;
   modalState: boolean;
-  userData: UserWithWallet;
+  userData: User;
 }
 
 const AdminUpdateUserForm = ({

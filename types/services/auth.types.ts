@@ -1,6 +1,5 @@
-import { UserRole } from "@/utils/constants";
-import { PermissionsType, RoleType, StatusType } from "../user.types";
 import { Company } from "@/services/companies.queries";
+import { PermissionsType, RoleType, StatusType } from "../user.types";
 
 export type LoginInputType = {
   email: string;
@@ -48,7 +47,7 @@ export type LoginResponseType = {
 };
 
 export interface CurrentUserResponseType {
-  user: UserWithWallet;
+  user: User;
 }
 
 export interface User {
@@ -70,9 +69,7 @@ export interface User {
   passwordResetToken?: string;
   updatedAt?: string;
 }
-export interface UserWithWallet extends User {
-  wallet: WalletType;
-}
+
 export type WalletType = {
   id: number;
   createdAt: string | null;
