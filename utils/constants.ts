@@ -49,6 +49,7 @@ export const ShipmentStatusDisplay = {
   IN_TRANSIT: "In Transit",
   PLANNED: "Planned",
   UNKNOWN: "Unknown",
+  DISCHARGED: "Discharged",
   DELIVERED: "Delivered",
 };
 

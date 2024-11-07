@@ -10,6 +10,7 @@ import {
 import { useCurrentUser } from "./auth.mutations";
 import { ErrorResponseType, SuccessResponseType } from "./types.common";
 import { PaginatorInfoType } from "./user.queries";
+import { Shipment } from "./shipment.queries";
 
 //types
 export type GetAllCompaniesInputType = {
@@ -54,9 +55,58 @@ export type Company = {
   credits?: number;
 };
 
+export interface UserDashboardStats {
+  users: {
+    totalUsers: number;
+    roleDistribution: Record<string, number>;
+    newUsers: {
+      last30Days: number;
+      last7Days: number;
+      today: number;
+    };
+  };
+  company: {
+    companyDetails: Company | null;
+    totalChildCompanies: number;
+    activeChildCompanies: number;
+    newChildCompanies: {
+      last30Days: number;
+      last7Days: number;
+      today: number;
+    };
+  };
+  shipments: {
+    totalShipments: number;
+    statusDistribution: Record<string, number>;
+    newShipments: {
+      last30Days: {
+        total: number;
+        byStatus: Record<string, number>;
+      };
+      last7Days: {
+        total: number;
+        byStatus: Record<string, number>;
+      };
+      today: {
+        total: number;
+        byStatus: Record<string, number>;
+      };
+    };
+    recentShipments: Shipment[];
+  };
+  wallet: {
+    currentBalance: number;
+  };
+  lastUpdated: Date;
+}
+
 export type createCompanyInputType = RegisterCompanyInputType & {
   type: "CLIENT" | "WHITE_LABEL";
   parentCompany?: number;
+};
+
+export type userDashboardResponseType = Omit<SuccessResponseType, "data"> & {
+  data: UserDashboardStats;
 };
 //services
 export const getAllCompanies = async (input: GetAllCompaniesInputType) => {
@@ -80,6 +130,15 @@ export const getCompanyById = async (input: GetCompanyByIdInputType) => {
     "/companies",
     { params: { ...input } },
   );
+
+  return data;
+};
+
+export const getUserDashboardStats = async () => {
+  const { data } = await apiAxios.get<userDashboardResponseType>(
+    "/companies/user-dashboard",
+  );
+  console.log({ data });
 
   return data;
 };
@@ -130,5 +189,19 @@ export const useGetCompanyById = (
     queryFn: async () => await getCompanyById(input),
     queryKey: ["getCompanyById", user?.user.id, JSON.stringify(input)],
     enabled: Boolean(user?.user.id),
+  });
+};
+
+export const useGetUserDashboardStats = (
+  options?: Partial<
+    UseQueryOptions<unknown, ErrorResponseType, userDashboardResponseType>
+  >,
+) => {
+  const { data: user } = useCurrentUser();
+  return useQuery({
+    ...options,
+    queryFn: async () => await getUserDashboardStats(),
+    queryKey: ["getUserDashboardStats", user?.user.id],
+    enabled: [options?.enabled, Boolean(user?.user.id)].every(Boolean),
   });
 };

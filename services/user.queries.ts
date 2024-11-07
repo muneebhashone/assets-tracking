@@ -4,6 +4,7 @@ import { ErrorResponseType, SuccessResponseType } from "./types.common";
 import { User } from "@/types/services/auth.types";
 import { RoleType } from "@/types/user.types";
 import { useCurrentUser } from "./auth.mutations";
+import { Shipment } from "./shipment.queries";
 
 //types
 export type GetAllUserInputType = {
@@ -14,6 +15,48 @@ export type GetAllUserInputType = {
   filterByStatus?: ("APPROVED" | "REQUESTED" | "REJECTED")[];
   filterByRole?: RoleType;
 };
+
+export interface AdminDashboardStats {
+  users: {
+    totalUsers: number;
+    roleDistribution: Record<string, number>;
+    newUsers: {
+      last30Days: number;
+      last7Days: number;
+      today: number;
+    };
+  };
+  companies: {
+    totalCompanies: number;
+    activeCompanies: number;
+    newCompanies: {
+      last30Days: number;
+      last7Days: number;
+      today: number;
+    };
+  };
+  shipments: {
+    totalShipments: number;
+    statusDistribution: Record<string, number>;
+    newShipments: {
+      last30Days: {
+        total: number;
+        byStatus: Record<string, number>;
+      };
+      last7Days: {
+        total: number;
+        byStatus: Record<string, number>;
+      };
+      today: {
+        total: number;
+        byStatus: Record<string, number>;
+      };
+    };
+    recentShipments: Array<Shipment>;
+  };
+
+  lastUpdated: Date;
+}
 
 export type GetAllUserResponseType = {
   results: User[];
@@ -38,6 +81,11 @@ export interface GetUserByIdResponseType
   data: User;
 }
 
+export interface GetAdminDashboardResponseType
+  extends Omit<SuccessResponseType, "data"> {
+  data: AdminDashboardStats;
+}
+
 //services
 export const getUsers = async (input: GetAllUserInputType) => {
   const { data } = await apiAxios.get<GetAllUserResponseType>("/users", {
@@ -53,7 +101,13 @@ export const getUserById = async (input: GetUserByIdInputType) => {
 
   return data;
 };
+export const getAdminDashboardData = async () => {
+  const { data } = await apiAxios.get<GetAdminDashboardResponseType>(
+    "/admin/users/dashboard",
+  );
 
+  return data;
+};
 //hooks
 export const useGetUsers = (
   input: GetAllUserInputType,
@@ -80,5 +134,19 @@ export const useGetUserById = (
     queryFn: async () => await getUserById(input),
     queryKey: ["getUserById", user?.user.id, JSON.stringify(input)],
     enabled: Boolean(user?.user.id),
+  });
+};
+
+export const useGetAdminDashboardData = (
+  options?: Partial<
+    UseQueryOptions<unknown, ErrorResponseType, GetAdminDashboardResponseType>
+  >,
+) => {
+  const { data: user } = useCurrentUser();
+  return useQuery({
+    ...options,
+    queryFn: async () => await getAdminDashboardData(),
+    queryKey: ["getAdminDashboardData", user?.user.id],
+    enabled: [options?.enabled, Boolean(user?.user.id)].every(Boolean),
   });
 };
