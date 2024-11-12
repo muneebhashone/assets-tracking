@@ -1,6 +1,5 @@
 import { Shipment } from "@/services/shipment.queries";
 import moment from "moment";
-import ExcelJS from "exceljs";
 import { nanoid } from "nanoid";
 import * as XLSX from "xlsx";
 
@@ -34,16 +33,12 @@ export const handleExportProduct = async (
       const workbook = XLSX.utils.book_new();
       const worksheet = XLSX.utils.json_to_sheet(dataToExport);
 
-      // Make the header row bold
       const headerStyle = { font: { bold: true } };
       const columnNames = Object.keys(dataToExport[0]);
-      const headerRange = XLSX.utils.encode_range({
-        s: { r: 0, c: 0 },
-        e: { r: 0, c: columnNames.length - 1 },
-      });
-      worksheet["!cols"] = columnNames.map(() => ({ wch: 15 })); // Set column width
 
-      columnNames.forEach((col, index) => {
+      worksheet["!cols"] = columnNames.map(() => ({ wch: 15 }));
+
+      columnNames.forEach((_, index) => {
         const cellAddress = XLSX.utils.encode_cell({ r: 0, c: index });
         worksheet[cellAddress].s = headerStyle;
       });
@@ -63,11 +58,14 @@ export const handleExportProduct = async (
 };
 
 export const shortenContainerSizeType = (sizeType: string): string => {
-  const parts = sizeType.split(' ');
+  const parts = sizeType.split(" ");
   if (parts.length < 2) return sizeType;
 
   const number = parts[0];
-  const initials = parts.slice(1).map(word => word[0].toUpperCase()).join('');
+  const initials = parts
+    .slice(1)
+    .map((word) => word[0].toUpperCase())
+    .join("");
 
   return `${number} ${initials}`;
 };

@@ -99,17 +99,6 @@ export const columns: ColumnDef<User>[] = [
     ),
   },
 
-  // {
-  //   accessorKey: "permissions",
-  //   header: ({ table }) => (
-  //     <ProtectedHeader columnName="Permissions" permission="VIEW_PERMISSIONS" />
-  //   ),
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  //   cell: ({ row }) => <PermissionUpdate row={row} />,
-
-  //   maxSize: 20,
-  //   minSize: 30,
-  // },
   {
     accessorKey: "credits",
 
@@ -118,7 +107,7 @@ export const columns: ColumnDef<User>[] = [
     ),
     cell: ({ row }) => {
       const { data: currentUser } = useCurrentUser();
-      console.log({ row: row.original?.company });
+
       return (
         (currentUser?.user.role === "SUPER_ADMIN" ||
           checkPermissions(currentUser?.user.permissions as PermissionsType[], [

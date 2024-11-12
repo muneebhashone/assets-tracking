@@ -71,7 +71,7 @@ export default function UpdateShipmentForm({
         duration: 3000,
         variant: "default",
       });
-      // form.reset();
+      form.reset();
       setModalOpen(false);
     },
     onError(error, variables, context) {
@@ -141,7 +141,7 @@ export default function UpdateShipmentForm({
                     className="w-[25%] border-r-4 bg-golden"
                   >
                     <span className="mr-2">Update</span>
-                    {/* <PlusCircledIcon /> */}
+                  
                   </Button>
                 </CardFooter>
               </Card>

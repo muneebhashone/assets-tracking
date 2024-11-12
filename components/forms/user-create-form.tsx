@@ -157,11 +157,7 @@ const UserCreateForm = ({ modalState, setModalState }: UserCreateFormProps) => {
                           Role
                         </Label>
                         <FormControl>
-                          <Select
-                            onValueChange={field.onChange}
-                            // disabled={isPending || isFetching}
-                            {...field}
-                          >
+                          <Select onValueChange={field.onChange} {...field}>
                             <SelectTrigger id="role">
                               <SelectValue placeholder="Select a Role from the list" />
                             </SelectTrigger>

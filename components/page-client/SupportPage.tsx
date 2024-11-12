@@ -15,6 +15,7 @@ import {
 import { columns } from "../tables/support-table/columns";
 import { SupportTable } from "../tables/support-table/support";
 import { Switch } from "../ui/switch";
+import { TableFallback } from "../fallback/table-fallback";
 
 const breadcrumbItems = [
   { title: "Support Forms", link: "/dashboard/support" },
@@ -61,7 +62,7 @@ const SupportPage = () => {
           </div>
         </div>
         {allSupportLoading ? (
-          <div>Loading ... </div>
+          <TableFallback rows={10} columns={7} />
         ) : (
           <SupportTable
             columns={columns}

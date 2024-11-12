@@ -28,7 +28,6 @@ export const columns: ColumnDef<SupportType>[] = [
     cell: ({ row }) => <p>{truncateText(row.original.subject, 3)}</p>,
   },
   {
-    // accessorKey: "message",
     header: "Message",
     cell: ({ row }) => <p>{truncateText(row.original.message, 5)}</p>,
   },

@@ -9,6 +9,7 @@ import { Separator } from "@/components/ui/separator";
 import { useGetUsers } from "@/services/user.queries";
 import { User } from "@/types/services/auth.types";
 import { useSearchParams } from "next/navigation";
+import { TableFallback } from "../fallback/table-fallback";
 
 const breadcrumbItems = [
   { title: "Users", link: "/dashboard/requested-users" },
@@ -40,7 +41,7 @@ export default function RequestedUserPage() {
       <Separator />
       <SearchBar />
       {allUsersLoading ? (
-        <div>Loading ...</div>
+        <TableFallback rows={10} columns={8} />
       ) : (
         <RequestedUserTable
           columns={columns}

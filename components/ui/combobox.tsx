@@ -76,7 +76,7 @@ export function Combobox({
         className="w-[--radix-popover-trigger-width] p-0"
         align="start"
       >
-        {/* @ts-ignore */}
+        {/* @ts-expect-error */}
         <Command
           filter={(value, search) => {
             if (

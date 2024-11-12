@@ -42,7 +42,6 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
     },
   );
 
-  // };
   return (
     <>
       <AlertModal

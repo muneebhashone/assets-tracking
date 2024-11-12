@@ -1,22 +1,19 @@
-import {
-    ShipmentStatusDisplay,
-    TrackWithDisplay
-} from "@/utils/constants";
+import { ShipmentStatusDisplay, TrackWithDisplay } from "@/utils/constants";
 import { formatDistance } from "date-fns";
 import {
-    Area,
-    AreaChart,
-    Bar,
-    BarChart,
-    CartesianGrid,
-    Cell,
-    Legend,
-    Pie,
-    PieChart,
-    ResponsiveContainer,
-    Tooltip,
-    XAxis,
-    YAxis,
+  Area,
+  AreaChart,
+  Bar,
+  BarChart,
+  CartesianGrid,
+  Cell,
+  Legend,
+  Pie,
+  PieChart,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
 } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 
@@ -31,26 +28,25 @@ interface UserDashboardProps {
 export default function UserDashboard({ data, isLoading }: UserDashboardProps) {
   const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#8884d8"];
 
-  // Early return for loading state
   if (isLoading) {
     return (
       <div className="space-y-4">
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
           {[...Array(4)].map((_, i) => (
             <Card key={i} className="animate-pulse">
-              <CardContent className="h-[100px]" />
+              <CardContent className="h-[100px] bg-gray-200  rounded-md" />
             </Card>
           ))}
         </div>
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
           {[...Array(5)].map((_, i) => (
             <Card
               key={i}
               className={`animate-pulse ${
-                i === 4 ? "col-span-2" : "col-span-1"
+                i === 4 ? "md:col-span-2" : "col-span-1"
               }`}
             >
-              <CardContent className="h-[300px]" />
+              <CardContent className="h-[300px] bg-gray-200  rounded-md" />
             </Card>
           ))}
         </div>
@@ -58,7 +54,6 @@ export default function UserDashboard({ data, isLoading }: UserDashboardProps) {
     );
   }
 
-  // Prepare shipment trend data
   const shipmentTrendData = data && [
     {
       period: "Today",
@@ -77,7 +72,6 @@ export default function UserDashboard({ data, isLoading }: UserDashboardProps) {
     },
   ];
 
-  // Get all unique status keys
   const allStatusKeys =
     data &&
     Array.from(
@@ -88,7 +82,6 @@ export default function UserDashboard({ data, isLoading }: UserDashboardProps) {
       ]),
     );
 
-  // Prepare company growth data
   const companyGrowthData = data && [
     { name: "Today", value: data.company.newChildCompanies.today },
     { name: "Last 7 Days", value: data.company.newChildCompanies.last7Days },
@@ -97,8 +90,8 @@ export default function UserDashboard({ data, isLoading }: UserDashboardProps) {
 
   return (
     <div className="space-y-4">
-      {/* Stats Overview */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+   
+      <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
         <StatCard
           title="Wallet Balance"
           value={data?.wallet.currentBalance ?? 0}
@@ -124,9 +117,9 @@ export default function UserDashboard({ data, isLoading }: UserDashboardProps) {
         />
       </div>
 
-      {/* Charts Grid */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {/* Company Growth Trend */}
+   
+      <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+    
         <Card className="col-span-1">
           <CardHeader>
             <CardTitle>Company Growth</CardTitle>
@@ -156,7 +149,7 @@ export default function UserDashboard({ data, isLoading }: UserDashboardProps) {
           </CardContent>
         </Card>
 
-        {/* Shipment Status Distribution */}
+        
         <Card className="col-span-1">
           <CardHeader>
             <CardTitle>Shipment Status</CardTitle>
@@ -205,7 +198,7 @@ export default function UserDashboard({ data, isLoading }: UserDashboardProps) {
           </CardContent>
         </Card>
 
-        {/* Shipment Trends */}
+    
         <Card className="col-span-1">
           <CardHeader>
             <CardTitle>Shipment Trends</CardTitle>
@@ -244,7 +237,7 @@ export default function UserDashboard({ data, isLoading }: UserDashboardProps) {
           </CardContent>
         </Card>
 
-        {/* Company Details Card */}
+      
         <Card className="col-span-1">
           <CardHeader>
             <CardTitle>Company Details</CardTitle>
@@ -287,8 +280,8 @@ export default function UserDashboard({ data, isLoading }: UserDashboardProps) {
           </CardContent>
         </Card>
 
-        {/* Recent Shipments */}
-        <Card className="col-span-2">
+       
+        <Card className="col-span-1 md:col-span-2">
           <CardHeader>
             <CardTitle>Recent Shipments</CardTitle>
           </CardHeader>

@@ -14,8 +14,6 @@ export const permissionEnums = [
   "EDIT_COMPANY",
   "CREATE_COMPANY",
   "DELETE_COMPANY",
-  // "ASSIGN_CREDITS",
-  // "DEDUCT_CREDITS",
   "VIEW_PERMISSIONS",
   "UPDATE_PERMISSIONS",
 ] as const;

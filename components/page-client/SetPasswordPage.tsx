@@ -17,6 +17,8 @@ import {
 } from "../ui/form";
 import { Label } from "../ui/label";
 import { toast } from "../ui/use-toast";
+import Link from "next/link";
+import Image from "next/image";
 
 export type SetPasswordFormType = z.infer<typeof setPasswordFormSchema>;
 export const setPasswordFormSchema = z
@@ -62,66 +64,104 @@ const SetPasswordPage = ({ token }: { token?: string }) => {
     });
   };
   return (
-    <main className="antialiased bg-[#3492fea1] text-gray-900 font-sans">
-      <div className="flex items-center h-screen w-full">
-        <div className="w-full bg-white rounded shadow-lg p-8 m-4 md:max-w-sm md:mx-auto">
-          <span className="block w-full text-xl uppercase font-bold mb-4">
-            Set Password
-          </span>
+    <div className="relative h-screen flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
+     
+      <div className="relative hidden h-full flex-col bg-muted p-10 text-white lg:flex">
+        <div className="absolute inset-0 bg-[#3491fe]" />
+        <div className="relative z-20 flex items-center text-lg font-medium">
+          <Link href={"/"} className="hover:opacity-80 transition-opacity">
+            <Image
+              src={"/images/logo.png"}
+              alt="logo"
+              width={60}
+              height={60}
+              className="drop-shadow-xl"
+            />
+          </Link>
+        </div>
+        <div className="relative z-20 mt-20">
+          <h1 className="text-4xl font-bold mb-6">Set Your Password</h1>
+          <p className="text-xl text-white/80 max-w-md">
+            Create a strong password to secure your account. Make sure it meets
+            our security requirements.
+          </p>
+        </div>
+      </div>
+
+     
+      <div className="p-4 lg:p-8 h-full flex items-center">
+        <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
+          <div className="flex flex-col space-y-2 text-center">
+            <h1 className="text-2xl font-semibold tracking-tight">
+              Create Password
+            </h1>
+            <p className="text-sm text-muted-foreground">
+              Please set a secure password for your account
+            </p>
+          </div>
+
           <Form {...form}>
-            <form className="mb-4" onSubmit={handleSubmit(setPasswordHandler)}>
-              <div className="mb-6 md:w-full">
-                <FormField
-                  control={control}
-                  name="password"
-                  render={({ field }) => (
-                    <FormItem>
-                      <Label className="block text-xs mb-1">Password</Label>
-                      <FormControl>
-                        <PasswordInput
-                          className="w-full border rounded p-2 outline-none focus:shadow-outline"
-                          placeholder="Enter your password"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-              <div className="mb-6 md:w-full">
-                <FormField
-                  control={control}
-                  name="confirmPassword"
-                  render={({ field }) => (
-                    <FormItem>
-                      <Label className="block text-xs mb-1">
-                        Confirm Password
-                      </Label>
-                      <FormControl>
-                        <PasswordInput
-                          className="w-full border rounded p-2 outline-none focus:shadow-outline"
-                          placeholder="Re-Enter your password"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
+            <form
+              className="space-y-4"
+              onSubmit={handleSubmit(setPasswordHandler)}
+            >
+              <FormField
+                control={control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem>
+                    <Label>Password</Label>
+                    <FormControl>
+                      <PasswordInput
+                        placeholder="Enter your password"
+                        disabled={isSettingPassword}
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={control}
+                name="confirmPassword"
+                render={({ field }) => (
+                  <FormItem>
+                    <Label>Confirm Password</Label>
+                    <FormControl>
+                      <PasswordInput
+                        placeholder="Confirm your password"
+                        disabled={isSettingPassword}
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
               <Button
                 type="submit"
-                className="bg-[#D3991F] hover:bg-[#bf8c1e] text-white uppercase text-sm font-semibold px-4 py-2 rounded"
                 disabled={isSettingPassword}
+                className="w-full bg-[#3491fe] hover:bg-[#2b7ad8]"
               >
-                {isSettingPassword ? "Loading..." : "Submit"}
+                {isSettingPassword ? "Setting Password..." : "Set Password"}
               </Button>
             </form>
           </Form>
+
+          <div className="text-center">
+            <Link
+              href="/signin"
+              className="text-sm text-[#3491FE] hover:underline"
+            >
+              Back to Sign in
+            </Link>
+          </div>
         </div>
       </div>
-    </main>
+    </div>
   );
 };
 

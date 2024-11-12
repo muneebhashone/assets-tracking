@@ -11,8 +11,6 @@ import {
 } from "@/components/ui/tooltip";
 import { shortenContainerSizeType } from "@/utils/shipment.utils";
 
-// Function to shorten sizeType
-
 export const columns: ColumnDef<Container>[] = [
   {
     accessorKey: "container",
@@ -26,7 +24,10 @@ export const columns: ColumnDef<Container>[] = [
       <TooltipProvider>
         <Tooltip>
           <TooltipTrigger>
-            <Badge variant="outline" className="bg-gray-500 text-white font-bold">
+            <Badge
+              variant="outline"
+              className="bg-gray-500 text-white font-bold"
+            >
               {shortenContainerSizeType(row.original.sizeType || "")}
             </Badge>
           </TooltipTrigger>

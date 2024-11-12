@@ -98,9 +98,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
               Delete
             </DropdownMenuItem>
           )}
-          {/* <DropdownMenuItem >
-            <Trash className="mr-2 h-4 w-4" /> Details
-          </DropdownMenuItem> */}
+      
         </DropdownMenuContent>
       </DropdownMenu>
     </>

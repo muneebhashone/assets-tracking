@@ -55,7 +55,7 @@ export const ShipmentStatusDisplay = {
 
 export const TrackWithDisplay = {
   CONTAINER_NUMBER: "Container Number",
-  MBL_NUMBER: "Master Bill Of Lading Number",
+  MBL_NUMBER: "Master Bill / Lading Number",
 };
 
 export const PermissionsForDisplay = {

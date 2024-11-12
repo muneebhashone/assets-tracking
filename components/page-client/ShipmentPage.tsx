@@ -1,6 +1,7 @@
 "use client";
 
 import { useCurrentUser } from "@/services/auth.mutations";
+import { useGetCompanies } from "@/services/companies.queries";
 import {
   GetAllShipmentsInputType,
   Shipment,
@@ -14,10 +15,9 @@ import { useSearchParams } from "next/navigation";
 import Filter, { OptionsMapperType } from "../Filter";
 import SearchBar from "../SearchBar";
 import AllShipmentCreationDropDown from "../all-shipment-creation-dropdown";
+import { TableFallback } from "../fallback/table-fallback";
 import { columns } from "../tables/shipment-table/columns";
 import { ShipmentTable } from "../tables/shipment-table/shipment-table";
-import { ScrollArea } from "../ui/scroll-area";
-import { useGetCompanies } from "@/services/companies.queries";
 
 const ShipmentPage = () => {
   const searchParams = useSearchParams();
@@ -67,24 +67,23 @@ const ShipmentPage = () => {
   };
 
   return (
-    <ScrollArea className="h-full ">
-      <div className="flex-1 space-y-4 p-4 md:p-8 pt-6">
-        <div className="flex flex-col ">
-          <h1 className="text-lg font-bold tracking-tight">Shipment List</h1>
-          <div className="  flex justify-between">
-            <p className="text-sm tracking-tight">
-              You can create, view and edit all shipments from the table below.
-            </p>
-          </div>
-          <div className="mt-4">
-            <SearchBar placeholder="type anything to search ..." />
-          </div>
-          <div className="flex justify-between mb-4 mt-4">
-            {(user?.user.role === "SUPER_ADMIN" ||
-              checkPermissions(user?.user.permissions as PermissionsType[], [
-                "CREATE_SHIPMENT",
-              ])) && <AllShipmentCreationDropDown />}
-            {/* <Button
+    <div className="flex-1 space-y-4 p-4 md:p-8 pt-6">
+      <div className="flex flex-col ">
+        <h1 className="text-lg font-bold tracking-tight">Shipment List</h1>
+        <div className="  flex justify-between">
+          <p className="text-sm tracking-tight">
+            You can create, view and edit all shipments from the table below.
+          </p>
+        </div>
+        <div className="mt-4">
+          <SearchBar placeholder="type anything to search ..." />
+        </div>
+        <div className="flex justify-between mb-4 mt-4">
+          {(user?.user.role === "SUPER_ADMIN" ||
+            checkPermissions(user?.user.permissions as PermissionsType[], [
+              "CREATE_SHIPMENT",
+            ])) && <AllShipmentCreationDropDown />}
+          {/* <Button
               onClick={async () =>
                 await handleExportProduct((result?.results || []) as Shipment[])
               }
@@ -95,27 +94,26 @@ const ShipmentPage = () => {
                 {result?.results.length}
               </span>
             </Button> */}
-            <Filter
-              optionsMapper={optionsMapper}
-              type="Shipment"
-              defaultValue={"trackWith"}
-            />
-          </div>
-
-          {isLoading ? (
-            <>Loading...</>
-          ) : (
-            <>
-              <ShipmentTable
-                data={(result?.results || []) as Shipment[]}
-                columns={columns}
-                pageCount={result?.paginatorInfo.pages as number}
-              />
-            </>
-          )}
+          <Filter
+            optionsMapper={optionsMapper}
+            type="Shipment"
+            defaultValue={"trackWith"}
+          />
         </div>
+
+        {isLoading ? (
+          <TableFallback rows={10} columns={11} />
+        ) : (
+          <>
+            <ShipmentTable
+              data={(result?.results || []) as Shipment[]}
+              columns={columns}
+              pageCount={result?.paginatorInfo.pages as number}
+            />
+          </>
+        )}
       </div>
-    </ScrollArea>
+    </div>
   );
 };
 

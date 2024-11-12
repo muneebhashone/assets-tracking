@@ -111,7 +111,6 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
           description: "Share link discarded",
           title: "Success",
         });
-        // setShareableLink(null);
       },
       onError(error) {
         toast({

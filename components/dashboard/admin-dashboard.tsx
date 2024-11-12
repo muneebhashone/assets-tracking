@@ -1,6 +1,7 @@
 import { AdminDashboardStats } from "@/services/user.queries";
 import {
   ShipmentStatusDisplay,
+  StatusBadgeColor,
   TrackWithDisplay,
   UserRole,
 } from "@/utils/constants";
@@ -32,26 +33,25 @@ export default function AdminDashboard({
   data,
   isLoading,
 }: AdminDashboardProps) {
-  // Early return for loading state
   if (!data) {
     return (
       <div className="space-y-4">
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
           {[...Array(4)].map((_, i) => (
             <Card key={i} className="animate-pulse">
-              <CardContent className="h-[100px]" />
+              <CardContent className="h-[100px] bg-gray-200  rounded-md" />
             </Card>
           ))}
         </div>
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
           {[...Array(5)].map((_, i) => (
             <Card
               key={i}
               className={`animate-pulse ${
-                i === 3 ? "col-span-2" : "col-span-1"
+                i === 3 ? "md:col-span-2" : "col-span-1"
               }`}
             >
-              <CardContent className="h-[300px]" />
+              <CardContent className="h-[300px] bg-gray-200  rounded-md" />
             </Card>
           ))}
         </div>
@@ -60,7 +60,6 @@ export default function AdminDashboard({
   }
   const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#8884d8"];
 
-  // Prepare shipment trend data with proper structure
   const shipmentTrendData = data && [
     {
       period: "Today",
@@ -79,7 +78,6 @@ export default function AdminDashboard({
     },
   ];
 
-  // Get all unique status keys
   const allStatusKeys =
     data &&
     Array.from(
@@ -90,7 +88,6 @@ export default function AdminDashboard({
       ]),
     );
 
-  // Prepare growth data for users
   const userGrowthData = data && [
     { name: "Today", value: data.users.newUsers.today },
     { name: "Last 7 Days", value: data.users.newUsers.last7Days },
@@ -99,8 +96,8 @@ export default function AdminDashboard({
 
   return (
     <div className="space-y-4">
-      {/* Stats Overview */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+      
+      <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
         <StatCard
           title="Total Users"
           value={data.users.totalUsers}
@@ -122,9 +119,9 @@ export default function AdminDashboard({
         />
       </div>
 
-      {/* Charts Grid */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {/* User Role Distribution */}
+    
+      <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+       
         <Card className="col-span-1">
           <CardHeader>
             <CardTitle>User Roles</CardTitle>
@@ -168,7 +165,7 @@ export default function AdminDashboard({
           </CardContent>
         </Card>
 
-        {/* User Growth Trend */}
+    
         <Card className="col-span-1">
           <CardHeader>
             <CardTitle>User Growth</CardTitle>
@@ -197,7 +194,7 @@ export default function AdminDashboard({
           </CardContent>
         </Card>
 
-        {/* Shipment Status Distribution */}
+        
         <Card className="col-span-1">
           <CardHeader>
             <CardTitle>Shipment Status</CardTitle>
@@ -241,8 +238,8 @@ export default function AdminDashboard({
           </CardContent>
         </Card>
 
-        {/* Recent Shipments */}
-        <Card className="col-span-2">
+       
+        <Card className="col-span-1 md:col-span-2 lg:col-span-2">
           <CardHeader>
             <CardTitle>Recent Shipments</CardTitle>
           </CardHeader>
@@ -268,9 +265,19 @@ export default function AdminDashboard({
                         }
                         )
                       </p>
-                      <p className="text-sm text-muted-foreground">
-                        {shipment.status}
-                      </p>
+                      {shipment.status && (
+                        <p
+                          className={`text-sm text-${
+                            StatusBadgeColor[shipment.status].color
+                          }`}
+                        >
+                          {
+                            ShipmentStatusDisplay[
+                              shipment.status as keyof typeof ShipmentStatusDisplay
+                            ]
+                          }
+                        </p>
+                      )}
                     </div>
                     <div className="text-sm text-muted-foreground">
                       {formatDistance(
@@ -288,7 +295,7 @@ export default function AdminDashboard({
           </CardContent>
         </Card>
 
-        {/* Shipment Trends */}
+        
         <Card className="col-span-1">
           <CardHeader>
             <CardTitle>Shipment Trends</CardTitle>

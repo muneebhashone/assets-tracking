@@ -50,7 +50,7 @@ export default function AllShipmentCreationDropDown() {
       <ModalCustom
         isOpen={modalOpen}
         onClose={() => setModalOpen(false)}
-        className="max-h-[70vh] overflow-auto min-w-[45rem] mild-scrollbar backdrop-opacity-50"
+        className="max-h-[70vh] w-[90%] max-w-3xl overflow-auto mx-auto"
       >
         {isBulkUpload ? (
           <BulkShipmentUploader setIsBulkUpload={setIsBulkUpload} />

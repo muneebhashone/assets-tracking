@@ -33,7 +33,7 @@ export function AdminDashboardNav({ items, setOpen, user }: DashboardNavProps) {
               key={index}
               href={item.disabled ? "/" : item.href}
               onClick={() => {
-                if (setOpen) setOpen(false);
+                setOpen?.(false);
               }}
             >
               <span

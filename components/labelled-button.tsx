@@ -23,7 +23,7 @@ export const LabeledButton: React.FC<LabeledButtonProps> = ({
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger asChild>
-          <span className="inline-block"> {/* Wrapper to keep tooltip active */}
+          <span className="inline-block"> 
             <Button {...props} disabled={disabled}>
               {children}
             </Button>

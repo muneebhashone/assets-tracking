@@ -1,8 +1,6 @@
 "use client";
 
-import {
-  useGetSharedShipment
-} from "@/services/shipment.queries";
+import { useGetSharedShipment } from "@/services/shipment.queries";
 import Link from "next/link";
 import { Button } from "../ui/button";
 
@@ -18,7 +16,7 @@ const ViewShipmentPage = ({ token }: { token: string }) => {
 
   return (
     <div className="h-[100%] overflow-y-scroll">
-      <div className="flex items-center h-14 border-b px-4 md:h-16 bg-gray-100/40 dark:bg-gray-800/40">
+      <div className="flex items-center h-14 border-b px-4 md:h-16 bg-gray-100/40 ">
         <Link href={"/dashboard"}>
           <Button
             className="rounded-full border w-8 h-8"
@@ -121,7 +119,7 @@ const ViewShipmentPage = ({ token }: { token: string }) => {
                       "-"
                     )}
                   </p>
-                  {/* <p className="ml-2">John Doe &lt;Joan.doe@gmail.com&gt; </p> */}
+                  
                 </div>
               </div>
               <div className="flex ">
@@ -136,7 +134,7 @@ const ViewShipmentPage = ({ token }: { token: string }) => {
                       "-"
                     )}
                   </p>
-                  {/* <p className="ml-2">John Doe &lt;Joan.doe@gmail.com&gt; </p> */}
+                
                 </div>
               </div>
               <div className="flex ">

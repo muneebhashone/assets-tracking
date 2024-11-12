@@ -29,7 +29,7 @@ const Header = () => {
           />
         </div>
 
-        {/* Desktop Navigation */}
+  
         <nav className="hidden md:flex items-center gap-6">
           {menuitems.map((item) => (
             <Link
@@ -59,7 +59,7 @@ const Header = () => {
             </div>
           )}
 
-          {/* Mobile Navigation */}
+         
           <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger asChild className="md:hidden">
               <Button variant="ghost" size="icon">

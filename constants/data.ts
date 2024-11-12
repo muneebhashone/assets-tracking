@@ -11,7 +11,7 @@ export const navItems: NavItem[] = [
   {
     title: "Shipment List",
     href: "/dashboard/shipment-list",
-    icon: "laptop",
+    icon: "shipment",
     label: "Shipment",
     permissions: ["VIEW_SHIPMENT"],
   },
@@ -34,14 +34,14 @@ export const navItems: NavItem[] = [
   {
     title: "Company",
     href: "/dashboard/company",
-    icon: "laptop",
+    icon: "company",
     label: "company",
     permissions: ["VIEW_COMPANY"],
   },
   {
     title: "Assigns",
     href: "/dashboard/assigns",
-    icon: "laptop",
+    icon: "assignment",
     label: "assigns",
     permissions: ["SUPER_ADMIN"],
   },

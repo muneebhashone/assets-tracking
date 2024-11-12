@@ -76,7 +76,11 @@ const CreateAssignForm = ({
     },
   });
   return (
-    <ModalCustom isOpen={modalState} onClose={() => setModalState(false)}>
+    <ModalCustom
+      className="max-h-[70vh] w-[90%] max-w-3xl overflow-auto mx-auto"
+      isOpen={modalState}
+      onClose={() => setModalState(false)}
+    >
       <Form {...form}>
         <form onSubmit={handleSubmit(assignHandler)}>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

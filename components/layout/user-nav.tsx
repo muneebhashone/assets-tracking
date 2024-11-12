@@ -48,7 +48,7 @@ export function UserNav() {
             <Link href={"/dashboard"}>
               <DropdownMenuItem>
                 Dashboard
-                {/* <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut> */}
+                
               </DropdownMenuItem>
             </Link>
             <DropdownMenuSeparator />
@@ -59,7 +59,7 @@ export function UserNav() {
           <DropdownMenuSeparator />
           <DropdownMenuItem disabled={isLoggingOut} onClick={() => logout({})}>
             {isLoggingOut ? "Logging out..." : "Log out"}
-            {/* <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut> */}
+          
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

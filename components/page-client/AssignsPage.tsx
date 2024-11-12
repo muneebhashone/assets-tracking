@@ -14,6 +14,7 @@ import { AssignsTable } from "../tables/assings-table/assigns";
 import { columns } from "../tables/assings-table/columns";
 import Filter, { IRecord, OptionsMapperType } from "../Filter";
 import { useGetUsers } from "@/services/user.queries";
+import { TableFallback } from "../fallback/table-fallback";
 
 const breadcrumbItems = [{ title: "Assigns", link: "/dashboard/assigns" }];
 
@@ -83,7 +84,7 @@ const AssignsPage = () => {
           />
         </div>
         {allAssignsLoading ? (
-          <div>Loading ... </div>
+          <TableFallback rows={10} columns={5} />
         ) : (
           <AssignsTable
             columns={columns}

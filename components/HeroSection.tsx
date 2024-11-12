@@ -95,7 +95,7 @@ const HeroSection = () => {
     })) || [];
 
   return (
-    <div className="w-full h-[700px] md:h-[1040px] bg-[url('/images/containerbanner.png')] bg-cover bg-center bg-no-repeat flex md:items-start justify-center pt-48">
+    <div className="w-full h-[750px] md:h-[1040px] bg-[url('/images/containerbanner.png')] bg-cover bg-center bg-no-repeat flex md:items-start justify-center md:pt-48 pt-10">
       <div className="container">
         <h2 className="capitalize text-5xl font-semibold text-white">
           container Tracking

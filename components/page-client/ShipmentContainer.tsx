@@ -4,6 +4,7 @@ import { useGetContainersByShipmentId } from "@/services/shipment.queries";
 import { columns } from "../tables/shipment-container-table/columns";
 import { ShipmentContainerTable } from "../tables/shipment-container-table/shipment-container-table";
 import { Container } from "@/types/services/shipment.types";
+import { TableFallback } from "../fallback/table-fallback";
 
 interface ShipmentContainerProps {
   shipmentId: number;
@@ -12,7 +13,7 @@ interface ShipmentContainerProps {
 const ShipmentContainer = ({ shipmentId }: ShipmentContainerProps) => {
   const { data, isLoading } = useGetContainersByShipmentId({ shipmentId });
   return isLoading ? (
-    <p>Loading...</p>
+    <TableFallback rows={2} columns={6} />
   ) : (
     <ShipmentContainerTable
       columns={columns}

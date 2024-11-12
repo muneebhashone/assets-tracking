@@ -67,7 +67,7 @@ const BulkShipmentUploader: React.FC<{
   };
 
   const removeFile = () => {
-    reset(); // This will reset the form, including the file input
+    reset();
   };
 
   return (

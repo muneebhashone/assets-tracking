@@ -122,7 +122,6 @@ const AlertDialogCancel = React.forwardRef<
       className,
     )}
     onClick={() =>
-      // yes, you have to set a timeout
       setTimeout(() => (document.body.style.pointerEvents = ""), 100)
     }
     {...props}

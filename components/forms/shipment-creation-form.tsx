@@ -121,8 +121,6 @@ const ShipmentCreationForm = ({
   });
   const { control, formState, handleSubmit, watch, setValue } = form;
 
-  // Watch for changes in the trackWith field
-
   const onSubmit = (data: CreateShipmentInputType) => {
     mutate(data);
   };
@@ -148,19 +146,19 @@ const ShipmentCreationForm = ({
                   Number.
                 </p>
                 <div className="flex items-center space-x-2 mb-2">
-                  <CheckCircledIcon className="text-[#348cd4]" />
+                  <CheckCircledIcon className="text-[#348cd4] w-4 h-4" />
                   <span className="text-neutral-500 font-medium">
                     Choose the carrier.
                   </span>
                 </div>
                 <div className="flex items-center space-x-2 mb-2">
-                  <CheckCircledIcon className="text-[#348cd4]" />
+                  <CheckCircledIcon className="text-[#348cd4] w-5 h-5 md:w-4 md:h-4 " />
                   <span className="text-neutral-500 font-medium">
                     Enter your Container, Booking or BL Number.
                   </span>
                 </div>
                 <div className="flex items-center space-x-2 mb-2">
-                  <CheckCircledIcon className="text-[#348cd4]" />
+                  <CheckCircledIcon className="text-[#348cd4] w-4 h-4" />
                   <span className="text-neutral-500 font-medium">
                     Click to the &quot;Create&quot; button.
                   </span>

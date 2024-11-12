@@ -1,5 +1,11 @@
 import Header from "@/components/layout/header";
+import { Metadata } from "next";
 import { ReactNode, Suspense } from "react";
+
+export const metadata: Metadata = {
+  title: "Fratezone - View Shipment",
+  description: "View your shipment",
+};
 
 const ViewShipmentLayout = ({ children }: { children: ReactNode }) => {
   return (

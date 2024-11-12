@@ -78,15 +78,6 @@ const adminUserUpdateFormSchema = z
     status: z
       .enum(statusEnums, { required_error: "Status must be defined" })
       .optional(),
-    // credits: z.union([
-    //   z
-    //     .string()
-    //     .min(1)
-    //     .refine((value) => validator.isNumeric(value))
-    //     .transform(Number),
-    //   z.number(),
-    // ]),
-
     companyId: z
       .string()
       .min(1)
@@ -174,12 +165,12 @@ const AdminUpdateUserForm = ({
     mutate({ id: String(userData.id), ...sanitizedPayload });
   };
 
-  const { data: companies } = useGetCompanies({
+  const { data: companies, isFetching: isFetchingCompanies } = useGetCompanies({
     pageParam: 1,
     limitParam: 999,
   });
 
-  const { data: clients } = useGetUsers({
+  const { data: clients, isFetching: isFetchingClients } = useGetUsers({
     filterByRole: "CLIENT_SUPER_USER",
     filterByActive: "true",
     filterByStatus: ["APPROVED"],
@@ -271,6 +262,7 @@ const AdminUpdateUserForm = ({
                             onValueChange={field?.onChange}
                             value={String(field?.value)}
                             defaultValue={field.value}
+                            disabled={isFetchingClients}
                           >
                             <SelectTrigger id="clientId">
                               <SelectValue placeholder="Clients" />
@@ -314,7 +306,7 @@ const AdminUpdateUserForm = ({
                             onValueChange={field.onChange}
                             value={String(field.value)}
                             defaultValue={field.value}
-                            // disabled={isPending || isFetching}
+                            disabled={isFetchingCompanies}
                           >
                             <SelectTrigger id="companyId">
                               <SelectValue placeholder="Select a Company" />

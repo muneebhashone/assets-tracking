@@ -21,8 +21,41 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "FRATE ZONE",
-  description: "Find your shipment by one click",
+  title: "Fratezone",
+  description:
+    "FrateZone - Your comprehensive logistics platform for seamless shipment tracking, management and collaboration across global supply chains",
+  icons: {
+    icon: [
+      { url: "/favicon/favicon.ico" },
+      { url: "/favicon/favicon-96x96.png", sizes: "96x96", type: "image/png" },
+      {
+        url: "/favicon/web-app-manifest-192x192.png",
+        sizes: "192x192",
+        type: "image/png",
+      },
+      {
+        url: "/favicon/web-app-manifest-512x512.png",
+        sizes: "512x512",
+        type: "image/png",
+      },
+    ],
+    apple: [
+      {
+        url: "/favicon/apple-touch-icon.png",
+        sizes: "180x180",
+        type: "image/png",
+      },
+    ],
+    shortcut: ["/favicon/favicon.svg"],
+    other: [
+      {
+        rel: "mask-icon",
+        url: "/favicon/favicon.svg",
+        color: "#5bbad5",
+      },
+    ],
+  },
+  manifest: "/favicon/site.webmanifest",
 };
 
 export default async function RootLayout({
@@ -57,5 +90,3 @@ export default async function RootLayout({
     </html>
   );
 }
-
-//

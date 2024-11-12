@@ -10,9 +10,7 @@ import { useState } from "react";
 import { AdminDashboardNav } from "../admin-dashboard";
 import { Skeleton } from "../ui/skeleton";
 
-interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {
-  // playlists: Playlist[];
-}
+interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export function MobileSidebar({ className }: SidebarProps) {
   const [open, setOpen] = useState(false);

@@ -138,7 +138,6 @@ export const getUserDashboardStats = async () => {
   const { data } = await apiAxios.get<userDashboardResponseType>(
     "/companies/user-dashboard",
   );
-  console.log({ data });
 
   return data;
 };

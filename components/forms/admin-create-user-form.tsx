@@ -87,11 +87,6 @@ const adminCreateUserFormSchema = z
       .min(1),
     isActive: z.boolean().default(false),
     status: z.enum(statusEnums, { required_error: "Status must be defined" }),
-    // credits: z
-    //   .string()
-    //   .min(1)
-    //   .refine((value) => validator.isNumeric(value))
-    //   .transform(Number),
     companyId: z
       .string()
       .min(1)
@@ -179,14 +174,18 @@ const AdminCreateUserForm = ({
     }
   };
 
-  const { data: companies } = useGetCompanies({
+  const { data: companies, isFetching: isFetchingCompanies } = useGetCompanies({
     pageParam: 1,
     limitParam: 999,
   });
 
   return (
     <>
-      <ModalCustom isOpen={modalState} onClose={() => setModalState(false)}>
+      <ModalCustom
+        className="max-h-[70vh] w-[90%] max-w-3xl overflow-auto mx-auto"
+        isOpen={modalState}
+        onClose={() => setModalState(false)}
+      >
         <Form {...form}>
           <form onSubmit={handleSubmit(adminUpdateFormHandler)}>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -344,7 +343,7 @@ const AdminCreateUserForm = ({
                             onValueChange={field.onChange}
                             value={String(field.value)}
                             defaultValue={field.value}
-                            // disabled={isPending || isFetching}
+                            disabled={isFetchingCompanies}
                           >
                             <SelectTrigger id="companyId">
                               <SelectValue placeholder="Select a Company" />
@@ -370,23 +369,7 @@ const AdminCreateUserForm = ({
                 </div>
               )}
 
-              {/* <div>
-                <FormField
-                  control={control}
-                  name="credits"
-                  render={({ field }) => (
-                    <FormItem>
-                      <Label className="font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70 block text-xs mb-1">
-                        credits
-                      </Label>
-                      <FormControl>
-                        <Input type="number" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div> */}
+              
 
               <div>
                 <FormField

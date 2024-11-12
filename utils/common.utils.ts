@@ -10,10 +10,10 @@ export function sanitizeObject<T extends Record<string, any>>(
 
     if (value !== null && value !== undefined && value !== "") {
       if (typeof value === "object" && !Array.isArray(value)) {
-        //@ts-ignore
+        //@ts-expect-error
         acc[key] = sanitizeObject(value);
       } else {
-        //@ts-ignore
+        //@ts-expect-error
         acc[key] = value;
       }
     }

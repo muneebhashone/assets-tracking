@@ -95,7 +95,7 @@ const ProfileSettingPage = () => {
           </div>
 
           <h1 className="text-2xl font-bold">{user?.user?.name}</h1>
-          <p className="text-gray-500 dark:text-gray-400">
+          <p className="text-gray-500 ">
             {!userLoading && UserRole[user?.user.role as keyof typeof UserRole]}
           </p>
         </div>

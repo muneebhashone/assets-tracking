@@ -19,6 +19,7 @@ import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 import AdminCreateUserForm from "../forms/admin-create-user-form";
 import UserCreateForm from "../forms/user-create-form";
+import { TableFallback } from "../fallback/table-fallback";
 
 const breadcrumbItems = [{ title: "Users", link: "/dashboard/activeUsers" }];
 
@@ -105,7 +106,7 @@ const UsersPage = () => {
           />
         </div>
         {allUsersLoading ? (
-          <div>Loading ... </div>
+          <TableFallback rows={10} columns={8} />
         ) : (
           <UsersTable
             columns={columns}

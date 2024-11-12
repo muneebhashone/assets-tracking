@@ -4,17 +4,6 @@ import { useGetShipmentById } from "@/services/shipment.queries";
 import { Loader } from "@googlemaps/js-api-loader";
 import { HTMLAttributes, useEffect, useRef, useMemo } from "react";
 
-// type RouteSegment = {
-//   path: [number, number][];
-//   type: string;
-//   transport_type: string;
-// };
-
-// type GoogleMapProps = {
-//   shipmentId: number;
-
-// };
-
 interface GoogleMapProps extends HTMLAttributes<HTMLDivElement> {
   shipmentId: number;
 }
