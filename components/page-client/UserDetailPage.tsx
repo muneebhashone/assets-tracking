@@ -21,74 +21,76 @@ const UserDetailPage = ({ id }: UserDetailPageProps) => {
 
   return (
     <div className="w-full">
-      <section className="bg-muted py-12 md:py-20 lg:py-24">
+      <section className="bg-muted py-8 md:py-12 lg:py-16">
         <div className="container px-4 md:px-6">
-          <div className="max-w-3xl mx-auto text-center space-y-4">
-            <h1 className="text-3xl font-bold md:text-4xl lg:text-5xl">
+          <div className="max-w-3xl mx-auto text-center space-y-3">
+            <h1 className="text-2xl font-bold md:text-3xl lg:text-4xl">
               User # {id}
             </h1>
-            <p className="text-muted-foreground md:text-xl">
+            <p className="text-sm text-muted-foreground md:text-base lg:text-xl">
               User Details Overview
             </p>
           </div>
         </div>
       </section>
-      <section className=" md:py-20 lg:py-12">
+      <section className="py-6 md:py-12 lg:py-16">
         <div className="container px-4 md:px-6">
-          <div className=" mx-auto space-y-6">
+          <div className="mx-auto space-y-6">
             <Card>
               <CardHeader>
-                <CardTitle className="text-xl">User Details</CardTitle>
+                <CardTitle className="text-lg md:text-xl">
+                  User Details
+                </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="flex flex-wrap mb-4">
-                  <div className="flex flex-col basis-1/3 gap-3 mb-4">
+                <div className="flex flex-wrap -mx-2">
+                  <div className="w-full px-2 sm:w-1/2 lg:w-1/3 mb-4">
                     <Label htmlFor="name">Name: </Label>
                     {isLoading ? (
                       <Skeleton className="h-4 w-[200px] py-2" />
                     ) : (
-                      <p>{user?.data.name ?? "N/A"}</p>
+                      <p className="mt-1">{user?.data.name ?? "N/A"}</p>
                     )}
                   </div>
-                  <div className="flex flex-col basis-1/3 gap-3 mb-4">
+                  <div className="w-full px-2 sm:w-1/2 lg:w-1/3 mb-4">
                     <Label htmlFor="email">Email: </Label>
                     {isLoading ? (
                       <Skeleton className="h-4 w-[200px] py-2" />
                     ) : (
-                      <p>{user?.data.email ?? "N/A"}</p>
+                      <p className="mt-1">{user?.data.email ?? "N/A"}</p>
                     )}
                   </div>
-                  <div className="flex flex-col basis-1/3 gap-3 mb-4">
+                  <div className="w-full px-2 sm:w-1/2 lg:w-1/3 mb-4">
                     <Label htmlFor="phone">Phone Number: </Label>
                     {isLoading ? (
                       <Skeleton className="h-4 w-[200px] py-2" />
                     ) : (
-                      <p>{user?.data.phoneNo ?? "N/A"}</p>
+                      <p className="mt-1">{user?.data.phoneNo ?? "N/A"}</p>
                     )}
                   </div>
 
                   {user?.data.companyId && (
-                    <div className="flex flex-col basis-1/3 gap-3 mb-4">
+                    <div className="w-full px-2 sm:w-1/2 lg:w-1/3 mb-4">
                       <Label htmlFor="company">Company: </Label>
                       {isLoading ? (
                         <Skeleton className="h-4 w-[200px] py-2" />
                       ) : (
-                        <p>{user?.data.company?.name}</p>
+                        <p className="mt-1">{user?.data.company?.name}</p>
                       )}
                     </div>
                   )}
 
                   {user?.data.clientId && (
-                    <div className="flex flex-col basis-1/3 gap-3 mb-4">
+                    <div className="w-full px-2 sm:w-1/2 lg:w-1/3 mb-4">
                       <Label htmlFor="client">Client: </Label>
                       {isLoading ? (
                         <Skeleton className="h-4 w-[200px] py-2" />
                       ) : (
-                        <p>{user?.data.client?.name}</p>
+                        <p className="mt-1">{user?.data.client?.name}</p>
                       )}
                     </div>
                   )}
-                  <div className="flex flex-col basis-1/3 gap-3 mb-4">
+                  <div className="w-full px-2 sm:w-1/2 lg:w-1/3 mb-4">
                     <Label htmlFor="active">Active : </Label>
                     {isLoading ? (
                       <Skeleton className="h-4 w-[200px] py-2" />
@@ -102,7 +104,7 @@ const UserDetailPage = ({ id }: UserDetailPageProps) => {
                       </Badge>
                     )}
                   </div>
-                  <div className="flex flex-col basis-1/3 gap-3 mb-4">
+                  <div className="w-full px-2 sm:w-1/2 lg:w-1/3 mb-4">
                     <Label htmlFor="status">Status: </Label>
                     {isLoading ? (
                       <Skeleton className="h-4 w-[200px] py-2" />
@@ -112,7 +114,7 @@ const UserDetailPage = ({ id }: UserDetailPageProps) => {
                       </p>
                     )}
                   </div>
-                  <div className="flex flex-col basis-1/3 gap-3 mb-4">
+                  <div className="w-full px-2 sm:w-1/2 lg:w-1/3 mb-4">
                     {(currentUser?.user.role === "SUPER_ADMIN" ||
                       checkPermissions(
                         currentUser?.user.permissions as PermissionsType[],

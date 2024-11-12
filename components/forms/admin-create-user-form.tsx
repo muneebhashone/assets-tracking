@@ -182,7 +182,7 @@ const AdminCreateUserForm = ({
   return (
     <>
       <ModalCustom
-        className="max-h-[70vh] w-[90%] max-w-3xl overflow-auto mx-auto"
+        className="max-h-[70vh] w-[90%] max-w-3xl overflow-auto mx-auto rounded-lg"
         isOpen={modalState}
         onClose={() => setModalState(false)}
       >

@@ -112,7 +112,11 @@ const Filter = <T extends OptionsSelectorType>({
       >
         <SearchIcon /> Filter{" "}
       </Button>
-      <ModalCustom isOpen={openModal} onClose={() => setOpenModal(false)}>
+      <ModalCustom
+        className="max-h-[70vh] w-[90%] max-w-3xl overflow-auto mx-auto rounded-lg"
+        isOpen={openModal}
+        onClose={() => setOpenModal(false)}
+      >
         <DialogHeader>
           <DialogTitle className="text-start font-normal text-zinc-800">
             Filters

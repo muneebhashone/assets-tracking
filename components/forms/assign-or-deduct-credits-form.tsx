@@ -70,6 +70,7 @@ const AssignOrDeductCreditForm = ({
   return (
     <ModalCustom
       isOpen={openAssignCreditModal}
+      className="max-h-[70vh] w-[90%] max-w-xl overflow-auto mx-auto rounded-lg"
       onClose={() => setOpenAssignCreditModal(false)}
     >
       <Form {...form}>
@@ -84,7 +85,7 @@ const AssignOrDeductCreditForm = ({
                     htmlFor="credits"
                     className="text-neutral-500 font-medium"
                   >
-                    Assign Credits
+                    {type === "assign" ? "Assign Credits" : "Deduct Credits"}
                   </Label>
                   <FormControl>
                     <Input

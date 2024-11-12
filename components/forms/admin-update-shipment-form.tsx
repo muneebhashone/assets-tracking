@@ -107,7 +107,7 @@ const AdminUpdateShipmentForm = ({
       <ModalCustom
         isOpen={modalOpen}
         onClose={() => setModalOpen(false)}
-        className="max-h-[70vh] overflow-auto min-w-[40rem] mild-scrollbar backdrop-opacity-50"
+        className="max-h-[70vh] w-[90%] max-w-3xl overflow-auto mx-auto rounded-lg"
       >
         <Form {...form}>
           <form onSubmit={handleSubmit(onSubmit)}>
