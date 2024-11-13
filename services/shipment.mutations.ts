@@ -38,7 +38,7 @@ export interface DeleteShipmentInputType {
 }
 export interface DeleteShipmentFileInputType {
   id: number;
-  fileName: string;
+  key: string;
 }
 export interface DeleteBulkShipmentInputType {
   ids: number[];
@@ -86,9 +86,12 @@ export const deleteShipment = async (input: DeleteShipmentInputType) => {
 export const deleteShipmentFile = async (
   input: DeleteShipmentFileInputType,
 ) => {
-  const { id, fileName } = input;
+  const { id, key } = input;
   const { data } = await apiAxios.delete<SuccessResponseType>(
-    `/shipments/${id}/file/${fileName}`,
+    `/shipments/${id}/file/`,
+    {
+      data: { key },
+    },
   );
   return data;
 };

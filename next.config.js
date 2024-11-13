@@ -10,9 +10,17 @@ const nextConfig = {
   images: {
     remotePatterns: [
       {
-        hostname: "utfs.io",
+        hostname: "fratezone.s3.us-east-2.amazonaws.com",
       },
     ],
+  },
+  async rewrites() {
+    return [
+      {
+        source: "/bucket/:path*",
+        destination: `${process.env.S3_BUCKET_URL}/:path*`,
+      },
+    ];
   },
 };
 

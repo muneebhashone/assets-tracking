@@ -86,7 +86,7 @@ const ProfileSettingPage = () => {
               className="w-[200px] h-[200px] cursor-pointer"
               onClick={() => setModalOpen(true)}
             >
-              <AvatarImage src={user?.user.avatar} alt="avatar" />
+              <AvatarImage src={`/bucket/${user?.user.avatar}`} alt="avatar" />
               <AvatarFallback>{user?.user.name[0]}</AvatarFallback>
             </Avatar>
             <div className="rounded-full bg-white  absolute left-[70%] top-[70%] hover:text-blue-600 hover:bg-blue-50 cursor-pointer w-8 h-8 flex justify-center items-center">

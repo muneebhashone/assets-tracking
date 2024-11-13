@@ -25,7 +25,10 @@ export function UserNav() {
           <Button variant="ghost" className="relative h-8 w-8 rounded-full">
             <Avatar className="h-8 w-8">
               <AvatarImage
-                src={currentUser?.user.avatar ?? currentUser?.user.name}
+                src={
+                  `/bucket/${currentUser?.user.avatar}` ??
+                  currentUser?.user.name
+                }
                 alt={currentUser?.user.name ?? ""}
               />
               <AvatarFallback>{currentUser?.user?.name?.[0]}</AvatarFallback>
@@ -46,10 +49,7 @@ export function UserNav() {
           <DropdownMenuSeparator />
           <DropdownMenuGroup>
             <Link href={"/dashboard"}>
-              <DropdownMenuItem>
-                Dashboard
-                
-              </DropdownMenuItem>
+              <DropdownMenuItem>Dashboard</DropdownMenuItem>
             </Link>
             <DropdownMenuSeparator />
             <Link href={"/dashboard/profile/settings"}>
@@ -59,7 +59,6 @@ export function UserNav() {
           <DropdownMenuSeparator />
           <DropdownMenuItem disabled={isLoggingOut} onClick={() => logout({})}>
             {isLoggingOut ? "Logging out..." : "Log out"}
-          
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

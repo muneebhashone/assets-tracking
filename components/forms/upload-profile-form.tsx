@@ -112,7 +112,7 @@ const UploadProfileForm = ({
             className="w-[300px] h-[300px] mb-4 cursor-pointer"
             onClick={handleClick}
           >
-            <AvatarImage src={user?.user.avatar} />
+            <AvatarImage src={`/bucket/${user?.user.avatar}`} />
             <AvatarFallback className="bg-slate-400">
               {user?.user.name[0]}
             </AvatarFallback>

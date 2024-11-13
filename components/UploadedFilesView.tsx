@@ -52,7 +52,7 @@ const UploadedFilesView = ({ data }: { data: Shipment }) => {
                       isOpen={warningOpen}
                       onClose={() => setWarningOpen(false)}
                       onConfirm={() =>
-                        deleteFile({ id: data.id, fileName: String(fileName) })
+                        deleteFile({ id: data.id, key: String(file) })
                       }
                       loading={isPending}
                     />
@@ -67,7 +67,7 @@ const UploadedFilesView = ({ data }: { data: Shipment }) => {
                       <FileText className="w-20 h-20 text-blue-500" />
 
                       <Link
-                        href={file}
+                        href={`/bucket/${file}`}
                         target="_blank"
                         className="text-xs text-center font-semibold text-blue-950 transition-colors duration-300 transform hover:text-black break-words w-full"
                       >
