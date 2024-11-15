@@ -22,6 +22,7 @@ export type GetAllShipmentsInputType = {
   trackWith?: TrackWithType;
   status?: ShipmentStatus;
   companyId?: number;
+  orderBy?: "asc" | "desc";
 };
 
 export type GetSharedShipmentInputType = {

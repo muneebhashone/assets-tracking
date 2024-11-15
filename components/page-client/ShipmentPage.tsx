@@ -16,6 +16,7 @@ import Filter, { OptionsMapperType } from "../Filter";
 import SearchBar from "../SearchBar";
 import AllShipmentCreationDropDown from "../all-shipment-creation-dropdown";
 import { TableFallback } from "../fallback/table-fallback";
+import { OrderBySelector } from "../order-by-selector";
 import { columns } from "../tables/shipment-table/columns";
 import { ShipmentTable } from "../tables/shipment-table/shipment-table";
 
@@ -38,6 +39,9 @@ const ShipmentPage = () => {
     companyId: searchParams.get("companyId")
       ? Number(searchParams.get("companyId"))
       : undefined,
+    orderBy: searchParams.get("orderBy")
+      ? (searchParams.get("orderBy") as "asc" | "desc")
+      : "desc",
   };
 
   const { data: result, isLoading } = useGetShipments(params);
@@ -94,11 +98,14 @@ const ShipmentPage = () => {
                 {result?.results.length}
               </span>
             </Button> */}
-          <Filter
-            optionsMapper={optionsMapper}
-            type="Shipment"
-            defaultValue={"trackWith"}
-          />
+          <div className="flex gap-3">
+            <OrderBySelector />
+            <Filter
+              optionsMapper={optionsMapper}
+              type="Shipment"
+              defaultValue={"trackWith"}
+            />
+          </div>
         </div>
 
         {isLoading ? (
