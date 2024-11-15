@@ -20,7 +20,7 @@ export function OrderBySelector({
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const currentOrder = searchParams.get(paramKey) || "asc";
+  const currentOrder = searchParams.get(paramKey) || "desc";
 
   const handleOrderChange = (value: string) => {
     const params = new URLSearchParams(searchParams.toString());
