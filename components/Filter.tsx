@@ -110,7 +110,7 @@ const Filter = <T extends OptionsSelectorType>({
         onClick={() => setOpenModal(true)}
         className="flex justify-center items-center gap-2 bg-blue-500"
       >
-        <SearchIcon /> Filter{" "}
+        <SearchIcon /> <p className="md:block hidden">Filter </p>
       </Button>
       <ModalCustom
         className="max-h-[70vh] w-[90%] max-w-3xl overflow-auto mx-auto rounded-lg"
