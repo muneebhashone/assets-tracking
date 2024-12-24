@@ -8,8 +8,8 @@ import {
 } from "@/components/ui/dialog";
 
 interface ModalProps {
-  title: string;
-  description: string;
+  title?: string;
+  description?: string;
   isOpen: boolean;
   onClose: () => void;
   children?: React.ReactNode;
@@ -30,11 +30,15 @@ export const Modal: React.FC<ModalProps> = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={onChange}>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>{title}</DialogTitle>
-          <DialogDescription>{description}</DialogDescription>
-        </DialogHeader>
+      <DialogContent className="max-h-[70vh] w-[90%] max-w-xl overflow-auto mx-auto rounded-lg">
+        {(title || description) && (
+          <DialogHeader>
+            {title && <DialogTitle>{title}</DialogTitle>}
+            {description && (
+              <DialogDescription>{description}</DialogDescription>
+            )}
+          </DialogHeader>
+        )}
         <div>{children}</div>
       </DialogContent>
     </Dialog>

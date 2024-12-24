@@ -1,19 +1,19 @@
 "use client";
 
-import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 import { Icons } from "@/components/icons";
 import { cn } from "@/lib/utils";
-import { NavItem } from "@/types";
+import { User } from "@/types/services/auth.types";
+
+import { NavItem, PermissionsType } from "@/types/user.types";
+import { checkPermissions } from "@/utils/user.utils";
 import { Dispatch, SetStateAction } from "react";
-import { PERMISSIONS, ROLE, User } from "@prisma/client";
-import { checkPermissions } from "@/utils/checkPermissions";
-import { Session } from "next-auth";
+import Link from "next/link";
 
 interface DashboardNavProps {
   items: NavItem[];
-  user: Session["user"];
+  user?: User;
   setOpen?: Dispatch<SetStateAction<boolean>>;
 }
 
@@ -26,12 +26,11 @@ export function DashboardNav({ items, setOpen, user }: DashboardNavProps) {
 
   return (
     <nav className="grid items-start gap-2">
-      {items.map((item, index) => {
+      {items?.map((item, index) => {
         if (
-          user?.role !== ROLE.SUPER_ADMIN &&
           !checkPermissions(
-            user?.permissions,
-            item.permissions as PERMISSIONS[],
+            user?.permissions as PermissionsType[],
+            item?.permissions as PermissionsType[],
           )
         )
           return;

@@ -18,7 +18,7 @@ const Menu = ({
     <ul
       className={`md:flex items-center justify-center gap-16 font-medium ${className} text-center`}
     >
-      {listitem.map((item) => (
+      {listitem?.map((item) => (
         <li className="text-lg py-5 md:py-0" key={item.id}>
           <Link href={item.link}>{item.title}</Link>
         </li>

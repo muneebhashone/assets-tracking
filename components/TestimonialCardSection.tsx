@@ -16,7 +16,7 @@ const TestimonialCardSection = ({
   return (
     <div>
       <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-4 md:grid-cols-2 gap-x-5 gap-y-5 py-20">
-        {testimonialcard.map((item) => (
+        {testimonialcard?.map((item) => (
           <div
             key={item.id}
             className="col-span-1 border border-gray-300 text-center pt-9 pb-14 px-8 rounded-xl shadow-lg bg-white"

@@ -1,0 +1,55 @@
+<svg version="1.1"
+    baseProfile="full"
+    width="500" height="500"
+    xmlns="http://www.w3.org/2000/svg"
+    xmlns:xlink="http://www.w3.org/1999/xlink">
+
+
+<circle id="middle" r="50" cx="250" cy="250" fill="#000066" />
+<circle id="out_first" r="100" cx="250" cy="250" fill-opacity="0" stroke-opacity=".5" stroke-width="15" stroke="#000066" fill="null" />
+<circle id="out_second" r="180" cx="250" cy="250" fill-opacity="0" stroke-opacity=".5" stroke-width="15" stroke="#000066" fill="null" />
+
+
+<animate 
+xlink:href="#out_first"
+attributeName="r"
+from="100"
+to="160" 
+dur=".9s"
+begin="0"
+fill="freeze"
+repeatCount="indefinite"/>
+
+<animate 
+xlink:href="#out_first"
+attributeName="stroke-opacity"
+from=".5"
+to="-.2" 
+dur=".9s"
+begin="0"
+fill="freeze"
+repeatCount="indefinite"/>
+
+<animate 
+xlink:href="#out_second"
+attributeName="r"
+from="180"
+to="240" 
+dur=".9s"
+begin="0"
+fill="freeze"
+repeatCount="indefinite"/>
+
+<animate 
+xlink:href="#out_second"
+attributeName="stroke-opacity"
+from=".5"
+to="-.2" 
+dur=".9s"
+begin="0"
+fill="freeze"
+repeatCount="indefinite"/>
+
+
+
+</svg>

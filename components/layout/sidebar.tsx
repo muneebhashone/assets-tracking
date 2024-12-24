@@ -1,11 +1,15 @@
+"use client";
 import { DashboardNav } from "@/components/dashboard-nav";
-import { navItems } from "@/constants/data";
-import { auth } from "@/lib/auth-options";
 import { cn } from "@/lib/utils";
-import { User } from "@prisma/client";
+import { useCurrentUser } from "@/services/auth.mutations";
+import { Skeleton } from "../ui/skeleton";
+import { User } from "@/types/services/auth.types";
+import { NavItem } from "@/types/user.types";
+import { AdminDashboardNav } from "../admin-dashboard";
 
-export default async function Sidebar() {
-  const session = await auth();
+export default function Sidebar({ navItems }: { navItems: NavItem[] }) {
+  const { data: user, isLoading } = useCurrentUser();
+
   return (
     <nav
       className={cn(
@@ -18,10 +22,23 @@ export default async function Sidebar() {
             <h2 className="mb-2 px-4 text-xl font-semibold tracking-tight text-white ">
               Overview
             </h2>
-            <DashboardNav
-              user={session?.user as unknown as User}
-              items={navItems}
-            />
+
+            {isLoading ? (
+              <>
+                <div className="py-2">
+                  <Skeleton className="h-4 w-[200px] mb-4 py-2" />
+                  <Skeleton className="h-4 w-[200px] mb-4 py-2" />
+                  <Skeleton className="h-4 w-[200px] mb-4 py-2" />
+                  <Skeleton className="h-4 w-[200px] mb-4 py-2" />
+                  <Skeleton className="h-4 w-[200px] mb-4 py-2" />
+                  <Skeleton className="h-4 w-[200px]" />
+                </div>
+              </>
+            ) : user?.user.role === "SUPER_ADMIN" ? (
+              <AdminDashboardNav user={user?.user as User} items={navItems} />
+            ) : (
+              <DashboardNav user={user?.user as User} items={navItems} />
+            )}
           </div>
         </div>
       </div>

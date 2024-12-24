@@ -1,12 +1,17 @@
 import Providers from "@/components/layout/providers";
-import { Toaster } from "@/components/ui/toaster";
-import "@uploadthing/react/styles.css";
+import { ReactQueryClientProvider } from "@/components/layout/react-query-provider";
+import { currentUser } from "@/services/auth.services";
+import {
+  HydrationBoundary,
+  QueryClient,
+  dehydrate,
+} from "@tanstack/react-query";
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
+import { cookies } from "next/headers";
 import "./globals.css";
-import { ReactQueryClientProvider } from "@/components/ReactQueryClientProvider";
-import { InitializeSocket } from "@/stores/useSocketStore";
-import { auth } from "@/lib/auth-options";
+import { Suspense } from "react";
+import { AUTH_KEY } from "@/utils/constants";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -16,8 +21,41 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "FRATE ZONE",
-  description: "Find your shipment by one click",
+  title: "Fratezone",
+  description:
+    "FrateZone - Your comprehensive logistics platform for seamless shipment tracking, management and collaboration across global supply chains",
+  icons: {
+    icon: [
+      { url: "/favicon/favicon.ico" },
+      { url: "/favicon/favicon-96x96.png", sizes: "96x96", type: "image/png" },
+      {
+        url: "/favicon/web-app-manifest-192x192.png",
+        sizes: "192x192",
+        type: "image/png",
+      },
+      {
+        url: "/favicon/web-app-manifest-512x512.png",
+        sizes: "512x512",
+        type: "image/png",
+      },
+    ],
+    apple: [
+      {
+        url: "/favicon/apple-touch-icon.png",
+        sizes: "180x180",
+        type: "image/png",
+      },
+    ],
+    shortcut: ["/favicon/favicon.svg"],
+    other: [
+      {
+        rel: "mask-icon",
+        url: "/favicon/favicon.svg",
+        color: "#5bbad5",
+      },
+    ],
+  },
+  manifest: "/favicon/site.webmanifest",
 };
 
 export default async function RootLayout({
@@ -25,20 +63,30 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const session = await auth();
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        staleTime: 60 * 1000,
+      },
+    },
+  });
+
+  await queryClient.prefetchQuery({
+    queryKey: ["currentUser"],
+    queryFn: () => currentUser(cookies().get(AUTH_KEY)?.value),
+  });
+
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${poppins.className} `}>
-        <Providers session={session}>
+        <Suspense>
           <ReactQueryClientProvider>
-            <Toaster />
-            <InitializeSocket />
-            {children}
+            <HydrationBoundary state={dehydrate(queryClient)}>
+              <Providers>{children}</Providers>
+            </HydrationBoundary>
           </ReactQueryClientProvider>
-        </Providers>
+        </Suspense>
       </body>
     </html>
   );
 }
-
-//
