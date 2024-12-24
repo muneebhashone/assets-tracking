@@ -293,3 +293,49 @@ export const useUpdateShipment = (
     },
   });
 };
+
+// shipmentRouter.post(
+// '/status',
+// canAccess(),
+// validateZodSchema({ body: setShipmentStatusAndStopTrackingSchema }),
+// handleSetShipmentStatusAndStopTracking,
+// );
+
+// export const setShipmentStatusAndStopTrackingSchema = z.object({
+//   shipmentId: z.number({ required_error: 'shipmentId is required' }).min(1),
+//   status: z.enum(shipmentStatusEnums),
+// });
+
+export interface SetShipmentStatusAndStopTrackingInputType {
+  shipmentId: number;
+  status: string;
+}
+
+export const setShipmentStatusAndStopTracking = async (
+  input: SetShipmentStatusAndStopTrackingInputType,
+) => {
+  const { data } = await apiAxios.post<SuccessResponseType>(
+    `/shipments/status`,
+    input,
+  );
+  return data;
+};
+
+export const useSetShipmentStatusAndStopTracking = (
+  options?: UseMutationOptions<
+    SuccessResponseType,
+    ErrorResponseType,
+    SetShipmentStatusAndStopTrackingInputType
+  >,
+) => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    ...options,
+    mutationFn: setShipmentStatusAndStopTracking,
+    async onSuccess(data, variables, context) {
+      await queryClient.invalidateQueries({ queryKey: ["getShipments"] });
+      await queryClient.invalidateQueries({ queryKey: ["getShipmentById"] });
+      options?.onSuccess?.(data, variables, context);
+    },
+  });
+};

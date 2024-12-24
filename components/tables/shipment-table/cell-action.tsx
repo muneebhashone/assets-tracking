@@ -18,6 +18,7 @@ import {
   useDeletShipment,
   useDiscardShipmentShareableLink,
   useSetFilesShareable,
+  useSetShipmentStatusAndStopTracking,
 } from "@/services/shipment.mutations";
 import { Shipment } from "@/services/shipment.queries";
 import { PermissionsType } from "@/types/user.types";
@@ -29,6 +30,7 @@ import {
   ExternalLink,
   LinkIcon,
   MoreHorizontal,
+  StopCircle,
   ToggleLeft,
   ToggleRight,
   Trash,
@@ -46,6 +48,8 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
   const [updateModalOpen, setUpdateModalOpen] = useState<boolean>(false);
   const [adminUpdateModalOpen, setAdminUpdateModalOpen] =
     useState<boolean>(false);
+  const [stopTrackingOpen, setStopTrackingOpen] = useState<boolean>(false);
+
   const { mutate: deleteShipment, isPending: isDeletingShipment } =
     useDeletShipment({
       onSuccess(data) {
@@ -121,6 +125,26 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
       },
     });
   const { data: user } = useCurrentUser();
+  const {
+    mutate: adminShipmentStopTracking,
+    isPending: isSettingShipmentStatusAndStopTracking,
+  } = useSetShipmentStatusAndStopTracking({
+    onSuccess(data) {
+      setStopTrackingOpen(false);
+      toast({
+        variant: "default",
+        description: data.message,
+        title: "Success",
+      });
+    },
+    onError(error) {
+      toast({
+        variant: "destructive",
+        description: error.response?.data.message,
+        title: "Error",
+      });
+    },
+  });
 
   return (
     <>
@@ -129,6 +153,17 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
         onClose={() => setWarningOpen(false)}
         onConfirm={() => deleteShipment({ id: data.id })}
         loading={isDeletingShipment}
+      />
+      <AlertModal
+        isOpen={stopTrackingOpen}
+        onClose={() => setStopTrackingOpen(false)}
+        onConfirm={() =>
+          adminShipmentStopTracking({
+            shipmentId: data.id,
+            status: "DELIVERED",
+          })
+        }
+        loading={isSettingShipmentStatusAndStopTracking}
       />
       <UploadShipmentFile
         modalOpen={modalOpen}
@@ -243,6 +278,16 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
                 <LinkIcon className="mr-2 h-4 w-4" /> Generate Sharable Link
               </DropdownMenuItem>
             ))}
+
+          {["SUB_ADMIN", "SUPER_ADMIN"].includes(user?.user.role as string) &&
+            data.status !== "DELIVERED" && (
+              <DropdownMenuItem
+                onClick={() => setStopTrackingOpen(true)}
+                disabled={isSettingShipmentStatusAndStopTracking}
+              >
+                <StopCircle className="mr-2 h-4 w-4" /> Stop Shipment Tracking
+              </DropdownMenuItem>
+            )}
         </DropdownMenuContent>
       </DropdownMenu>
     </>

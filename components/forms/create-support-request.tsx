@@ -114,6 +114,9 @@ const CreateSupportForm = ({ currentUser }: CreateSupportFormProps) => {
     resolver: zodResolver(createSupportFormSchema),
     defaultValues: {
       userId: currentUser?.id ? String(currentUser?.id) : undefined,
+      email: currentUser?.email ? currentUser?.email : undefined,
+      phoneNo: currentUser?.phoneNo ? currentUser?.phoneNo : undefined,
+      name: currentUser?.name ? currentUser?.name : undefined,
     },
   });
   const { push } = useRouter();
