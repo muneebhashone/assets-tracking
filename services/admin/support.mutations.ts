@@ -1,14 +1,15 @@
 import { apiAxios } from "@/utils/api.utils";
 import {
-  UseMutationOptions,
+  type UseMutationOptions,
   useMutation,
   useQueryClient,
 } from "@tanstack/react-query";
-import { ErrorResponseType, SuccessResponseType } from "../types.common";
-import { getAssigns } from "./assigns.queries";
-import { getAllSupportForms, getSupportFormById } from "./support.queries";
+import type { ErrorResponseType, SuccessResponseType } from "../types.common";
 
-//types
+export type CreateSupportMessageInputType = {
+  message: string;
+  supportFormId: number;
+};
 
 export type CreateSupportInputType = {
   name?: string;
@@ -18,13 +19,23 @@ export type CreateSupportInputType = {
   message?: string;
   userId?: string;
 };
+
 type DeleteSupportInputType = {
   id: number;
 };
 type ResolveSupportFormInputType = {
   id: number;
 };
-//services
+
+export const createSupportMessage = async (
+  input: CreateSupportMessageInputType,
+) => {
+  const { data } = await apiAxios.post<SuccessResponseType>(
+    `/admin/support-form/${input.supportFormId}/message`,
+    { message: input.message },
+  );
+  return data;
+};
 
 export const createSupportForm = async (input: CreateSupportInputType) => {
   const { data } = await apiAxios.post<SuccessResponseType>(
@@ -111,6 +122,32 @@ export const useResolveSupportForm = (
       });
       await queryClient.invalidateQueries({
         queryKey: ["getSupportFormById"],
+      });
+      options?.onSuccess?.(data, variables, context);
+    },
+  });
+};
+
+export const useCreateSupportMessage = (
+  options?: UseMutationOptions<
+    SuccessResponseType,
+    ErrorResponseType,
+    CreateSupportMessageInputType
+  >,
+) => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    ...options,
+    mutationFn: createSupportMessage,
+    async onSuccess(data, variables, context) {
+      await queryClient.invalidateQueries({
+        queryKey: ["getSupportFormById", variables.supportFormId.toString()],
+      });
+      await queryClient.invalidateQueries({
+        queryKey: [
+          "getSupportFormMessages",
+          variables.supportFormId.toString(),
+        ],
       });
       options?.onSuccess?.(data, variables, context);
     },

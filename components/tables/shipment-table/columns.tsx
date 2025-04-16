@@ -2,11 +2,17 @@
 import ProtectedCheckbox from "@/components/ProtectedCheckbox";
 import { Badge } from "@/components/ui/badge";
 import UploadedFilesView from "@/components/UploadedFilesView";
-import { Shipment, ShipmentStatus } from "@/services/shipment.queries";
+import {
+  type ProgressStatusAndStatus,
+  ShipmentProgressToColorMapper,
+  type Shipment,
+  type ShipmentStatus,
+} from "@/services/shipment.queries";
 import { StatusBadgeColor } from "@/utils/constants";
-import { ColumnDef } from "@tanstack/react-table";
+import type { ColumnDef } from "@tanstack/react-table";
 import moment from "moment";
 import { CellAction } from "./cell-action";
+import { cn } from "@/lib/utils";
 
 export const columns: ColumnDef<Shipment>[] = [
   {
@@ -111,7 +117,12 @@ export const columns: ColumnDef<Shipment>[] = [
           </Badge>
         ) : (
           <Badge
-            className={`text-center tracking-tighter text-white capitalize bg-gray-500`}
+            className={cn(
+              "text-center tracking-tighter text-white capitalize bg-gray-500",
+              ShipmentProgressToColorMapper[
+                row.original?.progress as ProgressStatusAndStatus
+              ],
+            )}
           >
             {row.original?.progress.split("_").join(" ").toLowerCase()}
           </Badge>
@@ -157,10 +168,9 @@ export const columns: ColumnDef<Shipment>[] = [
     accessorKey: "tags",
     header: "Tags",
     cell: ({ row }) =>
-      row.original?.tags &&
-      row.original?.tags.map((tag, index) => {
+      row.original?.tags?.map((tag, index) => {
         return (
-          <div className="flex flex-row mb-2" key={index}>
+          <div className="flex flex-row mb-2" key={index.toString()}>
             <p className="font-bold">
               <Badge className="bg-slate-500 cursor-pointer">{tag}</Badge>
             </p>

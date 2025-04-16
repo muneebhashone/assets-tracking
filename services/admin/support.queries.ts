@@ -1,10 +1,10 @@
 //types
 
 import { apiAxios } from "@/utils/api.utils";
-import { ErrorResponseType, SuccessResponseType } from "../types.common";
-import { PaginatorInfoType } from "../user.queries";
-import { useQuery, UseQueryOptions } from "@tanstack/react-query";
-import { User } from "@/types/services/auth.types";
+import type { ErrorResponseType, SuccessResponseType } from "../types.common";
+import type { PaginatorInfoType } from "../user.queries";
+import { useQuery, type UseQueryOptions } from "@tanstack/react-query";
+import type { User } from "@/types/services/auth.types";
 import { useCurrentUser } from "../auth.mutations";
 
 export interface SupportType {
@@ -20,6 +20,14 @@ export interface SupportType {
   updatedAt: string;
   user?: User;
 }
+
+export type SupportFormMessageType = {
+  message: string;
+  id: number;
+  createdAt: string;
+  updatedAt: string;
+  supportFormId: number;
+};
 
 export type SupportFormResponseType = {
   results: SupportType[];
@@ -43,6 +51,12 @@ export interface GetSupportFormByIdResponseType
   extends Omit<SuccessResponseType, "data"> {
   data: SupportType;
 }
+
+export interface GetSupportFormMessagesResponseType
+  extends Omit<SuccessResponseType, "data"> {
+  data: SupportFormMessageType[];
+}
+
 //services
 
 export const getAllSupportForms = async (input: GetAllSupportFormInputType) => {
@@ -56,6 +70,14 @@ export const getAllSupportForms = async (input: GetAllSupportFormInputType) => {
   return data;
 };
 
+export const getSupportFormMessages = async (input: GetSupportFormByIdType) => {
+  const { id } = input;
+  const { data } = await apiAxios.get<GetSupportFormMessagesResponseType>(
+    `/admin/support-form/${id}/messages`,
+  );
+  return data;
+};
+
 export const getSupportFormById = async (input: GetSupportFormByIdType) => {
   const { id } = input;
   const { data } = await apiAxios.get<GetAllSupportFormsResponseType>(
@@ -64,7 +86,23 @@ export const getSupportFormById = async (input: GetSupportFormByIdType) => {
 
   return data;
 };
-//hooks
+
+export const useGetSupportFormMessages = (
+  input: GetSupportFormByIdType,
+  options?: UseQueryOptions<
+    unknown,
+    ErrorResponseType,
+    GetSupportFormMessagesResponseType
+  >,
+) => {
+  const { data: user } = useCurrentUser();
+  return useQuery({
+    ...options,
+    queryFn: async () => await getSupportFormMessages(input),
+    queryKey: ["getSupportFormMessages", input.id],
+    enabled: Boolean(user?.user.id) && Boolean(input.id),
+  });
+};
 
 export const useGetAllSupportForms = (
   input: GetAllSupportFormInputType,
@@ -95,7 +133,7 @@ export const useGetSupportFormById = (
   return useQuery({
     ...options,
     queryFn: async () => await getSupportFormById(input),
-    queryKey: ["getSupportFormById", JSON.stringify(input)],
-    enabled: Boolean(user?.user.id),
+    queryKey: ["getSupportFormById", input.id],
+    enabled: Boolean(user?.user.id) && Boolean(input.id),
   });
 };

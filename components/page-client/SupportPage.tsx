@@ -9,7 +9,7 @@ import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 
 import {
-  SupportType,
+  type SupportType,
   useGetAllSupportForms,
 } from "@/services/admin/support.queries";
 import { columns } from "../tables/support-table/columns";

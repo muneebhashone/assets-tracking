@@ -1,19 +1,18 @@
 import { apiAxios } from "@/utils/api.utils";
-import { UseQueryOptions, useQuery } from "@tanstack/react-query";
-import { ErrorResponseType } from "./types.common";
-import { PaginatorInfoType } from "./user.queries";
+import { type UseQueryOptions, useQuery } from "@tanstack/react-query";
+import type { ErrorResponseType } from "./types.common";
+import type { PaginatorInfoType } from "./user.queries";
 import { useCurrentUser } from "./auth.mutations";
-import { User } from "@/types/services/auth.types";
-import {
+import type { User } from "@/types/services/auth.types";
+import type {
   Container,
   Movement,
   POD,
   POL,
   Vessel,
 } from "@/types/services/shipment.types";
-import { Company } from "./companies.queries";
+import type { Company } from "./companies.queries";
 
-//types
 export type GetAllShipmentsInputType = {
   searchString: string;
   limitParam: number;
@@ -69,6 +68,25 @@ export const SHIPMENT_PROGRESS_STATUSES = {
 export type TrackWithType = (typeof trackWithEnums)[number];
 export type ShipmentProgressStatusType =
   keyof typeof SHIPMENT_PROGRESS_STATUSES;
+
+export type ProgressStatusAndStatus = ShipmentProgressStatusType &
+  ShipmentStatus;
+
+export const ShipmentProgressToColorMapper: Record<
+  ProgressStatusAndStatus,
+  string
+> = {
+  IN_PROGRESS: "bg-slate-900",
+  FOUND: "bg-green-500",
+  NOT_FOUND: "bg-red-500",
+  QUEUED: "bg-blue-500",
+  INSUFFICIENT_CREDITS: "bg-gray-500",
+  PLANNED: "bg-slate-900",
+  IN_TRANSIT: "bg-blue-500",
+  DELIVERED: "bg-green-500",
+  UNKNOWN: "bg-gray-500",
+  DISCHARGED: "bg-yellow-500",
+} as const;
 
 export type ShipmentStatus =
   | "PLANNED"

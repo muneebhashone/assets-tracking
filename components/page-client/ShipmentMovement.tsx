@@ -1,7 +1,7 @@
 "use client";
 
 import { useGetMovementsByShipmentId } from "@/services/shipment.queries";
-import { Movement } from "@/types/services/shipment.types";
+import type { Movement } from "@/types/services/shipment.types";
 import { columns } from "../tables/shipment-movement-table/columns";
 import { ShipmentMovementTable } from "../tables/shipment-movement-table/shipment-movement-table";
 interface ShipmentMovementProps {

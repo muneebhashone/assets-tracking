@@ -1,7 +1,7 @@
 "use client";
 import {
-  ColumnDef,
-  PaginationState,
+  type ColumnDef,
+  type PaginationState,
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
@@ -31,7 +31,7 @@ import {
 } from "@/components/ui/table";
 import { toast } from "@/components/ui/use-toast";
 import { useBulkDeleteShipment } from "@/services/shipment.mutations";
-import { Shipment } from "@/services/shipment.queries";
+import type { Shipment } from "@/services/shipment.queries";
 import {
   DoubleArrowLeftIcon,
   DoubleArrowRightIcon,
@@ -39,7 +39,7 @@ import {
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCurrentUser } from "@/services/auth.mutations";
-import { RowData } from "@tanstack/react-table";
+import type { RowData } from "@tanstack/react-table";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -74,10 +74,10 @@ export function ShipmentTable({
   const page = Number(searchParams?.get("page") ?? "1");
   const pageAsNumber = Number(page);
   const fallbackPage =
-    isNaN(pageAsNumber) || pageAsNumber < 1 ? 1 : pageAsNumber;
+    Number.isNaN(pageAsNumber) || pageAsNumber < 1 ? 1 : pageAsNumber;
   const per_page = searchParams?.get("limit") ?? "10";
   const perPageAsNumber = Number(per_page);
-  const fallbackPerPage = isNaN(perPageAsNumber) ? 10 : perPageAsNumber;
+  const fallbackPerPage = Number.isNaN(perPageAsNumber) ? 10 : perPageAsNumber;
   const tableData = data;
   const [openWarning, setOpenWarning] = useState<boolean>(false);
   const createQueryString = React.useCallback(

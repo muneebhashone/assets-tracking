@@ -1,5 +1,5 @@
-import { ShipmentStatus } from "@/services/shipment.queries";
-import { RoleType } from "@/types/user.types";
+import type { ShipmentStatus } from "@/services/shipment.queries";
+import type { RoleType } from "@/types/user.types";
 
 export type StatusBadgeRecord = {
   color: string;
@@ -78,10 +78,10 @@ export const PermissionsForDisplay = {
 
 export const StatusBadgeColor: Record<ShipmentStatus, StatusBadgeRecord> = {
   DELIVERED: { color: "green-600", value: "Delivered" },
-  IN_TRANSIT: { color: "black", value: "In Transit" },
-  PLANNED: { color: "blue-500", value: "Planned" },
-  UNKNOWN: { color: "gray-500", value: "Unknown" },
-  DISCHARGED: { color: "blue-600", value: "Discharged" },
+  IN_TRANSIT: { color: "blue-600", value: "In Transit" },
+  PLANNED: { color: "gray-500", value: "Planned" },
+  UNKNOWN: { color: "slate-500", value: "Unknown" },
+  DISCHARGED: { color: "yellow-600", value: "Discharged" },
 };
 
 export const filterViewOptions = {

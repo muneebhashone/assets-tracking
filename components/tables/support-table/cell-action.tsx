@@ -105,7 +105,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
           )}
           <DropdownMenuItem>
             <Link href={`/dashboard/support/${data.id}`} className="flex">
-              <LinkIcon className="mr-2 h-4 w-4" /> View
+              <LinkIcon className="mr-2 h-4 w-4" /> View Details
             </Link>
           </DropdownMenuItem>
         </DropdownMenuContent>
