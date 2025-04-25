@@ -1,6 +1,6 @@
 "use client";
-import { Container } from "@/types/services/shipment.types";
-import { ColumnDef } from "@tanstack/react-table";
+import type { Container } from "@/types/services/shipment.types";
+import type { ColumnDef } from "@tanstack/react-table";
 import moment from "moment";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -67,6 +67,17 @@ export const columns: ColumnDef<Container>[] = [
       <div>
         {row.original?.gateOut
           ? moment(row.original?.gateOut).format("DD/MM/YYYY")
+          : "-"}
+      </div>
+    ),
+  },
+  {
+    accessorKey: "deliveryDate",
+    header: "Delivery Date",
+    cell: ({ row }) => (
+      <div>
+        {row.original?.deliveryDate
+          ? moment(row.original?.deliveryDate).format("DD/MM/YYYY")
           : "-"}
       </div>
     ),

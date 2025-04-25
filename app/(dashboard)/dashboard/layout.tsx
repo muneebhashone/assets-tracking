@@ -2,7 +2,7 @@ import Header from "@/components/layout/header";
 import Sidebar from "@/components/layout/sidebar";
 import { navItems } from "@/constants/data";
 import { Suspense } from "react";
-import { Metadata } from "next";
+import type { Metadata } from "next";
 
 type props = {
   children: React.ReactNode;

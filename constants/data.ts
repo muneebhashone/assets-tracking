@@ -1,4 +1,4 @@
-import { NavItem } from "@/types/user.types";
+import type { NavItem } from "@/types/user.types";
 
 export const navItems: NavItem[] = [
   {
@@ -52,6 +52,13 @@ export const navItems: NavItem[] = [
     label: "support",
     permissions: ["SUPER_ADMIN"],
   },
+  {
+    title: "Changelogs",
+    href: "/dashboard/changelogs",
+    icon: "changelog",
+    label: "changelogs",
+    permissions: ["VIEW_DASHBOARD"],
+  },
 ];
 
 export const userNavItems: NavItem[] = [
@@ -72,6 +79,12 @@ export const userNavItems: NavItem[] = [
     href: "/dashboard/shipment",
     icon: "moon",
     label: "Shipment",
+  },
+  {
+    title: "Changelogs",
+    href: "/dashboard/changelogs",
+    icon: "changelog",
+    label: "changelogs",
   },
 ];
 

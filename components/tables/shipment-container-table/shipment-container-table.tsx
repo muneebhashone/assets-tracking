@@ -1,7 +1,7 @@
 "use client";
 import {
-  ColumnDef,
-  PaginationState,
+  type ColumnDef,
+  type PaginationState,
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
@@ -9,7 +9,6 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import React from "react";
-
 
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import {
@@ -20,7 +19,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Container } from "@/types/services/shipment.types";
+import type { Container } from "@/types/services/shipment.types";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 interface DataTableProps<TData, TValue> {
@@ -42,10 +41,10 @@ export function ShipmentContainerTable({
   const page = Number(searchParams?.get("page") ?? "1");
   const pageAsNumber = Number(page);
   const fallbackPage =
-    isNaN(pageAsNumber) || pageAsNumber < 1 ? 1 : pageAsNumber;
+    Number.isNaN(pageAsNumber) || pageAsNumber < 1 ? 1 : pageAsNumber;
   const per_page = searchParams?.get("limit") ?? "10";
   const perPageAsNumber = Number(per_page);
-  const fallbackPerPage = isNaN(perPageAsNumber) ? 10 : perPageAsNumber;
+  const fallbackPerPage = Number.isNaN(perPageAsNumber) ? 10 : perPageAsNumber;
   const tableData = data;
 
   const createQueryString = React.useCallback(
@@ -81,9 +80,7 @@ export function ShipmentContainerTable({
         scroll: false,
       },
     );
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pageIndex, pageSize]);
+  }, [pageIndex, pageSize, router, pathname, createQueryString]);
 
   const table = useReactTable({
     data: tableData,
@@ -153,8 +150,6 @@ export function ShipmentContainerTable({
         </Table>
         <ScrollBar orientation="horizontal" />
       </ScrollArea>
-
- 
     </>
   );
 }

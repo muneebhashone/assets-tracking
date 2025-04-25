@@ -3,7 +3,7 @@
 import { useGetContainersByShipmentId } from "@/services/shipment.queries";
 import { columns } from "../tables/shipment-container-table/columns";
 import { ShipmentContainerTable } from "../tables/shipment-container-table/shipment-container-table";
-import { Container } from "@/types/services/shipment.types";
+import type { Container } from "@/types/services/shipment.types";
 import { TableFallback } from "../fallback/table-fallback";
 
 interface ShipmentContainerProps {

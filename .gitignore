@@ -36,3 +36,15 @@ next-env.d.ts
 
 # database
 .database
+
+
+.docx#
+
+# Any file started with .~lock
+*.~lock
+
+# Any file started with .~
+*.~
+
+# Any file started with .~
+*.~
