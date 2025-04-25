@@ -20,11 +20,19 @@ export interface GetChangelogByIdResponseType
   data: Changelog;
 }
 
+export interface GetChangelogsResponseType
+  extends Omit<SuccessResponseType, "data"> {
+  data: PaginatedChangelogs;
+}
+
 // Services
 export const getChangelogs = async (input: GetAllChangelogsInputType) => {
-  const { data } = await apiAxios.get<PaginatedChangelogs>("/changelogs", {
-    params: { ...input },
-  });
+  const { data } = await apiAxios.get<GetChangelogsResponseType>(
+    "/changelogs",
+    {
+      params: { ...input },
+    },
+  );
 
   return data;
 };
@@ -39,7 +47,11 @@ export const getChangelogById = async (id: number) => {
 // Hooks
 export const useGetChangelogs = (
   input: GetAllChangelogsInputType,
-  options?: UseQueryOptions<unknown, ErrorResponseType, PaginatedChangelogs>,
+  options?: UseQueryOptions<
+    unknown,
+    ErrorResponseType,
+    GetChangelogsResponseType
+  >,
 ) => {
   const { data: user } = useCurrentUser();
 

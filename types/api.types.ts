@@ -1,4 +1,4 @@
-import { SEARATES_CODES } from "./messgaes";
+import type { SEARATES_CODES } from "./messgaes";
 
 export interface FooterItem {
   title: string;

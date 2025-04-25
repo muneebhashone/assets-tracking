@@ -31,6 +31,7 @@ import type {
 import { format } from "date-fns";
 import { X } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useCurrentUser } from "@/services/auth.mutations";
 
 interface ChangelogFormProps {
   isOpen: boolean;
@@ -41,6 +42,8 @@ interface ChangelogFormProps {
 const ChangelogForm = ({ isOpen, onClose, changelog }: ChangelogFormProps) => {
   const { toast } = useToast();
   const isEditMode = !!changelog;
+  const { data: currentUser } = useCurrentUser();
+  const isSuperAdmin = currentUser?.user.role === "SUPER_ADMIN";
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -111,6 +114,15 @@ const ChangelogForm = ({ isOpen, onClose, changelog }: ChangelogFormProps) => {
   }, [changelog]);
 
   const handleSubmit = () => {
+    if (!isSuperAdmin) {
+      toast({
+        title: "Permission Denied",
+        description: "Only Super Admins can manage changelogs",
+        variant: "destructive",
+      });
+      return;
+    }
+
     if (!title) {
       toast({
         title: "Validation Error",
