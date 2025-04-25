@@ -1,7 +1,7 @@
 import UserAuthForm from "@/components/forms/user-auth-form";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { Metadata } from "next";
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { Truck, Package, BoxesIcon } from "lucide-react";
@@ -23,33 +23,42 @@ export default function AuthenticationPage() {
       >
         Login
       </Link>
-      <div className="relative hidden h-full flex-col bg-muted p-10 text-white lg:flex">
-        <div className="absolute inset-0 bg-[#3491fe]" />
+      <div
+        className="relative hidden h-full flex-col bg-muted p-10 bg-cover bg-center text-white lg:flex"
+        style={{ backgroundImage: "url('/images/bg-image.png')" }}
+      >
+        {/* Use background image from assets */}
 
-        <div className="absolute inset-0">
+        {/* <div className="absolute inset-0">
           <Truck className="absolute opacity-5 w-64 h-64 -right-10 top-10 rotate-12" />
           <Package className="absolute opacity-5 w-48 h-48 left-10 bottom-1/4" />
           <BoxesIcon className="absolute opacity-5 w-56 h-56 right-1/4 bottom-10 -rotate-12" />
-        </div>
+        </div> */}
+        <div className="flex flex-col items-center justify-center h-full">
+          <div className="relative z-20 flex items-center justify-center text-lg font-medium">
+            <Link href={"/"} className="hover:opacity-80 transition-opacity">
+              <Image
+                src={"/images/logo.png"}
+                alt="logo"
+                width={480}
+                height={480}
+                className="drop-shadow-xl"
+              />
+            </Link>
+          </div>
 
-        <div className="relative z-20 flex items-center text-lg font-medium">
-          <Link href={"/"} className="hover:opacity-80 transition-opacity">
-            <Image
-              src={"/images/logo.png"}
-              alt="logo"
-              width={60}
-              height={60}
-              className="drop-shadow-xl"
-            />
-          </Link>
-        </div>
-
-        <div className="relative z-20 mt-20">
-          <h1 className="text-4xl font-bold mb-6">Fast & Reliable Shipping</h1>
-          <p className="text-xl text-white/80 max-w-md">
-            Track your shipments, manage deliveries, and ensure your packages
-            arrive safely and on time.
-          </p>
+          <div className="relative text-center z-20 mt-10">
+            {/* <h1 className="text-4xl font-bold mb-6">
+              Fast & Reliable Shipping
+            </h1>
+            <p className="text-xl text-white/80 max-w-md">
+              Track your shipments, manage deliveries, and ensure your packages
+              arrive safely and on time.
+            </p> */}
+            <p className="text-xl text-white/80 font-thin ">
+              &quot;When you need an eyes on your shipment at all times&quot;
+            </p>
+          </div>
         </div>
       </div>
       <div className="p-4 lg:p-8 h-full flex items-center">

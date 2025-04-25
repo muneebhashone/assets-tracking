@@ -27,7 +27,6 @@ export const metadata: Metadata = {
   icons: {
     icon: [
       { url: "/favicon/favicon.ico" },
-      { url: "/favicon/favicon-96x96.png", sizes: "96x96", type: "image/png" },
       {
         url: "/favicon/web-app-manifest-192x192.png",
         sizes: "192x192",
@@ -46,11 +45,11 @@ export const metadata: Metadata = {
         type: "image/png",
       },
     ],
-    shortcut: ["/favicon/favicon.svg"],
+    shortcut: ["/favicon/favicon.ico"],
     other: [
       {
         rel: "mask-icon",
-        url: "/favicon/favicon.svg",
+        url: "/favicon/favicon.ico",
         color: "#5bbad5",
       },
     ],
@@ -78,7 +77,7 @@ export default async function RootLayout({
 
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${poppins.className} `}>
+      <body className={`${poppins.className} overflow-hidden`}>
         <Suspense>
           <ReactQueryClientProvider>
             <HydrationBoundary state={dehydrate(queryClient)}>
