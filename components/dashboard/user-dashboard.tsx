@@ -1,4 +1,8 @@
-import { ShipmentStatusDisplay, TrackWithDisplay } from "@/utils/constants";
+import {
+  ShipmentStatusDisplay,
+  StatusBadgeColor,
+  TrackWithDisplay,
+} from "@/utils/constants";
 import { formatDistance } from "date-fns";
 import {
   Area,
@@ -90,7 +94,6 @@ export default function UserDashboard({ data, isLoading }: UserDashboardProps) {
 
   return (
     <div className="space-y-4">
-   
       <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
         <StatCard
           title="Wallet Balance"
@@ -117,16 +120,13 @@ export default function UserDashboard({ data, isLoading }: UserDashboardProps) {
         />
       </div>
 
-   
       <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-    
         <Card className="col-span-1">
           <CardHeader>
             <CardTitle>Company Growth</CardTitle>
           </CardHeader>
           <CardContent className="h-[300px]">
-            {companyGrowthData &&
-            companyGrowthData.every((item) => item.value === 0) ? (
+            {companyGrowthData?.every((item) => item.value === 0) ? (
               <div className="flex h-full items-center justify-center text-muted-foreground">
                 No data available
               </div>
@@ -149,7 +149,6 @@ export default function UserDashboard({ data, isLoading }: UserDashboardProps) {
           </CardContent>
         </Card>
 
-        
         <Card className="col-span-1">
           <CardHeader>
             <CardTitle>Shipment Status</CardTitle>
@@ -182,10 +181,14 @@ export default function UserDashboard({ data, isLoading }: UserDashboardProps) {
                   >
                     {data &&
                       Object.entries(data.shipments.statusDistribution).map(
-                        (_, index) => (
+                        ([key, value], index) => (
                           <Cell
                             key={`cell-${index}`}
-                            fill={COLORS[index % COLORS.length]}
+                            fill={
+                              StatusBadgeColor[
+                                key as keyof typeof StatusBadgeColor
+                              ].hexColorCode ?? COLORS[index % COLORS.length]
+                            }
                           />
                         ),
                       )}
@@ -198,14 +201,12 @@ export default function UserDashboard({ data, isLoading }: UserDashboardProps) {
           </CardContent>
         </Card>
 
-    
         <Card className="col-span-1">
           <CardHeader>
             <CardTitle>Shipment Trends</CardTitle>
           </CardHeader>
           <CardContent className="h-[300px]">
-            {shipmentTrendData &&
-            shipmentTrendData.every((item) => item.total === 0) ? (
+            {shipmentTrendData?.every((item) => item.total === 0) ? (
               <div className="flex h-full items-center justify-center text-muted-foreground">
                 No data available
               </div>
@@ -217,27 +218,25 @@ export default function UserDashboard({ data, isLoading }: UserDashboardProps) {
                   <YAxis />
                   <Tooltip />
                   <Legend />
-                  {allStatusKeys &&
-                    allStatusKeys.map((status, index) => (
-                      <Bar
-                        key={status}
-                        dataKey={status}
-                        name={
-                          ShipmentStatusDisplay[
-                            status as keyof typeof ShipmentStatusDisplay
-                          ]
-                        }
-                        fill={COLORS[index % COLORS.length]}
-                        stackId="a"
-                      />
-                    ))}
+                  {allStatusKeys?.map((status, index) => (
+                    <Bar
+                      key={status}
+                      dataKey={status}
+                      name={
+                        ShipmentStatusDisplay[
+                          status as keyof typeof ShipmentStatusDisplay
+                        ]
+                      }
+                      fill={COLORS[index % COLORS.length]}
+                      stackId="a"
+                    />
+                  ))}
                 </BarChart>
               </ResponsiveContainer>
             )}
           </CardContent>
         </Card>
 
-      
         <Card className="col-span-1">
           <CardHeader>
             <CardTitle>Company Details</CardTitle>
@@ -280,7 +279,6 @@ export default function UserDashboard({ data, isLoading }: UserDashboardProps) {
           </CardContent>
         </Card>
 
-       
         <Card className="col-span-1 md:col-span-2">
           <CardHeader>
             <CardTitle>Recent Shipments</CardTitle>
