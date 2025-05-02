@@ -4,11 +4,10 @@ import {
   useMutation,
   useQueryClient,
 } from "@tanstack/react-query";
-import { useSearchParams } from "next/navigation";
 import { Shipment, TrackWithType } from "./shipment.queries";
 import { ErrorResponseType, SuccessResponseType } from "./types.common";
+import { useCurrentUser } from "./auth.mutations";
 
-// export type Email = `${string}@${string}.${string}`;
 //types
 export interface CreateShipmentInputType {
   trackWith: TrackWithType;
@@ -55,6 +54,12 @@ export interface DiscardShipmentShareableLinkInputType {
   shipmentId: string;
 }
 
+export interface UpdateContainerInputType {
+  containerId: number;
+  shipmentId: number;
+  deliveryDate: string | null; // ISO date string or null
+}
+
 export interface BuildShipmentShareableLinkResponseType
   extends Omit<SuccessResponseType, "payload"> {
   data: {
@@ -63,6 +68,16 @@ export interface BuildShipmentShareableLinkResponseType
 }
 
 //services
+
+export const updateContainer = async (input: UpdateContainerInputType) => {
+  const { data } = await apiAxios.patch<SuccessResponseType>(
+    `/shipments/container/${input.containerId}`,
+    {
+      deliveryDate: input.deliveryDate,
+    },
+  );
+  return data;
+};
 
 export const createShipment = async (
   input: CreateShipmentInputType,
@@ -148,6 +163,33 @@ export const updateShipment = async (input: UpdateShipmentInputType) => {
 };
 
 //hooks
+
+export const useUpdateContainer = (
+  options?: UseMutationOptions<
+    SuccessResponseType,
+    ErrorResponseType,
+    UpdateContainerInputType
+  >,
+) => {
+  const queryClient = useQueryClient();
+  const { data: user } = useCurrentUser();
+
+  return useMutation({
+    ...options,
+    mutationFn: updateContainer,
+    async onSuccess(data, variables, context) {
+      await queryClient.invalidateQueries({
+        queryKey: [
+          "getContainersByShipmentId",
+          user?.user.id,
+          JSON.stringify({ shipmentId: variables.shipmentId }),
+        ],
+      });
+      options?.onSuccess?.(data, variables, context);
+    },
+  });
+};
+
 export const useCreateShipment = (
   options?: UseMutationOptions<
     CreateUpdateShipmentResponseType,

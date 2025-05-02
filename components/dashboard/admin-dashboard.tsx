@@ -96,7 +96,6 @@ export default function AdminDashboard({
 
   return (
     <div className="space-y-4">
-      
       <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
         <StatCard
           title="Total Users"
@@ -119,9 +118,7 @@ export default function AdminDashboard({
         />
       </div>
 
-    
       <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-       
         <Card className="col-span-1">
           <CardHeader>
             <CardTitle>User Roles</CardTitle>
@@ -165,7 +162,6 @@ export default function AdminDashboard({
           </CardContent>
         </Card>
 
-    
         <Card className="col-span-1">
           <CardHeader>
             <CardTitle>User Growth</CardTitle>
@@ -194,7 +190,6 @@ export default function AdminDashboard({
           </CardContent>
         </Card>
 
-        
         <Card className="col-span-1">
           <CardHeader>
             <CardTitle>Shipment Status</CardTitle>
@@ -222,10 +217,16 @@ export default function AdminDashboard({
                     dataKey="value"
                   >
                     {Object.entries(data.shipments.statusDistribution).map(
-                      (_, index) => (
+                      ([key, value], index) => (
                         <Cell
                           key={`cell-${index}`}
-                          fill={COLORS[index % COLORS.length]}
+                          fill={
+                            StatusBadgeColor[
+                              key
+                                .replace(/\s+/g, "_")
+                                .toUpperCase() as keyof typeof StatusBadgeColor
+                            ].hexColorCode ?? COLORS[index % COLORS.length]
+                          }
                         />
                       ),
                     )}
@@ -238,7 +239,6 @@ export default function AdminDashboard({
           </CardContent>
         </Card>
 
-       
         <Card className="col-span-1 md:col-span-2 lg:col-span-2">
           <CardHeader>
             <CardTitle>Recent Shipments</CardTitle>
@@ -295,7 +295,6 @@ export default function AdminDashboard({
           </CardContent>
         </Card>
 
-        
         <Card className="col-span-1">
           <CardHeader>
             <CardTitle>Shipment Trends</CardTitle>

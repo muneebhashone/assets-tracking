@@ -4,6 +4,7 @@ import type { RoleType } from "@/types/user.types";
 export type StatusBadgeRecord = {
   color: string;
   value: "Delivered" | "In Transit" | "Planned" | "Unknown" | "Discharged";
+  hexColorCode: string;
 };
 export const AUTH_KEY = "FrateZoneAccessToken";
 
@@ -77,11 +78,23 @@ export const PermissionsForDisplay = {
 };
 
 export const StatusBadgeColor: Record<ShipmentStatus, StatusBadgeRecord> = {
-  DELIVERED: { color: "green-600", value: "Delivered" },
-  IN_TRANSIT: { color: "blue-600", value: "In Transit" },
-  PLANNED: { color: "gray-500", value: "Planned" },
-  UNKNOWN: { color: "slate-500", value: "Unknown" },
-  DISCHARGED: { color: "yellow-600", value: "Discharged" },
+  DELIVERED: {
+    color: "green-600",
+    value: "Delivered",
+    hexColorCode: "#16a34a",
+  },
+  IN_TRANSIT: {
+    color: "blue-600",
+    value: "In Transit",
+    hexColorCode: "#2563eb",
+  },
+  PLANNED: { color: "gray-500", value: "Planned", hexColorCode: "#6b7280" },
+  UNKNOWN: { color: "slate-500", value: "Unknown", hexColorCode: "#64748b" },
+  DISCHARGED: {
+    color: "yellow-600",
+    value: "Discharged",
+    hexColorCode: "#ca8a04",
+  },
 };
 
 export const filterViewOptions = {

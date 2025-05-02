@@ -56,7 +56,7 @@ export default function AuthenticationPage() {
               arrive safely and on time.
             </p> */}
             <p className="text-xl text-white/80 font-thin ">
-              &quot;When you need an eyes on your shipment at all times&quot;
+              &quot;When you need eyes on your shipment at all times&quot;
             </p>
           </div>
         </div>

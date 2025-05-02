@@ -21,7 +21,12 @@
     "rules": {
       "recommended": true,
       "suspicious": {
-        "noExplicitAny": "warn"
+        "noExplicitAny": "warn",
+        "noArrayIndexKey": "off"
+      },
+      "style": {
+        "useImportType": "off",
+        "noUnusedTemplateLiteral": "off"
       }
     }
   },

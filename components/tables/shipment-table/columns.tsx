@@ -118,7 +118,7 @@ export const columns: ColumnDef<Shipment>[] = [
         ) : (
           <Badge
             className={cn(
-              "text-center tracking-tighter text-white capitalize bg-gray-500",
+              "text-center tracking-tighter text-white capitalize bg-gray-800",
               ShipmentProgressToColorMapper[
                 row.original?.progress as ProgressStatusAndStatus
               ],

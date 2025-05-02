@@ -10,6 +10,87 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { shortenContainerSizeType } from "@/utils/shipment.utils";
+import { useUpdateContainer } from "@/services/shipment.mutations";
+import { Calendar } from "@/components/ui/calendar";
+import { Button } from "@/components/ui/button";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { CalendarIcon } from "@radix-ui/react-icons";
+import { cn } from "@/lib/utils";
+import React from "react";
+import { toast } from "sonner";
+
+interface DeliveryDateCellProps {
+  container: Container;
+}
+
+const DeliveryDateCell: React.FC<DeliveryDateCellProps> = ({ container }) => {
+  const currentDate = container?.deliveryDate
+    ? new Date(container.deliveryDate)
+    : null;
+  const [date, setDate] = React.useState<Date | null>(currentDate);
+  const [isOpen, setIsOpen] = React.useState(false);
+  const { mutate: updateContainer, isPending } = useUpdateContainer({
+    onSuccess: () => {
+      toast.success("Delivery date updated successfully");
+    },
+    onError: (error) => {
+      toast.error(`Failed to update delivery date: ${error.message}`);
+      // Reset to original date if update fails
+      setDate(currentDate);
+    },
+  });
+
+  const handleDateSelect = (selectedDate: Date | undefined) => {
+    const newDate = selectedDate || null;
+    setDate(newDate);
+    setIsOpen(false);
+
+    if (newDate !== currentDate) {
+      updateContainer({
+        containerId: container.id,
+        shipmentId: container.shipmentId as number,
+        deliveryDate: newDate ? newDate.toISOString() : null,
+      });
+    }
+  };
+
+  return (
+    <div className="flex justify-center">
+      <Popover open={isOpen} onOpenChange={setIsOpen}>
+        <PopoverTrigger asChild>
+          <Button
+            variant="ghost"
+            className={cn(
+              "w-[130px] justify-center text-center font-normal",
+              !date && "text-muted-foreground hover:bg-transparent",
+              isPending && "cursor-not-allowed opacity-50",
+            )}
+            disabled={isPending}
+          >
+            {isPending
+              ? "Updating..."
+              : date
+              ? moment(date).format("DD/MM/YYYY")
+              : "-"}
+            <CalendarIcon className="ml-2 h-4 w-4 opacity-50" />
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent className="w-auto p-0" align="center">
+          <Calendar
+            mode="single"
+            selected={date ?? undefined}
+            onSelect={handleDateSelect}
+            initialFocus
+          />
+        </PopoverContent>
+      </Popover>
+    </div>
+  );
+};
 
 export const columns: ColumnDef<Container>[] = [
   {
@@ -74,13 +155,7 @@ export const columns: ColumnDef<Container>[] = [
   {
     accessorKey: "deliveryDate",
     header: "Delivery Date",
-    cell: ({ row }) => (
-      <div>
-        {row.original?.deliveryDate
-          ? moment(row.original?.deliveryDate).format("DD/MM/YYYY")
-          : "-"}
-      </div>
-    ),
+    cell: ({ row }) => <DeliveryDateCell container={row.original} />,
   },
   {
     accessorKey: "emptyReturn",
