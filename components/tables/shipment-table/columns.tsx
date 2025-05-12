@@ -108,7 +108,7 @@ export const columns: ColumnDef<Shipment>[] = [
           <Badge
             className={`text-center tracking-tighter text-white  bg-${
               StatusBadgeColor[row.original?.status as ShipmentStatus]?.color ??
-              "gray-500"
+              "gray-700"
             }`}
           >
             {row.original?.status

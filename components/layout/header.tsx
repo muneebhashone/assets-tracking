@@ -11,7 +11,12 @@ export default function Header() {
       <nav className="h-14 flex items-center justify-between px-4">
         <div className="hidden lg:block">
           <Link href={"/"}>
-            <Image src={"/images/logo.png"} alt="logo" width={60} height={60} />
+            <Image
+              src={"/images/logo.png"}
+              alt="logo"
+              width={120}
+              height={120}
+            />
           </Link>
         </div>
         <div className={cn("block lg:!hidden")}>
@@ -19,7 +24,7 @@ export default function Header() {
         </div>
 
         <div className="flex items-center gap-2">
-          <UserNav  />
+          <UserNav />
           <Link href={"/support-request"}>
             <HelpCircle />
           </Link>

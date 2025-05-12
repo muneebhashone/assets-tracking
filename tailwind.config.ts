@@ -8,6 +8,19 @@ const theme: Config = {
     "./app/**/*.{ts,tsx}",
     "./src/**/*.{ts,tsx}",
   ],
+  // Add the safelist configuration here
+  safelist: [
+    // Status background colors from StatusBadgeColor in utils/constants.ts
+    "bg-green-600", // DELIVERED
+    "bg-blue-600", // IN_TRANSIT
+    "bg-gray-500", // PLANNED
+    "bg-slate-500", // UNKNOWN
+    "bg-yellow-600", // DISCHARGED
+
+    // Fallback colors
+    "bg-gray-600", // Darker fallback
+    "bg-gray-700", // Even darker alternative
+  ],
   theme: {
     container: {
       center: true,

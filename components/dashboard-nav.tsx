@@ -15,9 +15,15 @@ interface DashboardNavProps {
   items: NavItem[];
   user?: User;
   setOpen?: Dispatch<SetStateAction<boolean>>;
+  isCollapsed?: boolean;
 }
 
-export function DashboardNav({ items, setOpen, user }: DashboardNavProps) {
+export function DashboardNav({
+  items,
+  setOpen,
+  user,
+  isCollapsed,
+}: DashboardNavProps) {
   const path = usePathname();
 
   if (!items?.length) {
@@ -54,8 +60,8 @@ export function DashboardNav({ items, setOpen, user }: DashboardNavProps) {
                   item.disabled && "cursor-not-allowed opacity-80",
                 )}
               >
-                <Icon className="mr-2 h-4 w-4" />
-                <span>{item.title}</span>
+                <Icon className="h-4 w-4" />
+                {!isCollapsed && <span className="ml-2">{item.title}</span>}
               </span>
             </Link>
           )

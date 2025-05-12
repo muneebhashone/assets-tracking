@@ -93,7 +93,7 @@ const ShipmentDetailPage = ({ id }: ShipmentDetailPageProps) => {
                   className={`text-center tracking-tighter text-white text-xs px-1.5 py-0.5 bg-${
                     StatusBadgeColor[
                       shipmentData?.result.status as ShipmentStatus
-                    ]?.color ?? "gray-400"
+                    ]?.color ?? "gray-700"
                   }`}
                 >
                   {shipmentData?.result.status
@@ -158,7 +158,10 @@ const ShipmentDetailPage = ({ id }: ShipmentDetailPageProps) => {
                 </div>
               ) : (
                 <div className="grid grid-cols-5 gap-2">
-                  <KPICard title="Port to Port" value={kpis.portToPort} />
+                  <KPICard
+                    title="Port to Port"
+                    value={kpis.portToPort ? [kpis.portToPort] : null}
+                  />
                   <KPICard title="Door to Door" value={kpis.doorToDoor} />
                   <KPICard
                     title="Empty → Gate Out"
@@ -247,7 +250,7 @@ const ShipmentDetailPage = ({ id }: ShipmentDetailPageProps) => {
 
 interface KPICardProps {
   title: string;
-  value: number | null;
+  value: number[] | null;
 }
 
 const KPICard = ({ title, value }: KPICardProps) => {
@@ -255,7 +258,7 @@ const KPICard = ({ title, value }: KPICardProps) => {
     <div className="bg-white p-1.5 rounded shadow-sm border">
       <div className="text-xs font-medium text-gray-500 truncate">{title}</div>
       <div className="text-sm font-semibold">
-        {value !== null ? value : "-"}
+        {value !== null && value.length > 0 ? value.join(", ") : "-"}
       </div>
     </div>
   );
