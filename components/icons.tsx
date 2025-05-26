@@ -18,6 +18,7 @@ import {
   LogIn,
   type LucideIcon,
   type LucideProps,
+  Monitor,
   Moon,
   MoreVertical,
   Pizza,
@@ -66,6 +67,7 @@ export const Icons = {
   company: Building,
   shipment: Ship,
   changelog: FileText,
+  monitor: Monitor,
   gitHub: ({ ...props }: LucideProps) => (
     <svg
       aria-hidden="true"

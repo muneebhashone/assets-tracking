@@ -59,6 +59,13 @@ export const navItems: NavItem[] = [
     label: "changelogs",
     permissions: ["VIEW_DASHBOARD"],
   },
+  {
+    title: "Monitoring",
+    href: "/dashboard/monitoring",
+    icon: "monitor",
+    label: "monitoring",
+    permissions: ["SUPER_ADMIN"],
+  },
 ];
 
 export const userNavItems: NavItem[] = [
