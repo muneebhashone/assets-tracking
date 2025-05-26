@@ -80,6 +80,7 @@ export function ShipmentTable({
   const fallbackPerPage = Number.isNaN(perPageAsNumber) ? 10 : perPageAsNumber;
   const tableData = data;
   const [openWarning, setOpenWarning] = useState<boolean>(false);
+
   const createQueryString = React.useCallback(
     (params: Record<string, string | number | null>) => {
       const newSearchParams = new URLSearchParams(window.location.search);
@@ -113,9 +114,7 @@ export function ShipmentTable({
         scroll: false,
       },
     );
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pageIndex, pageSize]);
+  }, [pageIndex, pageSize, createQueryString, pathname, router]);
 
   const table = useReactTable({
     data: tableData,

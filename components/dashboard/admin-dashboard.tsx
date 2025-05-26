@@ -225,7 +225,7 @@ export default function AdminDashboard({
                               key
                                 .replace(/\s+/g, "_")
                                 .toUpperCase() as keyof typeof StatusBadgeColor
-                            ].hexColorCode ?? COLORS[index % COLORS.length]
+                            ]?.hexColorCode ?? COLORS[index % COLORS.length]
                           }
                         />
                       ),

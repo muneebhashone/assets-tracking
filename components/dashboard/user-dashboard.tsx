@@ -187,7 +187,7 @@ export default function UserDashboard({ data, isLoading }: UserDashboardProps) {
                             fill={
                               StatusBadgeColor[
                                 key as keyof typeof StatusBadgeColor
-                              ].hexColorCode ?? COLORS[index % COLORS.length]
+                              ]?.hexColorCode ?? COLORS[index % COLORS.length]
                             }
                           />
                         ),
