@@ -76,7 +76,7 @@ export const ShipmentProgressToColorMapper: Record<
   ProgressStatusAndStatus,
   string
 > = {
-  IN_PROGRESS: "bg-slate-900",
+  IN_PROGRESS: "bg-gray-500",
   FOUND: "bg-green-500",
   NOT_FOUND: "bg-red-500",
   QUEUED: "bg-blue-500",
