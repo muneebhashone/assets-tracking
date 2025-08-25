@@ -103,7 +103,7 @@ export const columns: ColumnDef<User>[] = [
     accessorKey: "credits",
 
     header: () => (
-      <ProtectedHeader columnName="Credits" permission="CREATE_SHIPMENT" />
+      <ProtectedHeader columnName="Shipments" permission="CREATE_SHIPMENT" />
     ),
     cell: ({ row }) => {
       const { data: currentUser } = useCurrentUser();

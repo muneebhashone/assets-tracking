@@ -204,7 +204,7 @@ const ShipmentDetailPage = ({ id }: ShipmentDetailPageProps) => {
                 value="extras"
                 className="w-full border-b-2 rounded-none data-[state=active]:border-[#3491fe] data-[state=active]:shadow-none text-black font-semibold text-sm"
               >
-                Doodads
+                Add-ons
               </TabsTrigger>
             </TabsList>
             <TabsContent value="movements">

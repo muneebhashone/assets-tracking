@@ -6,7 +6,6 @@ import { User } from "@/types/services/auth.types";
 import { UserRole } from "@/utils/constants";
 
 export const columns: ColumnDef<User>[] = [
-  
   {
     header: "S#",
     cell: ({ row }) => <p className="text-center">{row?.index + 1}</p>,
@@ -43,7 +42,7 @@ export const columns: ColumnDef<User>[] = [
   },
   {
     accessorKey: "credits",
-    header: "Credits",
+    header: "Shipments",
   },
   {
     id: "actions",

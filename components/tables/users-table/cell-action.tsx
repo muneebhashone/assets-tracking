@@ -122,7 +122,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
               "CLIENT_SUPER_USER",
             ])) && (
             <DropdownMenuItem onClick={() => creditActionSetter("assign")}>
-              <Edit className="mr-2 h-4 w-4" /> Assign Credits
+              <Edit className="mr-2 h-4 w-4" /> Assign Shipments
             </DropdownMenuItem>
           )}
 
@@ -132,7 +132,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
             "CLIENT_SUPER_USER",
           ]) && (
             <DropdownMenuItem onClick={() => creditActionSetter("deduct")}>
-              <Edit className="mr-2 h-4 w-4" /> Deduct Credits
+              <Edit className="mr-2 h-4 w-4" /> Deduct Shipments
             </DropdownMenuItem>
           )}
           {user?.user.role === "SUPER_ADMIN" && (

@@ -85,7 +85,9 @@ const AssignOrDeductCreditForm = ({
                     htmlFor="credits"
                     className="text-neutral-500 font-medium"
                   >
-                    {type === "assign" ? "Assign Credits" : "Deduct Credits"}
+                    {type === "assign"
+                      ? "Assign Shipments"
+                      : "Deduct Shipments"}
                   </Label>
                   <FormControl>
                     <Input

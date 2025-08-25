@@ -96,9 +96,9 @@ export default function UserDashboard({ data, isLoading }: UserDashboardProps) {
     <div className="space-y-4">
       <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
         <StatCard
-          title="Wallet Balance"
+          title="Shipment Balance"
           value={data?.wallet.currentBalance ?? 0}
-          description="Current Credits"
+          description=""
         />
         <StatCard
           title="Total Shipments"
