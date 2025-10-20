@@ -70,14 +70,21 @@ export default async function RootLayout({
     },
   });
 
-  await queryClient.prefetchQuery({
-    queryKey: ["currentUser"],
-    queryFn: () => currentUser(cookies().get(AUTH_KEY)?.value),
-  });
+  // Only prefetch user data if we have an auth token
+  const authToken = cookies().get(AUTH_KEY)?.value;
+  if (authToken) {
+    await queryClient.prefetchQuery({
+      queryKey: ["currentUser"],
+      queryFn: () => currentUser(authToken),
+    });
+  }
 
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${poppins.className} overflow-hidden`}>
+      <body
+        className={`${poppins.className} overflow-hidden`}
+        cz-shortcut-listen="true"
+      >
         <Suspense>
           <ReactQueryClientProvider>
             <HydrationBoundary state={dehydrate(queryClient)}>

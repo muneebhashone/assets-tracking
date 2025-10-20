@@ -67,6 +67,11 @@ export interface BuildShipmentShareableLinkResponseType
   };
 }
 
+export interface EmailShipmentShareableLinkInputType {
+  emails: string[];
+  shipmentId: number;
+}
+
 //services
 
 export const updateContainer = async (input: UpdateContainerInputType) => {
@@ -130,6 +135,16 @@ export const buildShipmentShareableLink = async (
 ) => {
   const { data } = await apiAxios.post<BuildShipmentShareableLinkResponseType>(
     `/shipments/share`,
+    input,
+  );
+  return data;
+};
+
+export const emailShipmentShareableLink = async (
+  input: EmailShipmentShareableLinkInputType,
+) => {
+  const { data } = await apiAxios.post<BuildShipmentShareableLinkResponseType>(
+    `/shipments/share/send-email`,
     input,
   );
   return data;
@@ -259,6 +274,19 @@ export const useBuildShipmentShareableLink = (
       await queryClient.invalidateQueries({ queryKey: ["getShipments"] });
       await options?.onSuccess?.(data, variables, context);
     },
+  });
+};
+
+export const useEmailShareableLink = (
+  options?: UseMutationOptions<
+    Omit<SuccessResponseType, "payload">,
+    ErrorResponseType,
+    EmailShipmentShareableLinkInputType
+  >,
+) => {
+  return useMutation({
+    ...options,
+    mutationFn: emailShipmentShareableLink,
   });
 };
 

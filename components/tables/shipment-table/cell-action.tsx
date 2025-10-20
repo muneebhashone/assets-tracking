@@ -14,7 +14,6 @@ import {
 import { toast } from "@/components/ui/use-toast";
 import { useCurrentUser } from "@/services/auth.mutations";
 import {
-  useBuildShipmentShareableLink,
   useDeletShipment,
   useDiscardShipmentShareableLink,
   useSetFilesShareable,
@@ -37,6 +36,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
+import ShareShipmentModal from "@/components/modal/share-shimpment-modal";
 
 interface CellActionProps {
   data: Shipment;
@@ -49,6 +49,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
   const [adminUpdateModalOpen, setAdminUpdateModalOpen] =
     useState<boolean>(false);
   const [stopTrackingOpen, setStopTrackingOpen] = useState<boolean>(false);
+  const [shareModalOpen, setShareModalOpen] = useState<boolean>(false);
 
   const { mutate: deleteShipment, isPending: isDeletingShipment } =
     useDeletShipment({
@@ -77,26 +78,6 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
           description: `Sharing ${data.shareFiles ? "Disabled" : "Enabled"} `,
           title: "Success",
         });
-      },
-      onError(error) {
-        toast({
-          variant: "destructive",
-          description: error.response?.data.message,
-          title: "Error",
-        });
-      },
-    });
-  const { mutate: createLink, isPending: isCreatingLink } =
-    useBuildShipmentShareableLink({
-      async onSuccess(data) {
-        toast({
-          variant: "default",
-          description: "Link generated and copied to clipboard",
-          title: "Success",
-        });
-
-        await navigator.clipboard.writeText(data.data.shareableLink);
-        setWarningOpen(false);
       },
       onError(error) {
         toast({
@@ -182,6 +163,13 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
         shipmentData={data}
       />
 
+      {/* Share Link Modal */}
+      <ShareShipmentModal
+        isOpen={shareModalOpen}
+        onClose={() => setShareModalOpen(false)}
+        shipment={data}
+      />
+
       <DropdownMenu modal={false}>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" className="h-8 w-8 p-0">
@@ -262,22 +250,23 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
               "EDIT_SHIPMENT",
               "CREATE_SHIPMENT",
               "DELETE_SHIPMENT",
-            ])) &&
-            (data.shareToken ? (
-              <DropdownMenuItem
-                onClick={() => discardLink({ shipmentId: String(data.id) })}
-                disabled={isDiscardingLink}
-              >
-                <ClipboardX className="mr-2 h-4 w-4" /> Discard Shareable Link
+            ])) && (
+            <>
+              <DropdownMenuItem onClick={() => setShareModalOpen(true)}>
+                <LinkIcon className="mr-2 h-4 w-4" />{" "}
+                {data.shareToken ? "Send" : "Generate"} Sharable Link
               </DropdownMenuItem>
-            ) : (
-              <DropdownMenuItem
-                onClick={() => createLink({ shipmentId: String(data.id) })}
-                disabled={isCreatingLink}
-              >
-                <LinkIcon className="mr-2 h-4 w-4" /> Generate Sharable Link
-              </DropdownMenuItem>
-            ))}
+
+              {data.shareToken && (
+                <DropdownMenuItem
+                  onClick={() => discardLink({ shipmentId: String(data.id) })}
+                  disabled={isDiscardingLink}
+                >
+                  <ClipboardX className="mr-2 h-4 w-4" /> Discard Shareable Link
+                </DropdownMenuItem>
+              )}
+            </>
+          )}
 
           {["SUB_ADMIN", "SUPER_ADMIN"].includes(user?.user.role as string) &&
             data.status !== "DELIVERED" && (

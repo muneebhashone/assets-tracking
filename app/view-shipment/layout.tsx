@@ -1,4 +1,4 @@
-import Header from "@/components/layout/header";
+import ConditionalHeader from "@/components/layout/conditional-header";
 import { Metadata } from "next";
 import { ReactNode, Suspense } from "react";
 
@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 const ViewShipmentLayout = ({ children }: { children: ReactNode }) => {
   return (
     <Suspense>
-      <Header />
+      <ConditionalHeader />
       <main className="w-full pt-16 overflow-y-auto">{children}</main>
     </Suspense>
   );

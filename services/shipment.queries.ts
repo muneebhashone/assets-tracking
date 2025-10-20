@@ -258,12 +258,10 @@ export const useGetSharedShipment = (
     GetSharedShipmentResponseType
   >,
 ) => {
-  const { data: user } = useCurrentUser();
   return useQuery({
     ...options,
     queryFn: async () => await viewSharedShipment(input),
-    queryKey: ["viewSharedShipment", user?.user.id, JSON.stringify(input)],
-    enabled: Boolean(user?.user.id),
+    queryKey: ["viewSharedShipment", JSON.stringify(input)],
   });
 };
 
@@ -275,16 +273,10 @@ export const useGetMovementsByShipmentId = (
     GetMovementsByShipmentIdResponseType
   >,
 ) => {
-  const { data: user } = useCurrentUser();
   return useQuery({
     ...options,
     queryFn: async () => await getMovementsByShipmentId(input),
-    queryKey: [
-      "getMovementsByShipmentId",
-      user?.user.id,
-      JSON.stringify(input),
-    ],
-    enabled: Boolean(user?.user.id),
+    queryKey: ["getMovementsByShipmentId", JSON.stringify(input)],
   });
 };
 
