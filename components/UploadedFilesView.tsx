@@ -56,24 +56,25 @@ const UploadedFilesView = ({ data }: { data: Shipment }) => {
                       }
                       loading={isPending}
                     />
-                    <div
-                      className="flex justify-center items-center flex-col bg-white p-4 rounded-md transition-all hover:bg-slate-100 cursor-pointer relative w-full max-w-xs"
-                      key={index}
+                    <Link
+                      href={`/bucket/${file}`}
+                      target="_blank"
+                      className="text-xs text-center font-semibold text-blue-950 transition-colors duration-300 transform hover:text-black break-words w-full"
+                      passHref
                     >
-                      <X
-                        onClick={() => setWarningOpen(true)}
-                        className="absolute right-0 top-0 z-[999] text-red-600 transition-colors duration-300 transform hover:text-black"
-                      />
-                      <FileText className="w-20 h-20 text-blue-500" />
-
-                      <Link
-                        href={`/bucket/${file}`}
-                        target="_blank"
-                        className="text-xs text-center font-semibold text-blue-950 transition-colors duration-300 transform hover:text-black break-words w-full"
+                      <div
+                        className="flex justify-center items-center flex-col bg-white p-4 rounded-md transition-all hover:bg-slate-100 relative w-full max-w-xs"
+                        key={index}
                       >
+                        <X
+                          onClick={() => setWarningOpen(true)}
+                          className="absolute right-0 top-0 z-[999] text-red-600 transition-colors duration-300 transform hover:text-black"
+                        />
+                        <FileText className="w-20 h-20 text-blue-500" />
+
                         {fileName}
-                      </Link>
-                    </div>
+                      </div>
+                    </Link>
                   </div>
                 );
               })
